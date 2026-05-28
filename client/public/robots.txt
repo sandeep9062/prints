@@ -1,0 +1,9 @@
+# ── Ink of Memories – Robots.txt ──────────────────────────
+# Live domain: https://inkofmemories.com
+
+# ── Allow all search engines to crawl everything ──
+User-agent: *
+Allow: /
+
+# ── Sitemap ──
+Sitemap: https://inkofmemories.com/sitemap.xml
