@@ -1,4 +1,4 @@
-import Enquiry from "../models/enquiry.js";
+import Enquiry from "../models/Enquiry.js"; // Capital 'E'
 
 export const createEnquiry = async (req, res) => {
   try {
