@@ -9,12 +9,12 @@ const ToggleButton = () => {
 
   useEffect(() => {
     setMounted(true);
-    // Set initial theme based on localStorage or system preference
+    // Set initial theme based on localStorage only, default to light
     const storedTheme = localStorage.getItem("theme");
     if (storedTheme) {
       setIsDark(storedTheme === "dark");
     } else {
-      setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches);
+      setIsDark(false); // Default to light mode
     }
   }, []);
 

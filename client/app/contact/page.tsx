@@ -89,7 +89,7 @@ const Contact = () => {
         keywords="contact printing press, Samlason Printing contact, Panchkula printing press, custom printing inquiry"
         jsonLd={breadcrumbSchema}
       />
-      <main className="pt-24 pb-16">
+      <main className="pt-20 pb-16">
         {/* Header */}
         <section className="py-16 bg-hero">
           <div className="container mx-auto px-4">

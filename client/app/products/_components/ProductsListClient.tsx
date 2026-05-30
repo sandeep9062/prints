@@ -83,7 +83,7 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
         keywords="buy printing products, wedding cards online, visiting cards India, brochure printing, custom printing shop"
         jsonLd={breadcrumbSchema}
       />
-      <main className="pt-24 pb-16">
+      <main className="pt-28 pb-16">
         <div className="container mx-auto px-4">
           {/* Page Title */}
           <div className="text-center max-w-2xl mx-auto mb-12">

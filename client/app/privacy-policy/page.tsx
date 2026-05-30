@@ -175,7 +175,7 @@ const PrivacyPolicyPage: FC = () => {
         keywords="privacy policy, data protection, Ink of Memories privacy, Samlason Printing privacy"
         jsonLd={breadcrumbSchema}
       />
-      <main className="pt-24 pb-16">
+      <main className="pt-20 pb-16">
         {/* Header */}
         <section className="py-16 bg-hero">
           <div className="container mx-auto px-4">

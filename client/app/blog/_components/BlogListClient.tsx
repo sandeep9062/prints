@@ -90,7 +90,7 @@ const BlogListClient = ({ initialPosts }: BlogListClientProps) => {
         keywords="printing blog, design trends, wedding card ideas, printing tips, invitation design inspiration"
         jsonLd={breadcrumbSchema}
       />
-      <main className="pt-24 pb-16">
+      <main className="pt-20 pb-16">
         {/* Hero */}
         <section className="py-16 bg-gradient-to-b from-secondary/50 to-background">
           <div className="container mx-auto px-4">

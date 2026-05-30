@@ -77,7 +77,7 @@ const About: FC = () => {
         keywords="about printing press, Samlason Printing, Panchkula printing history, 2004 printing, premium printing India"
         jsonLd={breadcrumbSchema}
       />
-      <main className="pt-24 pb-16">
+      <main className="pt-20 pb-16">
         {/* Hero */}
         <section className="py-16 bg-hero">
           <div className="container mx-auto px-4">

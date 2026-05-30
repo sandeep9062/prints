@@ -58,7 +58,7 @@ const Cart = () => {
           keywords="shopping cart, printing products cart, Ink of Memories cart"
           jsonLd={breadcrumbSchema}
         />
-        <main className="pt-24 pb-16">
+        <main className="pt-20 pb-16">
           <div className="container mx-auto px-4">
             <div className="max-w-md mx-auto text-center py-16">
               <div className="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mx-auto mb-6">
@@ -94,7 +94,7 @@ const Cart = () => {
         keywords="shopping cart, printing products cart, Ink of Memories cart, order review"
         jsonLd={breadcrumbSchema}
       />
-      <main className="pt-24 pb-16">
+      <main className="pt-20 pb-16">
         <div className="container mx-auto px-4">
           <h1 className="font-display text-3xl md:text-4xl font-semibold mb-8">
             Shopping Cart
