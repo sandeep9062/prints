@@ -63,42 +63,39 @@ export const Footer = () => {
   if (isDashboard) return null;
 
   return (
-    <footer className="bg-foreground text-background/90">
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Brand */}
-          <div>
-            <Link href="/" className="block">
-              {/* Light Mode Logo - Visible by default, hidden in dark mode */}
+    <footer className="bg-foreground text-background/90 w-full border-t border-background/5">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        {/* Main Footer Links Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-x-8 gap-y-10 items-start">
+          {/* Brand Column (Occupies 4 out of 12 columns on large screens) */}
+          <div className="sm:col-span-2 lg:col-span-4 flex flex-col items-start space-y-4">
+            <Link href="/" className="inline-block focus:outline-none">
+              {/* Light Mode Logo */}
               <Image
                 src="/inkofmemories-dark.png"
                 alt={websiteName}
                 width={180}
-                height={60}
+                height={30}
                 className="dark:hidden object-contain"
                 priority
               />
-              {/* Dark Mode Logo - Hidden by default, visible in dark mode */}
+              {/* Dark Mode Logo */}
               <Image
                 src="/inkofmemories.png"
                 alt={websiteName}
                 width={180}
-                height={60}
+                height={30}
                 className="hidden dark:block object-contain"
                 priority
               />
             </Link>
 
-            <p className="text-sm text-white/80 dark:text-black leading-relaxed mb-5">
-              Crafting legacies with elegant print. A digital atelier powered by
-              <span className="text-white/80 dark:text-black font-medium">
-                {" "}
-                Samlason Printing Press
-              </span>
-              , bringing over 27 years of artisanal excellence to your doorstep.
+            <p className="text-sm text-white/70 dark:text-black/70 leading-relaxed max-w-sm mb-6">
+              From premium wedding stationery to bespoke retail packaging, we
+              bridge heritage craftsmanship with modern design.
             </p>
 
-            <div className="flex gap-4">
+            <div className="flex items-center gap-3 pt-1">
               {socialPlatforms.map(({ icon: Icon, key }) => {
                 const url = socialUrls[key];
                 if (!url) return null;
@@ -108,27 +105,26 @@ export const Footer = () => {
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white/80 dark:text-red-800 dark:hover:text-red-600 hover:text-primary transition-colors"
+                    className="text-white/80 dark:text-red-800 dark:hover:text-red-600 hover:text-primary transition-colors p-1.5 -m-1.5 rounded-full hover:bg-background/5 dark:hover:bg-foreground/5"
                   >
-                    <Icon className="h-5 w-5" />
+                    <Icon className="h-4.5 w-4.5" />
                   </Link>
                 );
               })}
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-display text-lg font-semibold text-background mb-4">
+          {/* Quick Links Column (Occupies 2 out of 12 columns) */}
+          <div className="lg:col-span-2 flex flex-col space-y-4 lg:items-start">
+            <h4 className="font-display text-sm font-bold uppercase tracking-wider text-background">
               Quick Links
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               {[
                 { name: "Home", path: "/" },
                 { name: "Products", path: "/products" },
                 { name: "Business", path: "/business" },
                 { name: "Customize", path: "/customize" },
-
                 { name: "About Us", path: "/about-us" },
                 { name: "Contact", path: "/contact" },
                 { name: "Blog", path: "/blog" },
@@ -136,7 +132,7 @@ export const Footer = () => {
                 <li key={link.path}>
                   <Link
                     href={link.path}
-                    className="text-sm text-background/70  dark:hover:text-red-800 hover:text-primary transition-colors"
+                    className="text-sm text-background/70 dark:hover:text-red-800 hover:text-white transition-colors block py-0.5 subtle-underline"
                   >
                     {link.name}
                   </Link>
@@ -145,17 +141,17 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Products */}
-          <div>
-            <h4 className="font-display text-lg font-semibold text-background mb-4">
+          {/* Products Column (Occupies 3 out of 12 columns to comfortably handle layout spacing) */}
+          <div className="lg:col-span-3 flex flex-col space-y-4">
+            <h4 className="font-display text-sm font-bold uppercase tracking-wider text-background">
               Our Products
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               {navigationData.map((item) => (
                 <li key={item.path}>
                   <Link
                     href={item.path}
-                    className="text-sm text-background/70 dark:hover:text-red-800  hover:text-primary transition-colors"
+                    className="text-sm text-background/70 dark:hover:text-red-800 hover:text-white transition-colors block py-0.5 subtle-underline"
                   >
                     {item.name}
                   </Link>
@@ -164,44 +160,47 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
-          <div>
-            <h4 className="font-display text-lg font-semibold text-background mb-4">
+          {/* Contact Column (Occupies 3 out of 12 columns to avoid ugly wrapping lines) */}
+          <div className="lg:col-span-3 flex flex-col space-y-4">
+            <h4 className="font-display text-sm font-bold uppercase tracking-wider text-background">
               Contact Us
             </h4>
-            <ul className="space-y-4">
+            <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-primary dark:text-red-800 shrink-0 mt-0.5" />
-                <span className="text-sm text-background/70">{mainOffice}</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-primary dark:text-red-800 shrink-0" />
-                <span className="text-sm text-background/70     ">
-                  {contactNo1}
+                <MapPin className="h-5 w-5 text-white/70 dark:text-red-800 shrink-0 mt-0.5" />
+                <span className="text-sm text-background/70 leading-relaxed">
+                  {mainOffice}
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-primary dark:text-red-800 shrink-0" />
-                <span className="text-sm text-background/70">{email}</span>
+                <Phone className="h-5 w-5 text-white/70 dark:text-red-800 shrink-0" />
+                <span className="text-sm text-background/70">{contactNo1}</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="h-5 w-5 text-white/70 dark:text-red-800 shrink-0" />
+                <span className="text-sm text-background/70 break-all">
+                  {email}
+                </span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-background/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-background/50">
+        {/* Bottom Sub-Footer Bar */}
+        <div className="border-t border-background/10 mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-xs tracking-wide text-background/50 order-2 sm:order-1">
             © 2024 {websiteName}. All rights reserved.
           </p>
-          <div className="flex gap-6">
+          <div className="flex gap-6 order-1 sm:order-2">
             <Link
               href="/privacy-policy"
-              className="text-sm text-background/50 hover:text-background/70 transition-colors"
+              className="text-xs tracking-wide text-background/50 hover:text-background/70 transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="text-sm text-background/50 hover:text-background/70 transition-colors"
+              className="text-xs tracking-wide text-background/50 hover:text-background/70 transition-colors"
             >
               Terms of Service
             </Link>
