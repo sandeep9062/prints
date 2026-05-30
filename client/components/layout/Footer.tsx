@@ -67,7 +67,7 @@ export const Footer = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
-          <div className="space-y-6">
+          <div>
             <Link href="/" className="block">
               {/* Light Mode Logo - Visible by default, hidden in dark mode */}
               <Image
@@ -89,9 +89,9 @@ export const Footer = () => {
               />
             </Link>
 
-            <p className="text-sm text-white/80 leading-relaxed">
+            <p className="text-sm text-white/80 dark:text-black leading-relaxed mb-5">
               Crafting legacies with elegant print. A digital atelier powered by
-              <span className="text-white/80 font-medium">
+              <span className="text-white/80 dark:text-black font-medium">
                 {" "}
                 Samlason Printing Press
               </span>
@@ -108,7 +108,7 @@ export const Footer = () => {
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white/80 hover:text-primary transition-colors"
+                    className="text-white/80 dark:text-red-800 dark:hover:text-red-600 hover:text-primary transition-colors"
                   >
                     <Icon className="h-5 w-5" />
                   </Link>
@@ -136,7 +136,7 @@ export const Footer = () => {
                 <li key={link.path}>
                   <Link
                     href={link.path}
-                    className="text-sm text-background/70 hover:text-primary transition-colors"
+                    className="text-sm text-background/70  dark:hover:text-red-800 hover:text-primary transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -155,7 +155,7 @@ export const Footer = () => {
                 <li key={item.path}>
                   <Link
                     href={item.path}
-                    className="text-sm text-background/70 hover:text-primary transition-colors"
+                    className="text-sm text-background/70 dark:hover:text-red-800  hover:text-primary transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -171,15 +171,17 @@ export const Footer = () => {
             </h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                <MapPin className="h-5 w-5 text-primary dark:text-red-800 shrink-0 mt-0.5" />
                 <span className="text-sm text-background/70">{mainOffice}</span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-primary shrink-0" />
-                <span className="text-sm text-background/70">{contactNo1}</span>
+                <Phone className="h-5 w-5 text-primary dark:text-red-800 shrink-0" />
+                <span className="text-sm text-background/70     ">
+                  {contactNo1}
+                </span>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-primary shrink-0" />
+                <Mail className="h-5 w-5 text-primary dark:text-red-800 shrink-0" />
                 <span className="text-sm text-background/70">{email}</span>
               </li>
             </ul>
