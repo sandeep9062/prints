@@ -26,7 +26,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); // read cookies from incoming request,so that app can store user data
 
-const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "https://www.inkofmemories.com",
+  "https://inkofmemories.com",
+];
 
 app.use(
   cors({
