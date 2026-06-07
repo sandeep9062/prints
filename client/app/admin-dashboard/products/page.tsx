@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import {
   Package,
-  Eye,
   Edit,
   Trash2,
   Search,
@@ -13,16 +13,10 @@ import {
   Loader2,
 } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Table,
   TableBody,
@@ -39,14 +33,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -59,51 +45,24 @@ import {
 import { toast } from "@/hooks/use-toast";
 import {
   useGetProductsQuery,
-  useUpdateProductMutation,
   useDeleteProductMutation,
 } from "@/services/productsApi";
 
 const getProductStatusColor = (stock: number) => {
-  return stock > 0
-    ? "bg-green-100 text-green-800"
-    : "bg-red-100 text-red-800";
+  return stock > 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
 };
 
 const getProductStatus = (stock: number) => {
   return stock > 0 ? "Active" : "Out of Stock";
 };
 
-interface ProductFormData {
-  name: string;
-  description: string;
-  badge: string;
-  price: string;
-  discountPrice: string;
-  category: string;
-  stock: string;
-  featured: boolean;
-}
-
 const AdminProducts = () => {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-
-  // Edit modal state
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<any>(null);
-  const [formData, setFormData] = useState<ProductFormData>({
-    name: "",
-    description: "",
-    badge: "",
-    price: "",
-    discountPrice: "",
-    category: "",
-    stock: "",
-    featured: false,
-  });
 
   // Delete dialog state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -111,7 +70,6 @@ const AdminProducts = () => {
 
   // RTK Query hooks
   const { data: productsData, isLoading, isError } = useGetProductsQuery();
-  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
   const allProducts = useMemo(() => {
@@ -141,70 +99,6 @@ const AdminProducts = () => {
     currentPage * itemsPerPage,
   );
 
-  const handleEdit = (product: any) => {
-    setEditingProduct(product);
-    setFormData({
-      name: product.name || "",
-      description: product.description || "",
-      badge: product.badge || "",
-      price: product.price?.toString() || "",
-      discountPrice: product.discountPrice?.toString() || "",
-      category: product.category || "",
-      stock: product.stock?.toString() || "",
-      featured: product.featured || false,
-    });
-    setEditDialogOpen(true);
-  };
-
-  const handleFormChange = (
-    field: keyof ProductFormData,
-    value: string | boolean
-  ) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleSaveEdit = async () => {
-    if (!editingProduct) return;
-
-    try {
-      const productData = JSON.stringify({
-        name: formData.name,
-        description: formData.description,
-        badge: formData.badge,
-        price: parseFloat(formData.price) || 0,
-        discountPrice: formData.discountPrice
-          ? parseFloat(formData.discountPrice)
-          : undefined,
-        category: formData.category,
-        stock: parseInt(formData.stock) || 0,
-        featured: formData.featured,
-        images: editingProduct.images || [],
-      });
-
-      // Send as FormData since the server uses multer middleware
-      const body = new FormData();
-      body.append("productData", productData);
-
-      await updateProduct({
-        id: editingProduct._id,
-        body,
-      }).unwrap();
-
-      toast({
-        title: "Product Updated",
-        description: `"${formData.name}" has been updated successfully.`,
-      });
-      setEditDialogOpen(false);
-      setEditingProduct(null);
-    } catch (error: any) {
-      toast({
-        title: "Update Failed",
-        description: error?.data?.message || "Failed to update product. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
   const handleDelete = (product: any) => {
     setProductToDelete(product);
     setDeleteDialogOpen(true);
@@ -224,7 +118,8 @@ const AdminProducts = () => {
     } catch (error: any) {
       toast({
         title: "Delete Failed",
-        description: error?.data?.message || "Failed to delete product. Please try again.",
+        description:
+          error?.data?.message || "Failed to delete product. Please try again.",
         variant: "destructive",
       });
     }
@@ -247,7 +142,9 @@ const AdminProducts = () => {
         <div className="flex flex-col items-center gap-2">
           <Package className="h-12 w-12 text-red-400" />
           <p className="text-gray-600 font-medium">Failed to load products</p>
-          <p className="text-gray-400 text-sm">Please check your connection and try again.</p>
+          <p className="text-gray-400 text-sm">
+            Please check your connection and try again.
+          </p>
         </div>
       </div>
     );
@@ -266,13 +163,13 @@ const AdminProducts = () => {
           </p>
         </div>
         <div className="flex items-center gap-4 mt-4 md:mt-0">
-          <Button variant="default">
+          <Button
+            variant="default"
+            onClick={() => router.push("/admin-dashboard/products/new")}
+          >
             <Plus className="mr-2 h-4 w-4" />
             Add New Product
           </Button>
-          <Avatar>
-            <AvatarFallback>AD</AvatarFallback>
-          </Avatar>
         </div>
       </div>
 
@@ -285,7 +182,9 @@ const AdminProducts = () => {
                 <p className="text-sm font-medium text-gray-500">
                   Total Products
                 </p>
-                <h3 className="text-2xl font-bold mt-1">{allProducts.length}</h3>
+                <h3 className="text-2xl font-bold mt-1">
+                  {allProducts.length}
+                </h3>
               </div>
               <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
                 <Package className="h-6 w-6 text-blue-700" />
@@ -445,7 +344,11 @@ const AdminProducts = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => handleEdit(product)}
+                          onClick={() =>
+                            router.push(
+                              `/admin-dashboard/products/${product._id}/edit`,
+                            )
+                          }
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -470,8 +373,8 @@ const AdminProducts = () => {
             <div className="flex items-center justify-between p-4 border-t">
               <p className="text-sm text-gray-500">
                 Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-                {Math.min(currentPage * itemsPerPage, filteredProducts.length)} of{" "}
-                {filteredProducts.length} products
+                {Math.min(currentPage * itemsPerPage, filteredProducts.length)}{" "}
+                of {filteredProducts.length} products
               </p>
               <div className="flex items-center gap-2">
                 <Button
@@ -498,123 +401,6 @@ const AdminProducts = () => {
           )}
         </CardContent>
       </Card>
-
-      {/* Edit Product Dialog */}
-      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Edit Product</DialogTitle>
-            <DialogDescription>
-              Update the product details below. Click save when you're done.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-name">Product Name *</Label>
-              <Input
-                id="edit-name"
-                value={formData.name}
-                onChange={(e) => handleFormChange("name", e.target.value)}
-                placeholder="Enter product name"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="edit-category">Category *</Label>
-              <Input
-                id="edit-category"
-                value={formData.category}
-                onChange={(e) => handleFormChange("category", e.target.value)}
-                placeholder="Enter category"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="edit-price">Price *</Label>
-              <Input
-                id="edit-price"
-                type="number"
-                step="0.01"
-                min="0"
-                value={formData.price}
-                onChange={(e) => handleFormChange("price", e.target.value)}
-                placeholder="0.00"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="edit-discountPrice">Discount Price</Label>
-              <Input
-                id="edit-discountPrice"
-                type="number"
-                step="0.01"
-                min="0"
-                value={formData.discountPrice}
-                onChange={(e) =>
-                  handleFormChange("discountPrice", e.target.value)
-                }
-                placeholder="0.00"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="edit-stock">Stock *</Label>
-              <Input
-                id="edit-stock"
-                type="number"
-                min="0"
-                value={formData.stock}
-                onChange={(e) => handleFormChange("stock", e.target.value)}
-                placeholder="0"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="edit-badge">Badge</Label>
-              <Input
-                id="edit-badge"
-                value={formData.badge}
-                onChange={(e) => handleFormChange("badge", e.target.value)}
-                placeholder="e.g. New, Sale, Popular"
-              />
-            </div>
-
-            <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="edit-description">Description</Label>
-              <Textarea
-                id="edit-description"
-                value={formData.description}
-                onChange={(e) =>
-                  handleFormChange("description", e.target.value)
-                }
-                placeholder="Enter product description"
-                rows={3}
-              />
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setEditDialogOpen(false)}
-              disabled={isUpdating}
-            >
-              Cancel
-            </Button>
-            <Button onClick={handleSaveEdit} disabled={isUpdating || !formData.name || !formData.price}>
-              {isUpdating ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                "Save Changes"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
