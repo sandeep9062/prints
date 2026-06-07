@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -39,7 +39,13 @@ export default function ShareDraftModal({
   const [copied, setCopied] = useState(false);
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
-  const [shareLink, setShareLink] = useState(shareUrl || window.location.href);
+  const [shareLink, setShareLink] = useState(shareUrl || "");
+
+  useEffect(() => {
+    if (!shareUrl) {
+      setShareLink(window.location.href);
+    }
+  }, [shareUrl]);
 
   const handleCopyLink = async () => {
     try {
