@@ -11,14 +11,14 @@ const siteSettingsSchema = new mongoose.Schema(
     websiteUrl: {
       type: String,
       trim: true,
-      match: [/^https?:\/\//, "Invalid website URL"],
+      match: [/^$|^https?:\/\//, "Invalid website URL"],
     },
     email: {
       type: String,
       required: true,
       lowercase: true,
       trim: true,
-      match: [/^\S+@\S+\.\S+$/, "Invalid email format"],
+      match: [/^$|^\S+@\S+\.\S+$/, "Invalid email format"],
     },
     mainOffice: {
       type: String,
@@ -28,9 +28,8 @@ const siteSettingsSchema = new mongoose.Schema(
 
     googleMapUrl: {
       type: String,
-      required: true,
       trim: true,
-      match: [/^https?:\/\//, "Invalid Map URL"],
+      match: [/^$|^https?:\/\//, "Invalid Map URL"],
     },
 
     branchOffice: {
@@ -40,21 +39,19 @@ const siteSettingsSchema = new mongoose.Schema(
     },
     contactNo1: {
       type: String,
-      required: true,
       trim: true,
-      match: [/^\+?\d{7,15}$/, "Invalid contact number"],
+      match: [/^$|^\+?\d{7,15}$/, "Invalid contact number"],
     },
     whatsAppNo: {
       type: String,
-      required: true,
       trim: true,
-      match: [/^\+?\d{7,15}$/, "Invalid whatsApp number"],
+      match: [/^$|^\+?\d{7,15}$/, "Invalid whatsApp number"],
     },
 
     contactNo2: {
       type: String,
       trim: true,
-      match: [/^\+?\d{7,15}$/, "Invalid contact number"],
+      match: [/^$|^\+?\d{7,15}$/, "Invalid contact number"],
     },
     GSTNO: {
       type: String,
@@ -92,42 +89,42 @@ const siteSettingsSchema = new mongoose.Schema(
     linkedin: {
       type: String,
       trim: true,
-      match: [/^https?:\/\//, "Invalid LinkedIn URL"],
+      match: [/^$|^https?:\/\//, "Invalid LinkedIn URL"],
     },
     pinterest: {
       type: String,
       trim: true,
-      match: [/^https?:\/\//, "Invalid Pinterest URL"],
+      match: [/^$|^https?:\/\//, "Invalid Pinterest URL"],
     },
     twitter: {
       type: String,
       trim: true,
-      match: [/^https?:\/\//, "Invalid Twitter URL"],
+      match: [/^$|^https?:\/\//, "Invalid Twitter URL"],
     },
     github: {
       type: String,
       trim: true,
-      match: [/^https?:\/\//, "Invalid GitHub URL"],
+      match: [/^$|^https?:\/\//, "Invalid GitHub URL"],
     },
     facebook: {
       type: String,
       trim: true,
-      match: [/^https?:\/\//, "Invalid Facebook URL"],
+      match: [/^$|^https?:\/\//, "Invalid Facebook URL"],
     },
     instagram: {
       type: String,
       trim: true,
-      match: [/^https?:\/\//, "Invalid Instagram URL"],
+      match: [/^$|^https?:\/\//, "Invalid Instagram URL"],
     },
     youtubeUrl: {
       type: String,
       trim: true,
-      match: [/^https?:\/\//, "Invalid YouTube URL"],
+      match: [/^$|^https?:\/\//, "Invalid YouTube URL"],
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export const SiteSettings =

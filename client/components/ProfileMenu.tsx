@@ -182,7 +182,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
-          className="w-60 rounded-xl shadow-xl border bg-white/90 backdrop-blur-xl"
+          className="w-60 rounded-xl shadow-xl border bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl dark:border-gray-700"
           align="end"
         >
           <DropdownMenuLabel className="pb-2">
@@ -210,7 +210,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={handleLogout}
-            className="text-red-500 rounded-md cursor-pointer"
+            className="text-red-500 dark:text-red-400 rounded-md cursor-pointer"
           >
             <LogOut className="mr-2 h-4 w-4" />
             Logout
@@ -258,7 +258,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
                 value={phone}
                 onChange={(val) => setPhone(val || "")}
                 defaultCountry="IN"
-                className="border rounded-xl px-3 py-2 bg-gray-50"
+                className="border rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
               />
             </div>
 
@@ -292,7 +292,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
             <Button
               onClick={handleProfileUpdate}
               disabled={isLoading}
-              className="rounded-xl w-full bg-rose-300 hover:bg-rose-500"
+              className="rounded-xl w-full bg-rose-300 hover:bg-rose-500 dark:bg-rose-600 dark:hover:bg-rose-700 dark:text-white"
             >
               {isLoading ? "Saving..." : "Save Changes"}
             </Button>

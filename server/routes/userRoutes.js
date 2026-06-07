@@ -16,6 +16,11 @@ import {
   updateUser,
   userFavourites,
   userProfile,
+  addAddress,
+  getMyAddresses,
+  updateAddress,
+  deleteAddress,
+  getMyOrders,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -30,7 +35,20 @@ router.get("/profile", userProfile);
 // ✅ Get all favourite properties of a user
 router.get("/favourites", protect, userFavourites);
 
-// ✅ Get user by ID
+// ✅ My Orders (logged-in user) — must be BEFORE /:id
+router.get("/my-orders", protect, getMyOrders);
+
+// ✅ Address Routes (protect - logged in user) — must be BEFORE /:id
+router.post("/address", protect, addAddress);
+router.get("/address", protect, getMyAddresses);
+router.put("/address/:id", protect, updateAddress);
+router.delete("/address/:id", protect, deleteAddress);
+
+// ✅ Customer Management Routes (for merchants) — must be BEFORE /:id
+router.get("/customers/all", protect, getAllCustomers);
+router.get("/customers/:id", protect, getCustomerById);
+
+// ✅ Parameterized routes (must come after all named routes)
 router.get("/:id", getUser);
 
 // ✅ Create a new user
@@ -53,9 +71,5 @@ router.delete("/bookings/:propertyId", protect, cancelVisit);
 
 // ✅ Delete user by ID
 router.delete("/:id", protect, checkAdmin, deleteUser);
-
-// ✅ Customer Management Routes (for merchants)
-router.get("/customers/all", protect, getAllCustomers);
-router.get("/customers/:id", protect, getCustomerById);
 
 export default router;

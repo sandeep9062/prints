@@ -12,20 +12,38 @@ export const getSiteSettings = async (req, res) => {
   }
 };
 
-// Create Site Settings (only if not exists)
+// Create or Update Site Settings (upsert – single document)
 export const createSiteSettings = async (req, res) => {
   try {
     const existing = await SiteSettings.findOne();
     if (existing) {
-      return res
-        .status(400)
-        .json({ message: "Settings already exist. Use update instead." });
+      // Settings already exist – update them instead of rejecting
+      const settings = await SiteSettings.findByIdAndUpdate(
+        existing._id,
+        req.body,
+        { new: true, runValidators: true },
+      );
+      return res.status(200).json(settings);
     }
 
-    const settings = new SiteSettings(req.body);
+    // Ensure required fields have non-empty defaults to avoid validation errors
+    const payload = {
+      ...req.body,
+      websiteName: req.body.websiteName?.trim() || "Ink of Memories",
+      email: req.body.email?.trim() || "info@inkofmemories.com",
+      mainOffice:
+        req.body.mainOffice?.trim() ||
+        "123 Printing Street, Design District, Mumbai 400001",
+      branchOffice: req.body.branchOffice?.trim() || "Branch Office, City",
+      contactNo1: req.body.contactNo1?.trim() || "",
+      whatsAppNo: req.body.whatsAppNo?.trim() || "",
+    };
+
+    const settings = new SiteSettings(payload);
     await settings.save();
     res.status(201).json(settings);
   } catch (error) {
+    console.error("CREATE SITE SETTINGS ERROR:", error);
     res
       .status(400)
       .json({ message: "Error creating site settings", error: error.message });
@@ -35,9 +53,7 @@ export const createSiteSettings = async (req, res) => {
 // Update Site Settings
 export const updateSiteSettings = async (req, res) => {
   try {
-    //console.log("heleeooeoe")
     const { id } = req.params;
-    //console.log(id,"id of site")
     const settings = await SiteSettings.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true,

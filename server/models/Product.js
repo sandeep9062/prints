@@ -24,8 +24,9 @@ const ProductSchema = new Schema(
       paperTypes: [String],
       colors: [String],
     },
+    featured: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.models.Product ||

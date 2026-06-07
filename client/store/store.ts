@@ -11,6 +11,7 @@ import { customizationApi } from "@/services/customizationApi";
 import { blogApi } from "@/services/blogApi";
 import { mediaApi } from "@/services/mediaApi";
 import { siteSettingsApi } from "@/services/siteSettingsApi";
+import { addressApi } from "@/services/addressApi";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     [blogApi.reducerPath]: blogApi.reducer,
     [mediaApi.reducerPath]: mediaApi.reducer,
     [siteSettingsApi.reducerPath]: siteSettingsApi.reducer,
+    [addressApi.reducerPath]: addressApi.reducer,
     auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -38,6 +40,7 @@ const store = configureStore({
       blogApi.middleware,
       mediaApi.middleware,
       siteSettingsApi.middleware,
+      addressApi.middleware,
     ),
   devTools: process.env.NODE_ENV !== "production",
 });

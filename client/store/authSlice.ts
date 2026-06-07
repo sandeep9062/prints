@@ -1,18 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 
+interface UserData {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+  image?: string;
+  role: string;
+  wishlist: any[];
+  addresses: any[];
+  createdAt?: string;
+}
+
 interface AuthState {
   isAuthenticated: boolean;
-  user: {
-    _id: string;
-    name: string;
-    email: string;
-    phone: string;
-    image?: string;
-    role: string;
-    wishlist: any[];
-    addresses: any[];
-  } | null;
+  user: UserData | null;
   token: string | null;
 }
 
@@ -51,18 +54,9 @@ const authSlice = createSlice({
     loginSuccess(
       state,
       action: PayloadAction<{
-        user: {
-          _id: string;
-          name: string;
-          email: string;
-          phone: string;
-          image?: string;
-          role: string;
-          wishlist: any[];
-          addresses: any[];
-        };
+        user: UserData;
         token: string;
-      }>
+      }>,
     ) {
       state.isAuthenticated = true;
       state.user = action.payload.user;
@@ -80,18 +74,9 @@ const authSlice = createSlice({
     setUser(
       state,
       action: PayloadAction<{
-        user: {
-          _id: string;
-          name: string;
-          email: string;
-          phone: string;
-          image?: string;
-          role: string;
-          wishlist: any[];
-          addresses: any[];
-        };
+        user: UserData;
         token: string;
-      }>
+      }>,
     ) {
       state.isAuthenticated = true;
       state.user = action.payload.user;

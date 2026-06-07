@@ -22,15 +22,15 @@ export const getAllCustomers = async (req, res) => {
               _id: null,
               totalOrders: { $sum: 1 },
               totalSpent: { $sum: "$totalAmount" },
-              lastOrderDate: { $max: "$createdAt" }
-            }
-          }
+              lastOrderDate: { $max: "$createdAt" },
+            },
+          },
         ]);
 
         const stats = orderStats[0] || {
           totalOrders: 0,
           totalSpent: 0,
-          lastOrderDate: null
+          lastOrderDate: null,
         };
 
         return {
@@ -38,10 +38,10 @@ export const getAllCustomers = async (req, res) => {
           orderStats: {
             totalOrders: stats.totalOrders,
             totalSpent: stats.totalSpent,
-            lastOrderDate: stats.lastOrderDate
-          }
+            lastOrderDate: stats.lastOrderDate,
+          },
         };
-      })
+      }),
     );
 
     res.status(200).json({
@@ -66,7 +66,9 @@ export const getCustomerById = async (req, res) => {
       .populate("products", "name images price");
 
     if (!customer) {
-      return res.status(404).json({ success: false, message: "Customer not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Customer not found" });
     }
 
     // Get customer's orders with product details
@@ -86,9 +88,9 @@ export const getCustomerById = async (req, res) => {
           totalSpent: { $sum: "$totalAmount" },
           avgOrderValue: { $avg: "$totalAmount" },
           firstOrderDate: { $min: "$createdAt" },
-          lastOrderDate: { $max: "$createdAt" }
-        }
-      }
+          lastOrderDate: { $max: "$createdAt" },
+        },
+      },
     ]);
 
     const customerStats = stats[0] || {
@@ -96,7 +98,7 @@ export const getCustomerById = async (req, res) => {
       totalSpent: 0,
       avgOrderValue: 0,
       firstOrderDate: null,
-      lastOrderDate: null
+      lastOrderDate: null,
     };
 
     res.status(200).json({
@@ -104,8 +106,8 @@ export const getCustomerById = async (req, res) => {
       customer: {
         ...customer.toObject(),
         recentOrders: customerOrders,
-        stats: customerStats
-      }
+        stats: customerStats,
+      },
     });
   } catch (error) {
     console.error("Get Customer Error:", error);
@@ -120,7 +122,9 @@ export const userProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select("-password");
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
     res.status(200).json({ success: true, user });
   } catch (error) {
@@ -147,7 +151,9 @@ export const updateProfile = async (req, res) => {
     }).select("-password");
 
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     res.status(200).json({ success: true, user });
@@ -164,7 +170,7 @@ export const userFavourites = async (req, res) => {
   try {
     const wishlist = await Wishlist.findOne({ user: req.user._id }).populate(
       "products",
-      "name images price discountPrice badge category"
+      "name images price discountPrice badge category",
     );
 
     const favourites = wishlist ? wishlist.products : [];
@@ -219,7 +225,9 @@ export const getUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
     res.status(200).json({ success: true, user });
   } catch (error) {
@@ -237,13 +245,25 @@ export const createUser = async (req, res) => {
 
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ success: false, message: "User already exists" });
+      return res
+        .status(400)
+        .json({ success: false, message: "User already exists" });
     }
 
-    const user = await User.create({ name, email, password, role: role || "client" });
+    const user = await User.create({
+      name,
+      email,
+      password,
+      role: role || "client",
+    });
     res.status(201).json({
       success: true,
-      user: { _id: user._id, name: user.name, email: user.email, role: user.role },
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (error) {
     console.error("Create User Error:", error);
@@ -256,7 +276,9 @@ export const createUser = async (req, res) => {
 // =====================================
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find({}).select("-password").sort({ createdAt: -1 });
+    const users = await User.find({})
+      .select("-password")
+      .sort({ createdAt: -1 });
     res.status(200).json({ success: true, users });
   } catch (error) {
     console.error("Get Users Error:", error);
@@ -274,11 +296,13 @@ export const updateUser = async (req, res) => {
     const user = await User.findByIdAndUpdate(
       req.params.id,
       { name, email, role, isActive },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select("-password");
 
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     res.status(200).json({ success: true, user });
@@ -295,11 +319,143 @@ export const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
-    res.status(200).json({ success: true, message: "User deleted successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "User deleted successfully" });
   } catch (error) {
     console.error("Delete User Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// =====================================
+// ADD ADDRESS
+// =====================================
+export const addAddress = async (req, res) => {
+  try {
+    const { fullName, phone, street, city, state, pincode, country } = req.body;
+
+    if (!fullName || !phone || !street || !city || !state || !pincode) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Please provide all required fields",
+        });
+    }
+
+    const address = await Address.create({
+      user: req.user._id,
+      fullName,
+      phone,
+      street,
+      city,
+      state,
+      pincode,
+      country: country || "India",
+    });
+
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: { addresses: address._id },
+    });
+
+    res.status(201).json({ success: true, address });
+  } catch (error) {
+    console.error("Add Address Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// =====================================
+// GET USER ADDRESSES
+// =====================================
+export const getMyAddresses = async (req, res) => {
+  try {
+    const addresses = await Address.find({ user: req.user._id }).sort({
+      createdAt: -1,
+    });
+    res.status(200).json({ success: true, addresses });
+  } catch (error) {
+    console.error("Get Addresses Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// =====================================
+// UPDATE ADDRESS
+// =====================================
+export const updateAddress = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { fullName, phone, street, city, state, pincode, country } = req.body;
+
+    const address = await Address.findOneAndUpdate(
+      { _id: id, user: req.user._id },
+      { fullName, phone, street, city, state, pincode, country },
+      { new: true, runValidators: true },
+    );
+
+    if (!address) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found" });
+    }
+
+    res.status(200).json({ success: true, address });
+  } catch (error) {
+    console.error("Update Address Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// =====================================
+// DELETE ADDRESS
+// =====================================
+export const deleteAddress = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const address = await Address.findOneAndDelete({
+      _id: id,
+      user: req.user._id,
+    });
+
+    if (!address) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found" });
+    }
+
+    await User.findByIdAndUpdate(req.user._id, {
+      $pull: { addresses: id },
+    });
+
+    res
+      .status(200)
+      .json({ success: true, message: "Address deleted successfully" });
+  } catch (error) {
+    console.error("Delete Address Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// =====================================
+// GET MY ORDERS (for logged-in user)
+// =====================================
+export const getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user._id })
+      .populate("address")
+      .populate("items.product", "name images price")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, orders });
+  } catch (error) {
+    console.error("Get My Orders Error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -310,7 +466,7 @@ export const deleteUser = async (req, res) => {
 export const bookVisit = async (req, res) => {
   return res.status(400).json({
     success: false,
-    message: "Booking visits is not applicable for this application"
+    message: "Booking visits is not applicable for this application",
   });
 };
 
@@ -320,6 +476,6 @@ export const bookVisit = async (req, res) => {
 export const cancelVisit = async (req, res) => {
   return res.status(400).json({
     success: false,
-    message: "Cancelling visits is not applicable for this application"
+    message: "Cancelling visits is not applicable for this application",
   });
 };

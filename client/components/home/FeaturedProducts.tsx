@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useGetProductsQuery } from "@/services/productsApi";
 import { ProductCard } from "./ProductCard";
 
-type Product = {
+type ProductCardProps = {
   id: string;
   name: string;
   category: string;
@@ -16,47 +16,67 @@ type Product = {
   badge?: string;
 };
 
-const products: Product[] = [
-  {
-    id: "1",
-    name: "Royal Elegance Wedding Card",
-    category: "Bespoke Wedding Cards",
-    price: 2500,
-    originalPrice: 3000,
-    image:
-      "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=500&q=80",
-    badge: "Bestseller",
-  },
-  {
-    id: "2",
-    name: "Floral Dream Invitation",
-    category: "Event Invitations",
-    price: 1800,
-    image:
-      "https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?w=500&q=80",
-    badge: "New Arrival",
-  },
-  {
-    id: "3",
-    name: "Premium Business Card Set",
-    category: "Corporate Identity",
-    price: 1200,
-    image:
-      "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500&q=80",
-  },
-  {
-    id: "4",
-    name: "Vintage Gold Wedding Suite",
-    category: "Premium Collections",
-    price: 4500,
-    originalPrice: 5500,
-    image:
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80",
-    badge: "Signature",
-  },
-];
+type ApiProduct = {
+  _id: string;
+  name: string;
+  category: string;
+  price: number;
+  discountPrice?: number;
+  images?: string[];
+  badge?: string;
+  featured?: boolean;
+};
 
 export const FeaturedProducts = () => {
+  const { data, isLoading, isError } = useGetProductsQuery();
+
+  // Transform API products to ProductCard format and filter featured ones
+  const featuredProducts: ProductCardProps[] = (data?.products || [])
+    .filter((p: ApiProduct) => p.featured)
+    .slice(0, 4)
+    .map((p: ApiProduct) => ({
+      id: p._id,
+      name: p.name,
+      category: p.category,
+      price: p.price,
+      originalPrice:
+        p.discountPrice && p.discountPrice < p.price ? p.price : undefined,
+      image: p.images?.[0] || "/placeholder.svg",
+      badge: p.badge,
+    }));
+
+  if (isLoading) {
+    return (
+      <section className="py-24 bg-[#FCFBF9] dark:bg-[#0f111a]">
+        <div className="container mx-auto px-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+            {[...Array(4)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="group"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <div className="relative aspect-[4/5] bg-stone-100 dark:bg-stone-800 overflow-hidden mb-6 animate-pulse">
+                  <div className="w-full h-full bg-stone-200 dark:bg-stone-700" />
+                </div>
+                <div className="h-3 bg-stone-200 dark:bg-stone-700 rounded animate-pulse mb-2" />
+                <div className="h-5 bg-stone-200 dark:bg-stone-700 rounded animate-pulse w-3/4 mx-auto md:mx-0" />
+                <div className="h-4 bg-stone-200 dark:bg-stone-700 rounded animate-pulse w-1/2 mx-auto md:mx-0 mt-2" />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (isError || !featuredProducts.length) {
+    return null;
+  }
+
   return (
     <section className="py-24 bg-[#FCFBF9] dark:bg-[#0f111a]">
       <div className="container mx-auto px-6">
@@ -81,7 +101,7 @@ export const FeaturedProducts = () => {
 
         {/* Products Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
-          {products.map((product, index) => (
+          {featuredProducts.map((product, index) => (
             <ProductCard key={product.id} product={product} index={index} />
           ))}
         </div>

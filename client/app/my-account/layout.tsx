@@ -42,20 +42,30 @@ export default function UserDashboard({
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] pt-12">
-      <div className="container mx-auto px-6 lg:px-20">
-        <div className="grid lg:grid-cols-12 gap-12">
-          {/* LEFT SIDEBAR */}
-          <aside className="lg:col-span-3">
-            <h1 className="text-3xl font-serif text-stone-900 mb-10">
-              My Account
-            </h1>
+    <div className="min-h-screen bg-gradient-to-b from-stone-50 to-white pt-8 md:pt-12 pb-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        {/* Header Section */}
+        <div className="mb-8 md:mb-10">
+          <h1 className="text-3xl md:text-4xl font-serif text-stone-900 tracking-tight">
+            My Account
+          </h1>
+          <p className="text-stone-500 mt-2 text-sm hidden md:block">
+            Manage your profile, orders, and preferences
+          </p>
+        </div>
 
-            <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* LEFT SIDEBAR */}
+          <aside className="lg:w-72 xl:w-80 flex-shrink-0">
+            <div className="lg:sticky lg:top-24">
+              <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+            </div>
           </aside>
 
           {/* RIGHT CONTENT AREA */}
-          <main className="lg:col-span-9">{renderActiveContent()}</main>
+          <main className="flex-1 min-w-0">
+            <div className="animate-fadeIn">{renderActiveContent()}</div>
+          </main>
         </div>
       </div>
     </div>

@@ -217,6 +217,12 @@ export const userApi = createApi({
       query: (id) => `/v1/users/customers/${id}`,
       providesTags: (result, error, id) => ["User", { type: "User", id }],
     }),
+
+    // ✅ Get my orders (logged-in user)
+    getMyOrders: builder.query<{ success: boolean; orders: any[] }, void>({
+      query: () => `/v1/users/my-orders`,
+      providesTags: ["User"],
+    }),
   }),
 });
 
@@ -237,4 +243,5 @@ export const {
 
   useGetAllCustomersQuery,
   useGetCustomerByIdQuery,
+  useGetMyOrdersQuery,
 } = userApi;

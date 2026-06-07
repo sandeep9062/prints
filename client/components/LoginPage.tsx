@@ -54,7 +54,7 @@ export default function LoginPage({
   };
 
   return (
-    <div className="w-full min-h-screen lg:grid lg:grid-cols-2">
+    <div className="w-full min-h-screen lg:grid lg:grid-cols-2 bg-white dark:bg-gray-900">
       <div className="hidden lg:block relative">
         <Image
           src="/real-estate-login.jpg"
@@ -82,7 +82,7 @@ export default function LoginPage({
           <div className="absolute top-4 left-4">
             <button
               onClick={() => router.push("/")}
-              className="flex items-center gap-2 text-gray-600 hover:text-rose-600 transition-colors"
+              className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-rose-600 transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -103,19 +103,19 @@ export default function LoginPage({
           </div>
 
           <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
               Welcome Back!
             </h1>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Enter your credentials to access your account
             </p>
           </div>
-          <div className="bg-white p-8 shadow-2xl rounded-2xl">
+          <div className="bg-white dark:bg-gray-800 p-8 shadow-2xl rounded-2xl">
             <form onSubmit={handleSubmit(handleLogin)} className="space-y-6">
               <div>
                 <label
                   htmlFor="emailOrPhone"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Email or Phone
                 </label>
@@ -125,7 +125,7 @@ export default function LoginPage({
                     type="text"
                     placeholder="you@example.com"
                     {...register("emailOrPhone")}
-                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                   />
                   {errors.emailOrPhone && (
                     <p className="mt-2 text-sm text-red-600">
@@ -139,7 +139,7 @@ export default function LoginPage({
                 <div className="flex items-center justify-between">
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                   >
                     Password
                   </label>
@@ -158,12 +158,12 @@ export default function LoginPage({
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     {...register("password")}
-                    className="w-full p-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                    className="w-full p-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none"
                     aria-label={
                       showPassword ? "Hide password" : "Show password"
                     }
@@ -226,10 +226,10 @@ export default function LoginPage({
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
+                  <div className="w-full border-t border-gray-300 dark:border-gray-600" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">
+                  <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
                     Or continue with
                   </span>
                 </div>
@@ -238,7 +238,7 @@ export default function LoginPage({
               <div className="mt-6">
                 <button
                   type="button"
-                  className="w-full p-3 text-gray-700 font-medium bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 flex items-center justify-center"
+                  className="w-full p-3 text-gray-700 dark:text-gray-300 font-medium bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 flex items-center justify-center"
                 >
                   <svg
                     className="w-5 h-5 mr-2"
@@ -261,7 +261,7 @@ export default function LoginPage({
             </div>
           </div>
           <div className="mt-6 text-center text-sm">
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Don't have an account?{" "}
               <button
                 onClick={toggleAuthMode}

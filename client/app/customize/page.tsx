@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import React, {
   useState,
   ChangeEvent,
@@ -9,6 +10,8 @@ import React, {
   useCallback,
 } from "react";
 import {
+
+
   Sparkles,
   ArrowRight,
   RefreshCw,
@@ -54,6 +57,9 @@ import DesignStep from "@/components/customize/DesignStep";
 import MediaStep from "@/components/customize/MediaStep";
 import PreviewStep from "@/components/customize/PreviewStep";
 import LivePreview from "@/components/customize/LivePreview";
+import DesignTour from "@/components/customize/DesignTour";
+import ShareDraftModal from "@/components/customize/ShareDraftModal";
+import MessageTemplates from "@/components/customize/MessageTemplates";
 import {
   fonts,
   colorThemes,
@@ -249,6 +255,9 @@ function KeyboardShortcutsModal({
     { keys: "Ctrl + S", action: "Save draft" },
     { keys: "Ctrl + Shift + S", action: "Submit design" },
     { keys: "Ctrl + R", action: "Reset form" },
+    { keys: "Ctrl + M", action: "Message templates" },
+    { keys: "Ctrl + Shift + M", action: "Share design" },
+    { keys: "Ctrl + T", action: "Take tour" },
   ];
   return (
     <div
@@ -296,15 +305,17 @@ function MyCustomizationsPanel({
 }: {
   onLoadDraft: (data: any) => void;
 }) {
+  const [hasToken, setHasToken] = useState(false);
+  useEffect(() => {
+    setHasToken(!!localStorage.getItem("token"));
+  }, []);
+
   const { data, isLoading, error } = useGetMyCustomizationsQuery(undefined, {
-    skip:
-      typeof window !== "undefined" && !localStorage.getItem("token")
-        ? true
-        : false,
+    skip: !hasToken,
   });
   const [deleteCustomization] = useDeleteCustomizationMutation();
 
-  if (typeof window !== "undefined" && !localStorage.getItem("token")) {
+  if (!hasToken) {
     return null;
   }
 
@@ -495,6 +506,21 @@ const Page = () => {
   const [savedDraft, setSavedDraft] = useState<any>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
+  // New feature states
+  const [showTour, setShowTour] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showMessageTemplates, setShowMessageTemplates] = useState(false);
+  const [tourCompleted, setTourCompleted] = useState(false);
+
+  // Initialize tourCompleted from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setTourCompleted(
+        localStorage.getItem("design_tour_completed") === "true",
+      );
+    }
+  }, []);
+
   const [createCustomization] = useCreateCustomizationMutation();
   const [uploadImages] = useUploadCustomizationImagesMutation();
 
@@ -536,6 +562,18 @@ const Page = () => {
       if (e.key === "?" && e.shiftKey) {
         e.preventDefault();
         setShowShortcuts((prev) => !prev);
+      }
+      if (ctrl && e.key === "m") {
+        e.preventDefault();
+        setShowMessageTemplates(true);
+      }
+      if (ctrl && e.shiftKey && e.key === "M") {
+        e.preventDefault();
+        setShowShareModal(true);
+      }
+      if (ctrl && e.key === "t") {
+        e.preventDefault();
+        setShowTour(true);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -1202,6 +1240,36 @@ const Page = () => {
                     <span className="hidden sm:inline">Shortcuts</span>
                   </button>
 
+                  {/* Message Templates */}
+                  <button
+                    onClick={() => setShowMessageTemplates(true)}
+                    className="text-xs text-muted-foreground/50 hover:text-primary/60 transition-colors flex items-center gap-1"
+                    title="Message templates (Ctrl+M)"
+                  >
+                    <FileImage className="h-3 w-3" />
+                    <span className="hidden sm:inline">Templates</span>
+                  </button>
+
+                  {/* Share Design */}
+                  <button
+                    onClick={() => setShowShareModal(true)}
+                    className="text-xs text-muted-foreground/50 hover:text-primary/60 transition-colors flex items-center gap-1"
+                    title="Share design"
+                  >
+                    <Share2 className="h-3 w-3" />
+                    <span className="hidden sm:inline">Share</span>
+                  </button>
+
+                  {/* Design Tour */}
+                  <button
+                    onClick={() => setShowTour(true)}
+                    className="text-xs text-muted-foreground/50 hover:text-primary/60 transition-colors flex items-center gap-1"
+                    title="Take a tour"
+                  >
+                    <Sparkles className="h-3 w-3" />
+                    <span className="hidden sm:inline">Tour</span>
+                  </button>
+
                   <div className="flex-1" />
 
                   {/* Step hint */}
@@ -1403,9 +1471,43 @@ const Page = () => {
           open={showShortcuts}
           onClose={() => setShowShortcuts(false)}
         />
+
+        {/* Design Tour Modal */}
+        <DesignTour
+          isOpen={showTour}
+          onClose={() => setShowTour(false)}
+          onComplete={() => {
+            setTourCompleted(true);
+            localStorage.setItem("design_tour_completed", "true");
+          }}
+        />
+
+        {/* Share Draft Modal */}
+        <ShareDraftModal
+          isOpen={showShareModal}
+          onClose={() => setShowShareModal(false)}
+          designData={{
+            groomName: formData.groomName,
+            brideName: formData.brideName,
+            eventDate: formData.eventDate,
+            venue: formData.venue,
+          }}
+        />
+
+        {/* Message Templates Modal */}
+        <MessageTemplates
+          isOpen={showMessageTemplates}
+          onClose={() => setShowMessageTemplates(false)}
+          onSelectTemplate={(message) =>
+            setFormData((prev) => ({ ...prev, message }))
+          }
+          currentMessage={formData.message}
+        />
       </div>
     </CustomizeErrorBoundary>
   );
 };
 
 export default Page;
+
+

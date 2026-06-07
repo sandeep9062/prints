@@ -124,7 +124,7 @@ export const AdminSidebar = ({ activeTab, collapsed }: SidebarProps) => {
           </div>
 
           {!collapsed && item.count !== undefined && item.count > 0 && (
-            <span className="bg-stone-900 text-white text-[9px] font-bold px-2 py-0.5 min-w-[1.5rem] text-center">
+            <span className="bg-stone-200 text-stone-700 text-[9px] font-bold px-2 py-0.5 min-w-[1.5rem] text-center">
               {item.count}
             </span>
           )}

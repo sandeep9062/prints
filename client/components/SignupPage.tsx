@@ -57,7 +57,7 @@ export default function SignupPage({
   };
 
   return (
-    <div className="w-full min-h-screen lg:grid lg:grid-cols-2">
+    <div className="w-full min-h-screen lg:grid lg:grid-cols-2 bg-white dark:bg-gray-900">
       <div className="hidden lg:block relative">
         <Image
           src="/real-estate-login.jpg"
@@ -85,7 +85,7 @@ export default function SignupPage({
           <div className="absolute top-4 left-4">
             <button
               onClick={() => router.push("/")}
-              className="flex items-center gap-2 text-gray-600 hover:text-rose-600 transition-colors"
+              className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-rose-600 transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -106,19 +106,19 @@ export default function SignupPage({
           </div>
 
           <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
               Create an Account
             </h1>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Join us and start your journey today!
             </p>
           </div>
-          <div className="bg-white p-8 shadow-2xl rounded-2xl">
+          <div className="bg-white dark:bg-gray-800 p-8 shadow-2xl rounded-2xl">
             <form onSubmit={handleSubmit(handleSignup)} className="space-y-6">
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Full Name
                 </label>
@@ -128,7 +128,7 @@ export default function SignupPage({
                     type="text"
                     placeholder="John Doe"
                     {...register("name")}
-                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                   />
                   {errors.name && (
                     <p className="mt-2 text-sm text-red-600">
@@ -141,7 +141,7 @@ export default function SignupPage({
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Email
                 </label>
@@ -151,7 +151,7 @@ export default function SignupPage({
                     type="email"
                     placeholder="you@example.com"
                     {...register("email")}
-                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                   />
                   {errors.email && (
                     <p className="mt-2 text-sm text-red-600">
@@ -164,7 +164,7 @@ export default function SignupPage({
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Phone Number
                 </label>
@@ -174,7 +174,7 @@ export default function SignupPage({
                     placeholder="Enter phone number"
                     value={phoneValue}
                     onChange={(value) => setValue("phone", value || "")}
-                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                     defaultCountry="IN"
                   />
                   {errors.phone && (
@@ -188,7 +188,7 @@ export default function SignupPage({
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Password
                 </label>
@@ -198,12 +198,12 @@ export default function SignupPage({
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     {...register("password")}
-                    className="w-full p-3 pr-12 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition"
+                    className="w-full p-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none"
                     aria-label={
                       showPassword ? "Hide password" : "Show password"
                     }
@@ -254,7 +254,7 @@ export default function SignupPage({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Role
                 </label>
                 <div className="mt-2 flex items-center space-x-6">
@@ -265,7 +265,9 @@ export default function SignupPage({
                       {...register("role")}
                       className="form-radio h-4 w-4 text-rose-600 border-gray-300 focus:ring-rose-500"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Client</span>
+                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                      Client
+                    </span>
                   </label>
                   <label className="flex items-center">
                     <input
@@ -274,7 +276,9 @@ export default function SignupPage({
                       {...register("role")}
                       className="form-radio h-4 w-4 text-rose-600 border-gray-300 focus:ring-rose-500"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Merchant</span>
+                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                      Merchant
+                    </span>
                   </label>
                 </div>
                 {errors.role && (
@@ -296,7 +300,7 @@ export default function SignupPage({
             </form>
           </div>
           <div className="mt-6 text-center text-sm">
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Already have an account?{" "}
               <button
                 onClick={toggleAuthMode}

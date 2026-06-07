@@ -20,6 +20,7 @@ export const products = [
       paperTypes: ["Textured Ivory", "Metallic Gold"],
       colors: ["Cream", "White"],
     },
+    featured: true,
   },
   {
     name: "Minimalist Executive Business Cards",
@@ -42,6 +43,7 @@ export const products = [
       paperTypes: ["Suede Matte", "Linen"],
       colors: ["Midnight Black", "Slate Gray"],
     },
+    featured: true,
   },
   {
     name: "Velvet Crimson Shagun Envelopes",
@@ -64,6 +66,7 @@ export const products = [
       paperTypes: ["Velvet Finish", "Handmade Paper"],
       colors: ["Crimson Red", "Forest Green"],
     },
+    featured: true,
   },
   {
     name: "Corporate Identity Brochure",
@@ -86,6 +89,7 @@ export const products = [
       paperTypes: ["Glossy Silk", "Matte Coated"],
       colors: ["Full CMYK"],
     },
+    featured: true,
   },
   {
     name: "Floral Watercolor Invitation Card",
@@ -196,6 +200,7 @@ export const products = [
       paperTypes: ["Glossy Photo", "Fine Art Matte"],
       colors: ["Linen Gray", "Champagne Silk"],
     },
+    featured: true,
   },
   {
     name: "Luxury Foil-Stamped Gift Cards",
