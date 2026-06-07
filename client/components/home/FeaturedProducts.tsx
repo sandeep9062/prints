@@ -8,6 +8,7 @@ import { ProductCard } from "./ProductCard";
 
 type ProductCardProps = {
   id: string;
+  slug: string;
   name: string;
   category: string;
   price: number;
@@ -36,6 +37,7 @@ export const FeaturedProducts = () => {
     .slice(0, 4)
     .map((p: ApiProduct) => ({
       id: p._id,
+      slug: (p as any).slug || p._id,
       name: p.name,
       category: p.category,
       price: p.price,

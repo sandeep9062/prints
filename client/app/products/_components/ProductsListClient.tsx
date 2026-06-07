@@ -163,7 +163,8 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
             {filteredProducts.map((product: any, index: number) => {
               // Map API product to match ProductCard props format
               const formattedProduct = {
-                id: product.slug || product._id,
+                id: product._id,
+                slug: product.slug || product._id,
                 name: product.name,
                 category: product.category,
                 price: product.discountPrice || product.price,

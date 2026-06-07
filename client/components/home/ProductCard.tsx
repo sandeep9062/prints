@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 
 type Product = {
   id: string;
+  slug: string;
   name: string;
   category: string;
   price: number;
@@ -46,7 +47,7 @@ export const ProductCard = ({
 
         {/* Quick Add Overlay */}
         <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-          <Link href={`/products/${product.id}`}>
+          <Link href={`/products/${product.slug}`}>
             <Button className="w-full bg-stone-900/90 backdrop-blur-sm hover:bg-stone-900 text-white rounded-none py-6 text-[10px] tracking-widest uppercase">
               Quick View
             </Button>
