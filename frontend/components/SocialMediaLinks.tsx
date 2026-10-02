@@ -10,9 +10,14 @@ import {
   FaPinterest,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 
-export default function SocialMediaLinks() {
+export default function SocialMediaLinks({
+  className,
+}: {
+  className?: string;
+}) {
   const {
     facebook,
     instagram,
@@ -64,13 +69,16 @@ export default function SocialMediaLinks() {
   const displayLinks = socialLinks.length > 0 ? socialLinks : fallbackLinks;
 
   return (
-    <section className="text-center py-3 bg-white dark:bg-[#0F111A]">
+    <nav
+      aria-label="Social media"
+      className={cn("flex flex-wrap justify-center gap-3", className)}
+    >
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.5 }}
         viewport={{ once: true }}
-        className="flex justify-center gap-6"
+        className="flex flex-wrap justify-center gap-3"
       >
         {displayLinks.map((item, i) => (
           <a
@@ -79,12 +87,12 @@ export default function SocialMediaLinks() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={item.label}
-            className="text-xl text-gray-700 dark:text-gray-300 hover:scale-110 transition duration-300 hover:text-rose-800"
+            className="flex h-10 w-10 items-center justify-center border border-stone-200 text-stone-500 transition-all duration-300 hover:-translate-y-0.5 hover:border-red-900 hover:text-red-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 dark:border-stone-700 dark:text-stone-400 dark:hover:border-red-600 dark:hover:text-red-600 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
           >
             {item.icon}
           </a>
         ))}
       </motion.div>
-    </section>
+    </nav>
   );
 }

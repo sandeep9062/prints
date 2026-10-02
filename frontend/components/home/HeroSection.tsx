@@ -1,134 +1,293 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const STATS = [
-  { value: "20", label: "Years" },
-  { value: "50k", label: "Clients" },
-  { value: "100+", label: "Originals" },
-];
+/*
+  Design notes
+  - Palette: sage paper #E4E9DD, bottle-green ink #1F3A32, foil gold #B08D4A,
+    wax rose #A24B4B. Dark mode: deep green #16211D.
+  - Type: use a high-contrast serif for `font-serif` (Cormorant Garamond via
+    next/font works well) and your site sans for body.
+  - Memorable element: an invitation suite built in CSS. Visitors can swap the
+    paper stock and see the card change, which previews the real service.
+*/
+
+const DEBOSS = "0 1px 0 rgba(255,255,255,.85), 0 -1px 0 rgba(31,58,50,.25)";
+
+// Paper grain as an inline SVG, so no extra requests
+const GRAIN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")`;
+
+const PAPERS = [
+  {
+    id: "bone",
+    name: "Bone cotton, blind deboss",
+    card: "#F7F4EE",
+    rsvp: "#EFE9DC",
+    type: "#D8D0C0",
+    shadow: DEBOSS,
+    rule: "#B08D4A",
+  },
+  {
+    id: "blush",
+    name: "Blush cotton, blind deboss",
+    card: "#F4E4E0",
+    rsvp: "#EBD4CF",
+    type: "#DDBFB9",
+    shadow: DEBOSS,
+    rule: "#B08D4A",
+  },
+  {
+    id: "mist",
+    name: "Mist blue, blind deboss",
+    card: "#E3EAEF",
+    rsvp: "#D5DFE7",
+    type: "#BCCAD4",
+    shadow: DEBOSS,
+    rule: "#B08D4A",
+  },
+  {
+    id: "midnight",
+    name: "Midnight green, gold foil",
+    card: "#22332D",
+    rsvp: "#1B2A25",
+    type: "#D2AE62",
+    shadow: "none",
+    rule: "#D2AE62",
+  },
+] as const;
+
+const Grain = () => (
+  <span
+    aria-hidden="true"
+    className="pointer-events-none absolute inset-0 rounded-sm opacity-[.22] mix-blend-multiply"
+    style={{ backgroundImage: GRAIN }}
+  />
+);
 
 export const HeroSection: React.FC = () => {
+  const [paperId, setPaperId] = useState<(typeof PAPERS)[number]["id"]>("bone");
+  const paper = PAPERS.find((p) => p.id === paperId) ?? PAPERS[0];
+
+  const paperStyle = (extra: React.CSSProperties = {}) =>
+    ({
+      transition: "background-color .5s, color .5s",
+      color: paper.type,
+      textShadow: paper.shadow,
+      ...extra,
+    }) as React.CSSProperties;
+
   return (
-    // The Navbar is position:fixed and reserves no flow space, so the hero
-    // clears it using --navbar-height (defined in globals.css) + breathing room.
     <section
       aria-labelledby="hero-heading"
-      className="relative flex min-h-[70vh] items-center overflow-hidden bg-[#FCFBF9] pt-[calc(var(--navbar-height)+1.5rem)] pb-20 dark:bg-[#0f111a] lg:pt-[calc(var(--navbar-height)+3rem)] lg:pb-28"
+      className="relative overflow-hidden bg-[#E4E9DD] pt-[calc(var(--navbar-height)+2rem)] pb-24 dark:bg-[#16211D] lg:pt-[calc(var(--navbar-height)+4rem)] lg:pb-32"
     >
-      {/* Background detail: tinted side panel + soft paper glow */}
-      <div aria-hidden="true" className="absolute inset-0 z-0">
-        <div className="absolute right-0 top-0 hidden h-full w-[38%] bg-[#F4F1EE] dark:bg-[#0d1321] lg:block" />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-stone-300 to-transparent dark:via-stone-700" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-stone-300 to-transparent dark:via-stone-700" />
-      </div>
+      <style>{`
+        @keyframes suite-settle {
+          from { opacity: 0; transform: translateY(24px) rotate(var(--from, 0deg)); }
+          to   { opacity: 1; transform: translateY(0) rotate(var(--to, 0deg)); }
+        }
+        .suite-card { animation: suite-settle .9s cubic-bezier(.2,.7,.2,1) both; }
+        @media (prefers-reduced-motion: reduce) {
+          .suite-card { animation: none; transform: rotate(var(--to, 0deg)); }
+        }
+      `}</style>
 
-      <div className="container relative z-10 mx-auto px-6">
-        <div className="grid items-center gap-16 lg:grid-cols-12 lg:gap-12">
-          {/* Text Content */}
-          <div className="space-y-8 lg:col-span-7 lg:pr-8">
-            <div className="inline-flex items-center gap-3">
-              <span className="h-px w-10 bg-red-800 dark:bg-red-600" />
-              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-stone-500 dark:text-stone-400">
-                Est. 1984 — Premier Print Studio
-              </span>
-            </div>
+      {/* Faint grain across the whole section so the page feels like paper */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[.12] mix-blend-multiply dark:hidden"
+        style={{ backgroundImage: GRAIN }}
+      />
+
+      <div className="container relative mx-auto px-6">
+        <div className="grid items-center gap-16 lg:grid-cols-12">
+          {/* Copy: left aligned, short measure */}
+          <div className="lg:col-span-6">
+            <p className="mb-6 text-sm text-[#1F3A32]/70 dark:text-[#E4E9DD]/70">
+              Letterpress and foil stationery, since 1984
+            </p>
 
             <h1
               id="hero-heading"
-              className="font-serif text-5xl leading-[1.05] tracking-tight text-stone-900 dark:text-stone-100 md:text-6xl lg:text-7xl"
+              className="max-w-[14ch] font-serif text-5xl font-medium leading-[1.04] tracking-tight text-[#1F3A32] dark:text-[#F7F4EE] md:text-6xl lg:text-7xl"
             >
-              Timeless <br />
-              <span className="font-light italic text-red-800 dark:text-red-600">
-                Artistry
-              </span>{" "}
-              in Paper.
+              Wedding invitations, printed slowly.
             </h1>
 
-            <p className="max-w-xl text-base font-light leading-[1.8] text-stone-600 dark:text-stone-300 md:text-lg">
-              We specialize in bespoke wedding stationery and luxury print
-              solutions crafted with meticulous attention to detail and heritage
-              techniques.
+            <p className="mt-8 max-w-[52ch] text-base leading-[1.75] text-[#1F3A32]/80 dark:text-[#E4E9DD]/80 md:text-lg">
+              Each suite is designed with you, proofed on real paper, and
+              finished by hand using heritage printing techniques.
             </p>
 
-            <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:gap-5">
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Button
                 asChild
-                className="group h-14 min-w-[220px] justify-center gap-3 rounded-none bg-red-900 px-8 text-xs uppercase tracking-widest text-white shadow-lg shadow-red-900/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-800 hover:shadow-xl hover:shadow-red-900/30 focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0 dark:focus-visible:ring-offset-[#0f111a]"
+                className="h-14 min-w-[200px] rounded-full bg-[#1F3A32] px-8 text-base text-[#F7F4EE] transition-colors hover:bg-[#2B4F44] focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 dark:bg-[#F7F4EE] dark:text-[#1F3A32] dark:hover:bg-white dark:focus-visible:ring-offset-[#16211D]"
               >
-                <Link href="/products">
-                  View Collection
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none" />
-                </Link>
+                <Link href="/products">Browse invitations</Link>
               </Button>
 
               <Button
                 asChild
                 variant="outline"
-                className="h-14 min-w-[220px] justify-center rounded-none border-red-200 bg-transparent px-8 text-xs uppercase tracking-widest text-red-900 transition-all duration-300 hover:border-red-900 hover:bg-red-900 hover:text-white focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 motion-reduce:transition-none dark:border-red-800 dark:text-red-400 dark:focus-visible:ring-offset-[#0f111a]"
+                className="h-14 min-w-[200px] rounded-full border-[#1F3A32]/40 bg-transparent px-8 text-base text-[#1F3A32] transition-colors hover:border-[#1F3A32] hover:bg-[#1F3A32]/5 focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 dark:border-[#E4E9DD]/40 dark:text-[#F7F4EE] dark:hover:bg-white/10 dark:focus-visible:ring-offset-[#16211D]"
               >
-                <Link href="/customize">Private Consultation</Link>
+                <Link href="/customize">Book a consultation</Link>
               </Button>
             </div>
 
-            {/* Stats */}
-            <dl className="mt-4 grid max-w-md grid-cols-3 border-t border-stone-200 pt-8 dark:border-stone-700">
-              {STATS.map((stat, i) => (
-                <div
-                  key={stat.label}
-                  className={
-                    i > 0
-                      ? "border-l border-stone-200 pl-6 dark:border-stone-700"
-                      : ""
-                  }
-                >
-                  <dd className="font-serif text-3xl font-light uppercase tabular-nums text-stone-900 dark:text-stone-100">
-                    {stat.value}
-                  </dd>
-                  <dt className="mt-1.5 text-[10px] uppercase tracking-widest text-stone-400 dark:text-stone-500">
-                    {stat.label}
-                  </dt>
-                </div>
-              ))}
-            </dl>
+            <p className="mt-12 max-w-[46ch] border-t border-[#1F3A32]/20 pt-6 text-sm leading-relaxed text-[#1F3A32]/70 dark:border-[#E4E9DD]/20 dark:text-[#E4E9DD]/70">
+              Trusted by over 50,000 clients, with more than 100 original
+              designs in the collection.
+            </p>
           </div>
 
-          {/* Editorial Image Composition */}
-          <div className="relative mx-auto w-full max-w-md lg:col-span-5 lg:max-w-none">
-            {/* Offset outline frame behind the main image */}
+          {/* Invitation suite + paper picker */}
+          <div className="mx-auto w-full max-w-[460px] lg:col-span-6 lg:max-w-none">
             <div
-              aria-hidden="true"
-              className="absolute -right-4 -top-4 h-full w-full border border-red-200 dark:border-red-800 sm:-right-6 sm:-top-6"
-            />
+              role="img"
+              aria-label={`Sample wedding invitation suite on ${paper.name}: envelope, invitation, RSVP card and wax seal`}
+              className="relative h-[440px] w-full sm:h-[520px]"
+            >
+              {/* Envelope: open flap + striped liner */}
+              <div
+                className="suite-card absolute left-0 top-[36%] h-[54%] w-[58%] rounded-sm shadow-[0_18px_40px_-18px_rgba(31,58,50,.5)]"
+                style={
+                  {
+                    "--from": "-9deg",
+                    "--to": "-5deg",
+                    animationDelay: ".05s",
+                    background:
+                      "repeating-linear-gradient(135deg,#C9A3A0 0 2px,#D8B8B4 2px 14px)",
+                  } as React.CSSProperties
+                }
+              >
+                <div
+                  className="absolute -top-[26%] left-0 h-[27%] w-full bg-[#C39A95]"
+                  style={{ clipPath: "polygon(0 100%, 50% 0, 100% 100%)" }}
+                />
+              </div>
 
-            <div className="group relative aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-2xl shadow-stone-900/20 dark:bg-stone-800 dark:shadow-black/40">
-              <img
-                src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=800&q=80"
-                alt="Luxury wedding stationery laid out on a table"
-                width={800}
-                height={1000}
-                fetchPriority="high"
-                className="h-full w-full object-cover grayscale-[20%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-              />
-              {/* Soft inner vignette for depth */}
+              {/* Invitation */}
+              <div
+                className="suite-card absolute left-[30%] top-0 flex h-[84%] w-[58%] flex-col items-center justify-center rounded-sm px-6 text-center shadow-[0_28px_60px_-20px_rgba(31,58,50,.6)]"
+                style={paperStyle({
+                  backgroundColor: paper.card,
+                  animationDelay: ".2s",
+                  ["--from" as string]: "4deg",
+                  ["--to" as string]: "2deg",
+                })}
+              >
+                <Grain />
+                {/* Double rule, the classic stationery border */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-3 border transition-colors duration-500"
+                  style={{ borderColor: paper.rule }}
+                />
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-4 border opacity-50 transition-colors duration-500"
+                  style={{ borderColor: paper.rule }}
+                />
+                <span className="relative font-serif text-xs tracking-wide">
+                  Together with their families
+                </span>
+                <span className="relative mt-6 font-serif text-4xl leading-tight sm:text-5xl">
+                  Amelia
+                  <br />
+                  <span className="text-2xl italic">and</span>
+                  <br />
+                  Rohan
+                </span>
+                <span className="relative mt-6 font-serif text-xs tracking-wide">
+                  invite you to celebrate their wedding
+                </span>
+                <span className="relative mt-2 font-serif text-sm">
+                  Saturday, 14 June
+                </span>
+              </div>
+
+              {/* RSVP card */}
+              <div
+                className="suite-card absolute bottom-0 right-0 flex h-[30%] w-[40%] flex-col items-center justify-center rounded-sm shadow-[0_18px_40px_-16px_rgba(31,58,50,.55)]"
+                style={paperStyle({
+                  backgroundColor: paper.rsvp,
+                  animationDelay: ".35s",
+                  ["--from" as string]: "-2deg",
+                  ["--to" as string]: "-4deg",
+                })}
+              >
+                <Grain />
+                <span className="relative font-serif text-2xl italic">
+                  RSVP
+                </span>
+                <span className="relative mt-1 font-serif text-xs">
+                  by 1 May
+                </span>
+              </div>
+
+              {/* Wax seal with monogram */}
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/5 dark:ring-white/10"
-              />
+                className="suite-card absolute bottom-[12%] left-[20%] flex h-16 w-16 items-center justify-center rounded-full shadow-[0_8px_16px_-6px_rgba(0,0,0,.55)] sm:h-20 sm:w-20"
+                style={
+                  {
+                    "--from": "0deg",
+                    "--to": "0deg",
+                    animationDelay: ".5s",
+                    background:
+                      "radial-gradient(circle at 35% 30%,#C26666 0,#A24B4B 45%,#7E3535 100%)",
+                  } as React.CSSProperties
+                }
+              >
+                <span className="absolute inset-2 rounded-full border border-[#E9B5B5]/40" />
+                <span
+                  className="font-serif text-lg italic text-[#8E3D3D] sm:text-xl"
+                  style={{
+                    textShadow:
+                      "0 1px 0 rgba(255,255,255,.25), 0 -1px 0 rgba(0,0,0,.35)",
+                  }}
+                >
+                  A&amp;R
+                </span>
+              </div>
             </div>
 
-            {/* Floating Detail Image */}
-            <div className="absolute -bottom-10 -left-10 hidden h-48 w-36 overflow-hidden border-[8px] border-white shadow-xl dark:border-stone-900 xl:block">
-              <img
-                src="https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?w=400&q=80"
-                alt="Close-up detail of printed stationery"
-                width={400}
-                height={533}
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
+            {/* Paper picker: motion that answers an action */}
+            <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+              <span
+                id="paper-label"
+                className="text-sm text-[#1F3A32]/70 dark:text-[#E4E9DD]/70"
+              >
+                Try a paper
+              </span>
+              <div
+                role="radiogroup"
+                aria-labelledby="paper-label"
+                className="flex gap-3"
+              >
+                {PAPERS.map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={p.id === paperId}
+                    aria-label={p.name}
+                    onClick={() => setPaperId(p.id)}
+                    className="h-8 w-8 rounded-full border border-[#1F3A32]/30 transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#E4E9DD] aria-checked:ring-2 aria-checked:ring-[#1F3A32] aria-checked:ring-offset-2 aria-checked:ring-offset-[#E4E9DD] dark:border-white/30 dark:focus-visible:ring-offset-[#16211D] dark:aria-checked:ring-[#F7F4EE] dark:aria-checked:ring-offset-[#16211D] motion-reduce:transition-none"
+                    style={{ backgroundColor: p.card }}
+                  />
+                ))}
+              </div>
+              <span
+                aria-live="polite"
+                className="text-sm text-[#1F3A32] dark:text-[#F7F4EE]"
+              >
+                {paper.name}
+              </span>
             </div>
           </div>
         </div>

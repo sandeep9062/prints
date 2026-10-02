@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+/*
+  Design notes
+  - Each category is a photo mounted on a bone card. Wedding cards, the
+    flagship, is a large 2x2 tile; the other five fill the grid around it.
+  - The photo is decorative (the link text already names the category), so
+    alt is empty rather than repeating the name.
+*/
 
 interface Category {
   id: string;
@@ -64,62 +72,75 @@ const categories: Category[] = [
 
 export const CategoriesSection = () => {
   return (
-    <section className="py-20 bg-[#FCFBF9] dark:bg-[#0f111a]">
+    <section
+      aria-labelledby="categories-heading"
+      className="bg-[#E3EAEF] py-24 dark:bg-[#16211D] lg:py-28"
+    >
       <div className="container mx-auto px-6">
-        {/* Editorial Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-6 border-b border-stone-200 dark:border-stone-700">
-          <div className="max-w-xl">
-            <span className="text-[10px] tracking-[0.3em] font-bold text-stone-400 dark:text-stone-500 uppercase">
-              Curated Collections
-            </span>
-            <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-stone-100 mt-2">
-              Browse by Category
-            </h2>
-          </div>
-          <p className="text-stone-500 dark:text-stone-400 text-sm max-w-xs mt-4 md:mt-0 italic">
+        {/* Header */}
+        <div className="mb-12 flex flex-col justify-between gap-4 border-b border-[#1F3A32]/20 pb-8 dark:border-[#E4E9DD]/20 md:flex-row md:items-end">
+          <h2
+            id="categories-heading"
+            className="font-serif text-4xl font-medium leading-tight tracking-tight text-[#1F3A32] dark:text-[#F7F4EE] md:text-5xl"
+          >
+            Browse by category
+          </h2>
+          <p className="max-w-xs text-base leading-relaxed text-[#1F3A32]/75 dark:text-[#E4E9DD]/75">
             Experience the fusion of heritage craftsmanship and modern printing
             technology.
           </p>
         </div>
 
-        {/* Dense Grid Layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              href={`/products?category=${category.id}`}
-              className="group flex flex-col"
-            >
-              {/* Image: Smaller Aspect Ratio (3:2) for space efficiency */}
-              <div className="relative aspect-[3/2] overflow-hidden bg-stone-100 dark:bg-stone-800 mb-4">
-                <img
-                  src={category.image}
-                  alt={category.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute top-3 right-3 bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm px-2 py-1">
-                  <span className="text-[10px] font-semibold tracking-widest text-stone-900 dark:text-stone-100 uppercase">
-                    {category.count}
-                  </span>
+        {/* Grid: featured 2x2 tile + five single tiles */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+          {categories.map((category, index) => {
+            const featured = index === 0;
+            return (
+              <Link
+                key={category.id}
+                href={`/products?category=${category.id}`}
+                className={cn(
+                  "group flex flex-col rounded-sm bg-[#F7F4EE] p-3 shadow-[0_20px_40px_-26px_rgba(31,58,50,.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#E3EAEF] dark:bg-[#1C2B26] dark:focus-visible:ring-offset-[#16211D]",
+                  featured && "sm:col-span-2 lg:row-span-2",
+                )}
+              >
+                <div
+                  className={cn(
+                    "relative flex-1 overflow-hidden bg-[#D5DCCB] dark:bg-[#22332D]",
+                    featured
+                      ? "min-h-[280px] lg:min-h-[440px]"
+                      : "min-h-[200px]",
+                  )}
+                >
+                  <img
+                    src={category.image}
+                    alt=""
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
                 </div>
-              </div>
 
-              {/* Text Content: Structured and Minimal */}
-              <div className="flex justify-between items-start">
-                <div className="space-y-1">
-                  <h3 className="text-sm font-bold tracking-tight text-stone-900 dark:text-stone-100 uppercase">
-                    {category.name}
-                  </h3>
-                  <p className="text-xs text-stone-500 dark:text-stone-400 max-w-[240px] leading-relaxed">
+                <div className="px-2 pb-3 pt-5">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3
+                      className={cn(
+                        "font-serif font-medium text-[#1F3A32] underline decoration-transparent decoration-1 underline-offset-4 transition-colors group-hover:decoration-[#B08D4A] dark:text-[#F7F4EE] motion-reduce:transition-none",
+                        featured ? "text-3xl" : "text-2xl",
+                      )}
+                    >
+                      {category.name}
+                    </h3>
+                    <span className="shrink-0 text-sm text-[#1F3A32]/70 dark:text-[#E4E9DD]/70">
+                      {category.count}
+                    </span>
+                  </div>
+                  <p className="mt-2 max-w-[40ch] text-sm leading-relaxed text-[#1F3A32]/75 dark:text-[#E4E9DD]/75">
                     {category.description}
                   </p>
                 </div>
-                <div className="pt-1">
-                  <ArrowRight className="h-4 w-4 text-stone-300 dark:text-stone-600 group-hover:text-stone-900 dark:group-hover:text-stone-100 group-hover:translate-x-1 transition-all" />
-                </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

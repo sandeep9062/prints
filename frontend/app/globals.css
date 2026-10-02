@@ -2,6 +2,13 @@
 
 @import "tw-animate-css";
 
+/* Swiper — core styles + the modules used by the Featured Collection slider */
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "swiper/css/autoplay";
+@import "swiper/css/a11y";
+
 :root {
   --background: #ffffff;
   --foreground: #a42626;
@@ -69,6 +76,36 @@
   /* Card Elegant styling for design consistency */
   .card-elegant {
     @apply bg-card text-card-foreground rounded-xl shadow-sm border border-border/50 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 relative overflow-hidden;
+  }
+
+  /* Featured Products */
+  .featured-pagination .swiper-pagination-bullet {
+    width: 6px;
+    height: 6px;
+    margin: 0 !important;
+    border-radius: 9999px;
+    background: currentColor;
+    opacity: 0.2;
+    transition:
+      width 0.35s ease,
+      opacity 0.35s ease;
+  }
+
+  .featured-pagination .swiper-pagination-bullet-active {
+    width: 28px;
+    opacity: 0.7;
+  }
+
+  /* Prevent accidental horizontal page scrolling */
+  .featured-swiper,
+  .featured-swiper .swiper {
+    overflow: visible;
+  }
+
+  @media (max-width: 639px) {
+    .featured-pagination .swiper-pagination-bullet-active {
+      width: 22px;
+    }
   }
 
   .card-elegant::before {
@@ -292,6 +329,167 @@
 .swiper-container-custom .swiper-button-next {
   color: white;
   /* ... other styles */
+}
+
+/* ==========================================================================
+   FEATURED COLLECTION SLIDER
+   Horizontal, looping, auto-rotating product carousel.
+   Kept in sync with <FeaturedProducts /> in components/home.
+   ========================================================================== */
+
+.featured-swiper {
+  /* Pulls the slider out to the screen edge on mobile so the next
+     slide peeks in rather than being clipped by the page gutter. */
+  --featured-gutter: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .featured-swiper {
+    --featured-gutter: 0rem;
+  }
+}
+
+/* Let the peeked slides escape the container gutters. */
+.featured-swiper-bleed {
+  margin-inline: calc(var(--featured-gutter) * -1);
+  padding-inline: var(--featured-gutter);
+}
+
+/* --- Slides ---------------------------------------------------------------- */
+
+.featured-swiper .swiper-slide {
+  height: auto;
+  display: flex;
+}
+
+/* Cards should always render at full height so rows stay aligned. */
+.featured-swiper .swiper-slide > * {
+  width: 100%;
+}
+
+.featured-swiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+/* --- Navigation arrows ----------------------------------------------------- */
+
+.featured-swiper-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgb(214 211 209); /* stone-300 */
+  color: rgb(28 25 23); /* stone-900 */
+  background-color: transparent;
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    color 300ms ease,
+    transform 300ms ease;
+}
+
+.featured-swiper-nav:hover:not(:disabled) {
+  background-color: #a42626;
+  border-color: #a42616;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.featured-swiper-nav:focus-visible {
+  outline: 2px solid #a42626;
+  outline-offset: 3px;
+}
+
+.featured-swiper-nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* --- Pagination ------------------------------------------------------------ */
+
+.featured-swiper .swiper-pagination {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 3rem;
+  height: auto;
+  line-height: 0;
+}
+
+.featured-swiper .swiper-pagination-bullet {
+  width: 1.75rem;
+  height: 2px;
+  margin: 0 !important;
+  border-radius: 0;
+  background-color: rgb(214 211 209); /* stone-300 */
+  opacity: 1;
+  transition:
+    width 400ms ease,
+    background-color 400ms ease;
+}
+
+.featured-swiper .swiper-pagination-bullet-active {
+  width: 3.5rem;
+  background-color: #a42626;
+}
+
+/* --- Autoplay progress bar ------------------------------------------------- */
+
+.featured-swiper .swiper-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 5;
+  height: 2px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.featured-swiper .swiper-progress-bar {
+  background-color: #a42626;
+  height: 100%;
+  width: 100%;
+}
+
+/* --- Dark mode ------------------------------------------------------------- */
+
+.dark .featured-swiper-nav {
+  border-color: rgb(68 64 60); /* stone-700 */
+  color: rgb(245 245 244); /* stone-100 */
+}
+
+.dark .featured-swiper-nav:hover:not(:disabled) {
+  background-color: #b91c1c; /* red-800 */
+  border-color: #b91c1c;
+  color: #ffffff;
+}
+
+.dark .featured-swiper .swiper-pagination-bullet {
+  background-color: rgb(87 83 78); /* stone-600 */
+}
+
+.dark .featured-swiper .swiper-pagination-bullet-active {
+  background-color: #ef4444;
+}
+
+.dark .featured-swiper .swiper-progress-bar {
+  background-color: #ef4444;
+}
+
+/* --- Accessibility --------------------------------------------------------- */
+
+/* Users who ask for reduced motion get no sliding animation. */
+@media (prefers-reduced-motion: reduce) {
+  .featured-swiper .swiper-wrapper {
+    transition-duration: 0ms !important;
+  }
 }
 
 /* Fade In Animation */

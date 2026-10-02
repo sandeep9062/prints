@@ -1,8 +1,9 @@
 "use client";
 
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useGetProductsQuery } from "@/services/productsApi";
 import { ProductCard } from "./ProductCard";
 
@@ -19,6 +20,7 @@ type ProductCardProps = {
 
 type ApiProduct = {
   _id: string;
+  slug?: string;
   name: string;
   category: string;
   price: number;
@@ -28,84 +30,342 @@ type ApiProduct = {
   featured?: boolean;
 };
 
+const AUTOPLAY_DELAY = 4500;
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+const navBtn =
+  "flex h-11 w-11 items-center justify-center rounded-full border border-stone-300 " +
+  "bg-white text-stone-800 transition-colors duration-300 " +
+  "hover:border-stone-900 hover:bg-stone-900 hover:text-white " +
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-900 focus-visible:ring-offset-2 " +
+  "active:scale-95 " +
+  "dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200 " +
+  "dark:hover:border-stone-100 dark:hover:bg-stone-100 dark:hover:text-stone-900 " +
+  "dark:focus-visible:ring-stone-100 dark:focus-visible:ring-offset-[#0d0f16]";
+
+const FeaturedSkeleton = () => (
+  <section className="bg-[#FCFBF9] py-20 md:py-28 dark:bg-[#0d0f16]">
+    <div className="mx-auto max-w-7xl px-5 sm:px-6">
+      <div className="mb-12 space-y-4">
+        <div className="h-12 w-72 animate-pulse rounded-lg bg-stone-200 dark:bg-stone-800" />
+        <div className="h-4 w-full max-w-md animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
+      </div>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className={i > 1 ? "hidden lg:block" : ""}>
+            <div className="aspect-[4/5] animate-pulse rounded-2xl bg-stone-200 dark:bg-stone-800" />
+            <div className="mt-5 space-y-3">
+              <div className="h-3 w-20 animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
+              <div className="h-5 w-3/4 animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
+              <div className="h-4 w-1/2 animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
 export const FeaturedProducts = () => {
   const { data, isLoading, isError } = useGetProductsQuery();
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
+  const inViewRef = useRef(true);
+  const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  // Transform API products to ProductCard format and filter featured ones
-  const featuredProducts: ProductCardProps[] = (data?.products || [])
-    .filter((p: ApiProduct) => p.featured)
-    .slice(0, 4)
-    .map((p: ApiProduct) => ({
-      id: p._id,
-      slug: (p as any).slug || p._id,
-      name: p.name,
-      category: p.category,
-      price: p.price,
-      originalPrice:
-        p.discountPrice && p.discountPrice < p.price ? p.price : undefined,
-      image: p.images?.[0] || "/placeholder.svg",
-      badge: p.badge,
-    }));
+  const reduceMotion = useReducedMotion();
 
-  if (isLoading) {
-    return (
-      <section className="py-24 bg-[#FCFBF9] dark:bg-[#0f111a]">
-        <div className="container mx-auto px-6">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
-            {[...Array(4)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="group"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="relative aspect-[4/5] bg-stone-100 dark:bg-stone-800 overflow-hidden mb-6 animate-pulse">
-                  <div className="w-full h-full bg-stone-200 dark:bg-stone-700" />
-                </div>
-                <div className="h-3 bg-stone-200 dark:bg-stone-700 rounded animate-pulse mb-2" />
-                <div className="h-5 bg-stone-200 dark:bg-stone-700 rounded animate-pulse w-3/4 mx-auto md:mx-0" />
-                <div className="h-4 bg-stone-200 dark:bg-stone-700 rounded animate-pulse w-1/2 mx-auto md:mx-0 mt-2" />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+  const featuredProducts: ProductCardProps[] = useMemo(
+    () =>
+      (data?.products || [])
+        .filter((p: ApiProduct) => p.featured)
+        .map((p: ApiProduct) => ({
+          id: p._id,
+          slug: p.slug || p._id,
+          name: p.name,
+          category: p.category,
+          price: p.price,
+          originalPrice:
+            p.discountPrice && p.discountPrice < p.price ? p.price : undefined,
+          image: p.images?.[0] || "/placeholder.svg",
+          badge: p.badge,
+        })),
+    [data],
+  );
+
+  const total = featuredProducts.length;
+
+  const getStep = useCallback(() => {
+    const el = scrollerRef.current;
+    const first = el?.firstElementChild as HTMLElement | null;
+    if (!el || !first) return 0;
+    const gap = parseFloat(getComputedStyle(el).columnGap || "0") || 0;
+    return first.getBoundingClientRect().width + gap;
+  }, []);
+
+  const pauseFor = useCallback((ms = 8000) => {
+    pausedRef.current = true;
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(() => {
+      pausedRef.current = false;
+    }, ms);
+  }, []);
+
+  const slide = useCallback(
+    (dir: 1 | -1) => {
+      const el = scrollerRef.current;
+      if (!el) return;
+      const step = getStep();
+      const max = el.scrollWidth - el.clientWidth;
+      if (dir === 1 && el.scrollLeft >= max - 4) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else if (dir === -1 && el.scrollLeft <= 4) {
+        el.scrollTo({ left: max, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: dir * step, behavior: "smooth" });
+      }
+    },
+    [getStep],
+  );
+
+  const goPrev = useCallback(() => {
+    pauseFor();
+    slide(-1);
+  }, [slide, pauseFor]);
+
+  const goNext = useCallback(() => {
+    pauseFor();
+    slide(1);
+  }, [slide, pauseFor]);
+
+  // Progress bar + counter follow the scroll position
+  const handleScroll = useCallback(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    const ratio = max > 0 ? el.scrollLeft / max : 1;
+    if (barRef.current) {
+      barRef.current.style.transform = `scaleX(${Math.max(ratio, 0.04)})`;
+    }
+    const step = getStep();
+    if (step)
+      setActiveIndex(Math.min(total - 1, Math.round(el.scrollLeft / step)));
+  }, [getStep, total]);
+
+  // Autoplay
+  useEffect(() => {
+    if (total < 2) return;
+    const id = setInterval(() => {
+      if (pausedRef.current || !inViewRef.current || document.hidden) return;
+      slide(1);
+    }, AUTOPLAY_DELAY);
+    return () => clearInterval(id);
+  }, [total, slide]);
+
+  // Only autoplay while visible
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inViewRef.current = entry.isIntersecting;
+      },
+      { threshold: 0.2 },
     );
-  }
+    io.observe(el);
+    return () => io.disconnect();
+  }, [total]);
 
-  if (isError || !featuredProducts.length) {
-    return null;
-  }
+  // Mouse drag (touch uses native scrolling)
+  const dragRef = useRef({
+    active: false,
+    startX: 0,
+    startLeft: 0,
+    moved: false,
+  });
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+    const el = scrollerRef.current;
+    if (!el) return;
+    const d = dragRef.current;
+    d.active = true;
+    d.moved = false;
+    d.startX = e.clientX;
+    d.startLeft = el.scrollLeft;
+    pausedRef.current = true;
+    el.style.scrollSnapType = "none";
+    el.style.cursor = "grabbing";
+
+    const move = (ev: PointerEvent) => {
+      const dx = ev.clientX - d.startX;
+      if (Math.abs(dx) > 5) d.moved = true;
+      el.scrollLeft = d.startLeft - dx;
+    };
+    const up = () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+      d.active = false;
+      el.style.cursor = "";
+      const step = getStep();
+      if (step && d.moved) {
+        el.scrollTo({
+          left: Math.round(el.scrollLeft / step) * step,
+          behavior: "smooth",
+        });
+      }
+      // re-enable snapping once the settle animation has begun
+      setTimeout(() => {
+        el.style.scrollSnapType = "";
+      }, 400);
+      pauseFor();
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+  };
+
+  // Don't follow a link when the gesture was a drag
+  const onClickCapture = (e: React.MouseEvent) => {
+    if (dragRef.current.moved) {
+      e.preventDefault();
+      e.stopPropagation();
+      dragRef.current.moved = false;
+    }
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowRight") goNext();
+    if (e.key === "ArrowLeft") goPrev();
+  };
+
+  if (isLoading) return <FeaturedSkeleton />;
+  if (isError || !total) return null;
 
   return (
-    <section className="py-24 bg-[#FCFBF9] dark:bg-[#0f111a]">
-      <div className="container mx-auto px-6">
-        {/* Editorial Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-          <div className="max-w-xl">
-            <span className="text-[10px] tracking-[0.4em] font-bold text-stone-400 dark:text-stone-500 uppercase">
-              Selected Works
-            </span>
-            <h2 className="font-serif text-4xl md:text-5xl text-stone-900 dark:text-stone-100 mt-3 italic">
-              The Featured Collection
+    <section
+      aria-label="Featured collection"
+      className="relative overflow-hidden bg-[#FCFBF9] py-20 md:py-28 dark:bg-[#0d0f16]"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-40 top-0 h-[420px] w-[420px] rounded-full bg-stone-200/40 blur-3xl dark:bg-stone-800/20"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-40 -left-40 h-[420px] w-[420px] rounded-full bg-[#e8dfd4]/30 blur-3xl dark:bg-[#29231e]/20"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-6">
+        {/* Header */}
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.7, ease: EASE }}
+          className="mb-10 flex flex-col gap-8 md:mb-14 md:flex-row md:items-end md:justify-between"
+        >
+          <div className="max-w-2xl">
+            <h2 className="font-serif text-4xl leading-[1.05] tracking-tight text-stone-900 sm:text-5xl md:text-6xl dark:text-stone-100">
+              The featured collection
             </h2>
+            <p className="mt-5 max-w-lg text-[15px] leading-7 text-stone-600 dark:text-stone-400">
+              A carefully selected edit of pieces made to bring a little more
+              character, craft, and meaning to every occasion.
+            </p>
           </div>
-          <Link
-            href="/products"
-            className="group flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-stone-900 dark:text-stone-100 border-b border-stone-200 dark:border-stone-700 pb-1"
-          >
-            Browse All Suites
-            <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
-          </Link>
+
+          <div className="flex items-center justify-between gap-6 md:justify-end">
+            <Link
+              href="/products"
+              className="group inline-flex items-center gap-2 border-b border-stone-400 pb-1 text-sm font-medium text-stone-900 transition-colors duration-300 hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-900 focus-visible:ring-offset-4 dark:border-stone-600 dark:text-stone-200 dark:hover:border-stone-200 dark:focus-visible:ring-stone-100 dark:focus-visible:ring-offset-[#0d0f16]"
+            >
+              Browse all products
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={goPrev}
+                aria-label="Previous featured products"
+                className={navBtn}
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={goNext}
+                aria-label="Next featured products"
+                className={navBtn}
+              >
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Slider */}
+        <div
+          ref={scrollerRef}
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Featured products"
+          tabIndex={0}
+          onScroll={handleScroll}
+          onPointerDown={onPointerDown}
+          onClickCapture={onClickCapture}
+          onDragStart={(e) => e.preventDefault()}
+          onMouseEnter={() => (pausedRef.current = true)}
+          onMouseLeave={() => {
+            if (!dragRef.current.active) pausedRef.current = false;
+          }}
+          onTouchStart={() => pauseFor()}
+          onKeyDown={onKeyDown}
+          className="-mx-5 flex cursor-grab snap-x snap-mandatory gap-5 overflow-x-auto overscroll-x-contain scroll-px-5 px-5 pb-2 outline-none [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-6 sm:scroll-px-6 sm:px-6 sm:gap-6 xl:mx-0 xl:px-0 xl:scroll-px-0 [&::-webkit-scrollbar]:hidden [&_a]:[-webkit-user-drag:none] [&_img]:pointer-events-none [&_img]:[-webkit-user-drag:none]"
+        >
+          {featuredProducts.map((product, index) => (
+            <motion.div
+              key={product.id}
+              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{
+                duration: 0.6,
+                delay: Math.min(index * 0.07, 0.35),
+                ease: EASE,
+              }}
+              className="w-[78%] shrink-0 snap-start sm:w-[44%] md:w-[36%] lg:w-[29%] xl:w-[calc((100%-72px)/4)]"
+            >
+              <ProductCard product={product} index={index} />
+            </motion.div>
+          ))}
         </div>
 
-        {/* Products Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
-          {featuredProducts.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
-          ))}
+        {/* Progress */}
+        <div className="mt-10 flex items-center gap-5">
+          <div
+            role="progressbar"
+            aria-label="Slider progress"
+            aria-valuemin={1}
+            aria-valuemax={total}
+            aria-valuenow={activeIndex + 1}
+            className="relative h-px flex-1 overflow-hidden bg-stone-300 dark:bg-stone-700"
+          >
+            <div
+              ref={barRef}
+              className="absolute inset-y-0 left-0 w-full origin-left bg-stone-900 transition-transform duration-500 ease-out dark:bg-stone-100"
+              style={{ transform: "scaleX(0.04)" }}
+            />
+          </div>
+
+          <span className="tabular-nums text-sm text-stone-500 dark:text-stone-400">
+            {String(activeIndex + 1).padStart(2, "0")} /{" "}
+            {String(total).padStart(2, "0")}
+          </span>
         </div>
       </div>
     </section>
