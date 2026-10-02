@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Menu, X, ShoppingBag, ChevronDown, Feather } from "lucide-react";
+import { Menu, X, ShoppingBag, ChevronDown, Feather, ArrowRight } from "lucide-react";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
@@ -106,6 +106,31 @@ const CartBadge = ({ count }: { count: number }) =>
     </span>
   ) : null;
 
+const Logo = () => (
+  <Link
+    href="/"
+    aria-label="Ink of Memories, go to home page"
+    className={cn("group flex shrink-0 items-center rounded-md", focusRing)}
+  >
+    <Image
+      src="/inkofmemories.png"
+      alt="Ink of Memories"
+      className="h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] lg:h-24 dark:hidden"
+      width={100}
+      height={60}
+      priority
+    />
+    <Image
+      src="/inkofmemories-dark.png"
+      alt="Ink of Memories"
+      className="hidden h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] lg:h-9 dark:block"
+      width={140}
+      height={60}
+      priority
+    />
+  </Link>
+);
+
 // --- Component ---
 
 const NavbarInner = () => {
@@ -158,14 +183,16 @@ const NavbarInner = () => {
 
   const compact = scrolled || isOpen;
 
+  const cartLabel = `Cart, ${totalItems} item${totalItems === 1 ? "" : "s"}`;
+
   return (
     <nav
       aria-label="Main"
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300 motion-reduce:transition-none",
-        compact
-          ? "border-b border-stone-200/80 bg-white/85 shadow-sm shadow-stone-200/40 backdrop-blur-xl dark:border-stone-800 dark:bg-[#0f111a]/85 dark:shadow-none"
-          : "bg-gradient-to-b from-white/60 via-white/20 to-transparent dark:from-[#0f111a]/70 dark:via-[#0f111a]/20 dark:to-transparent",
+        "fixed inset-x-0 top-0 z-50 border-b bg-white backdrop-blur-xl transition-shadow duration-300 dark:bg-[#0f111a]/90 motion-reduce:transition-none",
+        scrolled
+          ? "border-stone-200/80 shadow-md shadow-stone-200/40 dark:border-stone-800 dark:shadow-none"
+          : "border-stone-200/60 dark:border-stone-800/80",
       )}
     >
       {/* Decorative top hairline (absolute so it never affects header height) */}
@@ -174,164 +201,62 @@ const NavbarInner = () => {
         className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-primary/40 to-transparent"
       />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* ───────── Row 1: logo + toggle, cart, login ───────── */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2">
         <div
           className={cn(
-            "flex items-center justify-between transition-[height] duration-300 motion-reduce:transition-none xl:grid xl:grid-cols-[auto_1fr_auto] xl:gap-8",
-            compact ? "h-16" : "h-20",
+            "flex items-center justify-between transition-[height] duration-300 motion-reduce:transition-none",
+            compact ? "h-11" : "h-12",
           )}
         >
-          {/* Logo */}
-          <Link
-            href="/"
-            aria-label="Ink of Memories, go to home page"
-            className={cn(
-              "group flex shrink-0 items-center gap-2.5 rounded-md",
-              focusRing,
-            )}
-          >
-            <div className="relative flex items-center">
-              <Image
-                src="/inkofmemories.png"
-                alt="Ink of Memories"
-                className="object-contain transition-transform duration-300 group-hover:scale-[1.03] dark:hidden"
-                width={140}
-                height={60}
-                priority
-              />
-              <Image
-                src="/inkofmemories-dark.png"
-                alt="Ink of Memories"
-                className="hidden object-contain transition-transform duration-300 group-hover:scale-[1.03] dark:block"
-                width={140}
-                height={60}
-                priority
-              />
-            </div>
-          </Link>
+          <Logo />
 
-          {/* Desktop navigation (centered) */}
-          <div className="hidden items-center justify-center gap-0.5 xl:flex">
-            <Link
-              href="/"
-              aria-current={pathname === "/" ? "page" : undefined}
-              className={cn(
-                "relative whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium tracking-tight transition-colors duration-200",
-                focusRing,
-                pathname === "/"
-                  ? "text-primary"
-                  : "text-stone-600 hover:text-primary dark:text-stone-300",
-              )}
-            >
-              Home
-              {pathname === "/" && (
-                <span className="absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-primary" />
-              )}
-            </Link>
-            {navigationData.map((link) => {
-              const active = activeCategory === link.slug;
-              return (
-                <div key={link.slug} className="group relative">
-                  <Link
-                    href={categoryHref(link.slug)}
-                    aria-current={active ? "page" : undefined}
-                    className={cn(
-                      "relative flex items-center gap-1 whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium tracking-tight transition-colors duration-200",
-                      focusRing,
-                      active
-                        ? "text-primary"
-                        : "text-stone-600 hover:text-primary dark:text-stone-300",
-                    )}
-                  >
-                    {link.name}
-                    <ChevronDown
-                      aria-hidden="true"
-                      className="mt-0.5 h-3.5 w-3.5 transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180 group-hover:text-primary motion-reduce:transition-none"
-                    />
-                    {active && (
-                      <span className="absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-primary" />
-                    )}
-                  </Link>
-
-                  {/* Dropdown: opens on hover and on keyboard focus */}
-                  <div className="invisible absolute left-1/2 top-full -translate-x-1/2 translate-y-1 pt-3 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
-                    <div className="relative min-w-[230px] overflow-hidden rounded-2xl border border-stone-200/70 bg-white py-2 shadow-xl shadow-stone-900/10 dark:border-stone-800 dark:bg-[#171a29] dark:shadow-black/40">
-                      <div
-                        aria-hidden="true"
-                        className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-l border-t border-stone-200/70 bg-white dark:border-stone-800 dark:bg-[#171a29]"
-                      />
-                      <div className="relative">
-                        {link.subItems.map((sub) => {
-                          const subActive =
-                            active && activeSub === slugify(sub);
-                          return (
-                            <Link
-                              key={sub}
-                              href={subCategoryHref(link.slug, sub)}
-                              className={cn(
-                                "block px-4 py-2.5 text-sm transition-colors hover:bg-primary/5 hover:text-primary focus-visible:bg-primary/5 focus-visible:text-primary focus-visible:outline-none dark:hover:bg-primary/10",
-                                subActive
-                                  ? "font-medium text-primary"
-                                  : "text-stone-600 dark:text-stone-300",
-                              )}
-                            >
-                              {sub}
-                            </Link>
-                          );
-                        })}
-                        <div className="mx-4 my-1.5 h-px bg-stone-200/70 dark:bg-stone-800" />
-                        <Link
-                          href={categoryHref(link.slug)}
-                          className="block px-4 py-2 text-xs font-medium text-primary hover:underline focus-visible:underline focus-visible:outline-none"
-                        >
-                          View all {link.name}
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Desktop actions */}
-          <div className="hidden items-center gap-3 xl:flex">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             <ToggleButton />
 
             {mounted ? (
-              <>
-                <Button
-                  asChild
-                  variant="ghost"
-                  size="icon"
-                  className="relative rounded-full hover:bg-primary/10 hover:text-primary"
-                >
-                  <Link
-                    href="/cart"
-                    aria-label={`Cart, ${totalItems} item${totalItems === 1 ? "" : "s"}`}
-                  >
-                    <ShoppingBag className="h-5 w-5" />
-                    <CartBadge count={totalItems} />
-                  </Link>
-                </Button>
+              <Button
+                asChild
+                variant="ghost"
+                size="icon"
+                className="relative rounded-full hover:bg-primary/10 hover:text-primary"
+              >
+                <Link href="/cart" aria-label={cartLabel}>
+                  <ShoppingBag className="h-5 w-5" />
+                  <CartBadge count={totalItems} />
+                </Link>
+              </Button>
+            ) : (
+              <div
+                aria-hidden="true"
+                className="h-10 w-10 animate-pulse rounded-full bg-stone-200 dark:bg-stone-800"
+              />
+            )}
 
+            {/* Login / profile (desktop only; mobile has it in the panel) */}
+            <div className="hidden items-center gap-3 lg:flex">
+              <div
+                aria-hidden="true"
+                className="h-6 w-px bg-stone-200 dark:bg-stone-700"
+              />
+              {!mounted ? (
                 <div
                   aria-hidden="true"
-                  className="h-6 w-px bg-stone-200 dark:bg-stone-700"
+                  className="h-9 w-20 animate-pulse rounded-full bg-stone-200 dark:bg-stone-800"
                 />
+              ) : !isAuthenticated ? (
+                <>
+                  <Button
+                    asChild
+                    size="sm"
+                    className="group rounded-full bg-red-900 px-5 text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-red-800 hover:shadow-md focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0 dark:bg-red-800 dark:hover:bg-red-700 dark:focus-visible:ring-red-600 dark:focus-visible:ring-offset-[#0f111a]"
+                  >
+                    <Link href="/products">
+                      Order Now
+                      <ArrowRight className="ml-2 h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 motion-reduce:transition-none" />
+                    </Link>
+                  </Button>
 
-                <Button
-                  asChild
-                  size="sm"
-                  className="rounded-full bg-foreground px-5 text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:bg-red-800 dark:hover:bg-red-900 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-                >
-                  <Link href="/products">
-                    <Feather className="mr-1.5 h-3.5 w-3.5" />
-                    Order Now
-                  </Link>
-                </Button>
-
-                {!isAuthenticated ? (
                   <Button
                     asChild
                     size="sm"
@@ -339,42 +264,17 @@ const NavbarInner = () => {
                   >
                     <Link href="/auth">Login</Link>
                   </Button>
-                ) : (
-                  user && <ProfileMenu user={user} />
-                )}
-              </>
-            ) : (
-              <div className="flex items-center gap-3" aria-hidden="true">
-                <div className="h-10 w-10 animate-pulse rounded-full bg-stone-200 dark:bg-stone-800" />
-                <div className="h-9 w-28 animate-pulse rounded-full bg-stone-200 dark:bg-stone-800" />
-                <div className="h-9 w-20 animate-pulse rounded-full bg-stone-200 dark:bg-stone-800" />
-              </div>
-            )}
-          </div>
+                </>
+              ) : (
+                user && <ProfileMenu user={user} />
+              )}
+            </div>
 
-          {/* Mobile / tablet controls */}
-          <div className="flex items-center gap-1 xl:hidden">
-            <ToggleButton />
-            {mounted && (
-              <Button
-                asChild
-                variant="ghost"
-                size="icon"
-                className="relative rounded-full"
-              >
-                <Link
-                  href="/cart"
-                  aria-label={`Cart, ${totalItems} item${totalItems === 1 ? "" : "s"}`}
-                >
-                  <ShoppingBag className="h-5 w-5" />
-                  <CartBadge count={totalItems} />
-                </Link>
-              </Button>
-            )}
+            {/* Hamburger (below lg) */}
             <button
               type="button"
               className={cn(
-                "rounded-full p-2 text-stone-700 transition-colors hover:bg-stone-100 dark:text-stone-200 dark:hover:bg-stone-800",
+                "rounded-full p-2 text-stone-700 transition-colors hover:bg-stone-100 dark:text-stone-200 dark:hover:bg-stone-800 lg:hidden",
                 focusRing,
               )}
               onClick={() => setIsOpen((v) => !v)}
@@ -392,16 +292,105 @@ const NavbarInner = () => {
         </div>
       </div>
 
+      {/* ───────── Row 2: navigation (desktop) ───────── */}
+      <div className="hidden border-t border-stone-200/60 dark:border-stone-800/80 lg:block">
+        <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex h-9 items-stretch justify-center gap-1 xl:gap-2">
+            <Link
+              href="/"
+              aria-current={pathname === "/" ? "page" : undefined}
+              className={cn(
+                "relative flex items-center whitespace-nowrap px-3 text-sm font-medium tracking-tight transition-colors duration-200 xl:px-4",
+                focusRing,
+                pathname === "/"
+                  ? "text-primary"
+                  : "text-stone-600 hover:text-primary dark:text-stone-300",
+              )}
+            >
+              Home
+              {pathname === "/" && (
+                <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-primary xl:inset-x-4" />
+              )}
+            </Link>
+
+            {navigationData.map((link) => {
+              const active = activeCategory === link.slug;
+              return (
+                <div key={link.slug} className="group relative flex">
+                  <Link
+                    href={categoryHref(link.slug)}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "relative flex items-center gap-1 whitespace-nowrap px-3 text-sm font-medium tracking-tight transition-colors duration-200 xl:px-4",
+                      focusRing,
+                      active
+                        ? "text-primary"
+                        : "text-stone-600 hover:text-primary dark:text-stone-300",
+                    )}
+                  >
+                    {link.name}
+                    <ChevronDown
+                      aria-hidden="true"
+                      className="mt-0.5 h-3.5 w-3.5 transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180 group-hover:text-primary motion-reduce:transition-none"
+                    />
+                    <span
+                      className={cn(
+                        "absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-primary transition-transform duration-200 origin-center motion-reduce:transition-none xl:inset-x-4",
+                        active
+                          ? "scale-x-100"
+                          : "scale-x-0 group-hover:scale-x-100 group-focus-within:scale-x-100",
+                      )}
+                    />
+                  </Link>
+
+                  {/* Dropdown: opens on hover and on keyboard focus */}
+                  <div className="invisible absolute left-1/2 top-full z-10 -translate-x-1/2 translate-y-1 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
+                    <div className="relative mt-px min-w-[230px] overflow-hidden rounded-b-2xl border border-t-0 border-stone-200/70 bg-white py-2 shadow-xl shadow-stone-900/10 dark:border-stone-800 dark:bg-[#171a29] dark:shadow-black/40">
+                      {link.subItems.map((sub) => {
+                        const subActive = active && activeSub === slugify(sub);
+                        return (
+                          <Link
+                            key={sub}
+                            href={subCategoryHref(link.slug, sub)}
+                            className={cn(
+                              "block px-4 py-2.5 text-sm transition-colors hover:bg-primary/5 hover:text-primary focus-visible:bg-primary/5 focus-visible:text-primary focus-visible:outline-none dark:hover:bg-primary/10",
+                              subActive
+                                ? "font-medium text-primary"
+                                : "text-stone-600 dark:text-stone-300",
+                            )}
+                          >
+                            {sub}
+                          </Link>
+                        );
+                      })}
+                      <div className="mx-4 my-1.5 h-px bg-stone-200/70 dark:bg-stone-800" />
+                      <Link
+                        href={categoryHref(link.slug)}
+                        className="block px-4 py-2 text-xs font-medium text-primary hover:underline focus-visible:underline focus-visible:outline-none"
+                      >
+                        View all {link.name}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
       {/*
         Mobile panel. Positioned absolutely inside <nav> with an explicit height:
         a `fixed` child of an element using backdrop-filter is sized against that
         element, not the viewport, which collapses the panel.
+        Row 1 is h-11 (2.75rem) plus py-2 (1rem) while the menu is open, so the
+        panel fills the rest.
       */}
       <div
         id="mobile-menu"
         aria-hidden={!isOpen}
         className={cn(
-          "absolute inset-x-0 top-full h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain bg-white transition-all duration-300 ease-out dark:bg-[#0f111a] motion-reduce:transition-none xl:hidden",
+          "absolute inset-x-0 top-full h-[calc(100dvh-3.75rem)] overflow-y-auto overscroll-contain bg-white transition-all duration-300 ease-out dark:bg-[#0f111a] motion-reduce:transition-none lg:hidden",
           isOpen
             ? "visible translate-y-0 opacity-100"
             : "invisible -translate-y-2 opacity-0",
@@ -409,7 +398,7 @@ const NavbarInner = () => {
       >
         <div className="mx-auto max-w-xl px-5 pb-10 pt-4">
           <ul className="flex flex-col">
-            <li className="border-t border-b border-stone-100 dark:border-stone-800">
+            <li className="border-b border-t border-stone-100 dark:border-stone-800">
               <Link
                 href="/"
                 aria-current={pathname === "/" ? "page" : undefined}
@@ -524,30 +513,16 @@ const NavbarInner = () => {
               user && <ProfileMenu user={user} mobile />
             )}
 
-            <div className="grid grid-cols-2 gap-3">
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="w-full rounded-full border-stone-300 dark:border-stone-700"
-              >
-                <Link href="/cart">
-                  <ShoppingBag className="mr-2 h-4 w-4" />
-                  Cart{mounted ? ` (${totalItems})` : ""}
-                </Link>
-              </Button>
-
-              <Button
-                asChild
-                size="lg"
-                className="w-full rounded-full bg-foreground text-white dark:bg-red-800"
-              >
-                <Link href="/products">
-                  <Feather className="mr-2 h-4 w-4" />
-                  Order Now
-                </Link>
-              </Button>
-            </div>
+            <Button
+              asChild
+              size="lg"
+              className="w-full rounded-full bg-foreground text-white dark:bg-red-800"
+            >
+              <Link href="/products">
+                <Feather className="mr-2 h-4 w-4" />
+                Order Now
+              </Link>
+            </Button>
           </div>
         </div>
       </div>
@@ -555,33 +530,17 @@ const NavbarInner = () => {
   );
 };
 
-// useSearchParams needs a Suspense boundary in the App Router
-// Shown while search params resolve, so the logo/home link never disappears
+// useSearchParams needs a Suspense boundary in the App Router.
+// Shown while search params resolve, so the logo never disappears.
 const NavbarFallback = () => (
   <nav
     aria-label="Main"
-    className="fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-white/60 via-white/20 to-transparent dark:from-[#0f111a]/70 dark:via-[#0f111a]/20 dark:to-transparent"
+    className="fixed inset-x-0 top-0 z-50 border-b border-stone-200/60 bg-white/90 dark:border-stone-800/80 dark:bg-[#0f111a]/90"
   >
-    <div className="mx-auto flex h-20 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-      <Link href="/" aria-label="Ink of Memories, go to home page">
-        <Image
-          src="/inkofmemories.png"
-          alt="Ink of Memories"
-          className="object-contain dark:hidden"
-          width={140}
-          height={60}
-          priority
-        />
-        <Image
-          src="/inkofmemories-dark.png"
-          alt="Ink of Memories"
-          className="hidden object-contain dark:block"
-          width={140}
-          height={60}
-          priority
-        />
-      </Link>
+    <div className="mx-auto flex h-12 max-w-7xl items-center px-4 py-2 sm:px-6 lg:px-8">
+      <Logo />
     </div>
+    <div className="hidden h-9 border-t border-stone-200/60 dark:border-stone-800/80 lg:block" />
   </nav>
 );
 

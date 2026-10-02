@@ -262,48 +262,41 @@ export default function SocialAuthButtons({
   };
 
   return (
-    <div className="mt-6">
+    <div className="space-y-6">
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+          <div className="w-full border-t border-stone-200 dark:border-stone-700" />
         </div>
-        <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+        <div className="relative flex justify-center">
+          <span className="bg-[#FCFBF9] px-4 text-[10px] font-semibold uppercase tracking-[0.25em] text-stone-400 dark:bg-[#0f111a] dark:text-stone-500">
             {mode === "login" ? "Or continue with" : "Or sign up with"}
           </span>
         </div>
       </div>
 
-      <div className="mt-6 space-y-3">
+      <div className="space-y-3">
         <button
           type="button"
           onClick={handleGoogle}
           disabled={socialLoading === "google"}
-          className="flex h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white font-medium text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-60 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+          className="flex h-12 w-full items-center justify-center gap-2.5 rounded-none border border-stone-300 bg-white text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-700 transition-colors duration-300 hover:border-stone-900 hover:bg-stone-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 disabled:opacity-60 dark:border-stone-700 dark:bg-stone-900/40 dark:text-stone-200 dark:hover:border-stone-500 dark:hover:bg-stone-900"
         >
-          <FcGoogle className="h-5 w-5" />
+          <FcGoogle className="h-4 w-4" />
           {socialLoading === "google"
-            ? "Connecting to Google…"
+            ? "Connecting…"
             : mode === "login"
               ? "Continue with Google"
               : "Sign up with Google"}
         </button>
-        {socialLoading === "google" && (
-          <p className="text-center text-xs text-gray-500">
-            Verifying with Google…
-          </p>
-        )}
 
         <button
           type="button"
           onClick={handleApple}
           disabled={socialLoading === "apple"}
-          className="flex h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-black font-medium text-white shadow-sm hover:bg-gray-900 disabled:opacity-60"
+          className="flex h-12 w-full items-center justify-center gap-2.5 rounded-none bg-stone-900 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors duration-300 hover:bg-stone-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 disabled:opacity-60 dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-white dark:focus-visible:ring-offset-[#0f111a]"
         >
-          <FaApple className="h-5 w-5" />
-          {socialLoading === "apple"
-            ? "Connecting to Apple…"
-            : "Continue with Apple"}
+          <FaApple className="h-4 w-4" />
+          {socialLoading === "apple" ? "Connecting…" : "Continue with Apple"}
         </button>
       </div>
     </div>

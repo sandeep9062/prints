@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,8 +7,15 @@ import * as z from "zod";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { useRegisterMutation } from "../services/authApi";
-import Image from "next/image";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import SocialAuthButtons from "./SocialAuthButtons";
+import AuthShell from "./auth/AuthShell";
+import {
+  AuthError,
+  AuthField,
+  AuthLabel,
+  authInputClass,
+} from "./auth/AuthField";
 
 const signupSchema = z.object({
   name: z.string().min(1, "Full name is required"),
@@ -26,7 +32,6 @@ export default function SignupPage({
 }: {
   toggleAuthMode: () => void;
 }) {
-  const router = useRouter();
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [registerUser, { isLoading }] = useRegisterMutation();
@@ -64,267 +69,181 @@ export default function SignupPage({
   };
 
   return (
-    <div className="w-full min-h-screen lg:grid lg:grid-cols-2 bg-white dark:bg-gray-900">
-      <div className="hidden lg:block relative">
-        <Image
-          src="/real-estate-login.jpg"
-          alt="Signup Image"
-          layout="fill"
-          objectFit="cover"
-          className="absolute inset-0 h-full w-full"
-        />
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="absolute inset-0 flex items-center justify-center p-12 text-white">
-          <div className="text-center">
-            <h2 className="text-4xl font-bold">
-              Join the <span className="text-red-600">Ink of Memories</span>{" "}
-              Community
-            </h2>
-            <p className="mt-4 text-lg">
-              Sign up to unlock exclusive features and benefits.
-            </p>
-          </div>
-        </div>
-      </div>
+    <AuthShell
+      mode="signup"
+      onModeChange={(next) => {
+        if (next !== "signup") toggleAuthMode();
+      }}
+      aside={{
+        image: "/gallery-cards.jpg",
+        imageAlt:
+          "Letterpress business card suites pressed at Samlason Printing Press",
+        eyebrow: "Join the Studio",
+        title: (
+          <>
+            Begin your
+            <br />
+            <em className="font-light text-red-800 dark:text-red-600">
+              first commission.
+            </em>
+          </>
+        ),
+        description:
+          "Create an account to save bespoke designs, approve 3D proofs and unlock member pricing across wedding stationery, corporate suites and packaging.",
+        stats: [
+          { value: "48h", label: "Proofs" },
+          { value: "24k", label: "Gold Foil" },
+          { value: "100%", label: "In-House" },
+        ],
+      }}
+    >
+      <div className="space-y-8">
+        <header className="space-y-3">
+          <h2 className="font-serif text-3xl leading-tight text-stone-900 dark:text-stone-100">
+            Create an Account
+          </h2>
+          <p className="text-sm font-light leading-relaxed text-stone-500 dark:text-stone-400">
+            A few details and your studio portfolio is ready.
+          </p>
+        </header>
 
-      <div className="flex items-center justify-center p-4 sm:p-6 lg:p-8">
-        <div className="mx-auto w-full max-w-md space-y-6">
-          <div className="absolute top-4 left-4">
-            <button
-              onClick={() => router.push("/")}
-              className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-rose-600 transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-                />
-              </svg>
-              <span className="text-sm font-medium">Back to Home</span>
-            </button>
+        {error && (
+          <div
+            role="alert"
+            className="border-l-2 border-red-700 bg-red-50/70 px-4 py-3 text-sm text-red-800 dark:border-red-600 dark:bg-red-950/40 dark:text-red-300"
+          >
+            {error}
           </div>
+        )}
 
-          <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Create an Account
-            </h1>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              Join us and start your journey today!
-            </p>
-          </div>
-          <div className="bg-white dark:bg-gray-800 p-8 shadow-2xl rounded-2xl">
-            {error && (
-              <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
-                {error}
-              </div>
+        <form onSubmit={handleSubmit(handleSignup)} className="space-y-6">
+          <AuthField label="Full Name" error={errors.name?.message}>
+            {({ id }) => (
+              <input
+                id={id}
+                type="text"
+                autoComplete="name"
+                placeholder="Ananya Sharma"
+                {...register("name")}
+                className={authInputClass}
+              />
             )}
-            <form onSubmit={handleSubmit(handleSignup)} className="space-y-6">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Full Name
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="name"
-                    type="text"
-                    placeholder="John Doe"
-                    {...register("name")}
-                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
-                  />
-                  {errors.name && (
-                    <p className="mt-2 text-sm text-red-600">
-                      {errors.name.message}
-                    </p>
-                  )}
-                </div>
-              </div>
+          </AuthField>
 
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Email
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    {...register("email")}
-                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
-                  />
-                  {errors.email && (
-                    <p className="mt-2 text-sm text-red-600">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
-              </div>
+          <AuthField label="Email" error={errors.email?.message}>
+            {({ id }) => (
+              <input
+                id={id}
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                {...register("email")}
+                className={authInputClass}
+              />
+            )}
+          </AuthField>
 
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Phone Number
-                </label>
-                <div className="mt-1">
-                  <PhoneInput
-                    id="phone"
-                    placeholder="Enter phone number"
-                    value={phoneValue}
-                    onChange={(value) => setValue("phone", value || "")}
-                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
-                    defaultCountry="IN"
-                  />
-                  {errors.phone && (
-                    <p className="mt-2 text-sm text-red-600">
-                      {errors.phone.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Password
-                </label>
-                <div className="mt-1 relative">
-                  <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    {...register("password")}
-                    className="w-full p-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none"
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
-                  >
-                    {showPassword ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-5 h-5"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-5 h-5"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                        />
-                      </svg>
-                    )}
-                  </button>
-                  {errors.password && (
-                    <p className="mt-2 text-sm text-red-600">
-                      {errors.password.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Role
-                </label>
-                <div className="mt-2 flex items-center space-x-6">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      value="client"
-                      {...register("role")}
-                      className="form-radio h-4 w-4 text-rose-600 border-gray-300 focus:ring-rose-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                      Client
-                    </span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      value="merchant"
-                      {...register("role")}
-                      className="form-radio h-4 w-4 text-rose-600 border-gray-300 focus:ring-rose-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                      Merchant
-                    </span>
-                  </label>
-                </div>
-                {errors.role && (
-                  <p className="mt-2 text-sm text-red-600">
-                    {errors.role.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <button
-                  type="submit"
-                  className="w-full p-3 text-white font-semibold bg-rose-600 rounded-lg shadow-md hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition duration-300 ease-in-out transform hover:-translate-y-1"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Creating Account..." : "Create Account"}
-                </button>
-              </div>
-            </form>
-            <SocialAuthButtons mode="signup" />
-          </div>
-          <div className="mt-6 text-center text-sm">
-            <p className="text-gray-600 dark:text-gray-400">
-              Already have an account?{" "}
+          <AuthField
+            label="Phone Number"
+            error={errors.phone?.message}
+            hint="We'll only use this for order updates."
+          >
+            {({ id }) => (
+              <PhoneInput
+                id={id}
+                placeholder="Enter phone number"
+                value={phoneValue}
+                onChange={(value) => setValue("phone", value || "")}
+                defaultCountry="IN"
+                international
+                className={authInputClass}
+              />
+            )}
+          </AuthField>
+          <div className="space-y-2">
+            <AuthLabel>Password</AuthLabel>
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
+                placeholder="Minimum 8 characters"
+                {...register("password")}
+                className={`${authInputClass} pr-12`}
+              />
               <button
-                onClick={toggleAuthMode}
-                className="font-medium text-rose-600 hover:text-rose-500"
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 flex items-center px-4 text-stone-400 transition-colors hover:text-red-800 focus-visible:outline-none focus-visible:text-red-800 dark:hover:text-red-600"
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                Sign in
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </button>
-            </p>
+            </div>
+            <AuthError message={errors.password?.message} />
           </div>
-        </div>
+
+          <fieldset className="space-y-2">
+            <legend className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-stone-500 dark:text-stone-400">
+              I am a
+            </legend>
+            <div className="grid grid-cols-2 gap-px bg-stone-200 dark:bg-stone-700">
+              {(["client", "merchant"] as const).map((value) => (
+                <label
+                  key={value}
+                  className="group relative cursor-pointer bg-white px-4 py-4 text-center transition-colors hover:bg-stone-50 dark:bg-stone-900/40 dark:hover:bg-stone-900"
+                >
+                  <input
+                    type="radio"
+                    value={value}
+                    {...register("role")}
+                    className="peer sr-only"
+                  />
+                  <span className="block text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500 transition-colors peer-checked:text-stone-900 peer-focus-visible:text-stone-900 group-hover:text-stone-900 dark:text-stone-400 dark:peer-checked:text-stone-50 dark:peer-focus-visible:text-stone-50 dark:group-hover:text-stone-50">
+                    {value === "client" ? "Client" : "Merchant"}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-red-800 transition-transform duration-300 peer-checked:scale-x-100 dark:bg-red-600 motion-reduce:transition-none"
+                  />
+                </label>
+              ))}
+            </div>
+            <AuthError message={errors.role?.message} />
+          </fieldset>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="flex h-14 w-full items-center justify-center gap-3 rounded-none bg-red-900 px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-red-900/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-800 hover:shadow-xl hover:shadow-red-900/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none motion-reduce:hover:translate-y-0 dark:focus-visible:ring-offset-[#0f111a]"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Creating Account
+              </>
+            ) : (
+              "Create Account"
+            )}
+          </button>
+        </form>
+
+        <SocialAuthButtons mode="signup" />
+
+        <p className="border-t border-stone-200 pt-6 text-center text-xs text-stone-500 dark:border-stone-700 dark:text-stone-400">
+          Already have an account?{" "}
+          <button
+            onClick={toggleAuthMode}
+            className="rounded-none font-semibold uppercase tracking-[0.15em] text-red-800 underline-offset-4 transition-colors hover:underline dark:text-red-600"
+          >
+            Sign in
+          </button>
+        </p>
       </div>
-    </div>
+    </AuthShell>
   );
 }

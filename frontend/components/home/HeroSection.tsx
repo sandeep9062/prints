@@ -12,9 +12,11 @@ const STATS = [
 
 export const HeroSection: React.FC = () => {
   return (
+    // The Navbar is position:fixed and reserves no flow space, so the hero
+    // clears it using --navbar-height (defined in globals.css) + breathing room.
     <section
       aria-labelledby="hero-heading"
-      className="relative flex min-h-[70vh] items-center overflow-hidden bg-[#FCFBF9] py-20 dark:bg-[#0f111a] lg:py-28"
+      className="relative flex min-h-[70vh] items-center overflow-hidden bg-[#FCFBF9] pt-[calc(var(--navbar-height)+1.5rem)] pb-20 dark:bg-[#0f111a] lg:pt-[calc(var(--navbar-height)+3rem)] lg:pb-28"
     >
       {/* Background detail: tinted side panel + soft paper glow */}
       <div aria-hidden="true" className="absolute inset-0 z-0">

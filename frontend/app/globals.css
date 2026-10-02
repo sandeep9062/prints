@@ -239,6 +239,31 @@
   }
 }
 
+/* ---------------------------------------------------------------------------
+ * Fixed navbar height
+ *
+ * The <Navbar> (components/layout/Navbar.tsx) is `position: fixed`, so it takes
+ * up no space in the document flow and whatever sits under it must reserve its
+ * height. Keep these values in sync with the navbar markup:
+ *
+ *   row 1 : py-2 (1rem) + h-12 (3rem)               = 64px
+ *   row 2 : border-t (1px) + h-9 (2.25rem)          = 37px  (lg and up only)
+ *   nav   : border-b                                = 1px
+ *
+ * Total -> 65px on mobile, 102px from the `lg` breakpoint up.
+ * ------------------------------------------------------------------------- */
+@layer base {
+  :root {
+    --navbar-height: 65px;
+  }
+
+  @media (min-width: 64rem) {
+    :root {
+      --navbar-height: 102px;
+    }
+  }
+}
+
 /* game gold */
 @keyframes gold-bounce {
   0%,
