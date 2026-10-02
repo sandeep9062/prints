@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FaArrowUp } from "react-icons/fa";
+import { scrollToTop } from "@/lib/smooth-scroll";
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -14,15 +15,8 @@ const ScrollToTopButton = () => {
     }
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
   useEffect(() => {
-    window.addEventListener("scroll", toggleVisibility);
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", toggleVisibility);
@@ -34,7 +28,7 @@ const ScrollToTopButton = () => {
       {isVisible && (
         <button
           type="button"
-          onClick={scrollToTop}
+          onClick={() => scrollToTop()}
           className="p-3 rounded-full bg-[#4161df] hover:bg-[#3759dd] text-white shadow-lg  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-opacity duration-300"
           aria-label="Scroll to top"
         >

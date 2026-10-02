@@ -55,6 +55,7 @@
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.26",
     "input-otp": "^1.4.2",
+    "lenis": "^1.3.26",
     "lexical": "^0.44.0",
     "lucide-react": "^0.562.0",
     "next": "^16.1.1",

@@ -46,6 +46,7 @@ import {
 } from "@/services/customizationApi";
 import { SEOHelper } from "@/components/SEOHelper";
 import { getBreadcrumbSchema } from "@/lib/seo";
+import { scrollToTop } from "@/lib/smooth-scroll";
 import { motion, AnimatePresence } from "framer-motion";
 import { type Product, type Finish } from "@/components/DesignCanvas";
 
@@ -726,12 +727,12 @@ const Page = () => {
       return;
     }
     if (!isLastStep) setCurrentStepIdx((prev) => prev + 1);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToTop(1.0);
   };
 
   const handlePrev = () => {
     if (!isFirstStep) setCurrentStepIdx((prev) => prev - 1);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToTop(1.0);
   };
 
   const handleStepClick = (idx: number) => {
@@ -856,7 +857,7 @@ const Page = () => {
       setPreviews(item.uploadedImages);
     }
     setCurrentStepIdx(4); // Go to preview
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToTop(1.0);
     toast.success("Design loaded successfully!");
   };
 

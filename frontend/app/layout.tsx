@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartProvider } from "../contexts/CartContext";
 import { Providers } from "./providers";
 import RouteTransitionWrapper from "@/components/RouteTransitionWrapper";
+import SmoothScroll from "@/components/SmoothScroll";
 import { Toaster } from "sonner";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -113,14 +114,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          <RouteTransitionWrapper>
-            <CartProvider>
-              <Navbar />
+          <SmoothScroll>
+            <RouteTransitionWrapper>
+              <CartProvider>
+                <Navbar />
 
-              {children}
-              <Footer />
-            </CartProvider>
-          </RouteTransitionWrapper>
+                {children}
+                <Footer />
+              </CartProvider>
+            </RouteTransitionWrapper>
+          </SmoothScroll>
           <Toaster />
         </Providers>
       </body>

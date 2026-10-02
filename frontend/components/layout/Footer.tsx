@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { scrollToTop } from "@/lib/smooth-scroll";
 
 /*
   Design notes
@@ -318,7 +319,7 @@ export const Footer = () => {
             </Link>
             <button
               type="button"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              onClick={() => scrollToTop()}
               aria-label="Back to top"
               className={`flex h-9 w-9 items-center justify-center rounded-full border border-[#E4E9DD]/25 text-[#E4E9DD]/80 transition-colors hover:border-[#D2AE62] hover:text-[#D2AE62] motion-reduce:transition-none ${focusRing}`}
             >

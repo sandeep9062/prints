@@ -271,8 +271,38 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    /* Native fallback when Lenis is unavailable (or reduced-motion):
+       keeps anchor jumps + window.scrollTo({behavior:"smooth"}) silky. */
+    scroll-behavior: smooth;
+    /* Keeps #anchor targets clear of the fixed navbar on native jumps. */
+    scroll-padding-top: calc(var(--navbar-height) + 12px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
   body {
     @apply bg-background text-foreground;
+    /* Hint to browsers for smoother compositing during scroll. */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: none;
+  }
+  /* Lenis-managed scrolling: let Lenis own the wheel, avoid CSS fighting it. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
   }
 }
 

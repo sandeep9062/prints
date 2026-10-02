@@ -1,84 +1,175 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, PenLine, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+/*
+  Design notes
+  - Same system as hero / testimonials / footer / atelier: bottle-green
+    desk (#1F3A32), bone paper (#F7F4EE), foil gold (#B08D4A / #D2AE62),
+    wax rose (#A24B4B). Dark mode: deep green #121C18.
+  - The CTA is a stationery card on the desk: bone paper, grain and a
+    double gold rule, like the cards in testimonials and the footer CTA.
+  - Crop marks at the trim corners echo the Atelier press-sheet frame.
+*/
+
+const GRAIN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")`;
+
+const MARKS = [
+  "top-3 left-1 h-px w-4",
+  "left-3 top-1 h-4 w-px",
+  "top-3 right-1 h-px w-4",
+  "right-3 top-1 h-4 w-px",
+  "bottom-3 left-1 h-px w-4",
+  "bottom-1 left-3 h-4 w-px",
+  "bottom-3 right-1 h-px w-4",
+  "bottom-1 right-3 h-4 w-px",
+];
+
+function useInView<T extends HTMLElement>(threshold = 0.2) {
+  const ref = useRef<T>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return [ref, inView] as const;
+}
+
 export const CTASection: React.FC = () => {
+  const [sectionRef, inView] = useInView<HTMLElement>(0.15);
+
+  const reveal = (delay: string) =>
+    `transition-all duration-1000 ease-out ${delay} ${
+      inView ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+    } motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none`;
+
   return (
-    <section className="py-32 bg-[#FCFBF9] dark:bg-[#0d1321] relative overflow-hidden">
-      {/* Sophisticated Texture Overlay */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-        <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern
-              id="grid"
-              width="40"
-              height="40"
-              patternUnits="userSpaceOnUse"
-            >
-              <path
-                d="M 40 0 L 0 0 0 40"
-                fill="none"
-                stroke="white"
-                strokeWidth="1"
-              />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-      </div>
+    <section
+      ref={sectionRef}
+      aria-labelledby="cta-heading"
+      className="relative overflow-hidden bg-[#1F3A32] py-10 dark:bg-[#121C18] lg:py-12"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[.15] mix-blend-overlay"
+        style={{ backgroundImage: GRAIN }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[320px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D2AE62]/10 blur-[100px]"
+      />
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="flex justify-center items-center space-x-4 mb-10">
-            <span className="h-px w-10 bg-stone-700 dark:bg-stone-500" />
-            <span className="text-[10px] font-bold tracking-[0.5em] text-stone-500 dark:text-stone-400 uppercase">
-              Bespoke Services
-            </span>
-            <span className="h-px w-10 bg-stone-700" />
-          </div>
+      <div className="container relative mx-auto px-6">
+        <div className={`relative mx-auto max-w-6xl p-3 sm:p-4 ${reveal("")}`}>
+          {MARKS.map((m) => (
+            <span
+              key={m}
+              aria-hidden="true"
+              className={`absolute bg-[#E4E9DD]/50 ${m}`}
+            />
+          ))}
 
-          <h2 className="font-serif text-5xl md:text-6xl lg:text-7xl text-stone-900 dark:text-white leading-tight mb-8">
-            Your Vision, <br />
-            <span className="italic text-red-800 dark:text-red-600 font-light">
-              Exquisitely
-            </span>{" "}
-            Rendered.
-          </h2>
+          <div className="relative overflow-hidden rounded-sm bg-[#F7F4EE] shadow-[0_32px_80px_-28px_rgba(0,0,0,.6)]">
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 opacity-[.22] mix-blend-multiply"
+              style={{ backgroundImage: GRAIN }}
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-3 border border-[#B08D4A]"
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-4 border border-[#B08D4A]/50"
+            />
 
-          <p className="text-stone-400 text-lg md:text-xl font-light mb-12 max-w-2xl mx-auto leading-relaxed">
-            From the first sketch to the final emboss, we partner with you to
-            create stationery that resonates. Begin your design consultation
-            today.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <Link href="/customize">
-              <Button
-                className="bg-red-900 hover:bg-red-800 text-white 
-                  min-w-[240px] h-[56px] px-8 text-[11px] font-bold rounded-none transition-all duration-300 tracking-widest uppercase text-xs justify-center"
+            <div className="relative px-5 py-6 text-center sm:px-8 sm:py-7 lg:px-10 lg:py-8">
+              <div
+                className={`flex items-center justify-center gap-3 ${reveal("delay-100")}`}
               >
-                Begin Customization
-              </Button>
-            </Link>
+                <span aria-hidden="true" className="h-px w-8 bg-[#1F3A32]/40" />
+                <span className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#1F3A32]/70">
+                  Bespoke services
+                </span>
+                <span aria-hidden="true" className="h-px w-8 bg-[#1F3A32]/40" />
+              </div>
 
-            <Link href="/contact">
-              <Button
-                variant="outline"
-                className="border-red-200 dark:border-red-800 text-red-900 dark:text-red-400 hover:bg-red-900 hover:text-white 
-                  min-w-[240px] h-[56px] px-8 text-[11px] font-bold rounded-none transition-all duration-300 tracking-widest uppercase text-xs justify-center"
-              >
-                Connect With Us
-                <ArrowRight className="ml-3 h-4 w-4" />
-              </Button>
-            </Link>
+              <div className="mt-5 grid items-center gap-6 lg:grid-cols-12 lg:gap-8 lg:text-left">
+                <div className="lg:col-span-7">
+                  <h2
+                    id="cta-heading"
+                    className={`font-serif text-3xl font-medium leading-[1.08] tracking-tight text-[#1F3A32] sm:text-4xl lg:text-5xl ${reveal("delay-200")}`}
+                  >
+                    Your vision,{" "}
+                    <span className="italic text-[#8A6A2F]">exquisitely</span>{" "}
+                    rendered.
+                  </h2>
+
+                  <p
+                    className={`mx-auto mt-3 max-w-[52ch] text-sm leading-relaxed text-[#1F3A32]/80 sm:text-base lg:mx-0 ${reveal("delay-300")}`}
+                  >
+                    From sketch to final emboss — begin your design consultation
+                    today.
+                  </p>
+                </div>
+
+                <div className={`lg:col-span-5 ${reveal("delay-[400ms]")}`}>
+                  <div className="flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-end">
+                    <Button
+                      asChild
+                      className="h-12 min-w-[190px] rounded-full bg-[#1F3A32] px-7 text-sm text-[#F7F4EE] transition-colors hover:bg-[#2B4F44] focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]"
+                    >
+                      <Link href="/customize">
+                        <PenLine className="h-4 w-4" aria-hidden="true" />
+                        Begin customization
+                      </Link>
+                    </Button>
+
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="h-12 min-w-[190px] rounded-full border-[#1F3A32]/40 bg-transparent px-7 text-sm text-[#1F3A32] transition-colors hover:border-[#1F3A32] hover:bg-[#1F3A32]/5 focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]"
+                    >
+                      <Link href="/contact">
+                        <Phone className="h-4 w-4" aria-hidden="true" />
+                        Connect with us
+                      </Link>
+                    </Button>
+                  </div>
+
+                  <p
+                    className={`mt-3 text-xs text-[#1F3A32]/60 sm:text-sm lg:text-right ${reveal("delay-500")}`}
+                  >
+                    Prefer to browse first?{" "}
+                    <Link
+                      href="/products"
+                      className="inline-flex items-center gap-1 underline decoration-[#B08D4A] decoration-1 underline-offset-4 transition-colors hover:text-[#1F3A32] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]"
+                    >
+                      Explore the collection
+                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </Link>
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-
-          {/* Subtle footer credit in CTA */}
-          <p className="mt-16 text-[9px] tracking-widest text-stone-600 uppercase">
-            Handcrafted in our studio since 2004
-          </p>
         </div>
       </div>
     </section>
