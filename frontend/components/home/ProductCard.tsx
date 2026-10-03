@@ -15,7 +15,6 @@ type Product = {
   image: string;
   badge?: string;
   description?: string;
-  /** Merchant-set flag (admin "Featured" toggle) — renders the Featured tag. */
   featured?: boolean;
 };
 

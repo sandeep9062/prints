@@ -221,7 +221,7 @@ export default function Atelier() {
                 className="h-14 min-w-[220px] rounded-full bg-[#1F3A32] px-8 text-base text-[#F7F4EE] transition-colors hover:bg-[#2B4F44] focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 dark:bg-[#F7F4EE] dark:text-[#1F3A32] dark:hover:bg-white dark:focus-visible:ring-offset-[#16211D]"
               >
                 {/* Point this at your real booking or contact page */}
-                <Link href="/contact">Book a studio tour</Link>
+                <Link href="/contact">Book a studio tour </Link>
               </Button>
             </div>
           </div>
