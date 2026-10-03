@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import Heart from "@/components/Heart";
 
 type Product = {
   id: string;
@@ -14,15 +15,17 @@ type Product = {
   image: string;
   badge?: string;
   description?: string;
+  /** Merchant-set flag (admin "Featured" toggle) — renders the Featured tag. */
+  featured?: boolean;
 };
 
 export const ProductCard = ({
   product,
-  index,
+  index = 0,
   showDescription = false,
 }: {
   product: Product;
-  index: number;
+  index?: number;
   /** Renders the blurb + CTA. Used by the "large" view on /products. */
   showDescription?: boolean;
 }) => {
@@ -58,14 +61,31 @@ export const ProductCard = ({
           className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/5 dark:ring-white/10"
         />
 
-        {product.badge && (
-          <span className="absolute left-4 top-4 bg-white/90 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-900 backdrop-blur-sm dark:bg-stone-900/90 dark:text-stone-100">
-            {product.badge}
-          </span>
+        {/* Top-left flag stack: Featured tag sits above the optional badge */}
+        {(product.featured || product.badge) && (
+          <div className="pointer-events-none absolute left-4 top-4 z-10 flex flex-col items-start gap-2">
+            {product.featured && (
+              <span className="inline-flex items-center gap-1 bg-stone-900 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white dark:bg-stone-100 dark:text-stone-900">
+                <Sparkles aria-hidden="true" className="h-2.5 w-2.5" />
+                Featured
+              </span>
+            )}
+
+            {product.badge && (
+              <span className="bg-white/90 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-900 backdrop-blur-sm dark:bg-stone-900/90 dark:text-stone-100">
+                {product.badge}
+              </span>
+            )}
+          </div>
         )}
 
+        {/* Wishlist — shared Heart.tsx toggle (top-right, above badges) */}
+        <div className="absolute right-4 top-4 z-10">
+          <Heart card={{ _id: product.id, id: product.id }} />
+        </div>
+
         {discount > 0 && (
-          <span className="absolute right-4 top-4 bg-red-900 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+          <span className="absolute right-4 top-[68px] bg-red-900 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
             {discount}% Off
           </span>
         )}

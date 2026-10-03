@@ -3,14 +3,13 @@
 import { useState } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
-import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export default function WhatsAppWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const { whatsAppNo, websiteName } = useSiteSettings();
 
-  const cleanNumber = whatsAppNo.replace(/[^0-9]/g, "");
-  const whatsappLink = `https://wa.me/${cleanNumber}`;
+  const whatsappLink =
+    "https://wa.me/919876543210?text=Hello%20Ink%20of%20Memories%20Team%2C%20I%20would%20like%20a%20quotation%20for%20custom%20printing%20%28wedding%20cards%2C%20visiting%20cards%2C%20shagun%20envelopes%2C%20brochures%29.%20Please%20share%20paper%20and%20finishing%20options.";
+
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
@@ -48,8 +47,10 @@ export default function WhatsAppWidget() {
             <FaWhatsapp className="text-[#25D366] text-2xl" />
           </div>
           <div className="ml-4">
-            <h3 className="text-sm font-semibold text-gray-800">Maldonite</h3>
-            <p className="text-xs text-gray-500">Helpdesk</p>
+            <h3 className="text-sm font-semibold text-gray-800">
+              Ink of Memories
+            </h3>
+            <p className="text-xs text-gray-500">Printing Helpdesk</p>
           </div>
           <div className="ml-auto">
             <FaWhatsapp className="text-[#25D366] text-xl" />

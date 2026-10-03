@@ -1,7 +1,7 @@
 /* ===================================================================
    Visual Consistency: Lexical Editor ↔ Frontend ReactMarkdown
    These CSS classes must EXACTLY mirror the Tailwind classes used in
-   frontend/app/journal/[slug]/JournalDetailClient.tsx
+   frontend/app/blog/[slug]/JournalDetailClient.tsx
    =================================================================== */
 
 /* --- Heading 1 --- */

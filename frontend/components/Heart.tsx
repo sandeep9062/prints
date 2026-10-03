@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "@/store/authSlice";
 import { useToFavMutation, useGetUserByIdQuery } from "@/services/userApi";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 
 interface HeartProps {
   card: any;
@@ -30,7 +30,7 @@ const Heart: React.FC<HeartProps> = ({ card }) => {
   const handleLike = async () => {
     if (!user) {
       toast.error("You must be logged in to do that");
-      router.push("/auth");
+      router.push("/login");
       return;
     }
 
@@ -38,11 +38,11 @@ const Heart: React.FC<HeartProps> = ({ card }) => {
       await toFav(card).unwrap(); // mutation toggles it
       refetch();
       toast.success(
-        favourited ? "Removed from favourites" : "Added to favourites"
+        favourited ? "Removed from favourites" : "Added to favourites",
       );
     } catch (error: any) {
       toast.error(
-        error?.data?.message || error?.error || "Something went wrong"
+        error?.data?.message || error?.error || "Something went wrong",
       );
     }
   };

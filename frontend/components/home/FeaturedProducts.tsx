@@ -16,6 +16,8 @@ type ProductCardProps = {
   originalPrice?: number;
   image: string;
   badge?: string;
+  /** Always true here (the carousel filters on it) — renders the Featured tag. */
+  featured?: boolean;
 };
 
 type ApiProduct = {
@@ -91,6 +93,7 @@ export const FeaturedProducts = () => {
             p.discountPrice && p.discountPrice < p.price ? p.price : undefined,
           image: p.images?.[0] || "/placeholder.svg",
           badge: p.badge,
+          featured: p.featured,
         })),
     [data],
   );

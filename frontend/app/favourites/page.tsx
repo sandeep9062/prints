@@ -41,6 +41,7 @@ type FavouriteProduct = {
   discountPrice?: number;
   images?: string[];
   description?: string;
+  featured?: boolean;
 };
 
 // Hydration-safe "are we on the client yet?" flag. `useSyncExternalStore`
@@ -241,6 +242,7 @@ export default function FavouritesPage() {
                             image: item.images?.[0] || "/placeholder.svg",
                             badge: item.badge,
                             description: item.description,
+                            featured: item.featured,
                           }}
                           index={index}
                         />

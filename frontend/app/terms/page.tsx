@@ -1,226 +1,356 @@
 "use client";
 
-import { FC } from "react";
-import {
-  Shield,
-  FileText,
-  CreditCard,
-  XCircle,
-  Truck,
-  RotateCcw,
-  FileWarning,
-  Copyright,
-  Lock,
-  RefreshCw,
-  HelpCircle,
-} from "lucide-react";
+import React from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { SEOHelper } from "@/components/SEOHelper";
-import { getBreadcrumbSchema } from "@/lib/seo";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import {
+  Scale,
+  FileText,
+  UserCheck,
+  Globe,
+  Building2,
+  CreditCard,
+  Copyright,
+  Ban,
+  Link2,
+  ShieldCheck,
+  UserX,
+  Gavel,
+  RefreshCw,
+  Mail,
+  Info,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-interface TermSection {
-  icon: React.ElementType;
+interface TermsSection {
+  icon: LucideIcon;
   title: string;
-  content: React.ReactNode;
+  content: string;
+  items: string[];
+  email?: string;
 }
 
-const termSections: TermSection[] = [
-  {
-    icon: FileText,
-    title: "1. About Our Printing Services",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        We provide professional printing and design services including Visiting
-        Cards, Wedding Cards, Invitation Cards, Brochures, Banners, Stickers,
-        Bill Books, Letterheads, Rubber Stamps, Calendars, Books, and customized
-        gift items. By placing an order, you agree to follow these terms.
-      </p>
-    ),
-  },
-  {
-    icon: Shield,
-    title: "2. Order Confirmation & Approval",
-    content: (
-      <ul className="space-y-2 text-muted-foreground">
-        {[
-          "Orders are confirmed only after final design approval.",
-          "Approved designs cannot be modified without additional charges.",
-          "Any errors must be corrected before approval.",
-          "We are not responsible for mistakes after approval.",
-        ].map((item, i) => (
-          <li key={i} className="flex items-start gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2.5 shrink-0" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    ),
-  },
-  {
-    icon: CreditCard,
-    title: "3. Pricing & Payment",
-    content: (
-      <ul className="space-y-2 text-muted-foreground">
-        {[
-          "All prices are in INR (₹).",
-          "Payment is required before production begins.",
-          "Costs depend on size, paper, finish & quantity.",
-          "Extra services like embossing, lamination may cost extra.",
-        ].map((item, i) => (
-          <li key={i} className="flex items-start gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2.5 shrink-0" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    ),
-  },
-  {
-    icon: XCircle,
-    title: "4. Order Cancellation",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        Orders can only be cancelled before printing begins. Once the job is
-        printed, it cannot be cancelled or refunded.
-      </p>
-    ),
-  },
-  {
-    icon: Truck,
-    title: "5. Delivery & Turnaround",
-    content: (
-      <ul className="space-y-2 text-muted-foreground">
-        {[
-          "Timelines are estimated and not guaranteed.",
-          "Delays due to external circumstances are not our responsibility.",
-          "Express services may cost extra.",
-        ].map((item, i) => (
-          <li key={i} className="flex items-start gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2.5 shrink-0" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    ),
-  },
-  {
-    icon: RotateCcw,
-    title: "6. Reprints & Returns",
-    content: (
-      <ul className="space-y-2 text-muted-foreground">
-        {[
-          "Reprints only if final product differs from approved design.",
-          "Color variations are normal from screen to print.",
-          "Customized products are non-refundable.",
-        ].map((item, i) => (
-          <li key={i} className="flex items-start gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2.5 shrink-0" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    ),
-  },
-  {
-    icon: FileWarning,
-    title: "7. Customer File Responsibility",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        Customer-provided files should be high resolution. We are not
-        responsible for poor print quality if the file itself is of low quality.
-      </p>
-    ),
-  },
-  {
-    icon: Copyright,
-    title: "8. Copyright & Usage",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        You must own rights to all content you provide. We will not be
-        responsible for any copyright issues caused by submitted content.
-      </p>
-    ),
-  },
-  {
-    icon: Lock,
-    title: "9. Privacy & Data Usage",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        Your personal details will be used only for order processing and
-        delivery and will never be shared or sold without your consent.
-      </p>
-    ),
-  },
-  {
-    icon: RefreshCw,
-    title: "10. Policy Updates",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        We may update our terms at any time. Changes will be reflected on this
-        page immediately.
-      </p>
-    ),
-  },
-];
+const TermsAndConditions = () => {
+  const router = useRouter();
 
-const TermsPage: FC = () => {
-  const breadcrumbSchema = getBreadcrumbSchema([
-    { name: "Home", url: "/" },
-    { name: "Terms & Conditions", url: "/terms" },
-  ]);
+  const sections: TermsSection[] = [
+    {
+      icon: FileText,
+      title: "1 — Acceptance of Terms",
+      content:
+        "These Terms & Conditions (these Terms) govern your access to and use of the Ink of Memories website and mobile experience (together, the Platform), operated by Samlason Printing Press. By browsing, registering on, or placing a print order on the Platform, you confirm that you have read, understood, and agree to be bound by these Terms, along with our Privacy Policy, Refund Policy, and Disclaimer.",
+      items: [
+        "These Terms form a legally binding agreement between you and Ink of Memories.",
+        "If you do not agree with any part of these Terms, please discontinue use of the Platform.",
+        "You are responsible for ensuring that your use of the Platform complies with all applicable laws.",
+      ],
+    },
+    {
+      icon: UserCheck,
+      title: "2 — Eligibility & Account Registration",
+      content:
+        "To create an account or place an order, you must be at least 18 years of age and legally capable of entering into binding contracts under the Indian Contract Act, 1872. You agree to provide true, accurate, current, and complete information at all times.",
+      items: [
+        "Keep your login credentials confidential — you are responsible for all activity carried out through your account.",
+        "One account per person or business, unless we authorise otherwise in writing.",
+        "Notify us immediately at info@inkofmemories.com of any unauthorised use of your account.",
+        "We may verify your identity, contact details, or business documents (such as GSTIN or PAN) before enabling bulk or business orders.",
+      ],
+    },
+    {
+      icon: Globe,
+      title: "3 — Use of the Platform",
+      content:
+        "Ink of Memories provides an online catalogue and ordering experience for custom printing — wedding cards, visiting cards, shagun envelopes, letter pads, brochures, banners, packaging and personalized gifts — fulfilled by Samlason Printing Press.",
+      items: [
+        "You may use the Platform for lawful, personal, or genuine business printing purposes.",
+        "Automated access, scraping, crawling, or bulk data extraction without our prior written consent is prohibited.",
+        "You must not attempt to bypass, disable, or interfere with the security or access-control features of the Platform.",
+        "Product imagery and previews are provided for reference; the physical proof approved by you is the basis for production.",
+      ],
+    },
+    {
+      icon: Building2,
+      title: "4 — Custom Orders, Artwork & Proofing",
+      content:
+        "Every custom order requires artwork or design content supplied by you. Ink of Memories acts as a printer and design facilitator, and is not a party to any arrangement between you and any third-party designer whose work you supply. All artwork is proofed with you on real paper before production.",
+      items: [
+        "You confirm that you hold the right to reproduce any text, image, logo, or design you submit.",
+        "Artwork must be supplied in print-ready format (vector PDF, AI, EPS, or high-resolution TIFF/CMYK) unless our team converts it for you.",
+        "We share a digital or physical proof for approval. Production begins only after your written approval of that proof.",
+        "We may decline artwork that is unlawful, infringing, or technically unsuitable for offset, letterpress, or foil-stamping production.",
+      ],
+    },
+    {
+      icon: CreditCard,
+      title: "5 — Pricing, Payments & Refunds",
+      content:
+        "All prices are shown on the Platform in Indian Rupees (₹) and are inclusive or exclusive of GST as indicated at checkout. Custom printing is a made-to-order service, and payments are processed through third-party payment gateways.",
+      items: [
+        "Prices are confirmed at the time of order and apply only to that order.",
+        "Quantities, paper stock, GSM, finishing and delivery charges are confirmed in your quotation before production.",
+        "Refunds, reprints, and cancellations are governed by our Refund Policy.",
+        "We are not responsible for delays or failures caused by banking or payment-gateway systems.",
+      ],
+    },
+    {
+      icon: Copyright,
+      title: "6 — Intellectual Property",
+      content:
+        "All content on the Platform — including the Ink of Memories name and logo, text, graphics, page design, software, original stationery designs, and curated product data — is owned by or licensed to Samlason Printing Press and is protected under applicable intellectual-property laws.",
+      items: [
+        "You receive a limited, revocable, non-exclusive licence to use the Platform for its intended purpose.",
+        "You may not copy, reproduce, modify, distribute, or create derivative works of our original designs without our prior written consent.",
+        "By uploading artwork, you grant us a non-exclusive, royalty-free licence to reproduce it solely for fulfilling your order.",
+        "You confirm that your uploaded content does not infringe the rights of any third party, including the right to print photographs of people.",
+      ],
+    },
+    {
+      icon: Ban,
+      title: "7 — Prohibited Activities",
+      content:
+        "To keep the Platform safe and trustworthy, the following activities are strictly prohibited.",
+      items: [
+        "Uploading artwork that is counterfeit, fraudulent, or infringes trademarks, copyrights, or the right to privacy of others.",
+        "Publishing content that is defamatory, obscene, harassing, discriminatory, or otherwise unlawful.",
+        "Impersonating Ink of Memories, its employees, or any other person or business.",
+        "Misusing enquiry or contact forms to send spam, promotions, or unsolicited communication.",
+        "Violating any applicable law, including the Information Technology Act, 2000 and the Consumer Protection (E-Commerce) Rules, 2020.",
+      ],
+    },
+    {
+      icon: Link2,
+      title: "8 — Third-Party Links & Services",
+      content:
+        "The Platform may contain links to third-party websites, tools, or services (for example, payment gateways, courier partners, or design resources). Such links are provided for convenience only.",
+      items: [
+        "We do not control and are not responsible for the content, policies, or practices of third parties.",
+        "Your dealings with any third party are solely between you and that party.",
+      ],
+    },
+    {
+      icon: Scale,
+      title: "9 — Limitation of Liability",
+      content:
+        "Printing is a physical craft — colour, texture, and finish vary between screens, proofs, and press output. The approved physical proof is the reference standard.",
+      items: [
+        "We are not liable for indirect, incidental, special, or consequential losses, including lost profits or missed event dates.",
+        "Colour reproduction on your monitor may differ from the physical print, particularly with metallic foils, textured stocks, and rich blacks.",
+        "To the maximum extent permitted by law, our total aggregate liability shall not exceed the amount you paid for the specific order giving rise to the claim.",
+        "Nothing in these Terms limits any liability that cannot be limited under applicable law.",
+      ],
+    },
+    {
+      icon: ShieldCheck,
+      title: "10 — Indemnification",
+      content:
+        "You agree to indemnify, defend, and hold harmless Ink of Memories, Samlason Printing Press, and their directors, employees, and partners from and against any claims, losses, liabilities, damages, and expenses (including reasonable legal fees) arising out of or related to:",
+      items: [
+        "Your use of the Platform or breach of these Terms.",
+        "Any artwork you upload, including claims that it infringes third-party rights.",
+        "Any dispute between you and another customer or third party.",
+      ],
+    },
+    {
+      icon: UserX,
+      title: "11 — Suspension & Termination",
+      content:
+        "We may restrict, suspend, or terminate your access to the Platform, or cancel an order, at our discretion and without prior notice, if we believe you have violated these Terms or applicable law.",
+      items: [
+        "You may stop using the Platform and request account deletion at any time.",
+        "Where a print order has entered production, it can no longer be cancelled — this is set out in our Refund Policy.",
+        "Provisions relating to intellectual property, liability, indemnification, and governing law survive termination.",
+      ],
+    },
+    {
+      icon: Gavel,
+      title: "12 — Governing Law & Jurisdiction",
+      content:
+        "These Terms are governed by and construed in accordance with the laws of India. Subject to applicable law, the courts at Chandigarh shall have exclusive jurisdiction over any dispute arising out of or in connection with the Platform or these Terms.",
+      items: [
+        "Before pursuing legal action, both parties agree to attempt to resolve disputes amicably by writing to info@inkofmemories.com.",
+      ],
+    },
+    {
+      icon: RefreshCw,
+      title: "13 — Changes to These Terms",
+      content:
+        "We may update these Terms from time to time to reflect changes in our services, technology, or legal requirements. The revised Terms will be posted on this page with an updated last-updated date.",
+      items: [
+        "Material changes will be notified through the Platform or by email where practicable.",
+        "Your continued use of the Platform after changes are posted constitutes acceptance of the revised Terms.",
+      ],
+    },
+    {
+      icon: Mail,
+      title: "14 — Contact & Grievance Redressal",
+      content:
+        "If you have questions, concerns, or complaints about your print order or these Terms, please reach out to our Grievance Officer. We aim to respond to every print-quality complaint within 7 working days of receiving the photographs you share:",
+      items: [],
+      email: "info@inkofmemories.com",
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <SEOHelper
-        title="Terms & Conditions – Ink of Memories | Samlason Printing Press"
-        description="Read the terms and conditions of Samlason Printing Press. Order policies, payment terms, delivery information, and reprint/return policies."
-        path="/terms"
-        image="https://inkofmemories.com/inkofmemories.png"
-        keywords="terms and conditions, printing terms, Samlason Printing terms, order policy, refund policy"
-        jsonLd={breadcrumbSchema}
-      />
-      <main className="pt-24 pb-16">
-        {/* Header */}
-        <section className="py-16 bg-hero">
-          <div className="container mx-auto px-4">
-            <div className="max-w-2xl mx-auto text-center">
-              <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4">
-                Terms & Conditions
-              </h1>
-              <p className="text-muted-foreground mb-4 leading-relaxed">
-                Please read these terms carefully. By placing an order with our
-                printing company, you agree to the conditions below.
+    <main className="relative min-h-screen bg-white">
+      {/* HERO HEADER */}
+      <section className="bg-gradient-to-r from-[#E4E9DD] to-[#DDE3D3] pt-30 py-20 text-black relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
+          <Scale size={400} strokeWidth={0.5} />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-3xl"
+          >
+            <div className="flex items-center gap-2 text-[#1F3A32] font-bold uppercase tracking-widest text-sm mb-4">
+              <FileText size={18} />
+              Legal Agreement
+            </div>
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-6">
+              Terms & Conditions
+            </h1>
+            <p className="text-gray-900 text-lg leading-relaxed">
+              Welcome to <strong>Ink of Memories</strong>, the printing platform by
+              Samlason Printing Press. These Terms & Conditions set out the
+              rules for ordering custom printing and stationery through the
+              Platform. Please read them carefully before placing a print
+              order.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* LAST UPDATED */}
+      <div className="container mx-auto px-4">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-gray-400 text-sm mt-6 mb-2">
+            Last updated: September 28, 2026
+          </p>
+        </div>
+      </div>
+
+      {/* MAIN CONTENT */}
+      <section className="py-16 md:py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            {/* INTRO BOX */}
+            <div className="bg-[#F7F4EE] border-l-4 border-[#1F3A32] p-6 mb-12 rounded-r-xl shadow-sm">
+              <div className="flex gap-4">
+                <Info className="text-[#1F3A32] shrink-0" />
+                <p className="text-slate-700 text-sm md:text-base italic">
+                  By using Ink of Memories, you agree to these Terms &
+                  Conditions. They work alongside our Privacy Policy, Refund
+                  Policy, and Disclaimer, so please review all of them together
+                  before placing an order.
+                </p>
+              </div>
+            </div>
+
+            {/* SECTIONS */}
+            <div className="space-y-14">
+              {sections.map((section, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group"
+                >
+                  <div className="flex items-start gap-5">
+                    <span className="flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 text-slate-500 shrink-0 group-hover:bg-[#1F3A32] group-hover:text-white transition-all duration-300">
+                      <section.icon size={22} />
+                    </span>
+                    <div className="flex-1">
+                      <h2 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-[#1F3A32] transition-colors">
+                        {section.title}
+                      </h2>
+                      <p className="text-slate-600 leading-relaxed text-base md:text-lg mb-3">
+                        {section.content}
+                      </p>
+
+                      {section.items.length > 0 && (
+                        <ul className="list-disc pl-5 sm:pl-6 space-y-1.5 sm:space-y-2 text-slate-600 text-base md:text-lg">
+                          {section.items.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {section.email && (
+                        <p className="text-slate-900 font-semibold text-base md:text-lg mt-2">
+                          Email:{" "}
+                          <span className="text-[#1F3A32]">{section.email}</span>
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* RELATED POLICIES */}
+            <div className="mt-16 bg-slate-50 rounded-2xl border border-slate-200 p-6 md:p-8">
+              <h2 className="text-lg font-bold text-slate-900 mb-4">
+                Related Policies
+              </h2>
+              <div className="flex flex-wrap gap-3">
+                {[
+                  ["Privacy Policy", "/privacy-policy"],
+                  ["Refund Policy", "/refund"],
+                  ["Disclaimer", "/disclaimer"],
+                ].map(([label, href]) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    className="px-4 py-2 rounded-full bg-white border border-slate-200 text-sm font-medium text-[#1F3A32] hover:bg-[#1F3A32] hover:text-white transition-colors"
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* FOOTER NOTE */}
+            <div className="mt-20 pt-10 border-t border-slate-200 text-center">
+              <p className="text-slate-400 text-sm">
+                Last Updated: September 2026 • © {new Date().getFullYear()}{" "}
+                Ink of Memories · Samlason Printing Press. All rights
+                reserved.
               </p>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Terms Sections */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto space-y-6">
-              {termSections.map((section) => (
-                <div key={section.title} className="card-elegant p-6 md:p-8">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center shrink-0">
-                      <section.icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h2 className="font-display text-xl font-semibold mb-3">
-                        {section.title}
-                      </h2>
-                      {section.content}
-                    </div>
-                  </div>
-                </div>
-              ))}
+      {/* HELP CALLOUT */}
+      <section className="container mx-auto px-4 pb-20">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-[#1F3A32] rounded-2xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                Need clarification on our Terms?
+              </h2>
+              <p className="text-[#E4E9DD] opacity-90">
+                Our team is happy to help you understand your rights and
+                responsibilities when ordering from Ink of Memories.
+              </p>
             </div>
+            <button
+              onClick={() => router.push("/contact")}
+              className="bg-white text-[#1F3A32] px-8 py-4 rounded-xl font-bold hover:bg-[#F7F4EE] transition-all whitespace-nowrap shadow-lg"
+            >
+              Contact Us
+            </button>
           </div>
-        </section>
-      </main>
-    </div>
+        </div>
+      </section>
+    </main>
   );
 };
 
-export default TermsPage;
+export default TermsAndConditions;

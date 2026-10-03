@@ -1,46 +1,47 @@
-import { BlogListServer } from "./_components/BlogListServer";
-import type { Metadata } from "next";
+import { fetchBlogsServer } from "@/services/blogApi";
+import JournalClient from "@/components/journal/JournalClient";
 
-export const metadata: Metadata = {
-  title: "Printing Blog – Tips, Trends & Inspiration | Ink of Memories",
-  description:
-    "Explore our printing blog for expert tips on wedding invitations, business cards, packaging design, and the latest printing trends. Insights from Samlason Printing Press.",
-  keywords: [
-    "printing blog",
-    "wedding invitation tips",
-    "design trends",
-    "printing guide",
-    "Samlason Printing",
-    "Ink of Memories",
-  ],
-  openGraph: {
-    title: "Printing Blog – Tips, Trends & Inspiration | Ink of Memories",
-    description:
-      "Explore our printing blog for expert tips on wedding invitations, business cards, packaging design, and the latest printing trends.",
-    type: "website",
-    locale: "en_IN",
-    siteName: "Ink of Memories",
-    images: [
-      {
-        url: "https://inkofmemories.com/inkofmemories.png",
-        width: 1200,
-        height: 630,
-        alt: "Ink of Memories Blog",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Printing Blog – Tips, Trends & Inspiration | Ink of Memories",
-    description:
-      "Expert printing tips, wedding invitation ideas, and design trends from Samlason Printing Press.",
-    images: ["https://inkofmemories.com/inkofmemories.png"],
-  },
-  alternates: {
-    canonical: "https://inkofmemories.com/blog",
-  },
-};
+/**
+ * ISR revalidation period (in seconds).
+ * Next.js will re-generate this page every 1 hour on demand,
+ * ensuring search engines always see fresh content.
+ */
+export const revalidate = 3600;
 
-export default function BlogPage() {
-  return <BlogListServer />;
+/**
+ * Static Site Generation (SSG) for /blog.
+ *
+ * The server fetches all blogs at BUILD TIME (SSG) and renders them
+ * into the static HTML sent to every visitor, then revalidates (ISR)
+ * so the content stays fresh.
+ *
+ * The client wrapper receives the pre-fetched data and:
+ *   - Shows it immediately (no loading spinner for the initial view).
+ *   - Filters / searches fully client-side (backend has no pagination).
+ */
+export default async function BlogPage() {
+  const blogs = await fetchBlogsServer();
+  const categories = Array.from(
+    new Set(blogs.map((b) => b.category).filter(Boolean) as string[]),
+  );
+
+  // Map BlogPost -> JournalPost shape expected by JournalClient
+  // (blog.image -> coverImage, blog.date -> publishedAt).
+  const initialJournals = blogs.map((b) => ({
+    _id: b._id,
+    slug: b.slug,
+    title: b.title,
+    excerpt: b.excerpt,
+    category: b.category,
+    readTime: b.readTime,
+    publishedAt: b.date,
+    coverImage: b.image,
+  }));
+
+  return (
+    <JournalClient
+      initialJournals={initialJournals}
+      initialCategories={categories}
+    />
+  );
 }

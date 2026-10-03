@@ -42,6 +42,7 @@ const productLinks = [
 const quickLinks = [
   { name: "Home", path: "/" },
   { name: "Products", path: "/products" },
+
   { name: "Business", path: "/business" },
   { name: "Customize", path: "/customize" },
   { name: "About Us", path: "/about-us" },

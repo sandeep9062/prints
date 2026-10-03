@@ -26,6 +26,7 @@ export const createProduct = async (req, res) => {
       stock,
       dimensions,
       options,
+      featured,
     } = JSON.parse(productData);
     const owner = req.user?._id; // Assuming auth middleware sets req.user
 
@@ -51,6 +52,8 @@ export const createProduct = async (req, res) => {
       stock,
       dimensions,
       options,
+      // Coerce FormData/JSON quirks — the admin toggle posts a boolean.
+      featured: Boolean(featured),
     });
 
     res.status(201).json({
@@ -228,6 +231,7 @@ export const updateProduct = async (req, res) => {
       dimensions,
       options,
       images: existingImages, // Client might send back the list of existing images
+      featured,
     } = JSON.parse(productData);
 
     const newImages = req.files ? req.files.map((file) => file.path) : [];
@@ -243,6 +247,10 @@ export const updateProduct = async (req, res) => {
       dimensions,
       options,
       images: [...(existingImages || []), ...newImages], // Combine old and new images
+      // Only touch `featured` when the client actually sends it — the merchant
+      // dashboard PATCHes partial payloads (e.g. just `stock`) and must not
+      // silently clear the flag.
+      ...(typeof featured === "boolean" ? { featured } : {}),
     };
 
     // Generate new slug if name changed

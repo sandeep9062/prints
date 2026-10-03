@@ -1,222 +1,215 @@
 "use client";
 
-import { FC } from "react";
+import React from "react";
+import { motion } from "framer-motion";
 import {
-  ShieldCheck,
+  Shield,
+  Lock,
   Database,
-  FileLock,
-  CreditCard,
-  Share2,
   Cookie,
-  LockKeyhole,
-  Eye,
-  RefreshCw,
-  HelpCircle,
+  Share2,
+  UserCheck,
+  Mail,
+  AlertTriangle,
+  Info,
 } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { SEOHelper } from "@/components/SEOHelper";
-import { getBreadcrumbSchema } from "@/lib/seo";
+import { useRouter } from "next/navigation";
 
-interface PolicySection {
-  icon: React.ElementType;
-  title: string;
-  content: React.ReactNode;
-}
+const PrivacyPolicy = () => {
+  const router = useRouter();
 
-const policySections: PolicySection[] = [
-  {
-    icon: Database,
-    title: "1. Information We Collect",
-    content: (
-      <>
-        <p className="text-muted-foreground leading-relaxed mb-4">
-          When you place an order or contact us, we may collect the following
-          information:
-        </p>
-        <ul className="grid sm:grid-cols-2 gap-2 text-muted-foreground">
-          {[
-            "Full Name",
-            "Phone Number",
-            "Email Address",
-            "Shipping & Billing Address",
-            "Uploaded Designs & Custom Content",
-            "Payment info (Handled securely)",
-          ].map((item, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2 shrink-0" />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-      </>
-    ),
-  },
-  {
-    icon: ShieldCheck,
-    title: "2. How We Use Your Information",
-    content: (
-      <ul className="space-y-2 text-muted-foreground">
-        {[
-          "To process and complete your printing orders",
-          "To send order updates & confirmations",
-          "To improve customer experience",
-          "To resolve queries and support requests",
-        ].map((item, i) => (
-          <li key={i} className="flex items-start gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2.5 shrink-0" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    ),
-  },
-  {
-    icon: FileLock,
-    title: "3. Design & File Confidentiality",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        Every document, design, image, and content shared by you is kept
-        strictly confidential. We never reuse, distribute, or sell your custom
-        files &mdash; your designs remain entirely yours.
-      </p>
-    ),
-  },
-  {
-    icon: CreditCard,
-    title: "4. Secure Payments",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        We do not store any card or UPI details on our servers. All transactions
-        are processed using trusted and secure third-party payment gateways with
-        end-to-end encryption.
-      </p>
-    ),
-  },
-  {
-    icon: Share2,
-    title: "5. Information Sharing",
-    content: (
-      <>
-        <p className="text-muted-foreground leading-relaxed mb-3">
-          Your information is shared only when absolutely required:
-        </p>
-        <ul className="space-y-2 text-muted-foreground">
-          {[
-            "With delivery partners to fulfill your orders",
-            "With legal authorities when required by law",
-            "With trusted partners who help in providing services",
-          ].map((item, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2.5 shrink-0" />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-      </>
-    ),
-  },
-  {
-    icon: Cookie,
-    title: "6. Cookies & Analytics",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        We use cookies and analytics to understand visitor behaviour and enhance
-        your browsing experience. These cookies never store personal or
-        sensitive data.
-      </p>
-    ),
-  },
-  {
-    icon: LockKeyhole,
-    title: "7. Data Protection",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        We use strong technical and organizational security measures to protect
-        your information from unauthorized access or disclosure.
-      </p>
-    ),
-  },
-  {
-    icon: Eye,
-    title: "8. Your Rights",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        You may request to view, edit, or delete your data at any time by
-        contacting us. We respect your rights and data ownership.
-      </p>
-    ),
-  },
-  {
-    icon: RefreshCw,
-    title: "9. Updates to this Policy",
-    content: (
-      <p className="text-muted-foreground leading-relaxed">
-        We may update this privacy policy in the future. Any changes will be
-        reflected on this page with the updated date.
-      </p>
-    ),
-  },
-];
-
-const PrivacyPolicyPage: FC = () => {
-  const breadcrumbSchema = getBreadcrumbSchema([
-    { name: "Home", url: "/" },
-    { name: "Privacy Policy", url: "/privacy-policy" },
-  ]);
+  const sections = [
+    {
+      icon: Database,
+      title: "1 — What Data We Collect",
+      content:
+        "We may collect personal data when you register, submit enquiries, fill forms, or interact with our website.",
+      items: [
+        "Basic profile information (name, email, phone number)",
+        "Order details — product selections, quantities, paper stock, finish and delivery addresses",
+        "Custom artwork, logos, and design files you upload for printing",
+        "Usage activity, device info, browser type, IP address",
+        "Cookies & tracking data for analytics and UX improvements",
+      ],
+    },
+    {
+      icon: Lock,
+      title: "2 — How We Use Your Data",
+      content:
+        "We only use your data to process and deliver your print orders and to improve our printing services.",
+      items: [
+        "Process your order, produce your prints, and arrange delivery",
+        "Share your delivery details with courier partners so your order reaches you",
+        "Contact you about your order — proofs, dispatch, and delivery updates",
+        "Improve website performance, product previews, and user experience",
+        "Send seasonal offers and new design collections (you can opt out anytime)",
+      ],
+    },
+    {
+      icon: Cookie,
+      title: "3 — Cookies & Tracking",
+      content:
+        "We use cookies to store small pieces of information which help improve website performance. You may disable cookies in your browser settings — however, some features may not function properly.",
+      items: [],
+    },
+    {
+      icon: Share2,
+      title: "4 — Data Sharing",
+      content:
+        "We DO NOT sell your personal data to any third party or advertiser. We may share your data only in the following cases:",
+      items: [
+        "To comply with legal obligations or government requests",
+        "With trusted service providers (ex: email notifications, hosting)",
+      ],
+    },
+    {
+      icon: UserCheck,
+      title: "5 — Your Rights",
+      content:
+        "You have full rights under applicable Indian data protection laws:",
+      items: [
+        "Right to access your data and order history",
+        "Right to correct or request data deletion",
+        "Right to withdraw consent anytime",
+      ],
+    },
+    {
+      icon: Mail,
+      title: "6 — Contact Us",
+      content:
+        "If you have any questions regarding this Privacy Policy, or want to request data changes or deletion of your uploaded artwork, please contact us:",
+      items: [],
+      email: "info@inkofmemories.com",
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <SEOHelper
-        title="Privacy Policy – Ink of Memories | Samlason Printing Press"
-        description="Read the privacy policy of Samlason Printing Press. Learn how we collect, use, and protect your personal information and uploaded designs."
-        path="/privacy-policy"
-        image="https://inkofmemories.com/inkofmemories.png"
-        keywords="privacy policy, data protection, Ink of Memories privacy, Samlason Printing privacy"
-        jsonLd={breadcrumbSchema}
-      />
-      <main className="pt-20 pb-16">
-        {/* Header */}
-        <section className="py-16 bg-hero">
-          <div className="container mx-auto px-4">
-            <div className="max-w-2xl mx-auto text-center">
-              <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4">
-                Privacy Policy
-              </h1>
-              <p className="text-muted-foreground mb-4 leading-relaxed">
-                We value your trust. This Privacy Policy describes how your
-                personal information is collected, used, and protected when you
-                use our printing services.
-              </p>
-            </div>
-          </div>
-        </section>
+    <main className="relative min-h-screen bg-white">
+      {/* HERO HEADER */}
+      <section className="bg-gradient-to-r from-[#E4E9DD] to-[#DDE3D3] pt-30 py-20 text-black relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
+          <Shield size={400} strokeWidth={0.5} />
+        </div>
 
-        {/* Policy Sections */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto space-y-6">
-              {policySections.map((section) => (
-                <div key={section.title} className="card-elegant p-6 md:p-8">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center shrink-0">
-                      <section.icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h2 className="font-display text-xl font-semibold mb-3">
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-3xl"
+          >
+            <div className="flex items-center gap-2 text-[#1F3A32] font-bold uppercase tracking-widest text-sm mb-4">
+              <AlertTriangle size={18} />
+              Privacy & Security
+            </div>
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-6">
+              Privacy Policy
+            </h1>
+            <p className="text-gray-900 text-lg leading-relaxed">
+              At <strong>Ink of Memories</strong>, your privacy is extremely
+              important to us. This Privacy Policy explains how we collect,
+              use, and safeguard your personal data when you order custom
+              printing and stationery from our platform.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* LAST UPDATED */}
+      <div className="container mx-auto px-4">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-gray-400 text-sm mt-6 mb-2">
+            Last updated: November 8, 2025
+          </p>
+        </div>
+      </div>
+
+      {/* MAIN CONTENT */}
+      <section className="py-16 md:py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            {/* INTRO BOX */}
+            <div className="bg-[#F7F4EE] border-l-4 border-[#1F3A32] p-6 mb-12 rounded-r-xl shadow-sm">
+              <div className="flex gap-4">
+                <Info className="text-[#1F3A32] shrink-0" />
+                <p className="text-slate-700 text-sm md:text-base italic">
+                  By using our website, you consent to our Privacy Policy.
+                  Please read the following information carefully to understand
+                  our views and practices regarding your personal data.
+                </p>
+              </div>
+            </div>
+
+            {/* SECTIONS */}
+            <div className="space-y-14">
+              {sections.map((section, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group"
+                >
+                  <div className="flex items-start gap-5">
+                    <span className="flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 text-slate-500 shrink-0 group-hover:bg-[#1F3A32] group-hover:text-white transition-all duration-300">
+                      <section.icon size={22} />
+                    </span>
+                    <div className="flex-1">
+                      <h2 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-[#1F3A32] transition-colors">
                         {section.title}
                       </h2>
-                      {section.content}
+                      <p className="text-slate-600 leading-relaxed text-base md:text-lg mb-3">
+                        {section.content}
+                      </p>
+
+                      {section.items.length > 0 && (
+                        <ul className="list-disc pl-5 sm:pl-6 space-y-1.5 sm:space-y-2 text-slate-600 text-base md:text-lg">
+                          {section.items.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {section.email && (
+                        <p className="text-slate-900 font-semibold text-base md:text-lg mt-2">
+                          Email:{" "}
+                          <span className="text-[#1F3A32]">
+                            {section.email}
+                          </span>
+                        </p>
+                      )}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
-        </section>
-      </main>
-    </div>
+        </div>
+      </section>
+
+      {/* HELP CALLOUT */}
+      <section className="container mx-auto px-4 pb-20">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-[#1F3A32] rounded-2xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                Have questions about your privacy?
+              </h2>
+              <p className="text-[#E4E9DD] opacity-90">
+                Our team is here to help with any concerns or clarifications.
+              </p>
+            </div>
+            <button
+              onClick={() => router.push("/contact")}
+              className="bg-white text-[#1F3A32] px-8 py-4 rounded-xl font-bold hover:bg-[#F7F4EE] transition-all whitespace-nowrap shadow-lg"
+            >
+              Contact Us
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 };
 
-export default PrivacyPolicyPage;
+export default PrivacyPolicy;

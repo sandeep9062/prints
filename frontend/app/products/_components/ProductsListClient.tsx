@@ -247,6 +247,7 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                 image: product?.images?.[0] || "/placeholder.svg",
                 badge: product.badge,
                 description: product.description,
+                featured: product.featured,
               };
 
               return (

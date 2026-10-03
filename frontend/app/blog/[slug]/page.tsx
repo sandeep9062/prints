@@ -1,99 +1,103 @@
-import { fetchBlogBySlugServer } from "@/services/blogApi";
-import BlogDetailClient from "./BlogDetailClient";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
+import JournalDetailClient from "./JournalDetailClient";
+import { fetchBlogBySlugServer } from "@/services/blogApi";
+import {
+  generateArticleSchema,
+  generateFAQSchema,
+  generateBreadcrumbSchema,
+  renderSchemaScript,
+} from "@/lib/schemaUtils";
 
-interface Props {
-  params: Promise<{ slug: string }>;
-}
+type Props = {
+  params: Promise<{
+    slug: string;
+  }>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await fetchBlogBySlugServer(slug);
 
-  if (!post) {
-    return { title: "Post Not Found" };
+  const journal = await fetchBlogBySlugServer(slug);
+
+  if (!journal) {
+    return {
+      title: "Article Not Found | Ink of Memories Blog",
+      description: "The article you're looking for could not be found.",
+    };
   }
 
+  const title = `${journal.title} | Ink of Memories Blog`;
+  const description =
+    journal.excerpt?.substring(0, 160) ||
+    journal.content?.replace(/<[^>]*>/g, "").substring(0, 160) ||
+    `Read ${journal.title} on Ink of Memories Blog.`;
+  const canonicalUrl = `https://inkofmemories.com/blog/${slug}`;
+  const imageUrl = journal.image || "https://inkofmemories.com/inkofmemories.png";
+
   return {
-    title: post.title,
-    description:
-      post.excerpt?.substring(0, 160) ||
-      "Read our latest article on printing and design from Ink of Memories.",
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
-      title: post.title,
-      description: post.excerpt?.substring(0, 160),
+      title,
+      description,
+      url: canonicalUrl,
       type: "article",
-      publishedTime: post.date,
-      authors: [post.author],
+      publishedTime: journal.createdAt,
+      authors: [journal.author || "Ink of Memories"],
       images: [
         {
-          url: post.image || "https://inkofmemories.com/inkofmemories.png",
+          url: imageUrl,
           width: 1200,
           height: 630,
-          alt: post.title,
+          alt: journal.title,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt?.substring(0, 160),
-      images: [post.image || "https://inkofmemories.com/inkofmemories.png"],
-    },
-    keywords: `${post.tags?.join(", ") || post.category}, printing tips, design trends`,
-    alternates: {
-      canonical: `https://inkofmemories.com/blog/${slug}`,
-    },
-    other: {
-      "article:published_time": post.date,
-      "article:author": post.author,
+      title,
+      description,
+      images: [imageUrl],
     },
   };
 }
 
-export default async function BlogPostPage({ params }: Props) {
+export default async function JournalDetailPage({ params }: Props) {
   const { slug } = await params;
-  const post = await fetchBlogBySlugServer(slug);
+  const journal = await fetchBlogBySlugServer(slug);
 
-  if (!post) {
+  if (!journal) {
     notFound();
   }
 
-  // Attach Article JSON-LD structured data
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title,
-    description: post.excerpt?.substring(0, 200) || post.title,
-    image: post.image || "https://inkofmemories.com/inkofmemories.png",
-    author: {
-      "@type": "Person",
-      name: post.author || "Ink of Memories",
-    },
-    datePublished: post.date || post.createdAt,
-    dateModified: post.updatedAt || post.date || post.createdAt,
-    publisher: {
-      "@type": "Organization",
-      name: "Samlason Printing Press",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://inkofmemories.com/inkofmemories.png",
-      },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `https://inkofmemories.com/blog/${slug}`,
-    },
+  const canonicalUrl = `https://inkofmemories.com/blog/${slug}`;
+  const imageUrl = journal.image || "https://inkofmemories.com/inkofmemories.png";
+
+  // Generate all schemas — map BlogPost fields to the schema helpers
+  // (blog.image -> coverImage).
+  const schemaJournal = {
+    ...journal,
+    coverImage: journal.image,
+    publishedAt: journal.date || journal.createdAt,
   };
+  const articleSchema = generateArticleSchema(schemaJournal, slug);
+  const faqSchema = generateFAQSchema(journal.content, journal.category);
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", item: "https://inkofmemories.com" },
+    { name: "Blog", item: "https://inkofmemories.com/blog" },
+    { name: journal.title, item: canonicalUrl },
+  ]);
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      <BlogDetailClient post={post} slug={slug} />
+      {renderSchemaScript("article-jsonld", articleSchema)}
+      {renderSchemaScript("faq-jsonld", faqSchema)}
+      {renderSchemaScript("breadcrumb-jsonld", breadcrumbSchema)}
+      <JournalDetailClient slug={slug} />
     </>
   );
 }

@@ -1,5 +1,5 @@
 /**
- * Schema Markup (JSON-LD) Utilities for PropertyBulbul
+ * Schema Markup (JSON-LD) Utilities for Ink of Memories
  * Server-side only implementation with safety checks
  */
 
@@ -9,105 +9,97 @@ import React from "react";
 export const isServer = typeof window === "undefined";
 
 /**
- * Generate RealEstateListing Schema
+ * Generate Printing Service / Product Schema
+ * (for stationery suites, wedding cards, visiting cards, brochures...)
  */
-export function generateRealEstateSchema(property: any, id: string) {
+export function generatePrintingProductSchema(product: any, id: string) {
   if (!isServer) return null;
 
-  const imageUrls = (property?.image || []).filter((img: string) => {
-    const lower = img.toLowerCase();
-    return !(
-      lower.endsWith(".mp4") ||
-      lower.endsWith(".webm") ||
-      lower.endsWith(".ogg")
-    );
-  });
-
+  const imageUrls = Array.isArray(product?.image)
+    ? product.image.filter(
+        (img: string) =>
+          !img.toLowerCase().endsWith(".mp4") &&
+          !img.toLowerCase().endsWith(".webm") &&
+          !img.toLowerCase().endsWith(".ogg"),
+      )
+    : product?.image
+      ? [product.image]
+      : [];
   return {
     "@context": "https://schema.org",
-    "@type": "RealEstateListing",
-    name: sanitizeText(property?.title || ""),
-    description: sanitizeText(property?.description || ""),
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: property?.location?.address,
-      addressLocality: property?.location?.sector || property?.location?.city,
-      addressRegion: property?.location?.city,
-      addressCountry: "IN",
+    "@type": "Product",
+    name: sanitizeText(product?.title || ""),
+    description: sanitizeText(product?.description || ""),
+    category: sanitizeText(product?.category || "Stationery"),
+    brand: {
+      "@type": "Brand",
+      name: "Ink of Memories",
     },
     offers: {
       "@type": "Offer",
-      price: property?.price,
+      price: product?.price,
       priceCurrency: "INR",
-      availability:
-        property?.availability === "Available"
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
-    },
-    offerType: property?.deal,
-    numberOfRooms: property?.facilities?.bedrooms || 0,
-    numberOfBathrooms: property?.facilities?.bathrooms || 0,
-    floorSize: {
-      "@type": "QuantitativeValue",
-      value: property?.area?.value,
-      unitCode: property?.area?.unit === "sqft" ? "FTK" : "MTK",
+      availability: "https://schema.org/InStock",
     },
     image: imageUrls,
-    url: `https://propertybulbul.com/property/${id}`,
+    url: `https://inkofmemories.com/products/${id}`,
     provider: {
       "@type": "Organization",
-      name: "Propertybulbul",
-      url: "https://propertybulbul.com",
+      name: "Ink of Memories",
+      url: "https://inkofmemories.com",
     },
   };
 }
 
 /**
- * Generate Article Schema for Journal/Blog posts
+ * Generate Article Schema for Press Notes / Blog posts
  */
 export function generateArticleSchema(journal: any, slug: string) {
   if (!isServer) return null;
 
-  const canonicalUrl = `https://propertybulbul.com/journal/${slug}`;
+  const canonicalUrl = `https://inkofmemories.com/blog/${slug}`;
   const imageUrl =
-    journal.coverImage || "https://propertybulbul.com/property-tricity.jpg";
+    journal.coverImage ||
+    journal.image ||
+    "https://inkofmemories.com/inkofmemories.png";
 
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: journal.title,
     description: sanitizeText(
-      stripHtml(journal.content)?.substring(0, 250) || journal.title,
+      stripHtml(journal.excerpt || journal.content)?.substring(0, 250) ||
+        journal.title,
     ),
     image: imageUrl,
-    datePublished: journal.createdAt,
-    dateModified: journal.updatedAt || journal.createdAt,
+    datePublished: journal.publishedAt || journal.date || journal.createdAt,
+    dateModified: journal.updatedAt || journal.createdAt || journal.date,
     author: {
-      "@type": "Organization",
-      name: journal.author || "PropertyBulbul Editorial",
-      url: "https://propertybulbul.com",
+      "@type": "Person",
+      name: journal.author || "Samlason Printing Press",
     },
     publisher: {
       "@type": "Organization",
-      name: "Propertybulbul",
+      name: "Ink of Memories",
       logo: {
         "@type": "ImageObject",
-        url: "https://propertybulbul.com/propertybulbul.png",
+        url: "https://inkofmemories.com/inkofmemories.png",
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": canonicalUrl,
     },
-    wordCount: journal.content?.split(/\s+/).length || 0,
+    wordCount:
+      stripHtml(journal.content || "").split(/\s+/).filter(Boolean).length || 0,
   };
 }
 
 /**
  * Generate FAQPage Schema
- * Auto extracts FAQs from content or uses default location based questions
+ * Auto extracts FAQs from content or uses printing-specific fallback questions
  */
-export function generateFAQSchema(content: string, location?: string) {
+export function generateFAQSchema(content: string, category?: string) {
   if (!isServer) return null;
 
   const faqs: Array<{ question: string; answer: string }> = [];
@@ -116,20 +108,20 @@ export function generateFAQSchema(content: string, location?: string) {
   const extractedFaqs = extractFAQsFromContent(content);
   faqs.push(...extractedFaqs);
 
-  // Add location specific common questions
-  if (location) {
+  // Add printing-specific fallback questions (matches homepage services)
+  if (category) {
     faqs.push(
       {
-        question: `Is ${location} safe to live?`,
-        answer: `${location} is considered one of the safest localities with excellent infrastructure, good connectivity, and low crime rates. It's a preferred residential area for families and professionals.`,
+        question: `What paper options are available for ${category}?`,
+        answer: `For ${category} we offer premium matte, textured linen, pearl shimmer and cotton stocks in 250-350 GSM. Every order is proofed on real paper at our Panchkula atelier before final printing.`,
       },
       {
-        question: `What are property prices in ${location}?`,
-        answer: `Property prices in ${location} vary depending on property type, size, and amenities. Current rates range from ₹4,500 to ₹8,000 per sq ft for residential apartments.`,
+        question: `What is the ordering timeline for ${category}?`,
+        answer: `We recommend ordering ${category} at least 2-3 weeks in advance (3-4 months for weddings). Digital printing is available for quick turnarounds and offset / letterpress for large or luxury runs.`,
       },
       {
-        question: `What facilities are available in ${location}?`,
-        answer: `${location} offers excellent amenities including schools, hospitals, shopping centers, parks, good road connectivity, and public transport facilities.`,
+        question: `Can I customise the design and finish?`,
+        answer: `Yes — every suite is designed with you. Choose foil stamping (gold, rose gold, copper), letterpress deboss, embossing and envelope liners. Start from the Customize page or book a consultation.`,
       },
     );
   }
@@ -175,7 +167,7 @@ export function generateBreadcrumbSchema(
  */
 function stripHtml(html: string): string {
   if (!html) return "";
-  return html.replace(/<[^>]*>/g, "");
+  return html.replace(/<[^>]*>/g, " ");
 }
 
 /**
@@ -184,7 +176,6 @@ function stripHtml(html: string): string {
 function sanitizeText(text: string): string {
   if (!text) return "";
   return text
-    .replace(/0\s*BHK/gi, "Studio/1BHK")
     .replace(/[\n\r\t]/g, " ")
     .replace(/\s+/g, " ")
     .trim();

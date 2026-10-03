@@ -307,16 +307,16 @@ export default function EditBlogPage() {
                 }
               >
                 <option value="">Select a category</option>
-                <option value="Investment">Investment Guide</option>
-                <option value="Real Estate">Real Estate</option>
-                <option value="Market News">Market News</option>
-                <option value="Legal">Legal & Documentation</option>
-                <option value="Lifestyle">Lifestyle</option>
-                <option value="Home Buying">Home Buying Guide</option>
-                <option value="Rental">Rental Guide</option>
-                <option value="Construction">Construction & Development</option>
-                <option value="Interior Design">Interior & Design</option>
-                <option value="Finance">Property Tax & Finance</option>
+                <option value="Wedding Cards">Wedding Cards</option>
+                <option value="Invitation Cards">Invitation Cards</option>
+                <option value="Visiting Cards">Visiting Cards</option>
+                <option value="Shagun Envelopes">Shagun Envelopes</option>
+                <option value="Brochures & Catalogs">Brochures & Catalogs</option>
+                <option value="Paper & Finishes">Paper & Finishes</option>
+                <option value="Printing Guide">Printing Guide</option>
+                <option value="Design Inspiration">Design Inspiration</option>
+                <option value="Business Stationery">Business Stationery</option>
+                <option value="Festive Collection">Festive Collection</option>
               </select>
             </div>
 
