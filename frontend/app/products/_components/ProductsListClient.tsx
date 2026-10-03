@@ -40,7 +40,18 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
   const router = useRouter();
 
   const [viewMode, setViewMode] = useState<"grid" | "large">("grid");
-  const [searchQuery, setSearchQuery] = useState("");
+
+  // The term is URL-driven so a navbar search (`/products?search=…`) lands
+  // filtered. Typing updates local state instantly; a term arriving in the URL
+  // is folded back in during render (React's "adjust state when a prop changes"
+  // pattern) so no effect is needed.
+  const searchParam = searchParams.get("search") ?? "";
+  const [searchQuery, setSearchQuery] = useState(searchParam);
+  const [syncedSearch, setSyncedSearch] = useState(searchParam);
+  if (searchParam !== syncedSearch) {
+    setSyncedSearch(searchParam);
+    setSearchQuery(searchParam);
+  }
 
   const categoryParam = searchParams.get("category") || "All";
 

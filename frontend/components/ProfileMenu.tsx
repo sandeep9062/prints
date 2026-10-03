@@ -11,25 +11,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { useLogoutMutation } from "@/services/authApi";
-import { useUpdateProfileMutation } from "@/services/userApi";
-import { logoutSuccess as logoutAction, setUser } from "@/store/authSlice";
+import { logoutSuccess as logoutAction } from "@/store/authSlice";
 import { toast } from "sonner";
-import PhoneInput from "react-phone-number-input";
-import "react-phone-number-input/style.css";
 
-import { Heart, LogOut, User as UserIcon, X } from "lucide-react";
+import { Heart, LogOut, User as UserIcon } from "lucide-react";
 
 interface ProfileMenuProps {
   user: any;
@@ -41,37 +29,19 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [logout] = useLogoutMutation();
-  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-
-  const [imageFile, setImageFile] = useState<File | null>(null);
-
-  // Properly resolve image URL immediately (no race condition)
+  // Resolve the avatar URL (Cloudinary URL or legacy relative path).
   const getProfileImageUrl = () => {
     if (!user?.image) return null;
     if (user.image.startsWith("http")) return user.image;
-    // Use relative path that works in both development and production
     return `/${user.image.replace(/\\/g, "/")}`;
   };
 
-  const [preview, setPreview] = useState<string | null>(getProfileImageUrl());
-
-  useEffect(() => {
-    setPreview(getProfileImageUrl());
-  }, [user?.image]);
+  const preview = getProfileImageUrl();
 
   useEffect(() => {
     setMounted(true);
-    if (user) {
-      setName(user.name || "");
-      setEmail(user.email || "");
-      setPhone(user.phone || "");
-    }
-  }, [user]);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -83,27 +53,8 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
     }
   };
 
-  const handleProfileUpdate = async () => {
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("phone", phone);
-
-    if (imageFile) formData.append("image", imageFile);
-
-    try {
-      const updatedUser = await updateProfile(formData).unwrap();
-      dispatch(
-        setUser({
-          user: { ...user, ...updatedUser },
-          token: localStorage.getItem("token") || "",
-        }),
-      );
-      toast.success("Profile updated successfully");
-      setIsModalOpen(false);
-    } catch (error) {
-      toast.error("Failed to update profile");
-    }
+  const handleOpenProfile = () => {
+    router.push("/profile");
   };
 
   const handleDashboardRedirect = () => {
@@ -140,9 +91,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
           <Button
             variant="outline"
             className="w-full justify-start rounded-xl py-5 shadow-sm"
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleOpenProfile}
           >
-            <UserIcon className="mr-2 h-5 w-5" />
+            <UserIcon className="mr-2 h-5 w-5 text-[#B08D4A] dark:text-[#D2AE62]" />
             Edit Profile
           </Button>
 
@@ -151,7 +102,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
             className="w-full justify-start rounded-xl py-5 shadow-sm"
             onClick={handleDashboardRedirect}
           >
-            <Heart className="mr-2 h-5 w-5" />
+            <Heart className="mr-2 h-5 w-5 text-[#B08D4A] dark:text-[#D2AE62]" />
             Dashboard
           </Button>
 
@@ -193,9 +144,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
 
           <DropdownMenuItem
             className="rounded-md cursor-pointer"
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleOpenProfile}
           >
-            <UserIcon className="mr-2 h-4 w-4" />
+            <UserIcon className="mr-2 h-4 w-4 text-[#B08D4A] dark:text-[#D2AE62]" />
             Profile
           </DropdownMenuItem>
 
@@ -203,7 +154,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
             className="rounded-md cursor-pointer"
             onClick={handleDashboardRedirect}
           >
-            <Heart className="mr-2 h-4 w-4" />
+            <Heart className="mr-2 h-4 w-4 text-[#B08D4A] dark:text-[#D2AE62]" />
             Dashboard
           </DropdownMenuItem>
 
@@ -217,88 +168,6 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      {/* ---------------------------------------------------
-                  EDIT PROFILE MODAL
-      ---------------------------------------------------- */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[430px] rounded-2xl shadow-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-semibold">
-              Edit Profile
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="grid gap-5 py-2">
-            {/* Name */}
-            <div className="flex flex-col gap-2">
-              <Label>Name</Label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="rounded-xl"
-              />
-            </div>
-
-            {/* Email */}
-            <div className="flex flex-col gap-2">
-              <Label>Email</Label>
-              <Input
-                value={email}
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
-                className="rounded-xl"
-              />
-            </div>
-
-            {/* Phone */}
-            <div className="flex flex-col gap-2">
-              <Label>Phone</Label>
-              <PhoneInput
-                value={phone}
-                onChange={(val) => setPhone(val || "")}
-                defaultCountry="IN"
-                className="border rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-              />
-            </div>
-
-            {/* Picture */}
-            <div className="flex flex-col gap-2">
-              <Label>Profile Picture</Label>
-
-              <div className="flex items-center gap-4">
-                <Avatar className="w-20 h-20 ring-2 ring-rose-400/40 shadow-sm">
-                  <AvatarImage src={preview || undefined} />
-                  <AvatarFallback>{name[0]}</AvatarFallback>
-                </Avatar>
-
-                <Input
-                  type="file"
-                  accept="image/*"
-                  className="rounded-xl"
-                  onChange={(e) => {
-                    if (e.target.files?.[0]) {
-                      const file = e.target.files[0];
-                      setImageFile(file);
-                      setPreview(URL.createObjectURL(file));
-                    }
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button
-              onClick={handleProfileUpdate}
-              disabled={isLoading}
-              className="rounded-xl w-full bg-rose-300 hover:bg-rose-500 dark:bg-rose-600 dark:hover:bg-rose-700 dark:text-white"
-            >
-              {isLoading ? "Saving..." : "Save Changes"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 };

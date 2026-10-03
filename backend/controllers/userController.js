@@ -138,14 +138,72 @@ export const userProfile = async (req, res) => {
 // =====================================
 export const updateProfile = async (req, res) => {
   try {
-    const { name, email, phone } = req.body;
-    const updateData = { name, email, phone };
+    const userId = req.user?._id || req.user?.id;
+
+    if (!userId) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Not authorized" });
+    }
+
+    const updateData = {};
+
+    // Only update fields that were actually sent. FormData always arrives
+    // as strings, so guard against undefined / "undefined" / "" values —
+    // passing `undefined` into findByIdAndUpdate with runValidators trips
+    // the required `name` check, and saving phone: "" collides with the
+    // unique sparse index (sparse skips missing fields, not "").
+    const rawName = req.body?.name;
+    const rawEmail = req.body?.email;
+    const rawPhone = req.body?.phone;
+
+    if (typeof rawName === "string" && rawName.trim()) {
+      updateData.name = rawName.trim();
+    }
+
+    if (typeof rawEmail === "string" && rawEmail.trim()) {
+      const email = rawEmail.trim().toLowerCase();
+      // Don't let a user take another account's email.
+      const emailTaken = await User.findOne({
+        email,
+        _id: { $ne: userId },
+      }).select("_id");
+      if (emailTaken) {
+        return res.status(400).json({
+          success: false,
+          message: "This email is already registered to another account.",
+        });
+      }
+      updateData.email = email;
+    }
+
+    if (typeof rawPhone === "string" && rawPhone.trim()) {
+      const phone = rawPhone.trim();
+      // Don't let a user take another account's phone number.
+      const phoneTaken = await User.findOne({
+        phone,
+        _id: { $ne: userId },
+      }).select("_id");
+      if (phoneTaken) {
+        return res.status(400).json({
+          success: false,
+          message: "This phone number is already registered to another account.",
+        });
+      }
+      updateData.phone = phone;
+    }
 
     if (req.file) {
       updateData.image = req.file.path;
     }
 
-    const user = await User.findByIdAndUpdate(req.user._id, updateData, {
+    if (Object.keys(updateData).length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Nothing to update." });
+    }
+
+    const user = await User.findByIdAndUpdate(userId, updateData, {
       new: true,
       runValidators: true,
     }).select("-password");
@@ -159,6 +217,24 @@ export const updateProfile = async (req, res) => {
     res.status(200).json({ success: true, user });
   } catch (error) {
     console.error("Update Profile Error:", error);
+    // Duplicate key (e.g. race on unique email/phone) → 400, not 500.
+    if (error?.code === 11000) {
+      const field = Object.keys(error.keyPattern || error.keyValue || {})[0];
+      return res.status(400).json({
+        success: false,
+        message: field
+          ? `This ${field} is already registered to another account.`
+          : "Duplicate field value entered.",
+      });
+    }
+    if (error?.name === "ValidationError") {
+      const message = Object.values(error.errors || {})
+        .map((val) => val.message)
+        .join(", ");
+      return res
+        .status(400)
+        .json({ success: false, message: message || "Validation failed." });
+    }
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -170,7 +246,7 @@ export const userFavourites = async (req, res) => {
   try {
     const wishlist = await Wishlist.findOne({ user: req.user._id }).populate(
       "products",
-      "name images price discountPrice badge category",
+      "name slug images price discountPrice badge category",
     );
 
     const favourites = wishlist ? wishlist.products : [];

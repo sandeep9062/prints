@@ -4,13 +4,14 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Menu, X, ShoppingBag, ChevronDown } from "lucide-react";
+import { Menu, X, ShoppingBag, ChevronDown, Heart } from "lucide-react";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { cn } from "@/lib/utils";
 import ProfileMenu from "../ProfileMenu";
 import ToggleButton from "../ToggleButton";
+import SearchBar from "./SearchBar";
 import { selectIsAuthenticated, selectUser } from "@/store/authSlice";
 
 /*
@@ -119,6 +120,13 @@ const primaryBtn =
 const outlineBtn =
   "rounded-full border-[#1F3A32]/40 bg-transparent text-[#1F3A32] transition-colors hover:border-[#1F3A32] hover:bg-[#1F3A32]/5 hover:text-[#1F3A32] focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 dark:border-[#E4E9DD]/40 dark:text-[#F7F4EE] dark:hover:border-[#E4E9DD] dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:ring-offset-[#16211D] motion-reduce:transition-none";
 
+// Icons use the theme's accent role — foil gold on light surfaces and the
+// lighter gold on deep-green dark surfaces (see the palette table). Interactive
+// icons deepen to bottle-green ink on hover so the control reads as clickable.
+const iconAccent = "text-[#B08D4A] dark:text-[#D2AE62]";
+const iconInteractive =
+  "text-[#B08D4A] transition-colors hover:text-[#1F3A32] dark:text-[#D2AE62] dark:hover:text-[#F7F4EE] motion-reduce:transition-none";
+
 // --- Small pieces ---
 
 const CartBadge = ({ count }: { count: number }) =>
@@ -132,7 +140,7 @@ const Logo = () => (
   <Link
     href="/"
     aria-label="Ink of Memories, go to home page"
-    className={cn("flex shrink-0items-center rounded-md", focusRing)}
+    className={cn("flex shrink-0 items-center rounded-md", focusRing)}
   >
     <Image
       src="/inkofmemories.png"
@@ -224,8 +232,29 @@ const NavbarInner = () => {
         >
           <Logo />
 
+          {/* Search — desktop only; below lg it lives in the mobile panel. */}
+          <div className="hidden flex-1 justify-center px-6 lg:flex">
+            <SearchBar
+              defaultQuery={searchParams.get("search") ?? ""}
+              params={{ category: activeCategory ?? undefined }}
+              className="max-w-md"
+            />
+          </div>
+
           <div className="flex items-center gap-1.5 sm:gap-3">
             <ToggleButton />
+
+            <Link
+              href="/favourites"
+              aria-label="Favourites"
+              className={cn(
+                "rounded-full p-2 hover:bg-[#1F3A32]/10 dark:hover:bg-white/10",
+                iconInteractive,
+                focusRing,
+              )}
+            >
+              <Heart className="h-5 w-5" />
+            </Link>
 
             {mounted ? (
               <Button
@@ -233,7 +262,8 @@ const NavbarInner = () => {
                 variant="ghost"
                 size="icon"
                 className={cn(
-                  "relative rounded-full text-[#1F3A32] hover:bg-[#1F3A32]/10 hover:text-[#1F3A32] dark:text-[#E4E9DD] dark:hover:bg-white/10 dark:hover:text-white",
+                  "relative rounded-full hover:bg-[#1F3A32]/10 dark:hover:bg-white/10",
+                  iconInteractive,
                   focusRing,
                 )}
               >
@@ -248,6 +278,10 @@ const NavbarInner = () => {
                 className="h-10 w-10 animate-pulse rounded-full bg-[#1F3A32]/10 dark:bg-white/10"
               />
             )}
+
+            <Button asChild size="sm" className={cn(primaryBtn, "px-5")}>
+              <Link href="/products">Order now</Link>
+            </Button>
 
             {/* Account actions (desktop only; mobile has them in the panel) */}
             <div className="hidden items-center gap-3 lg:flex">
@@ -270,9 +304,6 @@ const NavbarInner = () => {
                   >
                     <Link href="/auth">Log in</Link>
                   </Button>
-                  <Button asChild size="sm" className={cn(primaryBtn, "px-5")}>
-                    <Link href="/products">Order now</Link>
-                  </Button>
                 </>
               ) : (
                 user && <ProfileMenu user={user} />
@@ -283,7 +314,8 @@ const NavbarInner = () => {
             <button
               type="button"
               className={cn(
-                "rounded-full p-2 text-[#1F3A32] transition-colors hover:bg-[#1F3A32]/10 dark:text-[#E4E9DD] dark:hover:bg-white/10 lg:hidden",
+                "rounded-full p-2 hover:bg-[#1F3A32]/10 dark:hover:bg-white/10 lg:hidden",
+                iconInteractive,
                 focusRing,
               )}
               onClick={() => setIsOpen((v) => !v)}
@@ -336,7 +368,10 @@ const NavbarInner = () => {
                     {link.name}
                     <ChevronDown
                       aria-hidden="true"
-                      className="mt-0.5 h-3.5 w-3.5 transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180 motion-reduce:transition-none"
+                      className={cn(
+                        "mt-0.5 h-3.5 w-3.5 transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180 motion-reduce:transition-none",
+                        iconAccent,
+                      )}
                     />
                     <span
                       className={cn(
@@ -403,6 +438,14 @@ const NavbarInner = () => {
         )}
       >
         <div className="mx-auto max-w-xl px-5 pb-10 pt-4">
+          {/* Search — mobile/tablet (the header field is lg and up). */}
+          <div className="pb-5">
+            <SearchBar
+              defaultQuery={searchParams.get("search") ?? ""}
+              params={{ category: activeCategory ?? undefined }}
+            />
+          </div>
+
           <ul className="flex flex-col">
             <li className="border-y border-[#1F3A32]/10 dark:border-[#E4E9DD]/10">
               <Link
@@ -449,7 +492,8 @@ const NavbarInner = () => {
                       aria-controls={panelId}
                       aria-label={`${isExpanded ? "Collapse" : "Expand"} ${link.name}`}
                       className={cn(
-                        "-mr-2 rounded-full p-2.5 text-[#1F3A32]/60 transition-colors hover:text-[#1F3A32] dark:text-[#E4E9DD]/60 dark:hover:text-white",
+                        "-mr-2 rounded-full p-2.5 hover:bg-[#1F3A32]/10 dark:hover:bg-white/10",
+                        iconInteractive,
                         focusRing,
                       )}
                     >

@@ -37,13 +37,13 @@ const ToggleButton = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition"
+      className="group p-2 rounded-full hover:bg-[#1F3A32]/10 dark:hover:bg-white/10 transition-colors"
       aria-label="Toggle Dark Mode"
     >
       {isDark ? (
-        <SunIcon className="text-red-500 w-5 h-5" />
+        <SunIcon className="h-5 w-5 text-[#B08D4A] transition-colors group-hover:text-[#1F3A32] dark:text-[#D2AE62] dark:group-hover:text-[#F7F4EE]" />
       ) : (
-        <MoonIcon className="text-red-500 w-5 h-5" />
+        <MoonIcon className="h-5 w-5 text-[#B08D4A] transition-colors group-hover:text-[#1F3A32] dark:text-[#D2AE62] dark:group-hover:text-[#F7F4EE]" />
       )}
     </button>
   );

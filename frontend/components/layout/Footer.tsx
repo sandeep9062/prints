@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { toast } from "sonner";
 import {
   Facebook,
   Instagram,
@@ -15,6 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { useSubscribeNewsletterMutation } from "@/services/newsletterApi";
 import { scrollToTop } from "@/lib/smooth-scroll";
 
 /*
@@ -130,6 +133,37 @@ export const Footer = () => {
   } = useSiteSettings();
 
   const pathname = usePathname();
+
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [subscribeToNewsletter, { isLoading: isSubscribing }] =
+    useSubscribeNewsletterMutation();
+
+  const handleNewsletterSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+
+    const emailToSubscribe = newsletterEmail.trim();
+    if (!emailToSubscribe) return;
+
+    try {
+      const response = await subscribeToNewsletter({
+        email: emailToSubscribe,
+      }).unwrap();
+      toast.success(
+        response?.alreadySubscribed
+          ? "You're already on the list."
+          : "Subscribed!",
+        { description: response?.message },
+      );
+      setNewsletterEmail("");
+    } catch (error) {
+      const message =
+        (error as { data?: { error?: string } })?.data?.error ??
+        "Something went wrong. Please try again.";
+      toast.error("Subscription failed", { description: message });
+    }
+  };
 
   if (HIDDEN_ROUTES.some((route) => pathname?.startsWith(route))) return null;
 
@@ -295,6 +329,50 @@ export const Footer = () => {
                 </ContactRow>
               )}
             </ul>
+          </div>
+        </div>
+
+        {/* Newsletter */}
+        <div className="border-t border-[#E4E9DD]/15 py-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-xl">
+              <h2 className="font-serif text-xl font-medium text-[#F7F4EE]">
+                Subscribe to our newsletter
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-[#E4E9DD]/75">
+                Seasonal offers, new designs and printing inspiration —
+                delivered to your inbox. No spam, unsubscribe anytime.
+              </p>
+            </div>
+
+            <form
+              onSubmit={handleNewsletterSubmit}
+              className="flex w-full max-w-md flex-col gap-3 sm:flex-row lg:w-auto"
+            >
+              <label htmlFor="newsletter-email" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="newsletter-email"
+                type="email"
+                name="email"
+                required
+                autoComplete="email"
+                value={newsletterEmail}
+                onChange={(event) => setNewsletterEmail(event.target.value)}
+                disabled={isSubscribing}
+                placeholder="you@example.com"
+                className="h-12 w-full flex-1 rounded-full border border-[#E4E9DD]/25 bg-transparent px-5 text-sm text-[#F7F4EE] outline-none transition-colors placeholder:text-[#E4E9DD]/40 focus:border-[#D2AE62] disabled:opacity-60 sm:w-64"
+              />
+              <Button
+                type="submit"
+                size="lg"
+                disabled={isSubscribing}
+                className="h-12 shrink-0 rounded-full bg-[#D2AE62] px-7 text-[#1A312A] transition-colors hover:bg-[#E0C07C] disabled:pointer-events-none disabled:opacity-60 focus-visible:ring-2 focus-visible:ring-[#D2AE62] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A312A] motion-reduce:transition-none dark:focus-visible:ring-offset-[#0F1815]"
+              >
+                {isSubscribing ? "Subscribing…" : "Subscribe"}
+              </Button>
+            </form>
           </div>
         </div>
 

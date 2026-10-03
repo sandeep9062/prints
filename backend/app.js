@@ -16,6 +16,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 import chatbotRouter from "./routes/chatbotRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import customizationRoutes from "./routes/customizationRoutes.js";
+import newsletterRoutes from "./routes/newsletterRoutes.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import cookieParser from "cookie-parser";
 
@@ -65,6 +66,7 @@ app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/chatbot", chatbotRouter);
 app.use("/api/v1/blogs", blogRoutes);
 app.use("/api/v1/customize", customizationRoutes);
+app.use("/api/v1/newsletter", newsletterRoutes);
 
 // Error middleware (must be after all routes)
 app.use(errorMiddleware);
