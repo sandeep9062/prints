@@ -16,6 +16,7 @@ import { useState, useRef, DragEvent } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useUpdateProfileMutation } from "@/services/userApi";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -80,8 +81,14 @@ export default function ProfilePage() {
       setIsEditing(false);
       setImageFile(null);
       setImagePreview(null);
+      toast.success("Profile updated", {
+        description: "Your changes have been saved.",
+      });
     } catch (err: any) {
       console.error("Failed to update profile:", err);
+      toast.error("Couldn't save your profile", {
+        description: err?.data?.message || "Please try again.",
+      });
     }
   };
 

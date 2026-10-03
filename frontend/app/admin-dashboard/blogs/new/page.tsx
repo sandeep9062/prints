@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Image as ImageIcon, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useCreateBlogMutation } from "@/services/blogApi";
 import { X } from "lucide-react";
 import RichTextEditor, { RichTextEditorRef } from "@/components/RichTextEditor";
@@ -75,7 +75,7 @@ export default function NewBlogPage() {
     const editorContent = editorRef.current?.getCurrentContent() || "";
 
     if (!formData.title || !editorContent) {
-      toast({ variant: "destructive", title: "Please fill required fields" });
+      toast.error("Please fill required fields");
       return;
     }
 
@@ -91,13 +91,11 @@ export default function NewBlogPage() {
           typeof formData.coverImage === "string" ? formData.coverImage : "",
       }).unwrap();
 
-      toast({ title: "Blog published successfully! 🚀" });
+      toast.success("Blog published successfully! 🚀");
       router.push("/admin-dashboard/blogs");
     } catch (error) {
       console.error("Failed to save blog:", error);
-      toast({
-        variant: "destructive",
-        title: "Error creating blog",
+      toast.error("Error creating blog", {
         description: "Please check your network or try again.",
       });
     }

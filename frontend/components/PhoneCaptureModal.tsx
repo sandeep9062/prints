@@ -3,7 +3,7 @@
 import { useState } from "react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { PhoneCall } from "lucide-react";
 
 // E.164: leading "+" + country code + subscriber number, e.g. "+919876543210"

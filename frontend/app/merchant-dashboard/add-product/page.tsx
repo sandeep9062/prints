@@ -18,7 +18,7 @@ import Link from "next/link";
 import { useAddProductMutation } from "@/services/productsApi";
 import { useRouter } from "next/navigation";
 import ImageUploader from "@/components/ui/ImageUploader";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { categories } from "@/data/products";
 import { motion } from "framer-motion";
 
@@ -47,7 +47,6 @@ const initialFormState = {
 export default function AddProductPage() {
   const [addProduct, { isLoading, isSuccess }] = useAddProductMutation();
   const router = useRouter();
-  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
 
   const [form, setForm] = useState(initialFormState);
@@ -122,17 +121,14 @@ export default function AddProductPage() {
 
     try {
       await addProduct(formData).unwrap();
-      toast({
-        title: "Success!",
+      toast.success("Success!", {
         description: "Product added successfully!",
       });
       router.push("/merchant-dashboard");
     } catch (err) {
       console.error("Failed to add product:", err);
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: "Failed to add product. Please try again.",
-        variant: "destructive",
       });
     }
   };

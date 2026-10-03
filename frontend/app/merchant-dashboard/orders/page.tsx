@@ -6,7 +6,7 @@ import {
   useGetOrdersByUserQuery,
   useUpdateOrderStatusMutation,
 } from "@/services/ordersApi";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import {
   Package,
   Search,
@@ -120,7 +120,6 @@ export default function OrdersPage() {
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const { data: ordersData, isLoading, isError } = useGetOrdersByUserQuery();
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
-  const { toast } = useToast();
 
   const orders = ordersData?.orders || [];
 
@@ -184,15 +183,12 @@ export default function OrdersPage() {
   ) => {
     try {
       await updateOrderStatus({ id: orderId, orderStatus: newStatus }).unwrap();
-      toast({
-        title: "Status Updated",
+      toast.success("Status Updated", {
         description: `Order status changed to ${newStatus}.`,
       });
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: "Failed to update order status.",
-        variant: "destructive",
       });
     }
   };

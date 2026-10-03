@@ -23,7 +23,7 @@ import {
 } from "@/services/productsApi";
 import { useRouter, useParams } from "next/navigation";
 import ImageUploader from "@/components/ui/ImageUploader";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 export default function EditProductPage() {
   const params = useParams();
@@ -36,7 +36,6 @@ export default function EditProductPage() {
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
   const [deleteProductImage] = useDeleteProductImageMutation();
   const router = useRouter();
-  const { toast } = useToast();
 
   const [form, setForm] = useState({
     name: "",
@@ -132,16 +131,13 @@ export default function EditProductPage() {
         ...prev,
         images: prev.images.filter((url) => url !== imageUrl),
       }));
-      toast({
-        title: "Success",
+      toast.success("Success", {
         description: "Image removed successfully!",
       });
     } catch (err) {
       console.error("Failed to delete image:", err);
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: "Failed to remove image. Please try again.",
-        variant: "destructive",
       });
     }
   };
@@ -163,17 +159,14 @@ export default function EditProductPage() {
 
     try {
       await updateProduct({ id, body: formData }).unwrap();
-      toast({
-        title: "Success",
+      toast.success("Success", {
         description: "Product updated successfully!",
       });
       router.push("/merchant-dashboard");
     } catch (err) {
       console.error("Failed to update product:", err);
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: "Failed to update product. Please try again.",
-        variant: "destructive",
       });
     }
   };

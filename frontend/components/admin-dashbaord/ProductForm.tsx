@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import {
   useAddProductMutation,
   useUpdateProductMutation,
@@ -139,26 +139,22 @@ export default function ProductForm({
 
       if (mode === "add") {
         await addProduct(body).unwrap();
-        toast({
-          title: "Product Created",
+        toast.success("Product Created", {
           description: `"${formData.name}" has been created successfully.`,
         });
       } else {
         await updateProduct({ id: productId!, body }).unwrap();
-        toast({
-          title: "Product Updated",
+        toast.success("Product Updated", {
           description: `"${formData.name}" has been updated successfully.`,
         });
       }
 
       router.push("/admin-dashboard/products");
     } catch (error: any) {
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description:
           error?.data?.message ||
           `Failed to ${mode === "add" ? "create" : "update"} product. Please try again.`,
-        variant: "destructive",
       });
     }
   };

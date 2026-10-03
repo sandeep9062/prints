@@ -42,7 +42,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import {
   useGetProductsQuery,
   useDeleteProductMutation,
@@ -109,18 +109,15 @@ const AdminProducts = () => {
 
     try {
       await deleteProduct(productToDelete._id).unwrap();
-      toast({
-        title: "Product Deleted",
+      toast.success("Product Deleted", {
         description: `"${productToDelete.name}" has been successfully removed.`,
       });
       setDeleteDialogOpen(false);
       setProductToDelete(null);
     } catch (error: any) {
-      toast({
-        title: "Delete Failed",
+      toast.error("Delete Failed", {
         description:
           error?.data?.message || "Failed to delete product. Please try again.",
-        variant: "destructive",
       });
     }
   };

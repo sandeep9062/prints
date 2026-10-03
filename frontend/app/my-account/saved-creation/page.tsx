@@ -8,6 +8,7 @@ import {
   Loader2,
   Calendar,
 } from "lucide-react";
+import { toast } from "sonner";
 import {
   useGetMyCustomizationsQuery,
   useDeleteCustomizationMutation,
@@ -22,8 +23,12 @@ export default function SavedCreationPage() {
   const handleDelete = async (id: string) => {
     try {
       await deleteCustomization(id).unwrap();
-    } catch (err) {
+      toast.success("Creation deleted");
+    } catch (err: any) {
       console.error("Failed to delete:", err);
+      toast.error("Couldn't delete this creation", {
+        description: err?.data?.message || "Please try again.",
+      });
     }
   };
 

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useGetBlogsQuery, useDeleteBlogMutation } from "@/services/blogApi";
 
 export default function BlogsDashboard() {
@@ -24,9 +24,9 @@ export default function BlogsDashboard() {
     if (window.confirm("Are you sure you want to delete this blog?")) {
       try {
         await deleteBlog(id).unwrap();
-        toast({ title: "Blog deleted successfully" });
+        toast.success("Blog deleted successfully");
       } catch (error) {
-        toast({ variant: "destructive", title: "Failed to delete blog" });
+        toast.error("Failed to delete blog");
       }
     }
   };

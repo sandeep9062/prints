@@ -25,7 +25,7 @@ import {
   useGetUserByIdQuery,
 } from "@/services/userApi";
 import type { User as UserType } from "@/services/userApi";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { selectUser, setUser } from "@/store/authSlice";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -35,7 +35,6 @@ export default function SettingsPage() {
   const [mounted, setMounted] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
@@ -122,10 +121,8 @@ export default function SettingsPage() {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        toast({
-          title: "File too large",
+        toast.error("File too large", {
           description: "Image must be less than 2MB.",
-          variant: "destructive",
         });
         return;
       }
@@ -139,8 +136,7 @@ export default function SettingsPage() {
 
   const handleRefresh = () => {
     refetch();
-    toast({
-      title: "Refreshing",
+    toast("Refreshing", {
       description: "Fetching latest profile data...",
     });
   };
@@ -149,10 +145,8 @@ export default function SettingsPage() {
     e.preventDefault();
     if (!validate()) return;
     if (!user?._id) {
-      toast({
-        title: "Not authenticated",
+      toast.error("Not authenticated", {
         description: "Please log in again.",
-        variant: "destructive",
       });
       return;
     }
@@ -188,8 +182,7 @@ export default function SettingsPage() {
       setImagePreview(null);
       refetch();
 
-      toast({
-        title: "Profile Updated",
+      toast.success("Profile Updated", {
         description: "Your profile has been updated successfully.",
       });
     } catch (err: any) {
@@ -199,10 +192,8 @@ export default function SettingsPage() {
           ? Object.values(err.data.errors).join(", ")
           : null) ||
         "Failed to update profile.";
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: message,
-        variant: "destructive",
       });
     }
   };
@@ -551,26 +542,21 @@ export default function SettingsPage() {
                         );
                         const data = await res.json();
                         if (res.ok) {
-                          toast({
-                            title: "Email Sent",
+                          toast.success("Email Sent", {
                             description:
                               data.message ||
                               "Check your email for password reset link.",
                           });
                         } else {
-                          toast({
-                            title: "Error",
+                          toast.error("Error", {
                             description:
                               data.message || "Failed to send reset email.",
-                            variant: "destructive",
                           });
                         }
                       } catch {
-                        toast({
-                          title: "Error",
+                        toast.error("Error", {
                           description:
                             "Could not connect to server. Please try again later.",
-                          variant: "destructive",
                         });
                       }
                     }}

@@ -51,7 +51,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 export default function DashboardPage() {
   const { data, isLoading, isError } = useGetProductsByUserQuery();
@@ -59,7 +59,6 @@ export default function DashboardPage() {
   const [deleteProductMutation] = useDeleteProductMutation();
   const [updateProductMutation] = useUpdateProductMutation();
   const router = useRouter();
-  const { toast } = useToast();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(
     null,
   );
@@ -68,16 +67,13 @@ export default function DashboardPage() {
   const handleDeleteProduct = async (id: string) => {
     try {
       await deleteProductMutation(id).unwrap();
-      toast({
-        title: "Product Deleted",
+      toast.success("Product Deleted", {
         description: "Product has been removed from your store.",
       });
       setShowDeleteConfirm(null);
     } catch (err) {
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: "Failed to delete product. Please try again.",
-        variant: "destructive",
       });
     }
   };
@@ -88,15 +84,12 @@ export default function DashboardPage() {
       const formData = new FormData();
       formData.append("productData", JSON.stringify({ stock }));
       await updateProductMutation({ id: productId, body: formData }).unwrap();
-      toast({
-        title: "Stock Updated",
+      toast.success("Stock Updated", {
         description: `Stock quantity updated to ${stock}.`,
       });
     } catch (err) {
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: "Failed to update stock. Please try again.",
-        variant: "destructive",
       });
     } finally {
       setStockLoadingId(null);

@@ -68,7 +68,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { formatDate } from "@/lib/utils";
 import {
   useGetOrdersByUserQuery,
@@ -452,8 +452,7 @@ const AdminOrders = () => {
   const handleUpdateStatus = async (id: string, newStatus: string) => {
     try {
       await updateOrderStatus({ id, orderStatus: newStatus }).unwrap();
-      toast({
-        title: "Status Updated",
+      toast.success("Status Updated", {
         description: `Order status changed to ${statusConfig[newStatus]?.label || newStatus}`,
       });
       setDetailOpen(false);
@@ -463,7 +462,7 @@ const AdminOrders = () => {
         err && typeof err === "object" && "data" in err
           ? (err as { data: { message?: string } }).data?.message
           : "Failed to update order status";
-      toast({ title: "Error", description: msg, variant: "destructive" });
+      toast.error("Error", { description: msg });
     }
   };
 
@@ -475,8 +474,7 @@ const AdminOrders = () => {
   const confirmDelete = () => {
     // API endpoint for order deletion is not implemented in backend,
     // but we keep the UI flow. Show a toast indicating it's a placeholder.
-    toast({
-      title: "Delete Order",
+    toast.warning("Delete Order", {
       description: `Order #${orderToDelete?._id.slice(-8).toUpperCase()} deletion is not available via API yet.`,
     });
     setDeleteDialogOpen(false);

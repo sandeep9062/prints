@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "@/store/authSlice";
 import { useToFavMutation, useGetUserByIdQuery } from "@/services/userApi";
 import { useRouter } from "next/navigation";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface HeartProps {
   card: any;

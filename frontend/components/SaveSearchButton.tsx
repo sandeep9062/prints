@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BellRing, Check, Loader2, X } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 /**
  * "Save this print brief" control.

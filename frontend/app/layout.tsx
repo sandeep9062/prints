@@ -104,12 +104,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-IN">
+    <html lang="en-IN" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="geo.region" content="IN-HR" />
         <meta name="geo.placename" content="Panchkula" />
         <meta name="theme-color" content="#991b1b" />
+        {/*
+          Restore the colour scheme BEFORE first paint. Tailwind v4 keys its
+          `dark:` variant off a `.dark` class on <html> (see globals.css), but
+          that class was only ever set inside ToggleButton's useEffect — which
+          runs after hydration. Without this script every reload painted light
+          first (FOUC) and pages without the toggle stayed light permanently.
+          This mirrors Mantine's own ColorSchemeScript approach.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"){document.documentElement.classList.add("dark");}else if(t==="light"){document.documentElement.classList.remove("dark");}}catch(e){}})();`,
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -128,7 +141,16 @@ export default function RootLayout({
           {/* Fixed-position compare tray — outside SmoothScroll/RouteTransitionWrapper
               so it isn't affected by scroll transforms or route exits. */}
           <CompareDrawer />
-          <Toaster />
+          {/* --toast-duration feeds the CSS countdown rail in globals.css; keep it
+              in sync with the `duration` below so the bar matches the dismiss. */}
+          <Toaster
+            position="top-right"
+            closeButton
+            style={
+              { "--toast-duration": "4000ms" } as React.CSSProperties
+            }
+            toastOptions={{ duration: 4000 }}
+          />
         </Providers>
       </body>
     </html>

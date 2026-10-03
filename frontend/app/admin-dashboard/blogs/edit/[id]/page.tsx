@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Save, Loader2, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { X } from "lucide-react";
 import { useGetBlogByIdQuery, useUpdateBlogMutation } from "@/services/blogApi";
 import RichTextEditor, { RichTextEditorRef } from "@/components/RichTextEditor";
@@ -103,7 +103,7 @@ export default function EditBlogPage() {
     const editorContent = editorRef.current?.getCurrentContent() || "";
 
     if (!editorContent) {
-      toast({ variant: "destructive", title: "Content cannot be empty" });
+      toast.error("Content cannot be empty");
       return;
     }
 
@@ -124,13 +124,11 @@ export default function EditBlogPage() {
         update: updatePayload,
       }).unwrap();
 
-      toast({ title: "Blog updated successfully! ✅" });
+      toast.success("Blog updated successfully! ✅");
       router.push("/admin-dashboard/blogs");
     } catch (error) {
       console.error("Update failed:", error);
-      toast({
-        variant: "destructive",
-        title: "Update failed",
+      toast.error("Update failed", {
         description: "Something went wrong while saving.",
       });
     }

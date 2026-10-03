@@ -10,10 +10,9 @@ import {
   Loader2,
 } from "lucide-react";
 import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 export default function ChangePasswordPage() {
-  const { toast } = useToast();
   const [formData, setFormData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -76,8 +75,7 @@ export default function ChangePasswordPage() {
         throw new Error(data.message || "Failed to update password");
       }
 
-      toast({
-        title: "Password updated",
+      toast.success("Password updated", {
         description: "Your password has been changed successfully.",
       });
       setFormData({
@@ -87,10 +85,8 @@ export default function ChangePasswordPage() {
       });
     } catch (err: any) {
       setError(err.message);
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: err.message,
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);

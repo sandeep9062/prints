@@ -50,7 +50,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { formatDate } from "@/lib/utils";
 import {
   useGetMediaQuery,
@@ -60,7 +60,7 @@ import {
 } from "@/services/mediaApi";
 
 const MediaPage = () => {
-  const { toast } = useToast();
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // API hooks
@@ -132,14 +132,11 @@ const MediaPage = () => {
 
     try {
       await uploadMedia(formData).unwrap();
-      toast({
-        title: "Upload successful",
+      toast.success("Upload successful", {
         description: `${file.name} has been uploaded.`,
       });
     } catch (err: any) {
-      toast({
-        variant: "destructive",
-        title: "Upload failed",
+      toast.error("Upload failed", {
         description:
           err?.data?.message || err.message || "Something went wrong",
       });
@@ -183,12 +180,10 @@ const MediaPage = () => {
         id: renameImage._id || renameImage.id,
         body: { altText: renameValue },
       }).unwrap();
-      toast({ title: "Renamed", description: "Image alt text updated." });
+      toast.success("Renamed", { description: "Image alt text updated." });
       setRenameImage(null);
     } catch (err: any) {
-      toast({
-        variant: "destructive",
-        title: "Rename failed",
+      toast.error("Rename failed", {
         description:
           err?.data?.message || err.message || "Something went wrong",
       });
@@ -213,12 +208,10 @@ const MediaPage = () => {
         id: editImage._id || editImage.id,
         body: editForm,
       }).unwrap();
-      toast({ title: "Updated", description: "Image details updated." });
+      toast.success("Updated", { description: "Image details updated." });
       setEditImage(null);
     } catch (err: any) {
-      toast({
-        variant: "destructive",
-        title: "Update failed",
+      toast.error("Update failed", {
         description:
           err?.data?.message || err.message || "Something went wrong",
       });
@@ -233,12 +226,10 @@ const MediaPage = () => {
     if (!deleteImage) return;
     try {
       await deleteMedia(deleteImage._id || deleteImage.id).unwrap();
-      toast({ title: "Deleted", description: "Image has been deleted." });
+      toast.success("Deleted", { description: "Image has been deleted." });
       setDeleteImage(null);
     } catch (err: any) {
-      toast({
-        variant: "destructive",
-        title: "Delete failed",
+      toast.error("Delete failed", {
         description:
           err?.data?.message || err.message || "Something went wrong",
       });

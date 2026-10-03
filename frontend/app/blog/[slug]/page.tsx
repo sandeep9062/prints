@@ -1,7 +1,10 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import JournalDetailClient from "./JournalDetailClient";
-import { fetchBlogBySlugServer } from "@/services/blogApi";
+import {
+  fetchBlogBySlugServer,
+  fetchBlogsServer,
+} from "@/services/blogApi";
 import {
   generateArticleSchema,
   generateFAQSchema,
@@ -14,6 +17,12 @@ type Props = {
     slug: string;
   }>;
 };
+
+/**
+ * ISR revalidation period (in seconds). Matches the /blog archive page so
+ * both surfaces refresh together.
+ */
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -68,14 +77,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function JournalDetailPage({ params }: Props) {
   const { slug } = await params;
-  const journal = await fetchBlogBySlugServer(slug);
+
+  // The article and the list used for "related notes" are fetched together so
+  // the page ships real content in its HTML — the client then keeps it fresh
+  // via RTK Query. Without this the reader gets a skeleton on every load and
+  // crawlers see an empty <article>.
+  const [journal, allBlogs] = await Promise.all([
+    fetchBlogBySlugServer(slug),
+    fetchBlogsServer(),
+  ]);
 
   if (!journal) {
     notFound();
   }
 
   const canonicalUrl = `https://inkofmemories.com/blog/${slug}`;
-  const imageUrl = journal.image || "https://inkofmemories.com/inkofmemories.png";
 
   // Generate all schemas — map BlogPost fields to the schema helpers
   // (blog.image -> coverImage).
@@ -97,7 +113,12 @@ export default async function JournalDetailPage({ params }: Props) {
       {renderSchemaScript("article-jsonld", articleSchema)}
       {renderSchemaScript("faq-jsonld", faqSchema)}
       {renderSchemaScript("breadcrumb-jsonld", breadcrumbSchema)}
-      <JournalDetailClient slug={slug} />
+      <JournalDetailClient
+        slug={slug}
+        canonicalUrl={canonicalUrl}
+        initialJournal={journal}
+        initialBlogs={allBlogs}
+      />
     </>
   );
 }

@@ -48,7 +48,7 @@ import {
   Cell,
   Legend,
 } from "recharts";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useGetOrdersByUserQuery } from "@/services/ordersApi";
 import { useGetProductsQuery } from "@/services/productsApi";
 import { useGetAllCustomersQuery } from "@/services/userApi";
@@ -402,8 +402,7 @@ const AdminAnalytics = () => {
     refetchOrders();
     refetchProducts();
     refetchCustomers();
-    toast({
-      title: "Refreshing",
+    toast("Refreshing", {
       description: "Fetching latest analytics data...",
     });
   };

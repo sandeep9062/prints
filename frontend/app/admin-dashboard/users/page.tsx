@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { toast } from "sonner";
 import {
   Users,
   Eye,
@@ -141,8 +142,12 @@ const AdminUsers = () => {
     if (userToDelete) {
       try {
         await deleteUser(userToDelete).unwrap();
-      } catch (err) {
+        toast.success("User deleted");
+      } catch (err: any) {
         console.error("Failed to delete user:", err);
+        toast.error("Couldn't delete user", {
+          description: err?.data?.message || "Please try again.",
+        });
       }
     }
     setDeleteDialogOpen(false);
@@ -155,8 +160,12 @@ const AdminUsers = () => {
         id: user._id,
         data: { isActive: !user.isActive },
       }).unwrap();
-    } catch (err) {
+      toast.success(user.isActive ? "User deactivated" : "User activated");
+    } catch (err: any) {
       console.error("Failed to toggle user status:", err);
+      toast.error("Couldn't update user status", {
+        description: err?.data?.message || "Please try again.",
+      });
     }
   };
 

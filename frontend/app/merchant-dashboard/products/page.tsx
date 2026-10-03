@@ -30,7 +30,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import {
   useGetProductsByUserQuery,
   useDeleteProductMutation,
@@ -78,7 +78,6 @@ function ProductsContent() {
   const router = useRouter();
   const { data, error, isLoading } = useGetProductsByUserQuery();
   const [deleteProduct] = useDeleteProductMutation();
-  const { toast } = useToast();
   const products: Product[] = data?.products || [];
   const [viewMode, setViewMode] = useState<"grid" | "large">("grid");
   const [searchQuery, setSearchQuery] = useState("");
@@ -120,15 +119,12 @@ function ProductsContent() {
     if (productToDelete) {
       try {
         await deleteProduct(productToDelete._id).unwrap();
-        toast({
-          title: "Product Deleted",
+        toast.success("Product Deleted", {
           description: `"${productToDelete.name}" has been deleted.`,
         });
       } catch (error) {
-        toast({
-          title: "Error",
+        toast.error("Error", {
           description: "Failed to delete product.",
-          variant: "destructive",
         });
       } finally {
         setProductToDelete(null);

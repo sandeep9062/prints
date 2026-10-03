@@ -29,7 +29,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import {
   useGetSiteSettingsQuery,
   useCreateSiteSettingsMutation,
@@ -118,15 +118,13 @@ const SettingsPage = () => {
       if (settings?._id) {
         // UPDATE existing
         await updateSettings({ id: settings._id, body: form }).unwrap();
-        toast({
-          title: "Settings saved",
+        toast.success("Settings saved", {
           description: "Site settings have been updated successfully.",
         });
       } else {
         // CREATE new
         await createSettings(form).unwrap();
-        toast({
-          title: "Settings created",
+        toast.success("Settings created", {
           description: "Site settings have been created successfully.",
         });
       }
@@ -136,7 +134,7 @@ const SettingsPage = () => {
         err && typeof err === "object" && "data" in err
           ? (err as { data: { message?: string } }).data?.message
           : "Failed to save settings";
-      toast({ title: "Error", description: msg, variant: "destructive" });
+      toast.error("Error", { description: msg });
     }
   };
 

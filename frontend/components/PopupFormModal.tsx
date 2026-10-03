@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useAddContactMutation } from "../services/contactApi"; // ✅ Import the API hook
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";

@@ -12,6 +12,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import {
   useGetMyAddressesQuery,
   useAddAddressMutation,
@@ -52,16 +53,26 @@ export default function AddressBookPage() {
       await addAddress(form).unwrap();
       setForm(emptyForm);
       setShowForm(false);
-    } catch (err) {
+      toast.success("Address saved", {
+        description: "Your address has been added to your address book.",
+      });
+    } catch (err: any) {
       console.error("Failed to add address:", err);
+      toast.error("Couldn't save address", {
+        description: err?.data?.message || "Please try again.",
+      });
     }
   };
 
   const handleDelete = async (id: string) => {
     try {
       await deleteAddress(id).unwrap();
-    } catch (err) {
+      toast.success("Address removed");
+    } catch (err: any) {
       console.error("Failed to delete address:", err);
+      toast.error("Couldn't remove address", {
+        description: err?.data?.message || "Please try again.",
+      });
     }
   };
 

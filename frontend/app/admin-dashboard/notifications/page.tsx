@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useGetOrdersByUserQuery } from "@/services/ordersApi";
 import { useGetContactsQuery } from "@/services/contactApi";
 import { useGetAllCustomersQuery } from "@/services/userApi";
@@ -329,8 +329,7 @@ const NotificationsPage = () => {
       return next;
     });
     setMarkingAll(false);
-    toast({
-      title: "All marked as read",
+    toast.success("All marked as read", {
       description: `${allIds.length} notification${allIds.length !== 1 ? "s" : ""} marked`,
     });
   };
