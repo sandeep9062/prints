@@ -1,6 +1,8 @@
 import * as React from "react";
 
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
+import { toastVariants } from "@/components/ui/toast";
+import type { VariantProps } from "class-variance-authority";
 
 const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;
@@ -162,6 +164,45 @@ function toast({ ...props }: Toast) {
     update,
   };
 }
+
+/**
+ * Variant-aware helpers.
+ *
+ * The bare `toast({...})` above is the shadcn primitive. Callers overwhelmingly
+ * want a semantic variant though, so expose `toast.success` / `toast.error` /
+ * `toast.info` shorthands that pre-fill the matching variant classes and keep
+ * `toast(...)` itself working for anyone passing props directly.
+ *
+ * Usage: toast.success("Saved to favourites") — the string becomes the title.
+ */
+type ToastVariant = NonNullable<VariantProps<typeof toastVariants>["variant"]>;
+
+const VARIANT_CLASS: Record<string, string> = {
+  default: "",
+  success: "border-green-600 bg-green-50 text-green-900",
+  destructive: "border-red-600 bg-red-50 text-red-900",
+  info: "border-slate-600 bg-slate-50 text-slate-900",
+};
+
+// ToastProps (from components/ui/toast) carries the Radix root props but not
+// the className we pass straight through to Toast, hence the intersection.
+type VariantOptions = Omit<Toast, "variant"> & { className?: string };
+
+function withVariant(variant: ToastVariant) {
+  return (title: string, options: VariantOptions = {}) =>
+    toast({
+      ...options,
+      variant,
+      title,
+      className: [VARIANT_CLASS[variant] ?? "", options.className]
+        .filter(Boolean)
+        .join(" "),
+    });
+}
+
+toast.success = withVariant("default");
+toast.error = withVariant("destructive");
+toast.info = withVariant("default");
 
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState);

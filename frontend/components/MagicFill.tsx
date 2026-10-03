@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useCallback } from "react";
 import {
   Button,
@@ -11,208 +12,136 @@ import {
 } from "@mantine/core";
 import { Sparkles, Wand2 } from "lucide-react";
 import { toast } from "sonner";
-import { useMagicFillMutation } from "@/services/aiBasedApi";
 
 interface MagicFillProps {
   nextStep: () => void;
-  propertyDetails: any;
-  setPropertyDetails: React.Dispatch<React.SetStateAction<any>>;
-  normalizeCountry?: (raw: string) => string;
+  /** Free-form print brief this step pre-fills. */
+  printDetails: Record<string, unknown>;
+  setPrintDetails: React.Dispatch<
+    React.SetStateAction<Record<string, unknown>>
+  >;
 }
 
-function mergeAiIntoPropertyDetails(
-  prev: any,
-  ai: Record<string, any>,
-  normalizeCountry: (c: string) => string,
-) {
-  const loc = ai.location && typeof ai.location === "object" ? ai.location : {};
-  const hasLatLng =
-    loc.coordinates &&
-    typeof loc.coordinates.lat === "number" &&
-    typeof loc.coordinates.lng === "number" &&
-    (loc.coordinates.lat !== 0 || loc.coordinates.lng !== 0);
-  const coords = hasLatLng
-    ? { lat: loc.coordinates.lat, lng: loc.coordinates.lng }
-    : prev.location?.coordinates;
+/**
+ * Heuristic field extractor for a pasted print brief.
+ *
+ * Runs entirely in the browser — no AI service involved. It scans the pasted
+ * text for the handful of things we can recognise deterministically
+ * (quantity, paper GSM, finishing, colour, deadline) and returns ONLY the keys
+ * it actually found, so the caller can merge over existing values without
+ * blanking anything the user already typed.
+ */
+const FINISHING_TERMS = [
+  "foil",
+  "emboss",
+  "spot uv",
+  "matte lamination",
+  "glossy lamination",
+  "die-cut",
+  "die cut",
+  "letterpress",
+  "varnish",
+];
 
-  const np =
-    ai.nearbyPlaces && typeof ai.nearbyPlaces === "object"
-      ? ai.nearbyPlaces
-      : null;
-  const nearbyPlaces = np
-    ? {
-        schools: np.schools?.length
-          ? np.schools
-          : (prev.nearbyPlaces?.schools ?? []),
-        metroStations: np.metroStations?.length
-          ? np.metroStations
-          : (prev.nearbyPlaces?.metroStations ?? []),
-        hospitals: np.hospitals?.length
-          ? np.hospitals
-          : (prev.nearbyPlaces?.hospitals ?? []),
-        malls: np.malls?.length ? np.malls : (prev.nearbyPlaces?.malls ?? []),
-      }
-    : prev.nearbyPlaces;
+const COLOUR_TERMS = [
+  "black and white",
+  "black & white",
+  "full colour",
+  "full color",
+];
 
-  const fac =
-    ai.facilities && typeof ai.facilities === "object" ? ai.facilities : null;
+const CATEGORY_TERMS: Record<string, string> = {
+  "wedding card": "wedding-cards",
+  "wedding invitation": "wedding-cards",
+  "visiting card": "visiting-cards",
+  "business card": "visiting-cards",
+  shagun: "shagun-envelopes",
+  "letter pad": "letter-pads",
+  notepad: "letter-pads",
+  brochure: "brochures",
+  catalogue: "brochures",
+  catalog: "brochures",
+  banner: "banners",
+  flex: "banners",
+  sticker: "stickers",
+  label: "stickers",
+  stamp: "rubber-stamps",
+  "book binding": "books-bindings",
+  "spiral binding": "books-bindings",
+};
 
-  const merged: Record<string, any> = {
-    ...prev,
-    title: (typeof ai.title === "string" && ai.title.trim()) || prev.title,
-    description:
-      (typeof ai.description === "string" && ai.description.trim()) ||
-      prev.description,
-    price:
-      typeof ai.price === "number" && Number.isFinite(ai.price) && ai.price > 0
-        ? ai.price
-        : prev.price,
-    deal: ai.deal || prev.deal,
-    type: ai.type || prev.type,
-    propertyCategory: ai.propertyCategory || prev.propertyCategory,
-    availability: ai.availability || prev.availability,
-    furnishing: ai.furnishing || prev.furnishing,
-    facing:
-      typeof ai.facing === "string" && ai.facing.trim() !== ""
-        ? ai.facing
-        : prev.facing,
-    postedBy: ai.postedBy || prev.postedBy,
-    listingAvailability: ai.listingAvailability || prev.listingAvailability,
-    area:
-      ai.area && typeof ai.area === "object" && ai.area.value != null
-        ? { ...prev.area, ...ai.area }
-        : prev.area,
-    location: {
-      ...prev.location,
-      ...loc,
-      country: normalizeCountry(
-        (typeof loc.country === "string" && loc.country) ||
-          prev.location?.country ||
-          "",
-      ),
-      coordinates: coords ?? prev.location?.coordinates,
-    },
-    facilities: fac ? { ...prev.facilities, ...fac } : prev.facilities,
-    reraNumber:
-      (typeof ai.reraNumber === "string" && ai.reraNumber.trim()) ||
-      prev.reraNumber,
-    virtualTourUrl:
-      (typeof ai.virtualTourUrl === "string" && ai.virtualTourUrl.trim()) ||
-      prev.virtualTourUrl,
-    videoUrl:
-      (typeof ai.videoUrl === "string" && ai.videoUrl.trim()) || prev.videoUrl,
-    nearbyPlaces,
-    commercialPropertyTypes:
-      Array.isArray(ai.commercialPropertyTypes) &&
-      ai.commercialPropertyTypes.length
-        ? ai.commercialPropertyTypes
-        : prev.commercialPropertyTypes,
-    investmentOptions:
-      Array.isArray(ai.investmentOptions) && ai.investmentOptions.length
-        ? ai.investmentOptions
-        : prev.investmentOptions,
-  };
+export function extractPrintFields(rawText: string): Record<string, unknown> {
+  const text = rawText.toLowerCase();
+  const fields: Record<string, unknown> = {};
 
-  if (ai.maintenanceCharge != null)
-    merged.maintenanceCharge = ai.maintenanceCharge;
-  if (ai.securityDeposit != null) merged.securityDeposit = ai.securityDeposit;
-  if (ai.lockInMonths != null) merged.lockInMonths = ai.lockInMonths;
-  if (ai.noticePeriodDays != null)
-    merged.noticePeriodDays = ai.noticePeriodDays;
-  if (ai.ageOfProperty != null) merged.ageOfProperty = ai.ageOfProperty;
-  if (ai.pricePerSqft != null) merged.pricePerSqft = ai.pricePerSqft;
-  if (typeof ai.negotiable === "boolean") merged.negotiable = ai.negotiable;
-
-  if (
-    ai.ocStatus !== undefined &&
-    ai.ocStatus !== null &&
-    String(ai.ocStatus).trim() !== ""
-  ) {
-    merged.ocStatus = ai.ocStatus;
+  // Quantity: "500 cards", "qty 250", "1000 pieces"
+  const qtyMatch = rawText.match(
+    /\b(?:qty|quantity)?\s*[:\-]?\s*(\d[\d,]{0,7})\s*(?:cards?|pieces?|nos?\.?|units?|sets?|invitations?|copies)?\b/i,
+  );
+  if (qtyMatch) {
+    const n = Number(qtyMatch[1].replace(/,/g, ""));
+    if (Number.isFinite(n) && n > 0) fields.quantity = n;
   }
 
-  if (ai.constructionStatus && typeof ai.constructionStatus === "object") {
-    merged.constructionStatus = {
-      ...prev.constructionStatus,
-      ...ai.constructionStatus,
-    };
-  }
+  // Paper weight in gsm
+  const gsmMatch = text.match(/\b(\d{2,3})\s*gsm\b/);
+  if (gsmMatch) fields.paperGsm = Number(gsmMatch[1]);
 
-  if (Array.isArray(ai.amenities) && ai.amenities.length > 0) {
-    merged.amenities = ai.amenities;
-  }
+  // Finishing techniques mentioned
+  const finishes = FINISHING_TERMS.filter((term) => text.includes(term));
+  if (finishes.length) fields.finishing = [...new Set(finishes)].join(", ");
 
-  if (ai.floor != null && Number.isFinite(Number(ai.floor))) {
-    merged.floor = Math.max(0, Math.round(Number(ai.floor)));
-  }
+  // Colour mode
+  const colour = COLOUR_TERMS.find((term) => text.includes(term));
+  if (colour) fields.colour = colour;
 
-  return merged;
+  // Product category — first taxonomy term that appears
+  const hit = Object.keys(CATEGORY_TERMS).find((term) => text.includes(term));
+  if (hit) fields.categorySlug = CATEGORY_TERMS[hit];
+
+  // Delivery deadline
+  const deadlineMatch = rawText.match(
+    /\b(?:by|before|needed\s+by|deadline)\s+(\d{1,2}(?:st|nd|rd|th)?\s+\w+|\d{1,2}[/-]\d{1,2})/i,
+  );
+  if (deadlineMatch) fields.deadline = deadlineMatch[1].trim();
+
+  return fields;
 }
+/*BODY*/
 
 const MagicFill = ({
   nextStep,
-  propertyDetails: _details,
-  setPropertyDetails,
-  normalizeCountry = (s: string) => s || "",
+  printDetails: _details,
+  setPrintDetails,
 }: MagicFillProps) => {
   const [rawText, setRawText] = useState("");
-  const [magicFill, { isLoading }] = useMagicFillMutation();
 
   const applyAndContinue = useCallback(
-    async (text: string) => {
-      const result = await magicFill(text).unwrap();
-      if (!result.success || !result.data) {
-        toast.error("Could not read listing from AI. Try again.");
+    (text: string) => {
+      const fields = extractPrintFields(text);
+      const keys = Object.keys(fields);
+
+      if (keys.length === 0) {
+        toast.error(
+          "Could not detect any print details. Try mentioning quantity, GSM or finishing.",
+        );
         return;
       }
-      const aiData = result.data;
-      setPropertyDetails((prev: any) =>
-        mergeAiIntoPropertyDetails(prev, aiData, normalizeCountry),
-      );
-      const filled: string[] = [];
-      if (aiData.title) filled.push("title");
-      if (aiData.description) filled.push("description");
-      if (aiData.price) filled.push("price");
-      if (aiData.location?.city) filled.push("location");
-      if (aiData.area?.value) filled.push("area");
-      if (
-        aiData.facilities &&
-        typeof aiData.facilities === "object" &&
-        Object.values(aiData.facilities).some(
-          (v) =>
-            v !== undefined &&
-            v !== null &&
-            v !== "" &&
-            !(typeof v === "number" && v === 0),
-        )
-      ) {
-        filled.push("facilities");
-      }
-      if ((aiData.amenities as string[])?.length) filled.push("amenities");
+
+      // Merge over the existing brief — never blank what the user typed.
+      setPrintDetails((prev) => ({ ...prev, ...fields }));
       toast.success(
-        filled.length
-          ? `Filled ${filled.length} sections — review location & images next.`
-          : "Applied — please complete key fields manually.",
+        `Filled ${keys.length} field${keys.length === 1 ? "" : "s"} — review before continuing.`,
       );
       nextStep();
     },
-    [magicFill, setPropertyDetails, nextStep, normalizeCountry],
+    [setPrintDetails, nextStep],
   );
 
-  const handleAiMagic = async () => {
+  const handleMagic = () => {
     const text = rawText.trim();
     if (!text) return;
-    try {
-      await applyAndContinue(text);
-    } catch (error: unknown) {
-      const err = error as { data?: { message?: string }; status?: number };
-      const msg =
-        err?.data?.message ||
-        (error instanceof Error
-          ? error.message
-          : "Magic fill failed. Try again.");
-      toast.error(msg);
-    }
+    applyAndContinue(text);
   };
 
   return (
@@ -227,14 +156,14 @@ const MagicFill = ({
             <Group gap="xs">
               <Sparkles size={24} className="text-blue-600" />
               <Text fw={800} size="lg" className="text-blue-950 tracking-tight">
-                AI Magic Fill
+                Quick Brief Fill
               </Text>
             </Group>
           </Group>
           <Text size="sm" c="dimmed" fw={500} mb="sm">
-            Paste rough notes, broker messages, or an old listing. We extract
-            structured fields (deal, price in INR, BHK, area, rent terms, OC,
-            amenities, neighbourhood hints) and normalize them for your form.
+            Paste rough notes, a WhatsApp message or an old order text. We pull
+            out what we can read automatically — quantity, paper GSM, finishing,
+            colour and deadline — and drop it into your brief.
           </Text>
           <List
             size="sm"
@@ -243,24 +172,25 @@ const MagicFill = ({
             icon={<Wand2 size={14} className="text-blue-500" />}
           >
             <List.Item>
-              Understands lakhs / crore and monthly rent vs sale price
+              Reads quantities like &ldquo;500 cards&rdquo; or &ldquo;qty
+              1000&rdquo;
             </List.Item>
             <List.Item>
-              Maps BHK, parking type, maintenance, deposit, lock-in where
-              mentioned
+              Detects paper weight, finishing and colour mode where mentioned
             </List.Item>
             <List.Item>
-              Match amenities to your listing checklist — you can still edit
-              every step
+              Matches your text to a printing category so the right template
+              opens — you can still edit every field
             </List.Item>
           </List>
         </Paper>
-
         <Textarea
-          placeholder={`Example:\n3BHK + study, 18th floor, DLF Phase 3 Gurgaon. 1850 sq ft, East facing, 2 covered parking.\nAsking 2.35 cr, negotiable. Maintenance ₹8500/mo. OC available. Gym, pool, clubhouse.\nNear Rapid Metro & Galleria.`}
+          placeholder={
+            "Example:\nNeed 500 wedding cards, 300 gsm matte with gold foil, full colour.\nBoth sides printed. Delivery needed by 15th."
+          }
           label={
             <Text fw={700} size="sm" mb={5} c="gray.7">
-              Paste property text
+              Paste your print brief
             </Text>
           }
           minRows={8}
@@ -279,7 +209,6 @@ const MagicFill = ({
           }}
           value={rawText}
           onChange={(e) => setRawText(e.target.value)}
-          disabled={isLoading}
         />
 
         <Group justify="space-between">
@@ -290,29 +219,28 @@ const MagicFill = ({
             size="md"
             radius="md"
           >
-            Skip — I’ll fill manually
+            Skip — I&rsquo;ll fill manually
           </Button>
 
           <Button
-            onClick={handleAiMagic}
-            loading={isLoading}
+            onClick={handleMagic}
             disabled={!rawText.trim()}
             size="md"
             radius="md"
-            leftSection={!isLoading && <Wand2 size={18} />}
+            leftSection={<Wand2 size={18} />}
             className="bg-[#4161df] hover:bg-[#3a56c4] shadow-lg shadow-blue-100/80 px-8"
           >
-            {isLoading ? "Extracting…" : "Run magic fill"}
+            Fill my brief
           </Button>
         </Group>
 
         <Text size="xs" c="dimmed" ta="center">
-          Pin location on the map in the next steps if coordinates weren’t
-          guessed. Photos still upload separately.
+          Everything is detected on your device — nothing is uploaded.
         </Text>
       </Stack>
     </div>
   );
 };
+
 
 export default MagicFill;

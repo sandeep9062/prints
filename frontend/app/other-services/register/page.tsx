@@ -21,7 +21,91 @@ import {
   Hash,
   ShieldCheck,
 } from "lucide-react";
-import { useRegisterLandlordMutation } from "@/services/landlordApi";
+
+/* ══════════════════════════════════════
+   SUBMISSION
+   ------------------------------------------------------------
+   Posts the print enquiry to the backend's enquiry endpoint
+   (`POST {NEXT_PUBLIC_API_URL}/v1/enquiry`), which stores
+   name / email / phone / message. That is the only public
+   "someone wants to print something" endpoint the API exposes,
+   so it is what this form targets.
+
+   The richer fields (categories, city, budget-ish detail,
+   languages, company/GSTIN) are folded into `message` so the
+   enquiry team still receives the full brief in one place.
+
+   A plain `fetch` rather than an RTK Query slice: this route is
+   a standalone public form, and the enquiry endpoint is not
+   part of the shared cached store (no reads, no invalidation).
+   ══════════════════════════════════════ */
+const ENQUIRY_ENDPOINT = `${process.env.NEXT_PUBLIC_API_URL}/v1/enquiry`;
+
+function buildEnquiryMessage(fields: {
+  categories: string[];
+  city: string;
+  quantity: string;
+  languages: string[];
+  companyName: string;
+  gstin: string;
+  pan: string;
+  bio: string;
+  hasPhoto: boolean;
+}): string {
+  const lines: string[] = ["Print enquiry from the website:", ""];
+
+  if (fields.categories.length) {
+    lines.push(`Services needed: ${fields.categories.join(", ")}`);
+  }
+  if (fields.city) lines.push(`City: ${fields.city}`);
+  if (fields.quantity) lines.push(`Approx. quantity: ${fields.quantity}`);
+  if (fields.languages.length) {
+    lines.push(`Languages: ${fields.languages.join(", ")}`);
+  }
+  if (fields.companyName) lines.push(`Company: ${fields.companyName}`);
+  if (fields.gstin) lines.push(`GSTIN: ${fields.gstin}`);
+  if (fields.pan) lines.push(`PAN: ${fields.pan}`);
+  if (fields.bio) lines.push(`Notes: ${fields.bio}`);
+  if (fields.hasPhoto) {
+    lines.push(
+      "(Reference photo selected on the form — please contact the customer directly for the file.)",
+    );
+  }
+
+  return lines.join("\n");
+}
+
+async function submitEnquiry(body: {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+}): Promise<void> {
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  const response = await fetch(ENQUIRY_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    // Surface the server's message when it sends one, otherwise a generic line.
+    let detail = "Something went wrong. Please try again.";
+    try {
+      const data = await response.json();
+      if (data && typeof data.message === "string") detail = data.message;
+      else if (data && typeof data.error === "string") detail = data.error;
+    } catch {
+      // Non-JSON error body — keep the generic message.
+    }
+    throw new Error(detail);
+  }
+}
 
 /* ══════════════════════════════════════
    STATIC OPTIONS
@@ -200,7 +284,6 @@ export default function ServiceProviderRegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [photo, setPhoto] = useState<File | null>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
-  const [registerProvider] = useRegisterLandlordMutation();
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -243,52 +326,29 @@ export default function ServiceProviderRegisterPage() {
     setError(null);
     setSubmitting(true);
     try {
-      // Build FormData for the API (supports file upload)
-      const formData = new FormData();
-      formData.append("name", form.name.trim());
-      formData.append("phone", form.phone.trim());
-      formData.append("whatsapp", form.whatsapp.trim());
-      formData.append("email", form.email.trim());
-      formData.append("address", form.address.trim());
-      formData.append("city", form.city.trim());
-      formData.append("state", form.state.trim());
-      formData.append("pincode", form.pincode.trim());
-      formData.append("bio", form.bio.trim());
-      formData.append("isCompany", String(form.isCompany));
-      formData.append("companyName", form.companyName.trim());
-      formData.append("gstin", form.gstin.trim());
-      formData.append("pan", form.pan.trim());
-
-      // Attach userId if the user is logged in
-      if (loggedInUser?._id) {
-        formData.append("userId", loggedInUser._id);
-      }
-
-      // Arrays — send as JSON strings; backend parses them.
-      // Service categories are sent in the `propertyTypes` field, which is
-      // the field the registration API expects for the professional's offerings.
-      formData.append("locations", JSON.stringify(form.locations));
-      formData.append("propertyTypes", JSON.stringify(form.services));
-      formData.append("languages", JSON.stringify(form.languages));
-
-      // Attach photo if selected
-      if (photo) {
-        formData.append("photo", photo);
-      }
-
-      await registerProvider(formData).unwrap();
+      await submitEnquiry({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        message: buildEnquiryMessage({
+          categories: form.services,
+          city: form.city.trim(),
+          quantity: form.whatsapp.trim(),
+          languages: form.languages,
+          companyName: form.companyName.trim(),
+          gstin: form.gstin.trim(),
+          pan: form.pan.trim(),
+          bio: form.bio.trim(),
+          hasPhoto: Boolean(photo),
+        }),
+      });
       setSubmitted(true);
     } catch (err: unknown) {
-      if (err && typeof err === "object" && "data" in err) {
-        const errorData = (err as { data: { message?: string } }).data;
-        setError(
-          errorData?.message || "Something went wrong. Please try again.",
-        );
-      } else if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Something went wrong. Please try again.");
-      }
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -307,13 +367,12 @@ export default function ServiceProviderRegisterPage() {
               <CheckCircle2 size={28} style={{ color: "#16a34a" }} />
             </div>
             <h1 className="text-[26px] text-slate-900 mb-2 font-semibold">
-              Profile created
+              Enquiry received
             </h1>
             <p className="text-[13.5px] text-slate-500 leading-relaxed mb-6">
-              Thanks {form.name.split(" ")[0] || "there"} — your service
-              provider profile has been created successfully. You can now
-              receive customer enquiries and manage your profile from your
-              dashboard.
+              Thanks {form.name.split(" ")[0] || "there"} — your print enquiry
+              is with our team. We&apos;ll get back to you with paper, finish
+              and pricing options shortly.
             </p>
             <button
               onClick={() => router.push("/")}

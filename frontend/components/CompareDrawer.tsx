@@ -1,6 +1,6 @@
 "use client";
 
-import { useCompare, type CompareItem } from "@/store/CompareProvider";
+import { useCompare, MAX_COMPARE_ITEMS, type CompareItem } from "@/store/CompareProvider";
 import { X, ArrowRight, Trash2, Scale } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -60,11 +60,10 @@ function CompareThumb({
 export default function CompareDrawer() {
   const { items, count, removeItem, clearAll } = useCompare();
 
-  if (count === 0) return null;
+  const slotsLeft = Math.max(0, MAX_COMPARE_ITEMS - count);
 
-  const maxItems = 4;
-  const slotsLeft = Math.max(0, maxItems - count);
-
+  // No early `return null` — AnimatePresence needs the component to stay
+  // mounted so it can play the exit slide when the last item is removed.
   return (
     <>
       <AnimatePresence>
@@ -110,13 +109,13 @@ export default function CompareDrawer() {
                           color: "#4161df",
                         }}
                       >
-                        {count}/{maxItems}
+                        {count}/{MAX_COMPARE_ITEMS}
                       </span>
                     </div>
 
                     {/* thumbnails row */}
                     <div className="flex flex-nowrap items-center gap-1 overflow-x-auto scrollbar-none">
-                      {items.map((item) => (
+                      {items.map((item: CompareItem) => (
                         <CompareThumb
                           key={item._id}
                           item={item}

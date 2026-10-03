@@ -1,9 +1,6 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  Banknote,
-  BedDouble,
-  Building2,
   ChevronDown,
   Compass,
   MapPin,
@@ -15,20 +12,16 @@ import { getRootSeoStaticParams } from "@/lib/seoListings";
 
 /**
  * Homepage "popular searches" section — quick links to the programmatic SEO
- * landing pages (landmark pages, price buckets, sector + type pages).
+ * landing pages (printing category + city, and category + locality pages).
  *
- * A server component on purpose: the link list is derived from LIVE inventory
- * via `getRootSeoStaticParams()` — the same guardrail-aware source the
- * sitemap and `generateStaticParams` use — so it never links to a URL the
- * site itself would 404 (thin-content guardrail). Precomputed slugs can be
- * passed in via the `slugs` prop to skip the fetch.
+ * A server component on purpose: the link list is derived from the printing
+ * taxonomy via `getRootSeoStaticParams()` — the same source `generateStaticParams`
+ * uses — so it can never link to a URL the site itself would 404. Precomputed
+ * slugs can be passed in via the `slugs` prop to skip the derivation.
  *
  * Long groups collapse behind a native <details> ("Show N more"). Every link
  * stays in the server-rendered HTML (crawlable, no client JS) — it's only
  * visually tucked away so the section doesn't grow endlessly on mobile.
- *
- * Fetches carry `next: { revalidate: 3600 }` (Next data cache), so the first
- * request pays the derivation cost and subsequent ones are served from cache.
  */
 const BRAND = "#4161df";
 const BRAND_TINT = "#EEF1FC";
@@ -56,6 +49,12 @@ interface QuickLinkGroup {
   items: QuickLinkItem[];
 }
 
+/** A group after the maxPerGroup cap is applied. */
+interface ResolvedGroup extends QuickLinkGroup {
+  /** Every link the group holds — may exceed `items.length` when capped. */
+  total: number;
+}
+
 interface QuickLinksProps {
   title?: string;
   subtitle?: string;
@@ -63,29 +62,36 @@ interface QuickLinksProps {
   maxPerGroup?: number;
   /**
    * How many links to show before collapsing the rest behind "Show N more".
-   * Default: picked from the layout (8 / 10 / 12). 0 = never collapse.
+   * Defaults to a value chosen from the column count (8 / 10 / 12).
+   * 0 = never collapse.
    */
   collapseAfter?: number;
-  /** Optional precomputed root slugs (default: derive from live inventory). */
+  /**
+   * Heading id, wired to `aria-labelledby`. Defaults to a fixed value; pass a
+   * distinct one if two <QuickLinks> ever render on the same page so ids stay
+   * unique.
+   */
+  titleId?: string;
+  /** Optional precomputed root slugs (default: derive from the taxonomy). */
   slugs?: string[];
 }
 
-/** Which visual group a resolved slug belongs to ("" = drop it). */
+/**
+ * Which visual group a resolved slug belongs to. Every resolvable slug lands in
+ * exactly one group, so this never returns "" — the caller's `if (!key)` guard
+ * is kept as a cheap forward-compat tripwire if a new spec kind is ever added.
+ */
 function groupKeyFor(resolved: ResolvedSlug): string {
-  if (resolved.landmarkSlug) return "landmarks";
-  if (resolved.spec.kind === "price") return "budget";
-  if (resolved.spec.kind === "category") return "flats-houses";
-  if (resolved.spec.kind === "pg") return "pg";
-  return "";
+  return resolved.spec.kind === "category-in-city" ? "by-city" : "near-you";
 }
 
 function makeGroups(): QuickLinkGroup[] {
   return [
     {
-      key: "flats-houses",
-      heading: "Flats & Houses",
-      blurb: "By sector and locality",
-      icon: Building2,
+      key: "by-city",
+      heading: "Printing by City",
+      blurb: "Category pages across our service cities",
+      icon: MapPin,
       accent: {
         color: BRAND,
         tint: BRAND_TINT,
@@ -95,23 +101,10 @@ function makeGroups(): QuickLinkGroup[] {
       items: [],
     },
     {
-      key: "pg",
-      heading: "PG & Hostels",
-      blurb: "Sector-wise shared stays",
-      icon: BedDouble,
-      accent: {
-        color: "#6D4AE0",
-        tint: "#F1EDFD",
-        linkHover:
-          "hover:bg-[#F1EDFD] hover:text-[#6D4AE0] focus-visible:ring-[#6D4AE0]",
-      },
-      items: [],
-    },
-    {
-      key: "landmarks",
-      heading: "Near Landmarks",
-      blurb: "Hospitals, colleges & transit",
-      icon: MapPin,
+      key: "near-you",
+      heading: "Printing Near You",
+      blurb: "Category pages by locality",
+      icon: Compass,
       accent: {
         color: "#059669",
         tint: "#E6F6EF",
@@ -120,25 +113,12 @@ function makeGroups(): QuickLinkGroup[] {
       },
       items: [],
     },
-    {
-      key: "budget",
-      heading: "Budget Rentals",
-      blurb: "Under a fixed monthly rent",
-      icon: Banknote,
-      accent: {
-        color: "#EA580C",
-        tint: "#FFF0E6",
-        linkHover:
-          "hover:bg-[#FFF0E6] hover:text-[#EA580C] focus-visible:ring-[#EA580C]",
-      },
-      items: [],
-    },
   ];
 }
 
-const DEFAULT_TITLE = "Explore stationery by category, finish & occasion";
+const DEFAULT_TITLE = "Explore printing by category, finish & city";
 const DEFAULT_SUBTITLE =
-  "Popular printing categories across wedding cards, invitation cards, visiting cards, shagun envelopes, letter pads and brochures.";
+  "Popular printing categories across Chandigarh, Panchkula, Mohali and nearby localities — wedding cards, visiting cards, brochures, banners and more.";
 /** Don't collapse for just a couple of leftovers ("Show 1 more" is silly). */
 const COLLAPSE_SLACK = 2;
 
@@ -166,12 +146,12 @@ function LinkRow({
 export default async function QuickLinks({
   title = DEFAULT_TITLE,
   subtitle = DEFAULT_SUBTITLE,
-  // No cap by default: the list is already guardrail-filtered (only combos
-  // with >= MIN_LISTINGS_FOR_SEO_PAGE live listings), so every link we can
-  // derive is worth linking. Pass `maxPerGroup` to trim a group if a page
-  // ever needs to stay compact.
+  // No cap by default: every slug the taxonomy yields is a real, prerendered
+  // page, so each one is worth linking. Pass `maxPerGroup` to trim a group if
+  // a page ever needs to stay compact.
   maxPerGroup = 0,
   collapseAfter,
+  titleId = "quicklinks-title",
   slugs,
 }: QuickLinksProps) {
   let rootSlugs: string[];
@@ -183,37 +163,37 @@ export default async function QuickLinks({
   }
 
   const groups = makeGroups();
+  const byKey = new Map(groups.map((g) => [g.key, g] as const));
   const seen = new Set<string>();
 
   for (const slug of rootSlugs) {
     if (seen.has(slug)) continue;
     const resolved = parseRootSlug(slug);
     if (!resolved) continue;
-    // TODO(open decision #1): independent-room/flatmate pages are not live
-    // yet (they 404) — never link to them from the homepage until confirmed.
-    if (
-      resolved.spec.kind === "independent-room" ||
-      resolved.spec.kind === "flatmate"
-    ) {
-      continue;
-    }
     const key = groupKeyFor(resolved);
     if (!key) continue;
     const label = quickLinkLabel(slug);
     if (!label) continue;
-    const group = groups.find((g) => g.key === key)!;
+    // Map lookup instead of `find(...)!` — a missing key skips rather than
+    // throwing on a non-null assertion at runtime.
+    const group = byKey.get(key);
+    if (!group) continue;
     group.items.push({ href: `/${slug}`, label });
     seen.add(slug);
   }
 
-  const activeGroups = groups
+  const activeGroups: ResolvedGroup[] = groups
     .filter((g) => g.items.length > 0)
-    .map((g) => ({
-      ...g,
-      items: g.items
-        .sort((a, b) => a.label.localeCompare(b.label))
-        .slice(0, maxPerGroup > 0 ? maxPerGroup : g.items.length),
-    }));
+    .map((g) => {
+      const all = g.items.sort((a, b) => a.label.localeCompare(b.label));
+      // Keep the true total even when `maxPerGroup` trims the rendered list —
+      // the badge counts everything the group holds, not just what's visible.
+      return {
+        ...g,
+        total: all.length,
+        items: maxPerGroup > 0 ? all.slice(0, maxPerGroup) : all,
+      };
+    });
 
   // Nothing eligible → render nothing; the homepage stays clean.
   if (activeGroups.length === 0) return null;
@@ -248,7 +228,7 @@ export default async function QuickLinks({
 
   return (
     <section
-      aria-labelledby="quicklinks-title"
+      aria-labelledby={titleId}
       className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
     >
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -261,7 +241,7 @@ export default async function QuickLinks({
             Popular searches
           </span>
           <h2
-            id="quicklinks-title"
+            id={titleId}
             className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl"
             style={{ color: INK }}
           >
@@ -273,10 +253,10 @@ export default async function QuickLinks({
         </div>
 
         <Link
-          href="/properties"
+          href="/products"
           className="group inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-transparent hover:bg-[#4161df] hover:text-white hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4161df] focus-visible:ring-offset-2"
         >
-          Browse all properties
+          Browse all products
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </div>
@@ -334,9 +314,9 @@ export default async function QuickLinks({
                     background: group.accent.tint,
                     color: group.accent.color,
                   }}
-                  aria-label={`${group.items.length} links`}
+                  title={`${group.total} links`}
                 >
-                  {group.items.length}
+                  {group.total}
                 </span>
               </div>
 

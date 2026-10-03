@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import Heart from "@/components/Heart";
+import CompareToggle from "@/components/CompareToggle";
 
 type Product = {
   id: string;
@@ -60,8 +61,9 @@ export const ProductCard = ({
           className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/5 dark:ring-white/10"
         />
 
-        {/* Top-left flag stack: Featured tag sits above the optional badge */}
-        {(product.featured || product.badge) && (
+        {/* Top-left flag stack: Featured tag sits above the optional badge,
+            with the discount chip last so the editorial tags keep priority */}
+        {(product.featured || product.badge || discount > 0) && (
           <div className="pointer-events-none absolute left-4 top-4 z-10 flex flex-col items-start gap-2">
             {product.featured && (
               <span className="inline-flex items-center gap-1 bg-stone-900 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white dark:bg-stone-100 dark:text-stone-900">
@@ -75,19 +77,31 @@ export const ProductCard = ({
                 {product.badge}
               </span>
             )}
+
+            {discount > 0 && (
+              <span className="bg-red-900 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+                {discount}% Off
+              </span>
+            )}
           </div>
         )}
 
-        {/* Wishlist — shared Heart.tsx toggle (top-right, above badges) */}
-        <div className="absolute right-4 top-4 z-10">
+        {/* Card actions — wishlist + compare share the top-right rail so they
+            stack instead of overlapping the flags above. */}
+        <div className="absolute right-4 top-4 z-10 flex flex-col items-center gap-2">
           <Heart card={{ _id: product.id, id: product.id }} />
+          <CompareToggle
+            item={{
+              _id: product.id,
+              title: product.name,
+              image: product.image,
+              price: product.price,
+              originalPrice: product.originalPrice,
+              category: product.category,
+              slug: product.slug,
+            }}
+          />
         </div>
-
-        {discount > 0 && (
-          <span className="absolute right-4 top-[68px] bg-red-900 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
-            {discount}% Off
-          </span>
-        )}
 
         {/* Quick View overlay */}
         <div className="absolute inset-x-0 bottom-0 translate-y-full p-4 transition-transform duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 motion-reduce:transition-none">

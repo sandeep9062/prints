@@ -924,3 +924,14 @@
     linear-gradient(#fff 0 0);
   mask-composite: exclude;
 }
+
+/* Hides the scrollbar on the compare tray's thumbnail strip so the selected
+   products scroll cleanly without a chunky axis inside the pill. */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}

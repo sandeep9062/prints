@@ -5,6 +5,7 @@ import { CartProvider } from "../contexts/CartContext";
 import { Providers } from "./providers";
 import RouteTransitionWrapper from "@/components/RouteTransitionWrapper";
 import SmoothScroll from "@/components/SmoothScroll";
+import CompareDrawer from "@/components/CompareDrawer";
 import { Toaster } from "sonner";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -124,6 +125,9 @@ export default function RootLayout({
               </CartProvider>
             </RouteTransitionWrapper>
           </SmoothScroll>
+          {/* Fixed-position compare tray — outside SmoothScroll/RouteTransitionWrapper
+              so it isn't affected by scroll transforms or route exits. */}
+          <CompareDrawer />
           <Toaster />
         </Providers>
       </body>
