@@ -211,10 +211,10 @@ export default function SettingsPage() {
     return (
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="animate-pulse space-y-6">
-          <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded-lg" />
-          <div className="h-[500px] bg-gray-100 dark:bg-gray-800/50 rounded-2xl" />
-          <div className="h-[200px] bg-gray-100 dark:bg-gray-800/50 rounded-2xl" />
-          <div className="h-[200px] bg-gray-100 dark:bg-gray-800/50 rounded-2xl" />
+          <div className="h-8 w-48 bg-muted dark:bg-card rounded-lg" />
+          <div className="h-[500px] bg-muted dark:bg-black/50 rounded-2xl" />
+          <div className="h-[200px] bg-muted dark:bg-black/50 rounded-2xl" />
+          <div className="h-[200px] bg-muted dark:bg-black/50 rounded-2xl" />
         </div>
       </div>
     );
@@ -226,14 +226,14 @@ export default function SettingsPage() {
       <motion.div {...fadeInUp}>
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-              <Sparkles className="h-6 w-6 text-blue-500" />
+            <div className="p-2 bg-brand-soft dark:bg-footer/30 rounded-xl">
+              <Sparkles className="h-6 w-6 text-brand" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <h2 className="font-sans text-2xl font-semibold text-foreground dark:text-primary-foreground">
                 Settings
               </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Manage your account and preferences
               </p>
             </div>
@@ -254,13 +254,13 @@ export default function SettingsPage() {
 
       {/* Profile Section */}
       <motion.div variants={fadeInUp} initial="initial" animate="animate">
-        <Card className="bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm shadow-xl border border-gray-100 dark:border-gray-700/30 overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+        <Card className="bg-card/80 dark:bg-card/40 backdrop-blur-sm shadow-xl border border-border dark:border-border/30 overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-brand to-brand-hover text-primary-foreground">
             <CardTitle className="text-xl flex items-center gap-2">
               <UserIcon className="h-5 w-5" />
               Profile Information
             </CardTitle>
-            <p className="text-white/80 text-sm">
+            <p className="text-primary-foreground/80 text-sm">
               Update your personal details and profile photo
             </p>
           </CardHeader>
@@ -269,7 +269,7 @@ export default function SettingsPage() {
               {/* Avatar Upload */}
               <div className="flex items-center gap-6">
                 <div className="relative group">
-                  <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 ring-4 ring-white dark:ring-gray-800 shadow-lg">
+                  <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-brand-soft to-card dark:from-brand/30 dark:to-brand-hover/30 ring-4 ring-white dark:ring-border shadow-lg">
                     {displayImage ? (
                       <Image
                         src={displayImage}
@@ -280,14 +280,14 @@ export default function SettingsPage() {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <UserIcon className="h-10 w-10 text-blue-400" />
+                        <UserIcon className="h-10 w-10 text-brand" />
                       </div>
                     )}
                   </div>
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute bottom-0 right-0 bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 opacity-90 hover:opacity-100"
+                    className="absolute bottom-0 right-0 bg-gradient-to-r from-brand to-brand-hover text-primary-foreground p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 opacity-90 hover:opacity-100"
                   >
                     <Camera className="h-4 w-4" />
                   </button>
@@ -300,13 +300,13 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900 dark:text-white">
+                  <p className="font-medium text-foreground dark:text-primary-foreground">
                     {user?.name || "User"}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground capitalize">
                     {user?.role || "Merchant"}
                   </p>
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     JPG, PNG or WEBP. Max 2MB.
                   </p>
                 </div>
@@ -319,7 +319,7 @@ export default function SettingsPage() {
                     htmlFor="name"
                     className="text-sm font-medium flex items-center gap-2"
                   >
-                    <UserIcon className="h-4 w-4 text-blue-500" />
+                    <UserIcon className="h-4 w-4 text-brand" />
                     Full Name
                   </Label>
                   <Input
@@ -328,13 +328,13 @@ export default function SettingsPage() {
                     value={form.name}
                     onChange={handleChange}
                     placeholder="Your full name"
-                    className={`bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-blue-300 dark:focus:border-blue-600 ${
-                      errors.name ? "border-red-400 focus:border-red-400" : ""
+                    className={`bg-card dark:bg-card border-border dark:border-border focus:border-brand/40 dark:focus:border-brand ${
+                      errors.name ? "border-destructive/40 focus:border-destructive/40" : ""
                     }`}
                     required
                   />
                   {errors.name && (
-                    <p className="text-xs text-red-500 flex items-center gap-1 mt-1">
+                    <p className="text-xs text-destructive flex items-center gap-1 mt-1">
                       <AlertCircle className="h-3 w-3" />
                       {errors.name}
                     </p>
@@ -345,7 +345,7 @@ export default function SettingsPage() {
                     htmlFor="email"
                     className="text-sm font-medium flex items-center gap-2"
                   >
-                    <Mail className="h-4 w-4 text-blue-500" />
+                    <Mail className="h-4 w-4 text-brand" />
                     Email Address
                   </Label>
                   <Input
@@ -355,13 +355,13 @@ export default function SettingsPage() {
                     value={form.email}
                     onChange={handleChange}
                     placeholder="your@email.com"
-                    className={`bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-blue-300 dark:focus:border-blue-600 ${
-                      errors.email ? "border-red-400 focus:border-red-400" : ""
+                    className={`bg-card dark:bg-card border-border dark:border-border focus:border-brand/40 dark:focus:border-brand ${
+                      errors.email ? "border-destructive/40 focus:border-destructive/40" : ""
                     }`}
                     required
                   />
                   {errors.email && (
-                    <p className="text-xs text-red-500 flex items-center gap-1 mt-1">
+                    <p className="text-xs text-destructive flex items-center gap-1 mt-1">
                       <AlertCircle className="h-3 w-3" />
                       {errors.email}
                     </p>
@@ -372,7 +372,7 @@ export default function SettingsPage() {
                     htmlFor="phone"
                     className="text-sm font-medium flex items-center gap-2"
                   >
-                    <Phone className="h-4 w-4 text-blue-500" />
+                    <Phone className="h-4 w-4 text-brand" />
                     Phone Number
                   </Label>
                   <Input
@@ -382,13 +382,13 @@ export default function SettingsPage() {
                     value={form.phone}
                     onChange={handleChange}
                     placeholder="+91 98765 43210"
-                    className={`bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-blue-300 dark:focus:border-blue-600 ${
-                      errors.phone ? "border-red-400 focus:border-red-400" : ""
+                    className={`bg-card dark:bg-card border-border dark:border-border focus:border-brand/40 dark:focus:border-brand ${
+                      errors.phone ? "border-destructive/40 focus:border-destructive/40" : ""
                     }`}
                     required
                   />
                   {errors.phone && (
-                    <p className="text-xs text-red-500 flex items-center gap-1 mt-1">
+                    <p className="text-xs text-destructive flex items-center gap-1 mt-1">
                       <AlertCircle className="h-3 w-3" />
                       {errors.phone}
                     </p>
@@ -396,27 +396,27 @@ export default function SettingsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label className="text-sm font-medium flex items-center gap-2">
-                    <Store className="h-4 w-4 text-blue-500" />
+                    <Store className="h-4 w-4 text-brand" />
                     Account Type
                   </Label>
-                  <div className="p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 text-sm capitalize flex items-center gap-2 h-10">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                  <div className="p-2.5 rounded-xl border border-border dark:border-border bg-muted dark:bg-black/50 text-foreground dark:text-muted-foreground/70 text-sm capitalize flex items-center gap-2 h-10">
+                    <div className="w-2 h-2 rounded-full bg-success"></div>
                     {user?.role || "Merchant"} Account
                   </div>
                 </div>
               </div>
 
               {/* Save Button */}
-              <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700/30">
+              <div className="flex items-center justify-between pt-4 border-t border-border dark:border-border/30">
                 <div className="flex items-center gap-2">
                   {isLoading && (
-                    <span className="text-sm text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+                    <span className="text-sm text-brand dark:text-brand flex items-center gap-1.5">
                       <Loader2 className="h-4 w-4 animate-spin" />
                       Saving...
                     </span>
                   )}
                   {saveSuccess && !isLoading && (
-                    <span className="text-sm text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                    <span className="text-sm text-success dark:text-brand flex items-center gap-1.5">
                       <CheckCircle2 className="h-4 w-4" />
                       Profile saved successfully
                     </span>
@@ -425,7 +425,7 @@ export default function SettingsPage() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-60"
+                  className="bg-gradient-to-r from-brand to-brand-hover hover:from-brand hover:to-brand-hover text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-60"
                 >
                   {isLoading ? (
                     <>
@@ -447,51 +447,51 @@ export default function SettingsPage() {
 
       {/* Account Details Display */}
       <motion.div variants={fadeInUp} initial="initial" animate="animate">
-        <Card className="bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm shadow-xl border border-gray-100 dark:border-gray-700/30 overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
+        <Card className="bg-card/80 dark:bg-card/40 backdrop-blur-sm shadow-xl border border-border dark:border-border/30 overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-brand to-brand-hover text-primary-foreground">
             <CardTitle className="text-xl flex items-center gap-2">
               <Store className="h-5 w-5" />
               Account Details
             </CardTitle>
-            <p className="text-white/80 text-sm">
+            <p className="text-primary-foreground/80 text-sm">
               Your account information and system details
             </p>
           </CardHeader>
           <CardContent className="p-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-1">
-                <p className="text-xs text-gray-400 uppercase tracking-wider font-medium flex items-center gap-1.5">
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium flex items-center gap-1.5">
                   <UserIcon className="h-3.5 w-3.5" />
                   User ID
                 </p>
-                <p className="text-sm font-mono text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800/50 px-3 py-2 rounded-lg truncate">
+                <p className="text-sm font-mono text-foreground dark:text-primary-foreground bg-muted dark:bg-black/50 px-3 py-2 rounded-lg truncate">
                   {user?._id || "—"}
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-gray-400 uppercase tracking-wider font-medium flex items-center gap-1.5">
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium flex items-center gap-1.5">
                   <Mail className="h-3.5 w-3.5" />
                   Email
                 </p>
-                <p className="text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800/50 px-3 py-2 rounded-lg">
+                <p className="text-sm text-foreground dark:text-primary-foreground bg-muted dark:bg-black/50 px-3 py-2 rounded-lg">
                   {form.email || "—"}
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-gray-400 uppercase tracking-wider font-medium flex items-center gap-1.5">
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium flex items-center gap-1.5">
                   <Phone className="h-3.5 w-3.5" />
                   Phone
                 </p>
-                <p className="text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800/50 px-3 py-2 rounded-lg">
+                <p className="text-sm text-foreground dark:text-primary-foreground bg-muted dark:bg-black/50 px-3 py-2 rounded-lg">
                   {form.phone || "—"}
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-gray-400 uppercase tracking-wider font-medium flex items-center gap-1.5">
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium flex items-center gap-1.5">
                   <Store className="h-3.5 w-3.5" />
                   Role
                 </p>
-                <p className="text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800/50 px-3 py-2 rounded-lg capitalize">
+                <p className="text-sm text-foreground dark:text-primary-foreground bg-muted dark:bg-black/50 px-3 py-2 rounded-lg capitalize">
                   {user?.role || "—"}
                 </p>
               </div>
@@ -502,27 +502,27 @@ export default function SettingsPage() {
 
       {/* Password Section */}
       <motion.div variants={fadeInUp} initial="initial" animate="animate">
-        <Card className="bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm shadow-xl border border-gray-100 dark:border-gray-700/30 overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-purple-500 to-fuchsia-600 text-white">
+        <Card className="bg-card/80 dark:bg-card/40 backdrop-blur-sm shadow-xl border border-border dark:border-border/30 overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-brand to-brand-hover text-primary-foreground">
             <CardTitle className="text-xl flex items-center gap-2">
               <Lock className="h-5 w-5" />
               Security
             </CardTitle>
-            <p className="text-white/80 text-sm">
+            <p className="text-primary-foreground/80 text-sm">
               Manage your password and account security
             </p>
           </CardHeader>
           <CardContent className="p-8">
-            <div className="bg-purple-50 dark:bg-purple-900/10 rounded-2xl p-6 border border-purple-100 dark:border-purple-900/30">
+            <div className="bg-brand-soft dark:bg-brand-soft/10 rounded-2xl p-6 border border-brand/40 dark:border-brand/60/30">
               <div className="flex items-start gap-4">
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-xl shrink-0">
-                  <Lock className="h-5 w-5 text-purple-500" />
+                <div className="p-2 bg-brand-soft dark:bg-brand-soft/30 rounded-xl shrink-0">
+                  <Lock className="h-5 w-5 text-brand" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
+                  <h4 className="font-semibold text-foreground dark:text-primary-foreground mb-1">
                     Change Password
                   </h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-4">
                     You'll receive a password reset link on your registered
                     email: <strong>{user?.email || "your email"}</strong>
                   </p>

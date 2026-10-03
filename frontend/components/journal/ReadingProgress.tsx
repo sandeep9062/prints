@@ -56,7 +56,7 @@ export default function ReadingProgress() {
       style={{ top: "var(--navbar-height, 65px)" }}
     >
       <div
-        className="h-full origin-left bg-gradient-to-r from-[#8A6A2F] via-[#D2AE62] to-[#8A6A2F] shadow-[0_0_10px_rgba(210,174,98,.55)] transition-[transform] duration-100 ease-out"
+        className="h-full origin-left bg-gradient-to-r to-brand-hover -text -text shadow-[0_0_10px_rgba(210,174,98,.55)] transition-[transform] duration-100 ease-out"
         style={{ transform: `scaleX(${progress})` }}
       />
     </div>

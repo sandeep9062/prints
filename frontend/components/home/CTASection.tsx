@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button";
 
 /*
   Design notes
-  - Same system as hero / testimonials / footer / atelier: bottle-green
-    desk (#1F3A32), bone paper (#F7F4EE), foil gold (#B08D4A / #D2AE62),
-    wax rose (#A24B4B). Dark mode: deep green #121C18.
-  - The CTA is a stationery card on the desk: bone paper, grain and a
-    double gold rule, like the cards in testimonials and the footer CTA.
+  - Same system as hero / testimonials / footer / atelier: midnight navy desk
+    (bg-footer), champagne gold, brand-blue seal. The section behind the card is
+    the cool off-white `bg-muted` so the navy card reads as a card.
+  - The CTA is a stationery card on the desk: navy card, grain, a double gold
+    rule and a gold-foil headline, like the cards in testimonials and the
+    footer CTA.
   - Crop marks at the trim corners echo the Atelier press-sheet frame.
 */
 
@@ -63,7 +64,7 @@ export const CTASection: React.FC = () => {
     <section
       ref={sectionRef}
       aria-labelledby="cta-heading"
-      className="relative overflow-hidden bg-[#1F3A32] py-20 dark:bg-[#121C18] lg:py-24"
+      className="relative overflow-hidden bg-muted py-20 lg:py-24"
     >
       <div
         aria-hidden="true"
@@ -72,7 +73,7 @@ export const CTASection: React.FC = () => {
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[640px] w-[1440px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D2AE62]/10 blur-[200px]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[640px] w-[1440px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/10 blur-[200px]"
       />
 
       <div className="container relative mx-auto px-6">
@@ -81,49 +82,51 @@ export const CTASection: React.FC = () => {
             <span
               key={m}
               aria-hidden="true"
-              className={`absolute bg-[#E4E9DD]/50 ${m}`}
+              className={`absolute bg-foreground/50 ${m}`}
             />
           ))}
 
-          <div className="relative overflow-hidden rounded-sm bg-[#F7F4EE] shadow-[0_64px_160px_-56px_rgba(0,0,0,.6)]">
+          <div className="relative overflow-hidden rounded-sm bg-footer shadow-[0_64px_160px_-56px_rgba(0,0,0,.6)]">
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 opacity-[.22] mix-blend-multiply"
+              className="pointer-events-none absolute inset-0 opacity-[.22] mix-blend-overlay"
               style={{ backgroundImage: GRAIN }}
             />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-6 border-2 border-[#B08D4A]"
+              className="pointer-events-none absolute inset-6 border-2 border-gold"
             />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-8 border border-[#B08D4A]/50"
+              className="pointer-events-none absolute inset-8 border border-gold/50"
             />
 
             <div className="relative px-10 py-12 text-center sm:px-16 sm:py-14 lg:px-20 lg:py-16">
               <div
                 className={`flex items-center justify-center gap-6 ${reveal("delay-100")}`}
               >
-                <span aria-hidden="true" className="h-0.5 w-16 bg-[#1F3A32]/40" />
-                <span className="text-sm font-medium uppercase tracking-[0.35em] text-[#1F3A32]/70">
+                <span aria-hidden="true" className="h-0.5 w-16 bg-gold/50" />
+                <span className="text-sm font-medium text-footer-muted">
                   Bespoke services
                 </span>
-                <span aria-hidden="true" className="h-0.5 w-16 bg-[#1F3A32]/40" />
+                <span aria-hidden="true" className="h-0.5 w-16 bg-gold/50" />
               </div>
 
               <div className="mt-10 grid items-center gap-12 lg:grid-cols-12 lg:gap-16 lg:text-left">
                 <div className="lg:col-span-7">
                   <h2
                     id="cta-heading"
-                    className={`font-serif text-5xl font-medium leading-[1.08] tracking-tight text-[#1F3A32] sm:text-6xl lg:text-7xl xl:text-8xl ${reveal("delay-200")}`}
+                    className={`font-serif text-5xl font-medium leading-[1.08] tracking-tight text-footer-foreground sm:text-6xl lg:text-7xl xl:text-8xl ${reveal("delay-200")}`}
                   >
                     Your vision,{" "}
-                    <span className="italic text-[#8A6A2F]">exquisitely</span>{" "}
+                    {/* Large display line, so plain gold is used here (not
+                        gold-text, which is for small text on light paper). */}
+                    <span className="italic text-gold">exquisitely</span>{" "}
                     rendered.
                   </h2>
 
                   <p
-                    className={`mx-auto mt-6 max-w-[52ch] text-lg leading-relaxed text-[#1F3A32]/80 sm:text-xl lg:mx-0 lg:text-2xl ${reveal("delay-300")}`}
+                    className={`mx-auto mt-6 max-w-[52ch] text-lg leading-relaxed text-footer-muted sm:text-xl lg:mx-0 lg:text-2xl ${reveal("delay-300")}`}
                   >
                     From sketch to final emboss — begin your design consultation
                     today.
@@ -134,7 +137,7 @@ export const CTASection: React.FC = () => {
                   <div className="flex flex-col items-center justify-center gap-6 sm:flex-row lg:justify-end">
                     <Button
                       asChild
-                      className="h-16 min-w-[260px] rounded-full bg-[#1F3A32] px-10 text-base text-[#F7F4EE] transition-colors hover:bg-[#2B4F44] focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE] lg:h-20 lg:px-12 lg:text-lg"
+                      className="h-16 min-w-[260px] rounded-full bg-gold px-10 text-base text-footer transition-colors hover:bg-gold/85 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer lg:h-20 lg:px-12 lg:text-lg"
                     >
                       <Link href="/customize">
                         <PenLine className="h-6 w-6" aria-hidden="true" />
@@ -145,7 +148,7 @@ export const CTASection: React.FC = () => {
                     <Button
                       asChild
                       variant="outline"
-                      className="h-16 min-w-[260px] rounded-full border-[#1F3A32]/40 bg-transparent px-10 text-base text-[#1F3A32] transition-colors hover:border-[#1F3A32] hover:bg-[#1F3A32]/5 focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE] lg:h-20 lg:px-12 lg:text-lg"
+                      className="h-16 min-w-[260px] rounded-full border-footer-foreground/40 bg-transparent px-10 text-base text-footer-foreground transition-colors hover:border-footer-foreground/10 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer lg:h-20 lg:px-12 lg:text-lg"
                     >
                       <Link href="/contact">
                         <Phone className="h-6 w-6" aria-hidden="true" />
@@ -155,12 +158,12 @@ export const CTASection: React.FC = () => {
                   </div>
 
                   <p
-                    className={`mt-6 text-base text-[#1F3A32]/60 sm:text-lg lg:text-right lg:text-xl ${reveal("delay-500")}`}
+                    className={`mt-6 text-base text-footer-muted sm:text-lg lg:text-right lg:text-xl ${reveal("delay-500")}`}
                   >
                     Prefer to browse first?{" "}
                     <Link
                       href="/products"
-                      className="inline-flex items-center gap-1 underline decoration-[#B08D4A] decoration-1 underline-offset-4 transition-colors hover:text-[#1F3A32] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]"
+                      className="inline-flex items-center gap-1 font-medium text-footer-foreground underline decoration-gold decoration-1 underline-offset-4 transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer"
                     >
                       Explore the collection
                       <ArrowRight className="h-6 w-6" aria-hidden="true" />

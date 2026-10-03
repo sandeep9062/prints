@@ -123,36 +123,36 @@ const statusConfig: Record<
 > = {
   pending: {
     label: "Pending",
-    color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+    color: "bg-gold/15 text-gold-text border-gold/50",
     icon: <Clock className="h-3 w-3" />,
   },
   processing: {
     label: "Processing",
-    color: "bg-blue-100 text-blue-800 border-blue-200",
+    color: "bg-brand-soft text-foreground border-brand/40",
     icon: <RefreshCw className="h-3 w-3" />,
   },
   shipped: {
     label: "Shipped",
-    color: "bg-purple-100 text-purple-800 border-purple-200",
+    color: "bg-brand-soft text-brand/40",
     icon: <Truck className="h-3 w-3" />,
   },
   delivered: {
     label: "Delivered",
-    color: "bg-green-100 text-green-800 border-green-200",
+    color: "bg-success/10 text-success/40",
     icon: <CheckCircle className="h-3 w-3" />,
   },
   cancelled: {
     label: "Cancelled",
-    color: "bg-red-100 text-red-800 border-red-200",
+    color: "bg-destructive/10 text-destructive/40",
     icon: <X className="h-3 w-3" />,
   },
 };
 
 const paymentConfig: Record<string, { label: string; color: string }> = {
-  pending: { label: "Pending", color: "bg-yellow-50 text-yellow-700" },
-  paid: { label: "Paid", color: "bg-green-50 text-green-700" },
-  failed: { label: "Failed", color: "bg-red-50 text-red-700" },
-  refunded: { label: "Refunded", color: "bg-gray-100 text-gray-600" },
+  pending: { label: "Pending", color: "bg-gold/15 text-gold-text" },
+  paid: { label: "Paid", color: "bg-success/10 text-success" },
+  failed: { label: "Failed", color: "bg-destructive/10 text-destructive" },
+  refunded: { label: "Refunded", color: "bg-muted-foreground" },
 };
 
 function formatCurrency(amount: number): string {
@@ -191,8 +191,8 @@ function StatsCard({
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-500">{title}</p>
-            <h3 className="text-2xl font-bold mt-1">{value}</h3>
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            <h3 className="font-sans text-2xl font-semibold mt-1">{value}</h3>
           </div>
           <div
             className={`h-12 w-12 rounded-full flex items-center justify-center ${color}`}
@@ -246,7 +246,7 @@ function OrderDetailModal({
         <div className="space-y-6">
           {/* Customer Info */}
           <div>
-            <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+            <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">
               Customer
             </h4>
             <div className="flex items-center gap-3">
@@ -255,7 +255,7 @@ function OrderDetailModal({
               </Avatar>
               <div>
                 <p className="font-medium">{order.user?.name || "N/A"}</p>
-                <p className="text-sm text-gray-500">{order.user?.email}</p>
+                <p className="text-sm text-muted-foreground">{order.user?.email}</p>
               </div>
             </div>
           </div>
@@ -265,10 +265,10 @@ function OrderDetailModal({
           {/* Shipping Address */}
           {order.address && (
             <div>
-              <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+              <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                 Shipping Address
               </h4>
-              <div className="text-sm text-gray-700 space-y-0.5">
+              <div className="text-sm text-foreground space-y-0.5">
                 {order.address.fullName && <p>{order.address.fullName}</p>}
                 {order.address.street && <p>{order.address.street}</p>}
                 <p>
@@ -285,27 +285,27 @@ function OrderDetailModal({
 
           {/* Order Items */}
           <div>
-            <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+            <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
               Items ({order.items?.length || 0})
             </h4>
             <div className="space-y-3">
               {order.items?.map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center gap-4 p-3 bg-muted rounded-lg"
                 >
                   {item.product?.images?.[0] && (
                     <img
                       src={item.product.images[0]}
                       alt={item.product.name || "Product"}
-                      className="h-14 w-14 rounded-md object-cover bg-white"
+                      className="h-14 w-14 rounded-md object-cover bg-card"
                     />
                   )}
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm truncate">
                       {item.product?.name || "Custom Product"}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       Qty: {item.quantity} × {formatCurrency(item.price)}
                     </p>
                   </div>
@@ -322,18 +322,18 @@ function OrderDetailModal({
           {/* Payment & Status */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">
+              <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                 Payment
               </h4>
               <Badge variant="secondary" className={paymentInfo.color}>
                 {paymentInfo.label}
               </Badge>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 {order.paymentMethod || "N/A"}
               </p>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">
+              <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                 Total
               </h4>
               <p className="text-xl font-bold">
@@ -346,7 +346,7 @@ function OrderDetailModal({
 
           {/* Update Status */}
           <div>
-            <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+            <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">
               Update Status
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -559,11 +559,11 @@ const AdminOrders = () => {
         : "Failed to load orders";
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
-        <h2 className="text-xl font-semibold text-gray-700 mb-2">
+        <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+        <h2 className="text-xl font-semibold text-foreground mb-2">
           Failed to Load Orders
         </h2>
-        <p className="text-gray-500 mb-6">{errMsg}</p>
+        <p className="text-muted-foreground mb-6">{errMsg}</p>
         <Button onClick={refetch} variant="default">
           <RefreshCw className="mr-2 h-4 w-4" />
           Retry
@@ -580,10 +580,10 @@ const AdminOrders = () => {
       {/* ==================== HEADER ==================== */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+          <h1 className="font-sans text-2xl lg:text-3xl font-semibold text-foreground">
             Global Orders
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Manage and track all customer orders
           </p>
         </div>
@@ -603,32 +603,32 @@ const AdminOrders = () => {
         <StatsCard
           title="Total Orders"
           value={stats.total}
-          icon={<ShoppingCart className="h-6 w-6 text-blue-700" />}
-          color="bg-blue-100"
+          icon={<ShoppingCart className="h-6 w-6 text-brand" />}
+          color="bg-brand-soft"
         />
         <StatsCard
           title="Pending"
           value={stats.pending}
-          icon={<Clock className="h-6 w-6 text-yellow-700" />}
-          color="bg-yellow-100"
+          icon={<Clock className="h-6 w-6 text-gold-text" />}
+          color="bg-gold/15"
         />
         <StatsCard
           title="Processing"
           value={stats.processing}
-          icon={<Package className="h-6 w-6 text-blue-700" />}
-          color="bg-blue-100"
+          icon={<Package className="h-6 w-6 text-brand" />}
+          color="bg-brand-soft"
         />
         <StatsCard
           title="Delivered"
           value={stats.delivered}
-          icon={<CheckCircle className="h-6 w-6 text-green-700" />}
-          color="bg-green-100"
+          icon={<CheckCircle className="h-6 w-6 text-success" />}
+          color="bg-success/10"
         />
         <StatsCard
           title="Revenue"
           value={formatCurrency(stats.revenue)}
-          icon={<ShoppingCart className="h-6 w-6 text-purple-700" />}
-          color="bg-purple-100"
+          icon={<ShoppingCart className="h-6 w-6 text-brand" />}
+          color="bg-brand-soft"
         />
       </div>
 
@@ -637,7 +637,7 @@ const AdminOrders = () => {
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search by order ID, customer name or email..."
                 className="pl-10"
@@ -679,22 +679,22 @@ const AdminOrders = () => {
         <CardContent className="p-0">
           {showEmpty ? (
             <div className="flex flex-col items-center justify-center py-16 px-4">
-              <ShoppingCart className="h-12 w-12 text-gray-300 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-600 mb-1">
+              <ShoppingCart className="h-12 w-12 text-muted-foreground/70 mb-4" />
+              <h3 className="text-lg font-semibold text-muted-foreground mb-1">
                 No Orders Yet
               </h3>
-              <p className="text-sm text-gray-400 text-center max-w-sm">
+              <p className="text-sm text-muted-foreground text-center max-w-sm">
                 Orders placed by customers will appear here. When someone
                 completes a checkout, their order will show up in this list.
               </p>
             </div>
           ) : paginatedOrders.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 px-4">
-              <Search className="h-12 w-12 text-gray-300 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-600 mb-1">
+              <Search className="h-12 w-12 text-muted-foreground/70 mb-4" />
+              <h3 className="text-lg font-semibold text-muted-foreground mb-1">
                 No Matching Orders
               </h3>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 Try adjusting your search or filter criteria.
               </p>
             </div>
@@ -731,13 +731,13 @@ const AdminOrders = () => {
                               <div className="font-medium text-sm">
                                 {order.user?.name || "Guest"}
                               </div>
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-muted-foreground">
                                 {order.user?.email}
                               </div>
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell className="text-sm text-gray-600">
+                        <TableCell className="text-sm text-muted-foreground">
                           {order.items?.length || 0} item
                           {(order.items?.length || 0) !== 1 ? "s" : ""}
                         </TableCell>
@@ -750,7 +750,7 @@ const AdminOrders = () => {
                         <TableCell>
                           {renderPaymentBadge(order.paymentStatus)}
                         </TableCell>
-                        <TableCell className="text-sm text-gray-500 whitespace-nowrap">
+                        <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
                           {formatDate(order.createdAt)}
                         </TableCell>
                         <TableCell className="text-right">
@@ -801,7 +801,7 @@ const AdminOrders = () => {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
+                              className="h-8 w-8 text-destructive hover:text-brand hover:bg-destructive/10"
                               onClick={() => handleDeleteClick(order)}
                             >
                               <Trash2 className="h-3.5 w-3.5" />
@@ -816,7 +816,7 @@ const AdminOrders = () => {
 
               {/* Pagination */}
               <div className="flex items-center justify-between px-6 py-4 border-t">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   Showing {(safePage - 1) * itemsPerPage + 1} to{" "}
                   {Math.min(safePage * itemsPerPage, filteredOrders.length)} of{" "}
                   {filteredOrders.length} orders
@@ -873,7 +873,7 @@ const AdminOrders = () => {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-red-500 hover:bg-red-600"
+              className="bg-primary hover:bg-brand-hover"
               onClick={confirmDelete}
             >
               Delete

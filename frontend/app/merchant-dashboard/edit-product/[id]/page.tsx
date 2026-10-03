@@ -175,8 +175,8 @@ export default function EditProductPage() {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-68px)]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-500 dark:text-gray-400">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand mx-auto mb-4"></div>
+          <p className="text-muted-foreground dark:text-muted-foreground">
             Loading product details...
           </p>
         </div>
@@ -188,7 +188,7 @@ export default function EditProductPage() {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-68px)]">
         <div className="text-center">
-          <p className="text-red-500 text-lg font-medium">
+          <p className="text-destructive text-lg font-medium">
             Failed to load product.
           </p>
           <Link href="/merchant-dashboard">
@@ -203,13 +203,13 @@ export default function EditProductPage() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <Card className="bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm shadow-xl border border-gray-100 dark:border-gray-700/30 overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+      <Card className="bg-card/80 dark:bg-card/40 backdrop-blur-sm shadow-xl border border-border dark:border-border/30 overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-brand to-brand-hover text-primary-foreground">
           <CardTitle className="text-2xl flex items-center gap-2">
             <Sparkles className="h-6 w-6" />
             Edit Product Details
           </CardTitle>
-          <p className="text-white/80 text-sm">
+          <p className="text-primary-foreground/80 text-sm">
             Update your product information below
           </p>
         </CardHeader>
@@ -218,10 +218,10 @@ export default function EditProductPage() {
             {/* Basic Info Section */}
             <div className="space-y-6">
               <div className="flex items-center gap-2 mb-4">
-                <div className="p-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                  <Package className="h-5 w-5 text-blue-500" />
+                <div className="p-1.5 bg-brand-soft dark:bg-footer/30 rounded-lg">
+                  <Package className="h-5 w-5 text-brand" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-foreground dark:text-primary-foreground">
                   Basic Information
                 </h3>
               </div>
@@ -234,7 +234,7 @@ export default function EditProductPage() {
                     value={form.name}
                     onChange={handleChange}
                     required
-                    className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-blue-300 dark:focus:border-blue-600"
+                    className="bg-card dark:bg-card border-border dark:border-border focus:border-brand/40 dark:focus:border-brand"
                   />
                 </div>
                 <div className="space-y-2">
@@ -245,7 +245,7 @@ export default function EditProductPage() {
                     value={form.slug}
                     onChange={handleChange}
                     required
-                    className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-blue-300 dark:focus:border-blue-600"
+                    className="bg-card dark:bg-card border-border dark:border-border focus:border-brand/40 dark:focus:border-brand"
                   />
                 </div>
               </div>
@@ -256,18 +256,18 @@ export default function EditProductPage() {
                   name="description"
                   value={form.description}
                   onChange={handleChange}
-                  className="min-h-[120px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-blue-300 dark:focus:border-blue-600"
+                  className="min-h-[120px] bg-card dark:bg-card border-border dark:border-border focus:border-brand/40 dark:focus:border-brand"
                 />
               </div>
             </div>
 
             {/* Pricing Section */}
-            <div className="space-y-6 pt-4 border-t border-gray-100 dark:border-gray-700/30">
+            <div className="space-y-6 pt-4 border-t border-border dark:border-border/30">
               <div className="flex items-center gap-2 mb-4">
-                <div className="p-1.5 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
-                  <Package className="h-5 w-5 text-emerald-500" />
+                <div className="p-1.5 bg-success/10 dark:bg-footer/30 rounded-lg">
+                  <Package className="h-5 w-5 text-success" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-foreground dark:text-primary-foreground">
                   Pricing & Stock
                 </h3>
               </div>
@@ -281,7 +281,7 @@ export default function EditProductPage() {
                     value={form.price}
                     onChange={handleChange}
                     required
-                    className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-emerald-300 dark:focus:border-emerald-600"
+                    className="bg-card dark:bg-card border-border dark:border-border focus:border-success/40 dark:focus:border-success"
                   />
                 </div>
                 <div className="space-y-2">
@@ -292,7 +292,7 @@ export default function EditProductPage() {
                     type="number"
                     value={form.discountPrice}
                     onChange={handleChange}
-                    className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-emerald-300 dark:focus:border-emerald-600"
+                    className="bg-card dark:bg-card border-border dark:border-border focus:border-success/40 dark:focus:border-success"
                   />
                 </div>
                 <div className="space-y-2">
@@ -304,19 +304,19 @@ export default function EditProductPage() {
                     value={form.stock}
                     onChange={handleChange}
                     required
-                    className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-emerald-300 dark:focus:border-emerald-600"
+                    className="bg-card dark:bg-card border-border dark:border-border focus:border-success/40 dark:focus:border-success"
                   />
                 </div>
               </div>
             </div>
 
             {/* Details Section */}
-            <div className="space-y-6 pt-4 border-t border-gray-100 dark:border-gray-700/30">
+            <div className="space-y-6 pt-4 border-t border-border dark:border-border/30">
               <div className="flex items-center gap-2 mb-4">
-                <div className="p-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                  <Ruler className="h-5 w-5 text-purple-500" />
+                <div className="p-1.5 bg-brand-soft dark:bg-brand-soft/30 rounded-lg">
+                  <Ruler className="h-5 w-5 text-brand" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-foreground dark:text-primary-foreground">
                   Details & Options
                 </h3>
               </div>
@@ -329,7 +329,7 @@ export default function EditProductPage() {
                     value={form.badge}
                     onChange={handleChange}
                     placeholder="e.g., New, Sale"
-                    className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-purple-300 dark:focus:border-purple-600"
+                    className="bg-card dark:bg-card border-border dark:border-border focus:border-brand/40 dark:focus:border-brand"
                   />
                 </div>
                 <div className="space-y-2">
@@ -344,7 +344,7 @@ export default function EditProductPage() {
                         category: e.target.value,
                       }))
                     }
-                    className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-300 dark:focus:ring-purple-600 transition-all"
+                    className="w-full p-2.5 rounded-xl border border-border dark:border-border bg-card dark:bg-card focus:outline-none focus:ring-2 focus:ring-brand dark:focus:ring-brand transition-all"
                   >
                     <option value="">Select a category</option>
                     <option value="visiting-card">Visiting Card</option>
@@ -375,7 +375,7 @@ export default function EditProductPage() {
                       <button
                         type="button"
                         onClick={() => handleRemoveExistingImage(url)}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all shadow-lg hover:scale-110"
+                        className="absolute -top-2 -right-2 bg-destructive text-primary-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all shadow-lg hover:scale-110"
                       >
                         <X size={14} />
                       </button>
@@ -385,9 +385,9 @@ export default function EditProductPage() {
               </div>
 
               {/* Dimensions */}
-              <fieldset className="border border-gray-200 dark:border-gray-700 rounded-2xl p-6 space-y-4">
+              <fieldset className="border border-border dark:border-border rounded-2xl p-6 space-y-4">
                 <legend className="text-sm font-semibold px-3 flex items-center gap-2">
-                  <Ruler className="h-4 w-4 text-purple-500" />
+                  <Ruler className="h-4 w-4 text-brand" />
                   Dimensions (cm)
                 </legend>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -399,7 +399,7 @@ export default function EditProductPage() {
                       type="number"
                       value={form.dimensions.length}
                       onChange={handleChange}
-                      className="bg-white dark:bg-gray-800"
+                      className="bg-card dark:bg-card"
                     />
                   </div>
                   <div className="space-y-2">
@@ -410,7 +410,7 @@ export default function EditProductPage() {
                       type="number"
                       value={form.dimensions.width}
                       onChange={handleChange}
-                      className="bg-white dark:bg-gray-800"
+                      className="bg-card dark:bg-card"
                     />
                   </div>
                   <div className="space-y-2">
@@ -421,16 +421,16 @@ export default function EditProductPage() {
                       type="number"
                       value={form.dimensions.height}
                       onChange={handleChange}
-                      className="bg-white dark:bg-gray-800"
+                      className="bg-card dark:bg-card"
                     />
                   </div>
                 </div>
               </fieldset>
 
               {/* Options */}
-              <fieldset className="border border-gray-200 dark:border-gray-700 rounded-2xl p-6 space-y-4">
+              <fieldset className="border border-border dark:border-border rounded-2xl p-6 space-y-4">
                 <legend className="text-sm font-semibold px-3 flex items-center gap-2">
-                  <Palette className="h-4 w-4 text-purple-500" />
+                  <Palette className="h-4 w-4 text-brand" />
                   Product Options
                 </legend>
                 <div className="space-y-4">
@@ -442,7 +442,7 @@ export default function EditProductPage() {
                       value={form.options.sizes}
                       onChange={handleChange}
                       placeholder="S, M, L, XL"
-                      className="bg-white dark:bg-gray-800"
+                      className="bg-card dark:bg-card"
                     />
                   </div>
                   <div className="space-y-2">
@@ -455,7 +455,7 @@ export default function EditProductPage() {
                       value={form.options.paperTypes}
                       onChange={handleChange}
                       placeholder="Glossy, Matte, Premium"
-                      className="bg-white dark:bg-gray-800"
+                      className="bg-card dark:bg-card"
                     />
                   </div>
                   <div className="space-y-2">
@@ -466,7 +466,7 @@ export default function EditProductPage() {
                       value={form.options.colors}
                       onChange={handleChange}
                       placeholder="Red, Blue, Black"
-                      className="bg-white dark:bg-gray-800"
+                      className="bg-card dark:bg-card"
                     />
                   </div>
                 </div>
@@ -474,15 +474,15 @@ export default function EditProductPage() {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex gap-4 pt-6 border-t border-border dark:border-border">
               <Button
                 type="submit"
-                className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white flex-1 text-lg py-3 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+                className="bg-gradient-to-r from-brand to-brand-hover hover:from-brand hover:to-brand-hover text-primary-foreground flex-1 text-lg py-3 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
                 disabled={isUpdating}
               >
                 {isUpdating ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-border mr-2"></div>
                     Updating Product...
                   </>
                 ) : (
@@ -496,7 +496,7 @@ export default function EditProductPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="px-8 py-3 text-lg border-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 transition-all duration-200"
+                  className="px-8 py-3 text-lg border-border dark:border-border dark:hover:bg-brand-hover transition-all duration-200"
                 >
                   Cancel
                 </Button>

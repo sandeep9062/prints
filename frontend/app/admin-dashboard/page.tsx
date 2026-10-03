@@ -56,17 +56,17 @@ const getStatusColor = (status: string) => {
   switch (normalized) {
     case "delivered":
     case "completed":
-      return "bg-green-100 text-green-800";
+      return "bg-success/10 text-success";
     case "processing":
-      return "bg-blue-100 text-blue-800";
+      return "bg-brand-soft text-foreground";
     case "shipped":
-      return "bg-purple-100 text-purple-800";
+      return "bg-brand-soft text-brand";
     case "pending":
-      return "bg-yellow-100 text-yellow-800";
+      return "bg-gold/15 text-gold-text";
     case "cancelled":
-      return "bg-red-100 text-red-800";
+      return "bg-destructive/10 text-destructive";
     default:
-      return "bg-gray-100 text-gray-800";
+      return "bg-muted text-foreground";
   }
 };
 
@@ -231,8 +231,8 @@ const AdminDashboard = () => {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <Loader2 className="h-10 w-10 animate-spin text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">Loading dashboard data...</p>
+          <Loader2 className="h-10 w-10 animate-spin text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading dashboard data...</p>
         </div>
       </div>
     );
@@ -242,11 +242,11 @@ const AdminDashboard = () => {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-          <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-foreground mb-2">
             Failed to load dashboard
           </h2>
-          <p className="text-gray-500 mb-6">
+          <p className="text-muted-foreground mb-6">
             There was an error fetching the data. Please check your connection
             and try again.
           </p>
@@ -263,10 +263,10 @@ const AdminDashboard = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+          <h1 className="font-sans text-2xl lg:text-3xl font-semibold text-foreground">
             Dashboard Overview
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Welcome back! Here's what's happening today.
           </p>
         </div>
@@ -290,12 +290,12 @@ const AdminDashboard = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-500">
+                  <p className="text-sm font-medium text-muted-foreground">
                     {stat.title}
                   </p>
-                  <h3 className="text-2xl font-bold mt-1">{stat.value}</h3>
+                  <h3 className="font-sans text-2xl font-semibold mt-1">{stat.value}</h3>
                   <div
-                    className={`flex items-center mt-1 text-sm ${stat.trend === "up" ? "text-green-600" : "text-red-600"}`}
+                    className={`flex items-center mt-1 text-sm ${stat.trend === "up" ? "text-success" : "text-destructive"}`}
                   >
                     {stat.trend === "up" ? (
                       <TrendingUp className="h-3 w-3 mr-1" />
@@ -305,8 +305,8 @@ const AdminDashboard = () => {
                     {stat.change}
                   </div>
                 </div>
-                <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
-                  <stat.icon className="h-6 w-6 text-gray-700" />
+                <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
+                  <stat.icon className="h-6 w-6 text-foreground" />
                 </div>
               </div>
             </CardContent>
@@ -326,16 +326,16 @@ const AdminDashboard = () => {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={salesData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="name" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
+                <YAxis stroke="hsl(var(--muted-foreground))" />
                 <Tooltip />
                 <Line
                   type="monotone"
                   dataKey="value"
-                  stroke="#16a34a"
+                  stroke="hsl(var(--chart-1))"
                   strokeWidth={2}
-                  dot={{ fill: "#16a34a" }}
+                  dot={{ fill: "hsl(var(--chart-1))" }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -350,11 +350,11 @@ const AdminDashboard = () => {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={orderData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="name" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
+                <YAxis stroke="hsl(var(--muted-foreground))" />
                 <Tooltip />
-                <Bar dataKey="orders" fill="#4f46e5" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="orders" fill="hsl(var(--chart-5))" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -376,8 +376,8 @@ const AdminDashboard = () => {
         </CardHeader>
         <CardContent>
           {recentOrders.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              <ShoppingCart className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+            <div className="text-center py-12 text-muted-foreground">
+              <ShoppingCart className="h-8 w-8 mx-auto mb-2 text-muted-foreground/70" />
               <p>No orders yet</p>
             </div>
           ) : (
@@ -400,7 +400,7 @@ const AdminDashboard = () => {
                       <div>
                         <div className="font-medium">{order.customer}</div>
                         {order.email && (
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-muted-foreground">
                             {order.email}
                           </div>
                         )}
@@ -415,7 +415,7 @@ const AdminDashboard = () => {
                         {order.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-gray-500">
+                    <TableCell className="text-muted-foreground">
                       {order.date}
                     </TableCell>
                     <TableCell className="text-right">

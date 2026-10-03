@@ -2,13 +2,15 @@
 // SEO Constants & Configuration for Ink of Memories
 // ============================================================
 
+import { BRAND_NAME, FOUNDED_YEAR, LEGAL_NAME } from "./site-config";
+
 export const SITE_CONFIG = {
-  name: "Ink of Memories",
-  businessName: "Samlason Printing Press",
+  name: BRAND_NAME,
+  businessName: LEGAL_NAME,
   tagline: "Premium Printing & Design Services",
-  fullName: "Ink of Memories | Premium Printing",
+  fullName: `${BRAND_NAME} | Premium Printing`,
   description:
-    "Premium printing services from Samlason Printing Press since 2004. Wedding cards, visiting cards, brochures, banners, packaging & personalized gifts. Custom printing with hand-pressed quality in Panchkula.",
+    `Premium printing services from ${LEGAL_NAME} since ${FOUNDED_YEAR}. Wedding cards, visiting cards, brochures, banners, packaging & personalized gifts. Custom printing with hand-pressed quality in Panchkula.`,
   shortDescription:
     "Premium printing services for weddings, business & personal needs. Custom invitation cards, visiting cards & packaging.",
   url: "https://inkofmemories.com",
@@ -17,7 +19,7 @@ export const SITE_CONFIG = {
   favicon: "/favicon.ico",
   locale: "en_IN",
   language: "en",
-  siteName: "Ink of Memories",
+  siteName: BRAND_NAME,
   keywords: [
     "printing press",
     "wedding cards",
@@ -31,7 +33,6 @@ export const SITE_CONFIG = {
     "gold foil printing",
     "Panchkula printing",
     "Chandigarh printing",
-    "Samlason Printing",
     "Ink of Memories",
     "premium printing India",
   ],
@@ -169,7 +170,7 @@ export function getOrganizationSchema() {
     logo: `${SITE_CONFIG.url}/inkofmemories.png`,
     image: SITE_CONFIG.defaultImage,
     description: SITE_CONFIG.description,
-    foundingDate: "2004",
+    foundingDate: String(FOUNDED_YEAR),
     foundingLocation: "Panchkula, Haryana",
     areaServed: [
       { "@type": "City", name: "Panchkula" },

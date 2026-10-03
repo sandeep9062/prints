@@ -23,10 +23,10 @@ import { getRootSeoStaticParams } from "@/lib/seoListings";
  * stays in the server-rendered HTML (crawlable, no client JS) — it's only
  * visually tucked away so the section doesn't grow endlessly on mobile.
  */
-const BRAND = "#4161df";
-const BRAND_TINT = "#EEF1FC";
-const INK = "#161A2E";
-const INK_SOFT = "#5C5F73";
+const BRAND = "hsl(var(--brand))";
+const BRAND_TINT = "hsl(var(--brand-soft))";
+const INK = "hsl(var(--foreground))";
+const INK_SOFT = "hsl(var(--muted-foreground))";
 
 export interface QuickLinkItem {
   href: string;
@@ -96,7 +96,7 @@ function makeGroups(): QuickLinkGroup[] {
         color: BRAND,
         tint: BRAND_TINT,
         linkHover:
-          "hover:bg-[#EEF1FC] hover:text-[#4161df] focus-visible:ring-[#4161df]",
+          "hover:bg-brand-soft hover:text-brand focus-visible:ring-brand",
       },
       items: [],
     },
@@ -106,10 +106,10 @@ function makeGroups(): QuickLinkGroup[] {
       blurb: "Category pages by locality",
       icon: Compass,
       accent: {
-        color: "#059669",
-        tint: "#E6F6EF",
+        color: "hsl(var(--success))",
+        tint: "hsl(var(--success) / 0.12)",
         linkHover:
-          "hover:bg-[#E6F6EF] hover:text-[#059669] focus-visible:ring-[#059669]",
+          "hover:bg-success/10 hover:text-success focus-visible:ring-success",
       },
       items: [],
     },
@@ -133,7 +133,7 @@ function LinkRow({
     <li>
       <Link
         href={item.href}
-        className={`group flex items-center gap-2 rounded-xl px-2.5 py-2 text-sm leading-snug text-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 ${hoverClass}`}
+        className={`group flex items-center gap-2 rounded-xl px-2.5 py-2 text-sm leading-snug text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 ${hoverClass}`}
       >
         <span className="line-clamp-2">{item.label}</span>
         {/* Always faintly visible on touch (no hover there); reveals on hover for mouse users. */}
@@ -248,13 +248,13 @@ export default async function QuickLinks({
             {title}
           </h2>
           {subtitle && (
-            <p className="mt-1 max-w-2xl text-sm text-slate-500">{subtitle}</p>
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>
           )}
         </div>
 
         <Link
           href="/products"
-          className="group inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-transparent hover:bg-[#4161df] hover:text-white hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4161df] focus-visible:ring-offset-2"
+          className="group inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-transparent hover:bg-brand hover:text-primary-foreground hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
         >
           Browse all products
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -275,7 +275,7 @@ export default async function QuickLinks({
           return (
             <div
               key={group.key}
-              className="relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+              className="relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
             >
               {/* accent bar */}
               <span
@@ -284,7 +284,7 @@ export default async function QuickLinks({
                 style={{ background: group.accent.color }}
               />
 
-              <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-3 border-b border-border pb-4">
                 <span
                   className="flex size-10 shrink-0 items-center justify-center rounded-xl"
                   style={{
@@ -333,7 +333,7 @@ export default async function QuickLinks({
               {hidden.length > 0 && (
                 <details className="group/more mt-1">
                   <summary
-                    className="flex cursor-pointer list-none items-center justify-center gap-1 rounded-xl px-2.5 py-2 text-xs font-semibold transition-colors hover:bg-slate-50 [&::-webkit-details-marker]:hidden"
+                    className="flex cursor-pointer list-none items-center justify-center gap-1 rounded-xl px-2.5 py-2 text-xs font-semibold transition-colors hover:bg-muted [&::-webkit-details-marker]:hidden"
                     style={{ color: group.accent.color }}
                   >
                     <span className="group-open/more:hidden">

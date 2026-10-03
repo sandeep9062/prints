@@ -29,12 +29,12 @@ const AuthPage = () => {
         title={isLogin ? "Sign In to Your Account" : "Create an Account"}
         description={
           isLogin
-            ? "Sign in to Ink of Memories to review digital proofs, re-order your bespoke stationery and manage printing projects with Samlason Printing Press."
+            ? "Sign in to Ink of Memories to review digital proofs, re-order your bespoke stationery and manage printing projects with Ink of Memories."
             : "Create your Ink of Memories account to save bespoke designs, approve 3D proofs and unlock member pricing on premium printing in Panchkula."
         }
         path="/auth"
         image="https://inkofmemories.com/inkofmemories.png"
-        keywords="login ink of memories, sign up printing account, Samlason Printing Press client account"
+        keywords="login ink of memories, sign up printing account, Ink of Memories client account"
         jsonLd={breadcrumbSchema}
       />
 

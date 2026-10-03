@@ -9,6 +9,7 @@
 import type { Metadata } from "next";
 
 import { SITE_CONFIG } from "@/lib/seo";
+import { FOUNDED_YEAR } from "@/lib/site-config";
 import type { ResolvedSlug } from "@/lib/rootSlugPatterns";
 
 const TITLE_MAX = 60;
@@ -37,7 +38,7 @@ export function buildRootSeoMetadata(
   );
 
   const description = isNear
-    ? `${resolved.categoryName} printing near ${place}. ${resolved.blurb} Printed in-house at our ${SITE_CONFIG.address.city} press since 2004.`
+    ? `${resolved.categoryName} printing near ${place}. ${resolved.blurb} Printed in-house at our ${SITE_CONFIG.address.city} press since ${FOUNDED_YEAR}.`
     : `${resolved.categorySingular} printing in ${place}. ${resolved.blurb} Custom finishing, proof before print and bulk orders welcome.`;
 
   const url = slug ? `${SITE_CONFIG.url}/${slug}` : SITE_CONFIG.url;

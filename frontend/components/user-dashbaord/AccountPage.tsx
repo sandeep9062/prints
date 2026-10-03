@@ -9,12 +9,12 @@ const AccountPage = () => {
   const [activeTab, setActiveTab] = useState("orders");
 
   return (
-    <div className="min-h-screen bg-[#FBFBFA] py-16">
+    <div className="min-h-screen bg-background py-16">
       <div className="container mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-12 gap-16">
           {/* Sidebar Section */}
           <div className="lg:col-span-3">
-            <h1 className="font-serif text-4xl text-stone-900 mb-12">
+            <h1 className="font-serif text-4xl text-foreground mb-12">
               My Account
             </h1>
             <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
@@ -22,11 +22,11 @@ const AccountPage = () => {
 
           {/* Main Content Section */}
           <div className="lg:col-span-9">
-            <div className="flex items-center justify-between mb-10 pb-4 border-b border-stone-200">
-              <h2 className="font-serif text-2xl text-stone-900">
+            <div className="flex items-center justify-between mb-10 pb-4 border-b border-border">
+              <h2 className="font-sans text-2xl text-foreground">
                 Order History
               </h2>
-              <button className="flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase text-stone-400 hover:text-stone-900 transition-colors">
+              <button className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground hover:text-foreground transition-colors">
                 <Filter className="w-4 h-4" />
                 Filter
               </button>

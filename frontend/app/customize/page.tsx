@@ -95,16 +95,18 @@ const PARTICLE_POSITIONS = [
 ];
 
 // ─── Confetti helper ───
+// Celebratory burst on completion, drawn from the brand palette so the pieces
+// match the theme instead of a hardcoded rainbow.
 function fireConfetti() {
   const colors = [
-    "#C9A351",
-    "#FFD700",
-    "#FF6B6B",
-    "#48DBFB",
-    "#FF9FF3",
-    "#54A0FF",
-    "#5F27CD",
-    "#FFE66D",
+    "hsl(var(--gold))",
+    "hsl(var(--gold-sheen))",
+    "hsl(var(--brand))",
+    "hsl(var(--brand-soft))",
+    "hsl(var(--blush))",
+    "hsl(var(--ivory))",
+    "hsl(var(--brand-hover))",
+    "hsl(var(--footer))",
   ];
   const container = document.body;
   for (let i = 0; i < 30; i++) {
@@ -161,7 +163,7 @@ class CustomizeErrorBoundary extends React.Component<
         <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/30 flex items-center justify-center p-8">
           <div className="card-elegant p-8 max-w-lg text-center space-y-4">
             <AlertTriangle className="h-12 w-12 text-destructive mx-auto" />
-            <h2 className="font-display text-2xl font-semibold">
+            <h2 className="font-sans text-2xl font-semibold">
               Something went wrong
             </h2>
             <p className="text-muted-foreground text-sm">
@@ -173,7 +175,7 @@ class CustomizeErrorBoundary extends React.Component<
                 this.setState({ hasError: false, error: null });
                 this.props.onReset();
               }}
-              className="bg-primary text-white hover:bg-primary/90"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
             >
               <RotateCcw className="mr-2 h-4 w-4" />
               Restart Studio
@@ -218,7 +220,7 @@ function PrintSpecsModal({
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
             <Ruler className="h-5 w-5 text-primary" />
           </div>
-          <h3 className="font-display text-lg font-semibold">
+          <h3 className="font-sans text-lg font-semibold">
             Print Specifications
           </h3>
         </div>
@@ -275,7 +277,7 @@ function KeyboardShortcutsModal({
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
             <Keyboard className="h-5 w-5 text-primary" />
           </div>
-          <h3 className="font-display text-lg font-semibold">
+          <h3 className="font-sans text-lg font-semibold">
             Keyboard Shortcuts
           </h3>
         </div>
@@ -414,7 +416,7 @@ function PricingCalculator({
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="p-4 rounded-xl bg-gradient-to-br from-primary/5 to-primary/[0.02] border border-primary/10 space-y-3"
+      className="p-4 rounded-xl bg-gradient-to-br from-primary/5 to-primary /[0.02] border border-primary/10 space-y-3"
     >
       <div className="flex items-center gap-2">
         <DollarSign className="h-4 w-4 text-primary" />
@@ -1040,7 +1042,7 @@ const Page = () => {
       <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/30">
         <SEOHelper
           title="Customize Your Wedding Invitation – Design Online | Ink of Memories"
-          description="Design your own wedding invitation card online. Choose fonts, colors, borders, and templates. Premium quality printing by Samlason Printing Press, Panchkula."
+          description="Design your own wedding invitation card online. Choose fonts, colors, borders, and templates. Premium quality printing by Ink of Memories, Panchkula."
           path="/customize"
           image="https://inkofmemories.com/inkofmemories.png"
           keywords="customize wedding invitation, design invitation online, wedding card designer, custom invitation card, personalized wedding cards"
@@ -1086,7 +1088,7 @@ const Page = () => {
                   <Button
                     size="sm"
                     onClick={restoreDraft}
-                    className="bg-primary text-white hover:bg-primary/90"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
                   >
                     Restore
                   </Button>
@@ -1114,7 +1116,7 @@ const Page = () => {
                 <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4">
                   <PartyPopper className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="font-display text-xl font-semibold mb-2">
+                <h3 className="font-sans text-xl font-semibold mb-2">
                   Design Created! 🎉
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
@@ -1132,7 +1134,7 @@ const Page = () => {
                     Create Another
                   </Button>
                   <Button
-                    className="bg-primary text-white"
+                    className="bg-primary text-primary-foreground"
                     onClick={() => {
                       setIsSuccess(false);
                       setShowConfetti(false);
@@ -1302,7 +1304,7 @@ const Page = () => {
                         );
                         handleNext();
                       }}
-                      className="bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 ripple-effect"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 ripple-effect"
                     >
                       Continue
                       <ArrowRight className="ml-1.5 h-4 w-4" />
@@ -1344,7 +1346,7 @@ const Page = () => {
                           handleSubmit(e as unknown as FormEvent);
                         }}
                         disabled={isSubmitting || isSuccess}
-                        className="bg-primary text-white hover:bg-primary/90 disabled:opacity-50 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 min-w-[160px] ripple-effect"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 min-w-[160px] ripple-effect"
                       >
                         {isSubmitting ? (
                           <>
@@ -1411,7 +1413,7 @@ const Page = () => {
 
                   {/* Step indicator in preview */}
                   <div className="flex items-center justify-between mb-4 relative z-20">
-                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-[0.2em]">
+                    <h3 className="text-sm font-medium text-muted-foreground ">
                       ✨ Live Preview
                     </h3>
                     <div className="flex items-center gap-2">

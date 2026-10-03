@@ -143,26 +143,26 @@ export default function AddProductPage() {
     <div className="space-y-0">
       {/* Steps */}
       <div className="max-w-4xl mx-auto mb-8">
-        <div className="flex items-center justify-between bg-white/50 dark:bg-gray-800/20 rounded-2xl p-2 border border-gray-100 dark:border-gray-700/30">
+        <div className="flex items-center justify-between bg-card/50 dark:bg-card/20 rounded-2xl p-2 border border-border dark:border-border/30">
           {steps.map((step, idx) => (
             <div key={idx} className="flex items-center flex-1">
               <button
                 onClick={() => setCurrentStep(step.number)}
                 className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-300 w-full ${
                   currentStep === step.number
-                    ? "bg-gradient-to-r from-rose-500 to-pink-600 text-white shadow-lg"
+                    ? "bg-gradient-to-r from-brand to-brand-hover text-primary-foreground shadow-lg"
                     : currentStep > step.number
-                      ? "text-rose-600 dark:text-rose-400"
-                      : "text-gray-400 dark:text-gray-500"
+                      ? "text-brand dark:text-brand"
+                      : "text-muted-foreground dark:text-muted-foreground"
                 }`}
               >
                 <div
                   className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${
                     currentStep === step.number
-                      ? "bg-white/20"
+                      ? "bg-card/20"
                       : currentStep > step.number
-                        ? "bg-rose-100 dark:bg-rose-900/30"
-                        : "bg-gray-100 dark:bg-gray-800"
+                        ? "bg-brand-soft dark:bg-footer/30"
+                        : "bg-muted dark:bg-card"
                   }`}
                 >
                   {currentStep > step.number ? "✓" : step.number}
@@ -176,8 +176,8 @@ export default function AddProductPage() {
                 <div
                   className={`h-px flex-1 mx-4 ${
                     currentStep > step.number
-                      ? "bg-gradient-to-r from-rose-400 to-rose-600"
-                      : "bg-gray-200 dark:bg-gray-700"
+                      ? "bg-gradient-to-r from-brand to-brand-hover"
+                      : "bg-muted dark:bg-card"
                   }`}
                 />
               )}
@@ -186,13 +186,13 @@ export default function AddProductPage() {
         </div>
       </div>
 
-      <Card className="max-w-4xl mx-auto bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm shadow-xl border border-gray-100 dark:border-gray-700/30 overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-rose-500 to-pink-600 text-white">
+      <Card className="max-w-4xl mx-auto bg-card/80 dark:bg-card/40 backdrop-blur-sm shadow-xl border border-border dark:border-border/30 overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-brand to-brand-hover text-primary-foreground">
           <CardTitle className="text-2xl flex items-center gap-2">
             <Sparkles className="h-6 w-6" />
             Product Information
           </CardTitle>
-          <p className="text-white/80 text-sm">
+          <p className="text-primary-foreground/80 text-sm">
             Fill in the details below to create your product listing
           </p>
         </CardHeader>
@@ -209,10 +209,10 @@ export default function AddProductPage() {
             >
               <div className="space-y-6">
                 <div className="flex items-center gap-2 mb-6">
-                  <div className="p-1.5 bg-rose-100 dark:bg-rose-900/30 rounded-lg">
-                    <Package className="h-5 w-5 text-rose-500" />
+                  <div className="p-1.5 bg-brand-soft dark:bg-footer/30 rounded-lg">
+                    <Package className="h-5 w-5 text-brand" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg font-semibold text-foreground dark:text-primary-foreground">
                     Basic Information
                   </h3>
                 </div>
@@ -227,7 +227,7 @@ export default function AddProductPage() {
                       value={form.name}
                       onChange={handleChange}
                       placeholder="Enter product name"
-                      className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-rose-300 dark:focus:border-rose-600"
+                      className="bg-card dark:bg-card border-border dark:border-border focus:border-brand/40 dark:focus:border-brand"
                       required
                     />
                   </div>
@@ -241,7 +241,7 @@ export default function AddProductPage() {
                       value={form.slug}
                       onChange={handleChange}
                       placeholder="auto-generated"
-                      className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-rose-300 dark:focus:border-rose-600"
+                      className="bg-card dark:bg-card border-border dark:border-border focus:border-brand/40 dark:focus:border-brand"
                       required
                     />
                   </div>
@@ -256,14 +256,14 @@ export default function AddProductPage() {
                     value={form.description}
                     onChange={handleChange}
                     placeholder="Describe your product in detail..."
-                    className="min-h-[120px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-rose-300 dark:focus:border-rose-600"
+                    className="min-h-[120px] bg-card dark:bg-card border-border dark:border-border focus:border-brand/40 dark:focus:border-brand"
                   />
                 </div>
                 <div className="flex justify-end">
                   <Button
                     type="button"
                     onClick={() => setCurrentStep(2)}
-                    className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white"
+                    className="bg-gradient-to-r from-brand to-brand-hover hover:from-brand hover:to-brand-hover text-primary-foreground"
                   >
                     Next Step
                   </Button>
@@ -279,10 +279,10 @@ export default function AddProductPage() {
             >
               <div className="space-y-6">
                 <div className="flex items-center gap-2 mb-6">
-                  <div className="p-1.5 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
-                    <Package className="h-5 w-5 text-emerald-500" />
+                  <div className="p-1.5 bg-success/10 dark:bg-footer/30 rounded-lg">
+                    <Package className="h-5 w-5 text-success" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg font-semibold text-foreground dark:text-primary-foreground">
                     Pricing & Inventory
                   </h3>
                 </div>
@@ -298,7 +298,7 @@ export default function AddProductPage() {
                       value={form.price}
                       onChange={handleChange}
                       placeholder="0.00"
-                      className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-emerald-300 dark:focus:border-emerald-600"
+                      className="bg-card dark:bg-card border-border dark:border-border focus:border-success/40 dark:focus:border-success"
                       required
                     />
                   </div>
@@ -316,7 +316,7 @@ export default function AddProductPage() {
                       value={form.discountPrice}
                       onChange={handleChange}
                       placeholder="0.00"
-                      className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-emerald-300 dark:focus:border-emerald-600"
+                      className="bg-card dark:bg-card border-border dark:border-border focus:border-success/40 dark:focus:border-success"
                     />
                   </div>
                   <div className="space-y-2">
@@ -329,7 +329,7 @@ export default function AddProductPage() {
                       type="number"
                       value={form.stock}
                       onChange={handleChange}
-                      className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-emerald-300 dark:focus:border-emerald-600"
+                      className="bg-card dark:bg-card border-border dark:border-border focus:border-success/40 dark:focus:border-success"
                       required
                     />
                   </div>
@@ -345,7 +345,7 @@ export default function AddProductPage() {
                   <Button
                     type="button"
                     onClick={() => setCurrentStep(3)}
-                    className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white"
+                    className="bg-gradient-to-r from-brand to-brand-hover hover:from-brand hover:to-brand-hover text-primary-foreground"
                   >
                     Next Step
                   </Button>
@@ -361,10 +361,10 @@ export default function AddProductPage() {
             >
               <div className="space-y-6">
                 <div className="flex items-center gap-2 mb-6">
-                  <div className="p-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                    <Ruler className="h-5 w-5 text-purple-500" />
+                  <div className="p-1.5 bg-brand-soft dark:bg-brand-soft/30 rounded-lg">
+                    <Ruler className="h-5 w-5 text-brand" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg font-semibold text-foreground dark:text-primary-foreground">
                     Additional Details
                   </h3>
                 </div>
@@ -381,7 +381,7 @@ export default function AddProductPage() {
                       value={form.badge}
                       onChange={handleChange}
                       placeholder="e.g., New, Sale, Featured"
-                      className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-purple-300 dark:focus:border-purple-600"
+                      className="bg-card dark:bg-card border-border dark:border-border focus:border-brand/40 dark:focus:border-brand"
                     />
                   </div>
                   <div className="space-y-2">
@@ -398,7 +398,7 @@ export default function AddProductPage() {
                           category: e.target.value,
                         }))
                       }
-                      className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-300 dark:focus:ring-purple-600 transition-all"
+                      className="w-full p-2.5 rounded-xl border border-border dark:border-border bg-card dark:bg-card focus:outline-none focus:ring-2 focus:ring-brand dark:focus:ring-brand transition-all"
                       required
                     >
                       <option value="">Select a category</option>
@@ -435,9 +435,9 @@ export default function AddProductPage() {
                 </div>
 
                 {/* Dimensions */}
-                <fieldset className="border border-gray-200 dark:border-gray-700 rounded-2xl p-6 space-y-4">
+                <fieldset className="border border-border dark:border-border rounded-2xl p-6 space-y-4">
                   <legend className="text-sm font-semibold px-3 flex items-center gap-2">
-                    <Ruler className="h-4 w-4 text-purple-500" />
+                    <Ruler className="h-4 w-4 text-brand" />
                     Dimensions (cm)
                   </legend>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -449,7 +449,7 @@ export default function AddProductPage() {
                         type="number"
                         value={form.dimensions.length}
                         onChange={handleChange}
-                        className="bg-white dark:bg-gray-800"
+                        className="bg-card dark:bg-card"
                       />
                     </div>
                     <div className="space-y-2">
@@ -460,7 +460,7 @@ export default function AddProductPage() {
                         type="number"
                         value={form.dimensions.width}
                         onChange={handleChange}
-                        className="bg-white dark:bg-gray-800"
+                        className="bg-card dark:bg-card"
                       />
                     </div>
                     <div className="space-y-2">
@@ -471,16 +471,16 @@ export default function AddProductPage() {
                         type="number"
                         value={form.dimensions.height}
                         onChange={handleChange}
-                        className="bg-white dark:bg-gray-800"
+                        className="bg-card dark:bg-card"
                       />
                     </div>
                   </div>
                 </fieldset>
 
                 {/* Options */}
-                <fieldset className="border border-gray-200 dark:border-gray-700 rounded-2xl p-6 space-y-4">
+                <fieldset className="border border-border dark:border-border rounded-2xl p-6 space-y-4">
                   <legend className="text-sm font-semibold px-3 flex items-center gap-2">
-                    <Palette className="h-4 w-4 text-purple-500" />
+                    <Palette className="h-4 w-4 text-brand" />
                     Product Options
                   </legend>
                   <div className="space-y-4">
@@ -492,7 +492,7 @@ export default function AddProductPage() {
                         value={form.options.sizes}
                         onChange={handleChange}
                         placeholder="S, M, L, XL"
-                        className="bg-white dark:bg-gray-800"
+                        className="bg-card dark:bg-card"
                       />
                     </div>
                     <div className="space-y-2">
@@ -505,7 +505,7 @@ export default function AddProductPage() {
                         value={form.options.paperTypes}
                         onChange={handleChange}
                         placeholder="Glossy, Matte, Premium"
-                        className="bg-white dark:bg-gray-800"
+                        className="bg-card dark:bg-card"
                       />
                     </div>
                     <div className="space-y-2">
@@ -516,7 +516,7 @@ export default function AddProductPage() {
                         value={form.options.colors}
                         onChange={handleChange}
                         placeholder="Red, Blue, Black"
-                        className="bg-white dark:bg-gray-800"
+                        className="bg-card dark:bg-card"
                       />
                     </div>
                   </div>
@@ -535,19 +535,19 @@ export default function AddProductPage() {
                       <Button
                         type="button"
                         variant="outline"
-                        className="px-8 border-gray-300 dark:border-gray-600"
+                        className="px-8 border-border dark:border-border"
                       >
                         Cancel
                       </Button>
                     </Link>
                     <Button
                       type="submit"
-                      className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                      className="bg-gradient-to-r from-brand to-brand-hover hover:from-brand hover:to-brand-hover text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                       disabled={isLoading}
                     >
                       {isLoading ? (
                         <>
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-border mr-2"></div>
                           Adding Product...
                         </>
                       ) : (

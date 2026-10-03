@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
+import { LEGAL_NAME } from "@/lib/site-config";
+
 interface TermsSection {
   icon: LucideIcon;
   title: string;
@@ -39,7 +41,7 @@ const TermsAndConditions = () => {
       icon: FileText,
       title: "1 — Acceptance of Terms",
       content:
-        "These Terms & Conditions (these Terms) govern your access to and use of the Ink of Memories website and mobile experience (together, the Platform), operated by Samlason Printing Press. By browsing, registering on, or placing a print order on the Platform, you confirm that you have read, understood, and agree to be bound by these Terms, along with our Privacy Policy, Refund Policy, and Disclaimer.",
+        "These Terms & Conditions (these Terms) govern your access to and use of the Ink of Memories website and mobile experience (together, the Platform). By browsing, registering on, or placing a print order on the Platform, you confirm that you have read, understood, and agree to be bound by these Terms, along with our Privacy Policy, Refund Policy, and Disclaimer.",
       items: [
         "These Terms form a legally binding agreement between you and Ink of Memories.",
         "If you do not agree with any part of these Terms, please discontinue use of the Platform.",
@@ -62,7 +64,7 @@ const TermsAndConditions = () => {
       icon: Globe,
       title: "3 — Use of the Platform",
       content:
-        "Ink of Memories provides an online catalogue and ordering experience for custom printing — wedding cards, visiting cards, shagun envelopes, letter pads, brochures, banners, packaging and personalized gifts — fulfilled by Samlason Printing Press.",
+        "Ink of Memories provides an online catalogue and ordering experience for custom printing — wedding cards, visiting cards, shagun envelopes, letter pads, brochures, banners, packaging and personalized gifts — every one of them fulfilled by our own press.",
       items: [
         "You may use the Platform for lawful, personal, or genuine business printing purposes.",
         "Automated access, scraping, crawling, or bulk data extraction without our prior written consent is prohibited.",
@@ -98,7 +100,7 @@ const TermsAndConditions = () => {
       icon: Copyright,
       title: "6 — Intellectual Property",
       content:
-        "All content on the Platform — including the Ink of Memories name and logo, text, graphics, page design, software, original stationery designs, and curated product data — is owned by or licensed to Samlason Printing Press and is protected under applicable intellectual-property laws.",
+        "All content on the Platform — including the Ink of Memories name and logo, text, graphics, page design, software, original stationery designs, and curated product data — is owned by or licensed to Ink of Memories and is protected under applicable intellectual-property laws.",
       items: [
         "You receive a limited, revocable, non-exclusive licence to use the Platform for its intended purpose.",
         "You may not copy, reproduce, modify, distribute, or create derivative works of our original designs without our prior written consent.",
@@ -145,7 +147,7 @@ const TermsAndConditions = () => {
       icon: ShieldCheck,
       title: "10 — Indemnification",
       content:
-        "You agree to indemnify, defend, and hold harmless Ink of Memories, Samlason Printing Press, and their directors, employees, and partners from and against any claims, losses, liabilities, damages, and expenses (including reasonable legal fees) arising out of or related to:",
+        "You agree to indemnify, defend, and hold harmless Ink of Memories, its directors, employees, and partners from and against any claims, losses, liabilities, damages, and expenses (including reasonable legal fees) arising out of or related to:",
       items: [
         "Your use of the Platform or breach of these Terms.",
         "Any artwork you upload, including claims that it infringes third-party rights.",
@@ -193,9 +195,9 @@ const TermsAndConditions = () => {
   ];
 
   return (
-    <main className="relative min-h-screen bg-white">
+    <main className="relative min-h-screen bg-card">
       {/* HERO HEADER */}
-      <section className="bg-gradient-to-r from-[#E4E9DD] to-[#DDE3D3] pt-30 py-20 text-black relative overflow-hidden">
+      <section className="bg-gradient-to-r to-brand-hover from-muted to-brand-soft pt-30 py-20 text-black relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
           <Scale size={400} strokeWidth={0.5} />
         </div>
@@ -206,16 +208,16 @@ const TermsAndConditions = () => {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl"
           >
-            <div className="flex items-center gap-2 text-[#1F3A32] font-bold uppercase tracking-widest text-sm mb-4">
+            <div className="flex items-center gap-2 text-foreground font-bold text-sm mb-4">
               <FileText size={18} />
               Legal Agreement
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold mb-6">
               Terms & Conditions
             </h1>
-            <p className="text-gray-900 text-lg leading-relaxed">
-              Welcome to <strong>Ink of Memories</strong>, the printing platform by
-              Samlason Printing Press. These Terms & Conditions set out the
+            <p className="text-foreground text-lg leading-relaxed">
+              Welcome to <strong>Ink of Memories</strong>, the online identity of our
+              Panchkula press. These Terms & Conditions set out the
               rules for ordering custom printing and stationery through the
               Platform. Please read them carefully before placing a print
               order.
@@ -227,7 +229,7 @@ const TermsAndConditions = () => {
       {/* LAST UPDATED */}
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <p className="text-gray-400 text-sm mt-6 mb-2">
+          <p className="text-muted-foreground text-sm mt-6 mb-2">
             Last updated: September 28, 2026
           </p>
         </div>
@@ -238,10 +240,10 @@ const TermsAndConditions = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* INTRO BOX */}
-            <div className="bg-[#F7F4EE] border-l-4 border-[#1F3A32] p-6 mb-12 rounded-r-xl shadow-sm">
+            <div className="bg-ivory border-l-4 border-foreground p-6 mb-12 rounded-r-xl shadow-sm">
               <div className="flex gap-4">
-                <Info className="text-[#1F3A32] shrink-0" />
-                <p className="text-slate-700 text-sm md:text-base italic">
+                <Info className="text-foreground shrink-0" />
+                <p className="text-foreground text-sm md:text-base italic">
                   By using Ink of Memories, you agree to these Terms &
                   Conditions. They work alongside our Privacy Policy, Refund
                   Policy, and Disclaimer, so please review all of them together
@@ -262,19 +264,19 @@ const TermsAndConditions = () => {
                   className="group"
                 >
                   <div className="flex items-start gap-5">
-                    <span className="flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 text-slate-500 shrink-0 group-hover:bg-[#1F3A32] group-hover:text-white transition-all duration-300">
+                    <span className="flex items-center justify-center w-12 h-12 rounded-full bg-muted text-muted-foreground shrink-0 group-hover:bg-footer group-hover:text-footer-foreground transition-all duration-300">
                       <section.icon size={22} />
                     </span>
                     <div className="flex-1">
-                      <h2 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-[#1F3A32] transition-colors">
+                      <h2 className="font-sans text-xl font-semibold text-foreground mb-3 group-hover:text-foreground transition-colors">
                         {section.title}
                       </h2>
-                      <p className="text-slate-600 leading-relaxed text-base md:text-lg mb-3">
+                      <p className="text-muted-foreground leading-relaxed text-base md:text-lg mb-3">
                         {section.content}
                       </p>
 
                       {section.items.length > 0 && (
-                        <ul className="list-disc pl-5 sm:pl-6 space-y-1.5 sm:space-y-2 text-slate-600 text-base md:text-lg">
+                        <ul className="list-disc pl-5 sm:pl-6 space-y-1.5 sm:space-y-2 text-muted-foreground text-base md:text-lg">
                           {section.items.map((item, i) => (
                             <li key={i}>{item}</li>
                           ))}
@@ -282,9 +284,9 @@ const TermsAndConditions = () => {
                       )}
 
                       {section.email && (
-                        <p className="text-slate-900 font-semibold text-base md:text-lg mt-2">
+                        <p className="text-foreground font-semibold text-base md:text-lg mt-2">
                           Email:{" "}
-                          <span className="text-[#1F3A32]">{section.email}</span>
+                          <span className="text-foreground">{section.email}</span>
                         </p>
                       )}
                     </div>
@@ -294,8 +296,8 @@ const TermsAndConditions = () => {
             </div>
 
             {/* RELATED POLICIES */}
-            <div className="mt-16 bg-slate-50 rounded-2xl border border-slate-200 p-6 md:p-8">
-              <h2 className="text-lg font-bold text-slate-900 mb-4">
+            <div className="mt-16 bg-muted rounded-2xl border border-border p-6 md:p-8">
+              <h2 className="font-sans text-lg font-semibold text-foreground mb-4">
                 Related Policies
               </h2>
               <div className="flex flex-wrap gap-3">
@@ -307,7 +309,7 @@ const TermsAndConditions = () => {
                   <Link
                     key={label}
                     href={href}
-                    className="px-4 py-2 rounded-full bg-white border border-slate-200 text-sm font-medium text-[#1F3A32] hover:bg-[#1F3A32] hover:text-white transition-colors"
+                    className="px-4 py-2 rounded-full bg-card border border-border text-sm font-medium text-foreground hover:bg-footer hover:text-footer-foreground transition-colors"
                   >
                     {label}
                   </Link>
@@ -316,11 +318,10 @@ const TermsAndConditions = () => {
             </div>
 
             {/* FOOTER NOTE */}
-            <div className="mt-20 pt-10 border-t border-slate-200 text-center">
-              <p className="text-slate-400 text-sm">
+            <div className="mt-20 pt-10 border-t border-border text-center">
+              <p className="text-muted-foreground text-sm">
                 Last Updated: September 2026 • © {new Date().getFullYear()}{" "}
-                Ink of Memories · Samlason Printing Press. All rights
-                reserved.
+                {LEGAL_NAME}. All rights reserved.
               </p>
             </div>
           </div>
@@ -330,19 +331,19 @@ const TermsAndConditions = () => {
       {/* HELP CALLOUT */}
       <section className="container mx-auto px-4 pb-20">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-[#1F3A32] rounded-2xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="bg-footer rounded-2xl p-8 md:p-12 text-footer-foreground flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">
+              <h2 className="font-sans text-2xl md:text-3xl font-semibold mb-2">
                 Need clarification on our Terms?
               </h2>
-              <p className="text-[#E4E9DD] opacity-90">
+              <p className="text-muted-foreground opacity-90">
                 Our team is happy to help you understand your rights and
                 responsibilities when ordering from Ink of Memories.
               </p>
             </div>
             <button
               onClick={() => router.push("/contact")}
-              className="bg-white text-[#1F3A32] px-8 py-4 rounded-xl font-bold hover:bg-[#F7F4EE] transition-all whitespace-nowrap shadow-lg"
+              className="bg-card text-foreground px-8 py-4 rounded-xl font-bold hover:bg-ivory transition-all whitespace-nowrap shadow-lg"
             >
               Contact Us
             </button>

@@ -174,10 +174,10 @@ export default function ProductForm({
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+            <h1 className="font-sans text-2xl lg:text-3xl font-semibold text-foreground">
               {mode === "add" ? "Add New Product" : "Edit Product"}
             </h1>
-            <p className="text-gray-500 mt-1">
+            <p className="text-muted-foreground mt-1">
               {mode === "add"
                 ? "Fill in the details to create a new product"
                 : `Editing "${initialData?.name || ""}"`}
@@ -274,7 +274,7 @@ export default function ProductForm({
             </CardHeader>
             <CardContent>
               <div
-                className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-blue-400"
+                className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-brand"
                 onClick={() => document.getElementById("image-upload")?.click()}
               >
                 <input
@@ -290,11 +290,11 @@ export default function ProductForm({
                     }
                   }}
                 />
-                <UploadCloud className="mx-auto h-12 w-12 text-gray-400" />
-                <p className="mt-2 text-gray-500">
+                <UploadCloud className="mx-auto h-12 w-12 text-muted-foreground" />
+                <p className="mt-2 text-muted-foreground">
                   Click to select images or drag and drop
                 </p>
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-muted-foreground">
                   PNG, JPG, JPEG up to 60MB each
                 </p>
               </div>
@@ -311,7 +311,7 @@ export default function ProductForm({
                       <button
                         type="button"
                         onClick={() => handleRemoveExistingImage(index)}
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute top-1 right-1 bg-destructive text-primary-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <X size={14} />
                       </button>
@@ -334,7 +334,7 @@ export default function ProductForm({
               <div className="space-y-2">
                 <Label htmlFor="price">Price *</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                     $
                   </span>
                   <Input
@@ -353,7 +353,7 @@ export default function ProductForm({
               <div className="space-y-2">
                 <Label htmlFor="discountPrice">Discount Price</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                     $
                   </span>
                   <Input
@@ -394,7 +394,7 @@ export default function ProductForm({
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Featured Product</Label>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted-foreground">
                     Show this product on the homepage
                   </p>
                 </div>

@@ -28,18 +28,18 @@ const faqs: FAQItem[] = [
 const FAQSection: React.FC = () => {
   return (
     <section className="grid gap-8 mt-20 mb-12 md:grid-cols-1">
-      <div className="p-6 bg-white shadow-lg rounded-xl">
-        <h3 className="text-xl font-bold text-[#2C73D2] mb-4">
+      <div className="p-6 bg-card shadow-lg rounded-xl">
+        <h3 className="font-sans text-xl font-semibold text-brand mb-4">
           Frequently Asked Questions
         </h3>
 
         <div className="space-y-4">
           {faqs.map((faq, index) => (
             <div key={index}>
-              <h4 className="mb-2 font-semibold text-gray-800">
+              <h4 className="mb-2 font-semibold text-foreground">
                 {faq.question}
               </h4>
-              <p className="text-sm text-gray-600">{faq.answer}</p>
+              <p className="text-sm text-muted-foreground">{faq.answer}</p>
             </div>
           ))}
         </div>

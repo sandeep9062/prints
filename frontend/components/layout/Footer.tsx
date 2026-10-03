@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
@@ -22,9 +21,10 @@ import { scrollToTop } from "@/lib/smooth-scroll";
 
 /*
   Design notes
-  - The footer is always the deep green "desk" (#1A312A) in both themes, so it
-    always uses the dark-background logo. (Before, it inverted with the theme.)
-  - The call to action is a stationery card on the desk: bone paper, grain and
+  - The footer is always the midnight navy "desk" (bg-footer) in both themes, so
+    it always uses the dark-background logo and the fixed light-on-navy text
+    tokens (footer-foreground / footer-muted) rather than `foreground`.
+  - The call to action is a stationery card on the desk: ivory paper, grain and
     a double gold rule, like the cards in the hero and testimonials.
 */
 
@@ -63,15 +63,17 @@ const GRAIN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
 
 // --- Shared styles ---
 
+// Focus ring is the brand colour; the offset matches the navy desk so the ring
+// stays visible in both themes.
 const focusRing =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D2AE62] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A312A] dark:focus-visible:ring-offset-[#0F1815]";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer";
 
-const footerLink = `inline-block rounded-sm py-1 text-sm text-[#E4E9DD]/75 underline decoration-transparent decoration-1 underline-offset-4 transition-colors hover:text-white hover:decoration-[#D2AE62] motion-reduce:transition-none ${focusRing}`;
+const footerLink = `inline-block rounded-sm py-1 text-sm text-footer-muted underline decoration-transparent decoration-1 underline-offset-4 transition-colors hover:text-footer-foreground hover:decoration-gold motion-reduce:transition-none ${focusRing}`;
 
 // --- Small pieces ---
 
 const ColumnHeading = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="mb-5 font-serif text-xl font-medium text-[#F7F4EE]">
+  <h2 className="mb-5 text-xl font-semibold text-footer-foreground">
     {children}
   </h2>
 );
@@ -89,10 +91,10 @@ const ContactRow = ({
 }) => {
   const content = (
     <>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#E4E9DD]/25 text-[#D2AE62]">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-footer-foreground/25 text-gold">
         <Icon className="h-4 w-4" />
       </span>
-      <span className="pt-1.5 text-sm leading-relaxed text-[#E4E9DD]/80 transition-colors group-hover/row:text-white">
+      <span className="pt-1.5 text-sm leading-relaxed text-footer-muted transition-colors group-hover/row:text-footer-foreground">
         {children}
       </span>
     </>
@@ -180,15 +182,15 @@ export const Footer = () => {
   )}`;
 
   return (
-    <footer className="relative w-full overflow-hidden bg-[#1A312A] text-[#E4E9DD] dark:bg-[#0F1815]">
+    <footer className="relative w-full overflow-hidden bg-footer">
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-px bg-[#B08D4A]/50"
+        className="absolute inset-x-0 top-0 h-px bg-gold/50"
       />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Call to action: a stationery card on the desk */}
-        <div className="relative my-12 rounded-sm bg-[#F7F4EE] px-8 py-10 text-[#1F3A32] shadow-[0_28px_60px_-28px_rgba(0,0,0,.7)] md:px-12 md:py-12 lg:my-16">
+        <div className="relative my-12 rounded-sm bg-ivory px-8 py-10 text-foreground shadow-[0_28px_60px_-28px_rgba(0,0,0,.7)] md:px-12 md:py-12 lg:my-16">
           <span
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 rounded-sm opacity-[.2] mix-blend-multiply"
@@ -196,11 +198,11 @@ export const Footer = () => {
           />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-3 border border-[#B08D4A]"
+            className="pointer-events-none absolute inset-3 border border-gold"
           />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-4 border border-[#B08D4A] opacity-50"
+            className="pointer-events-none absolute inset-4 border border-gold opacity-50"
           />
 
           <div className="relative flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
@@ -208,7 +210,7 @@ export const Footer = () => {
               <h3 className="font-serif text-3xl font-medium leading-tight sm:text-4xl">
                 Have an occasion to print for?
               </h3>
-              <p className="mt-3 max-w-[48ch] text-base leading-relaxed text-[#1F3A32]/75">
+              <p className="mt-3 max-w-[48ch] text-base leading-relaxed text-foreground/75">
                 Pick a design, or tell us what you have in mind and we will
                 customise it for you.
               </p>
@@ -218,7 +220,7 @@ export const Footer = () => {
               <Button
                 asChild
                 size="lg"
-                className="h-12 rounded-full bg-[#1F3A32] px-7 text-[#F7F4EE] transition-colors hover:bg-[#2B4F44] focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 motion-reduce:transition-none"
+                className="h-12 rounded-full bg-primary px-7 text-primary-foreground transition-colors hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 motion-reduce:transition-none"
               >
                 <Link href="/products">Order now</Link>
               </Button>
@@ -226,7 +228,7 @@ export const Footer = () => {
                 asChild
                 size="lg"
                 variant="outline"
-                className="h-12 rounded-full border-[#1F3A32]/40 bg-transparent px-7 text-[#1F3A32] transition-colors hover:border-[#1F3A32] hover:bg-[#1F3A32]/5 hover:text-[#1F3A32] focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 motion-reduce:transition-none"
+                className="h-12 rounded-full border-foreground/40 bg-transparent px-7 text-foreground transition-colors hover:border-foreground hover:bg-foreground/5 hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 motion-reduce:transition-none"
               >
                 <Link href="/contact">Talk to us</Link>
               </Button>
@@ -238,22 +240,19 @@ export const Footer = () => {
         <div className="grid grid-cols-1 gap-x-8 gap-y-12 pb-12 pt-4 sm:grid-cols-2 lg:grid-cols-12 lg:pb-16">
           {/* Brand */}
           <div className="flex flex-col items-start sm:col-span-2 lg:col-span-4">
+            {/* Text wordmark, same wording as the Navbar and /auth. The footer
+                sits on the midnight-navy --footer surface, so it uses the footer
+                colour roles (light ink + gold accent), NOT the page-level
+                text-foreground/text-primary — those measure 1.14:1 here. */}
             <Link
               href="/"
               aria-label={`${websiteName}, go to home page`}
-              className={`mb-5 inline-block rounded-md ${focusRing}`}
+              className={`mb-5 inline-block rounded-md font-sans text-lg font-semibold tracking-wider text-footer-foreground transition-colors hover:text-gold motion-reduce:transition-none ${focusRing}`}
             >
-              <Image
-                src="/inkofmemories-dark.png"
-                alt={websiteName}
-                width={180}
-                height={40}
-                className="h-auto w-44 object-contain"
-                priority
-              />
+              INK <span className="text-gold">OF</span> MEMORIES
             </Link>
 
-            <p className="max-w-sm text-sm leading-relaxed text-[#E4E9DD]/75">
+            <p className="max-w-sm text-sm leading-relaxed text-footer-muted">
               From premium wedding stationery to bespoke retail packaging, we
               bridge heritage craftsmanship with modern design.
             </p>
@@ -269,7 +268,7 @@ export const Footer = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`${websiteName} on ${label}`}
-                      className={`flex h-10 w-10 items-center justify-center rounded-full border border-[#E4E9DD]/25 text-[#E4E9DD] transition-colors hover:border-[#F7F4EE] hover:bg-[#F7F4EE] hover:text-[#1A312A] motion-reduce:transition-none ${focusRing}`}
+                      className={`flex h-10 w-10 items-center justify-center rounded-full border border-footer-foreground/25 text-footer-foreground transition-colors hover:border-gold hover:text-gold motion-reduce:transition-none ${focusRing}`}
                     >
                       <Icon className="h-[18px] w-[18px]" />
                     </a>
@@ -334,13 +333,13 @@ export const Footer = () => {
         </div>
 
         {/* Newsletter */}
-        <div className="border-t border-[#E4E9DD]/15 py-10">
+        <div className="border-t border-footer-foreground/15 py-10">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-xl">
-              <h2 className="font-serif text-xl font-medium text-[#F7F4EE]">
+              <h2 className="text-xl font-semibold text-footer-foreground">
                 Subscribe to our newsletter
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-[#E4E9DD]/75">
+              <p className="mt-3 text-sm leading-relaxed text-footer-muted">
                 Seasonal offers, new designs and printing inspiration —
                 delivered to your inbox. No spam, unsubscribe anytime.
               </p>
@@ -363,13 +362,13 @@ export const Footer = () => {
                 onChange={(event) => setNewsletterEmail(event.target.value)}
                 disabled={isSubscribing}
                 placeholder="you@example.com"
-                className="h-12 w-full flex-1 rounded-full border border-[#E4E9DD]/25 bg-transparent px-5 text-sm text-[#F7F4EE] outline-none transition-colors placeholder:text-[#E4E9DD]/40 focus:border-[#D2AE62] disabled:opacity-60 sm:w-64"
+                className="h-12 w-full flex-1 rounded-full border border-footer-foreground/25 bg-transparent px-5 text-sm text-footer-foreground outline-none transition-colors placeholder:text-footer-muted/60 focus:border-gold disabled:opacity-60 sm:w-64"
               />
               <Button
                 type="submit"
                 size="lg"
                 disabled={isSubscribing}
-                className="h-12 shrink-0 rounded-full bg-[#D2AE62] px-7 text-[#1A312A] transition-colors hover:bg-[#E0C07C] disabled:pointer-events-none disabled:opacity-60 focus-visible:ring-2 focus-visible:ring-[#D2AE62] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A312A] motion-reduce:transition-none dark:focus-visible:ring-offset-[#0F1815]"
+                className="h-12 shrink-0 rounded-full bg-gold px-7 text-footer transition-colors hover:bg-gold disabled:pointer-events-none disabled:opacity-60 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer motion-reduce:transition-none"
               >
                 {isSubscribing ? "Subscribing…" : "Subscribe"}
               </Button>
@@ -378,21 +377,21 @@ export const Footer = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-[#E4E9DD]/15 py-6 sm:flex-row">
-          <p className="order-2 text-xs text-[#E4E9DD]/60 sm:order-1">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-footer-foreground/15 py-6 sm:flex-row">
+          <p className="order-2 text-xs text-footer-muted sm:order-1">
             © {new Date().getFullYear()} {websiteName}. All rights reserved.
           </p>
 
           <div className="order-1 flex items-center gap-6 sm:order-2">
             <Link
               href="/privacy-policy"
-              className={`rounded-sm text-xs text-[#E4E9DD]/60 transition-colors hover:text-white ${focusRing}`}
+              className={`rounded-sm text-xs text-footer-muted transition-colors hover:text-footer-foreground ${focusRing}`}
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className={`rounded-sm text-xs text-[#E4E9DD]/60 transition-colors hover:text-white ${focusRing}`}
+              className={`rounded-sm text-xs text-footer-muted transition-colors hover:text-footer-foreground ${focusRing}`}
             >
               Terms of Service
             </Link>
@@ -400,7 +399,7 @@ export const Footer = () => {
               type="button"
               onClick={() => scrollToTop()}
               aria-label="Back to top"
-              className={`flex h-9 w-9 items-center justify-center rounded-full border border-[#E4E9DD]/25 text-[#E4E9DD]/80 transition-colors hover:border-[#D2AE62] hover:text-[#D2AE62] motion-reduce:transition-none ${focusRing}`}
+              className={`flex h-9 w-9 items-center justify-center rounded-full border border-footer-foreground/25 text-footer-muted transition-colors hover:border-gold hover:text-gold motion-reduce:transition-none ${focusRing}`}
             >
               <ArrowUp className="h-4 w-4" />
             </button>

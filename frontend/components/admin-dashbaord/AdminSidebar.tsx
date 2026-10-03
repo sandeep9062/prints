@@ -97,8 +97,8 @@ export const AdminSidebar = ({ activeTab, collapsed }: SidebarProps) => {
           href={item.href}
           className={`flex items-center justify-between px-4 py-4 transition-all border-l-2 ${
             isActive(item.href, item.id)
-              ? "bg-stone-100 border-stone-900 text-stone-900 shadow-sm"
-              : "border-transparent text-stone-500 hover:text-stone-900 hover:bg-stone-50/50"
+              ? "bg-muted border-foreground shadow-sm"
+              : "border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50"
           } ${collapsed ? "justify-center" : ""}`}
           title={collapsed ? item.label : undefined}
         >
@@ -106,16 +106,16 @@ export const AdminSidebar = ({ activeTab, collapsed }: SidebarProps) => {
             <item.icon
               className={`w-5 h-5 transition-colors ${
                 isActive(item.href, item.id)
-                  ? "text-stone-900"
-                  : "text-stone-400 group-hover:text-stone-600"
+                  ? "text-foreground"
+                  : "text-muted-foreground group-hover:text-muted-foreground"
               }`}
             />
             {!collapsed && (
               <span
-                className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${
+                className={`text-[10px] font-medium transition-colors ${
                   isActive(item.href, item.id)
-                    ? "text-stone-900"
-                    : "text-stone-500"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
                 }`}
               >
                 {item.label}
@@ -124,7 +124,7 @@ export const AdminSidebar = ({ activeTab, collapsed }: SidebarProps) => {
           </div>
 
           {!collapsed && item.count !== undefined && item.count > 0 && (
-            <span className="bg-stone-200 text-stone-700 text-[9px] font-bold px-2 py-0.5 min-w-[1.5rem] text-center">
+            <span className="bg-muted text-foreground text-[9px] font-bold px-2 py-0.5 min-w-[1.5rem] text-center">
               {item.count}
             </span>
           )}

@@ -49,7 +49,7 @@ import {
 } from "@/services/productsApi";
 
 const getProductStatusColor = (stock: number) => {
-  return stock > 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
+  return stock > 0 ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive";
 };
 
 const getProductStatus = (stock: number) => {
@@ -126,8 +126,8 @@ const AdminProducts = () => {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="flex flex-col items-center gap-2">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-          <p className="text-gray-500">Loading products...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-brand" />
+          <p className="text-muted-foreground">Loading products...</p>
         </div>
       </div>
     );
@@ -137,9 +137,9 @@ const AdminProducts = () => {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="flex flex-col items-center gap-2">
-          <Package className="h-12 w-12 text-red-400" />
-          <p className="text-gray-600 font-medium">Failed to load products</p>
-          <p className="text-gray-400 text-sm">
+          <Package className="h-12 w-12 text-destructive" />
+          <p className="text-muted-foreground font-medium">Failed to load products</p>
+          <p className="text-muted-foreground text-sm">
             Please check your connection and try again.
           </p>
         </div>
@@ -152,10 +152,10 @@ const AdminProducts = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+          <h1 className="font-sans text-2xl lg:text-3xl font-semibold text-foreground">
             Product Management
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Manage all products, inventory and catalog
           </p>
         </div>
@@ -176,15 +176,15 @@ const AdminProducts = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">
+                <p className="text-sm font-medium text-muted-foreground">
                   Total Products
                 </p>
-                <h3 className="text-2xl font-bold mt-1">
+                <h3 className="font-sans text-2xl font-semibold mt-1">
                   {allProducts.length}
                 </h3>
               </div>
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                <Package className="h-6 w-6 text-blue-700" />
+              <div className="h-12 w-12 rounded-full bg-brand-soft flex items-center justify-center">
+                <Package className="h-6 w-6 text-brand" />
               </div>
             </div>
           </CardContent>
@@ -193,15 +193,15 @@ const AdminProducts = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">
+                <p className="text-sm font-medium text-muted-foreground">
                   Active Products
                 </p>
-                <h3 className="text-2xl font-bold mt-1">
+                <h3 className="font-sans text-2xl font-semibold mt-1">
                   {allProducts.filter((p: any) => p.stock > 0).length}
                 </h3>
               </div>
-              <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
-                <Package className="h-6 w-6 text-green-700" />
+              <div className="h-12 w-12 rounded-full bg-success/10 flex items-center justify-center">
+                <Package className="h-6 w-6 text-success" />
               </div>
             </div>
           </CardContent>
@@ -210,15 +210,15 @@ const AdminProducts = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">
+                <p className="text-sm font-medium text-muted-foreground">
                   Out of Stock
                 </p>
-                <h3 className="text-2xl font-bold mt-1">
+                <h3 className="font-sans text-2xl font-semibold mt-1">
                   {allProducts.filter((p: any) => p.stock === 0).length}
                 </h3>
               </div>
-              <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
-                <Package className="h-6 w-6 text-red-700" />
+              <div className="h-12 w-12 rounded-full bg-destructive/10 flex items-center justify-center">
+                <Package className="h-6 w-6 text-destructive" />
               </div>
             </div>
           </CardContent>
@@ -227,13 +227,13 @@ const AdminProducts = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Categories</p>
-                <h3 className="text-2xl font-bold mt-1">
+                <p className="text-sm font-medium text-muted-foreground">Categories</p>
+                <h3 className="font-sans text-2xl font-semibold mt-1">
                   {new Set(allProducts.map((p: any) => p.category)).size}
                 </h3>
               </div>
-              <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
-                <Package className="h-6 w-6 text-purple-700" />
+              <div className="h-12 w-12 rounded-full bg-brand-soft flex items-center justify-center">
+                <Package className="h-6 w-6 text-brand" />
               </div>
             </div>
           </CardContent>
@@ -245,7 +245,7 @@ const AdminProducts = () => {
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search products..."
                 className="pl-10"
@@ -296,8 +296,8 @@ const AdminProducts = () => {
               {paginatedProducts.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-8">
-                    <Package className="h-12 w-12 text-gray-300 mx-auto mb-2" />
-                    <p className="text-gray-500">No products found</p>
+                    <Package className="h-12 w-12 text-muted-foreground/70 mx-auto mb-2" />
+                    <p className="text-muted-foreground">No products found</p>
                   </TableCell>
                 </TableRow>
               ) : (
@@ -314,7 +314,7 @@ const AdminProducts = () => {
                             />
                           </div>
                         ) : (
-                          <div className="h-10 w-10 rounded-md bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center text-xs font-bold text-gray-600 flex-shrink-0">
+                          <div className="h-10 w-10 rounded-md bg-gradient-to-br from-brand-soft to-card flex items-center justify-center text-xs font-bold text-muted-foreground flex-shrink-0">
                             {product.name?.charAt(0)}
                           </div>
                         )}
@@ -325,7 +325,7 @@ const AdminProducts = () => {
                     <TableCell className="font-medium">
                       ${product.price}
                       {product.discountPrice ? (
-                        <span className="text-green-600 text-xs ml-1">
+                        <span className="text-success text-xs ml-1">
                           (disc: ${product.discountPrice})
                         </span>
                       ) : null}
@@ -352,7 +352,7 @@ const AdminProducts = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                          className="text-destructive hover:text-brand hover:bg-destructive/10"
                           onClick={() => handleDelete(product)}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -368,7 +368,7 @@ const AdminProducts = () => {
           {/* Pagination */}
           {filteredProducts.length > 0 && (
             <div className="flex items-center justify-between p-4 border-t">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
                 {Math.min(currentPage * itemsPerPage, filteredProducts.length)}{" "}
                 of {filteredProducts.length} products
@@ -412,7 +412,7 @@ const AdminProducts = () => {
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-red-500 hover:bg-red-600"
+              className="bg-primary hover:bg-brand-hover"
               onClick={confirmDelete}
               disabled={isDeleting}
             >

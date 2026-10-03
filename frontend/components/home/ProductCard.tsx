@@ -47,7 +47,7 @@ export const ProductCard = ({
       viewport={{ once: true, margin: "-40px" }}
     >
       {/* Image Composition */}
-      <div className="relative aspect-[4/5] overflow-hidden bg-stone-100 dark:bg-stone-800">
+      <div className="relative aspect-[4/5] overflow-hidden bg-muted">
         <img
           src={product.image}
           alt={product.name}
@@ -58,7 +58,7 @@ export const ProductCard = ({
         {/* Inner vignette for depth */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/5 dark:ring-white/10"
+          className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-foreground/5 dark:ring-foreground/10"
         />
 
         {/* Top-left flag stack: Featured tag sits above the optional badge,
@@ -66,20 +66,20 @@ export const ProductCard = ({
         {(product.featured || product.badge || discount > 0) && (
           <div className="pointer-events-none absolute left-4 top-4 z-10 flex flex-col items-start gap-2">
             {product.featured && (
-              <span className="inline-flex items-center gap-1 bg-stone-900 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white dark:bg-stone-100 dark:text-stone-900">
+              <span className="inline-flex items-center gap-1 bg-footer px-3 py-1.5 text-[9px] font-bold text-background">
                 <Sparkles aria-hidden="true" className="h-2.5 w-2.5" />
                 Featured
               </span>
             )}
 
             {product.badge && (
-              <span className="bg-white/90 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-900 backdrop-blur-sm dark:bg-stone-900/90 dark:text-stone-100">
+              <span className="bg-background/90 px-3 py-1.5 text-[9px] font-bold text-foreground backdrop-blur-sm">
                 {product.badge}
               </span>
             )}
 
             {discount > 0 && (
-              <span className="bg-red-900 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+              <span className="bg-primary px-3 py-1.5 text-[9px] font-bold text-primary-foreground">
                 {discount}% Off
               </span>
             )}
@@ -107,7 +107,7 @@ export const ProductCard = ({
         <div className="absolute inset-x-0 bottom-0 translate-y-full p-4 transition-transform duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 motion-reduce:transition-none">
           <Link
             href={`/products/${product.slug}`}
-            className="flex w-full items-center justify-center gap-2 rounded-none bg-stone-900/90 py-6 text-[10px] uppercase tracking-widest text-white backdrop-blur-sm transition-colors hover:bg-red-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white"
+            className="flex w-full items-center justify-center gap-2 rounded-none bg-black/90 py-6 text-[10px] font-medium text-background backdrop-blur-sm transition-colors hover:bg-brand hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
           >
             Quick View
             <ArrowRight className="h-3 w-3" />
@@ -117,31 +117,31 @@ export const ProductCard = ({
 
       {/* Content */}
       <div className="mt-5 space-y-1.5">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 dark:text-stone-500">
+        <p className="text-[10px] font-medium text-muted-foreground">
           {product.category}
         </p>
 
-        <h3 className="font-serif text-lg leading-snug text-stone-900 transition-colors group-hover:text-red-800 dark:text-stone-100 dark:group-hover:text-red-600">
+        <h3 className="text-lg leading-snug text-foreground transition-colors group-hover:text-brand">
           <Link
             href={`/products/${product.slug}`}
-            className="rounded-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800"
+            className="rounded-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             {product.name}
           </Link>
         </h3>
 
         {showDescription && product.description && (
-          <p className="line-clamp-2 max-w-sm text-xs leading-relaxed text-stone-500 dark:text-stone-400">
+          <p className="line-clamp-2 max-w-sm text-xs leading-relaxed text-muted-foreground">
             {product.description}
           </p>
         )}
 
         <div className="flex items-center gap-3 pt-1">
-          <span className="text-sm font-medium tabular-nums text-stone-900 dark:text-stone-100">
+          <span className="text-sm font-medium tabular-nums text-foreground">
             ₹{product.price.toLocaleString()}
           </span>
           {product.originalPrice && product.originalPrice > product.price && (
-            <span className="text-xs tabular-nums text-stone-300 line-through dark:text-stone-600">
+            <span className="text-xs tabular-nums text-muted-foreground/70 line-through">
               ₹{product.originalPrice.toLocaleString()}
             </span>
           )}

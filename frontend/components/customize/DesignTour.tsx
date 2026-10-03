@@ -151,7 +151,7 @@ export default function DesignTour({
                   <div className="w-16 h-16 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
                     <Check className="h-8 w-8 text-primary" />
                   </div>
-                  <h3 className="font-display text-xl font-semibold mb-2">
+                  <h3 className="font-sans text-xl font-semibold mb-2">
                     {step.title}
                   </h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
@@ -163,7 +163,7 @@ export default function DesignTour({
                   <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4">
                     <Check className="h-10 w-10 text-primary" />
                   </div>
-                  <h3 className="font-display text-2xl font-semibold mb-2">
+                  <h3 className="font-sans text-2xl font-semibold mb-2">
                     {step.title}
                   </h3>
                   <p className="text-muted-foreground text-base leading-relaxed">
@@ -197,7 +197,7 @@ export default function DesignTour({
               onClick={handleNext}
               className={cn(
                 "min-w-[120px]",
-                isLastStep ? "bg-primary text-white" : "",
+                isLastStep ? "bg-primary text-primary-foreground" : "",
               )}
             >
               {isLastStep ? (

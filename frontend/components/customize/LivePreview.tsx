@@ -345,7 +345,7 @@ export default function LivePreview({
 
         <div className="relative z-20 text-shadow-elegant w-full">
           <p
-            className="text-[10px] uppercase opacity-60 tracking-[0.3em] mb-6 font-medium"
+            className="text-[10px] opacity-60 mb-6 font-medium"
             style={{ color: selectedColor.primary }}
           >
             WEDDING INVITATION

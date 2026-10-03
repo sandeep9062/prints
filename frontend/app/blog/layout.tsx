@@ -3,7 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Press Notes | Printing Guides, Paper & Design Inspiration",
   description:
-    "Printing guides, paper notes and design inspiration from Samlason Printing Press — wedding cards, visiting cards, shagun envelopes, brochures & bespoke stationery. Read the Ink of Memories blog from Panchkula.",
+    "Printing guides, paper notes and design inspiration from Ink of Memories — wedding cards, visiting cards, shagun envelopes, brochures & bespoke stationery. Read the Ink of Memories blog from Panchkula.",
   alternates: {
     canonical: "https://inkofmemories.com/blog",
   },
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Press Notes | Ink of Memories Blog",
     description:
-      "Wedding cards, visiting cards, paper stocks, foil & letterpress guides from Samlason Printing Press.",
+      "Wedding cards, visiting cards, paper stocks, foil & letterpress guides from Ink of Memories.",
     images: ["https://inkofmemories.com/inkofmemories.png"],
   },
 };

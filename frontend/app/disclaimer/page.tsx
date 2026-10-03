@@ -4,6 +4,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { AlertTriangle, ShieldAlert, Info } from "lucide-react";
 
+import { LEGAL_NAME } from "@/lib/site-config";
+
 const DisclaimerPage = () => {
   const disclaimerSections = [
     {
@@ -28,7 +30,7 @@ const DisclaimerPage = () => {
       id: 4,
       title: "Content Ownership",
       content:
-        "All designs, layouts, copy, and imagery on Ink of Memories belong to Samlason Printing Press or are licensed from third-party providers. Artwork you upload remains yours; you grant us only the licence needed to print your order.",
+        "All designs, layouts, copy, and imagery on Ink of Memories belong to Ink of Memories or are licensed from third-party providers. Artwork you upload remains yours; you grant us only the licence needed to print your order.",
     },
     {
       id: 5,
@@ -46,7 +48,7 @@ const DisclaimerPage = () => {
       id: 7,
       title: "Limitation of Services",
       content:
-        "Ink of Memories is an online printing and stationery platform operated by Samlason Printing Press. We print what you order — we are not a marketplace, a broker, or a third-party contractor, and all work is produced in our own atelier.",
+        "Ink of Memories is an online printing and stationery platform operated by our own Panchkula press. We print what you order — we are not a marketplace, a broker, or a third-party contractor, and all work is produced in our own atelier.",
     },
     {
       id: 8,
@@ -57,9 +59,9 @@ const DisclaimerPage = () => {
   ];
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-card">
       {/* HEADER SECTION */}
-      <section className="bg-gradient-to-r from-[#E4E9DD] to-[#DDE3D3]  pt-30 py-20 text-black relative overflow-hidden">
+      <section className="bg-gradient-to-r to-brand-hover from-muted to-brand-soft pt-30 py-20 text-black relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
           <ShieldAlert size={400} strokeWidth={0.5} />
         </div>
@@ -70,17 +72,17 @@ const DisclaimerPage = () => {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl"
           >
-            <div className="flex items-center gap-2 text-[#1F3A32] font-bold uppercase tracking-widest text-sm mb-4">
+            <div className="flex items-center gap-2 text-foreground font-bold text-sm mb-4">
               <AlertTriangle size={18} />
               Legal Information
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold mb-6">
               Disclaimer
             </h1>
-            <p className=" text-gray-900 text-lg leading-relaxed">
-              Ink of Memories is the online identity of Samlason Printing
-              Press, and is used throughout this platform to represent our
-              printing, design and stationery services.
+            <p className=" text-foreground text-lg leading-relaxed">
+              Ink of Memories is the online identity of our Panchkula press,
+              and is used throughout this platform to represent our printing,
+              design and stationery services.
             </p>
           </motion.div>
         </div>
@@ -91,10 +93,10 @@ const DisclaimerPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-7xl mx-auto">
             {/* INTRO BOX */}
-            <div className="bg-[#F7F4EE] border-l-4 border-[#1F3A32] p-6 mb-12 rounded-r-xl shadow-sm">
+            <div className="bg-ivory border-l-4 border-foreground p-6 mb-12 rounded-r-xl shadow-sm">
               <div className="flex gap-4">
-                <Info className="text-[#1F3A32] shrink-0" />
-                <p className="text-slate-700 text-sm md:text-base italic">
+                <Info className="text-foreground shrink-0" />
+                <p className="text-foreground text-sm md:text-base italic">
                   By using <strong>Ink of Memories</strong>, users agree to these terms
                   and acknowledge that colour reproduction, delivery timelines
                   and print quality depend on the specifications approved in
@@ -115,14 +117,14 @@ const DisclaimerPage = () => {
                   className="group"
                 >
                   <div className="flex items-start gap-5">
-                    <span className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 text-slate-500 font-bold text-sm shrink-0 group-hover:bg-[#1F3A32] group-hover:text-white transition-colors">
+                    <span className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground font-bold text-sm shrink-0 group-hover:bg-footer group-hover:text-footer-foreground transition-colors">
                       {item.id}
                     </span>
                     <div>
-                      <h2 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-[#1F3A32] transition-colors">
+                      <h2 className="font-sans text-xl font-semibold text-foreground mb-3 group-hover:text-foreground transition-colors">
                         {item.title}
                       </h2>
-                      <p className="text-slate-600 leading-relaxed md:text-lg">
+                      <p className="text-muted-foreground leading-relaxed md:text-lg">
                         {item.content}
                       </p>
                     </div>
@@ -132,10 +134,10 @@ const DisclaimerPage = () => {
             </div>
 
             {/* FOOTER NOTE */}
-            <div className="mt-20 pt-10 border-t border-slate-200 text-center">
-              <p className="text-slate-400 text-sm">
+            <div className="mt-20 pt-10 border-t border-border text-center">
+              <p className="text-muted-foreground text-sm">
                 Last Updated: February 2026 • © {new Date().getFullYear()}{" "}
-                Ink of Memories · Samlason Printing Press. All rights reserved.
+                {LEGAL_NAME}. All rights reserved.
               </p>
             </div>
           </div>

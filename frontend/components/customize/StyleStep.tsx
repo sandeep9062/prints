@@ -47,7 +47,7 @@ export default function StyleStep({
               <Type className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold">Font Style</h2>
+              <h2 className="font-sans text-xl font-semibold">Font Style</h2>
               <p className="text-sm text-muted-foreground">
                 Choose the typeface that speaks your style
               </p>
@@ -79,7 +79,7 @@ export default function StyleStep({
                 </span>
                 {selectedFont.name === font.name && (
                   <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                    <Check className="h-3 w-3 text-white" />
+                    <Check className="h-3 w-3 text-primary-foreground" />
                   </div>
                 )}
               </motion.button>
@@ -96,7 +96,7 @@ export default function StyleStep({
               <Palette className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold">
+              <h2 className="font-sans text-xl font-semibold">
                 Color Theme
               </h2>
               <p className="text-sm text-muted-foreground">
@@ -116,22 +116,22 @@ export default function StyleStep({
                 className={cn(
                   "p-4 rounded-xl border-2 transition-all duration-200 relative overflow-hidden group",
                   selectedColor.name === theme.name
-                    ? "border-primary bg-primary/5 shadow-lg shadow-primary/10"
+                    ? "border-primary/5 shadow-lg shadow-primary/10"
                     : "border-border/60 hover:border-primary/30",
                 )}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="flex -space-x-2">
                     <div
-                      className="w-7 h-7 rounded-full border-2 border-white shadow-md"
+                      className="w-7 h-7 rounded-full border-2 border-border shadow-md"
                       style={{ backgroundColor: theme.primary }}
                     />
                     <div
-                      className="w-7 h-7 rounded-full border-2 border-white shadow-md"
+                      className="w-7 h-7 rounded-full border-2 border-border shadow-md"
                       style={{ backgroundColor: theme.accent }}
                     />
                     <div
-                      className="w-7 h-7 rounded-full border-2 border-white shadow-md"
+                      className="w-7 h-7 rounded-full border-2 border-border shadow-md"
                       style={{ backgroundColor: theme.secondary }}
                     />
                   </div>
@@ -142,7 +142,7 @@ export default function StyleStep({
                 </span>
                 {selectedColor.name === theme.name && (
                   <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                    <Check className="h-3 w-3 text-white" />
+                    <Check className="h-3 w-3 text-primary-foreground" />
                   </div>
                 )}
               </motion.button>

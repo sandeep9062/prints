@@ -57,31 +57,31 @@ export default function PhoneCaptureModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="phone-capture-title"
-        className="w-full max-w-md rounded-2xl bg-white shadow-2xl"
+        className="w-full max-w-md rounded-2xl bg-card shadow-2xl"
       >
         <div className="px-5 pb-5 pt-5">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-[#4161df]">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-soft text-brand">
             <PhoneCall className="h-6 w-6" aria-hidden />
           </div>
           <h2
             id="phone-capture-title"
-            className="text-center text-lg font-bold text-gray-900 sm:text-xl"
+            className="text-center text-lg font-bold text-foreground sm:text-xl"
           >
             What&apos;s your WhatsApp number?
           </h2>
-          <p className="mt-1.5 text-center text-sm text-gray-600">
+          <p className="mt-1.5 text-center text-sm text-muted-foreground">
             A phone number is required to finish setting up your account. We
             use it to connect you directly with buyers and agents.
           </p>
 
           <div className="mt-5">
-            <label className="block text-xs font-medium text-gray-700">
+            <label className="block text-xs font-medium text-foreground">
               Phone number (with country code)
             </label>
             <PhoneInput
               value={phone}
               onChange={(value) => setPhone(value ?? "")}
-              className="mt-1 w-full border border-gray-300 rounded-lg p-2 pr-14 text-sm"
+              className="mt-1 w-full border border-border rounded-lg p-2 pr-14 text-sm"
               defaultCountry="IN"
             />
           </div>
@@ -90,7 +90,7 @@ export default function PhoneCaptureModal({
             type="button"
             disabled={isSaving}
             onClick={handleSave}
-            className="mt-5 w-full rounded-lg bg-[#4161df] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#3759dd] disabled:opacity-60"
+            className="mt-5 w-full rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-brand-hover disabled:opacity-60"
           >
             {isSaving ? "Saving…" : "Save number"}
           </button>

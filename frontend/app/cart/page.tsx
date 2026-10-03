@@ -65,7 +65,7 @@ const Cart = () => {
                 <ShoppingBag className="h-10 w-10 text-muted-foreground" />
               </div>
 
-              <h1 className="font-display text-2xl font-semibold mb-4">
+              <h1 className="font-sans text-2xl font-semibold mb-4">
                 Your cart is empty
               </h1>
               <p className="text-muted-foreground mb-8">
@@ -96,7 +96,7 @@ const Cart = () => {
       />
       <main className="pt-20 pb-16">
         <div className="container mx-auto px-4">
-          <h1 className="font-display text-3xl md:text-4xl font-semibold mb-8">
+          <h1 className="font-serif text-3xl md:text-4xl font-semibold mb-8">
             Shopping Cart
           </h1>
 
@@ -115,7 +115,7 @@ const Cart = () => {
                     </div>
 
                     <div className="flex-1">
-                      <h3 className="font-display text-lg font-medium mb-1">
+                      <h3 className="font-sans text-lg font-medium mb-1">
                         {item.name}
                       </h3>
 
@@ -139,7 +139,7 @@ const Cart = () => {
                             <Minus className="h-4 w-4" />
                           </button>
 
-                          <span className="w-12 text-center font-medium">
+                          <span className="w-12 text-center font-medium tabular-nums">
                             {item.quantity}
                           </span>
 
@@ -154,7 +154,7 @@ const Cart = () => {
                         </div>
 
                         <div className="flex items-center gap-4">
-                          <span className="font-semibold">
+                          <span className="font-semibold tabular-nums">
                             ₹{(item.price * item.quantity).toLocaleString()}
                           </span>
 
@@ -173,7 +173,7 @@ const Cart = () => {
 
               {/* Upload Files */}
               <div className="card-elegant p-6">
-                <h3 className="font-display text-lg font-medium mb-4">
+                <h3 className="font-sans text-lg font-medium mb-4">
                   Upload Design Files
                 </h3>
 
@@ -192,14 +192,16 @@ const Cart = () => {
             {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="card-elegant p-6 sticky top-28">
-                <h3 className="font-display text-xl font-semibold mb-6">
+                <h3 className="font-sans text-xl font-semibold mb-6">
                   Order Summary
                 </h3>
 
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span>₹{totalPrice.toLocaleString()}</span>
+                    <span className="tabular-nums">
+                      ₹{totalPrice.toLocaleString()}
+                    </span>
                   </div>
 
                   <div className="flex justify-between text-sm">
@@ -211,7 +213,9 @@ const Cart = () => {
 
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
-                    <span>₹{totalPrice.toLocaleString()}</span>
+                    <span className="tabular-nums">
+                      ₹{totalPrice.toLocaleString()}
+                    </span>
                   </div>
                 </div>
 

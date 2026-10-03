@@ -45,13 +45,13 @@ const ToggleButton = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="group p-2 rounded-full hover:bg-[#1F3A32]/10 dark:hover:bg-white/10 transition-colors"
+      className="group p-2 rounded-full hover:bg-foreground/10 transition-colors"
       aria-label="Toggle Dark Mode"
     >
       {isDark ? (
-        <SunIcon className="h-5 w-5 text-[#B08D4A] transition-colors group-hover:text-[#1F3A32] dark:text-[#D2AE62] dark:group-hover:text-[#F7F4EE]" />
+        <SunIcon className="h-5 w-5 text-gold-text dark:text-gold transition-colors group-hover:text-foreground" />
       ) : (
-        <MoonIcon className="h-5 w-5 text-[#B08D4A] transition-colors group-hover:text-[#1F3A32] dark:text-[#D2AE62] dark:group-hover:text-[#F7F4EE]" />
+        <MoonIcon className="h-5 w-5 text-gold-text dark:text-gold transition-colors group-hover:text-foreground" />
       )}
     </button>
   );

@@ -2,7 +2,6 @@
 
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Menu, X, ShoppingBag, ChevronDown, Heart } from "lucide-react";
 import { useSelector } from "react-redux";
@@ -16,8 +15,8 @@ import { selectIsAuthenticated, selectUser } from "@/store/authSlice";
 
 /*
   Design notes
-  - Palette matches the hero: pale sage paper, bottle-green ink (#1F3A32),
-    foil-gold accents (#B08D4A), wax-rose cart badge (#A24B4B).
+  - Palette: ink blue brand (#2D47BE), warm ivory paper, champagne gold accents.
+    Every colour is a semantic token, so the navbar re-themes on its own.
   - One filled button (Order now) and one quiet outline (Log in), instead of
     two competing colours. No lift or slide hover effects.
   - Category names and sub-item strings are unchanged: sub-item text is
@@ -107,57 +106,59 @@ const HIDDEN_ROUTES = [
 
 // --- Shared styles ---
 
+// Focus ring is the brand colour on every theme; the offset matches the
+// surface the control sits on so the ring stays visible in dark mode.
 const focusRing =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F3F5EE] dark:focus-visible:ring-offset-[#16211D]";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
-const linkIdle =
-  "text-[#1F3A32]/75 hover:text-[#1F3A32] dark:text-[#E4E9DD]/75 dark:hover:text-white";
-const linkActive = "text-[#1F3A32] dark:text-white";
+const linkIdle = "text-foreground/75 hover:text-foreground";
+const linkActive = "text-foreground";
 
 const primaryBtn =
-  "rounded-full bg-[#1F3A32] text-[#F7F4EE] transition-colors hover:bg-[#2B4F44] focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 dark:bg-[#F7F4EE] dark:text-[#1F3A32] dark:hover:bg-white dark:focus-visible:ring-offset-[#16211D] motion-reduce:transition-none";
+  "rounded-full bg-primary text-primary-foreground transition-colors hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 motion-reduce:transition-none";
 
+// The outline variant ships `hover:bg-primary hover:text-primary-foreground`, a
+// FILL/TEXT PAIR. Overriding only the hover fill (below) left that pair broken:
+// tailwind-merge has no hover:text-* to collide with, so `hover:text-primary-
+// foreground` survived — white ink on a 5%-tinted paper surface in light mode
+// (invisible) and dark ink on dark in dark mode. Re-declaring the hover text is
+// what keeps the label readable on hover.
 const outlineBtn =
-  "rounded-full border-[#1F3A32]/40 bg-transparent text-[#1F3A32] transition-colors hover:border-[#1F3A32] hover:bg-[#1F3A32]/5 hover:text-[#1F3A32] focus-visible:ring-2 focus-visible:ring-[#B08D4A] focus-visible:ring-offset-2 dark:border-[#E4E9DD]/40 dark:text-[#F7F4EE] dark:hover:border-[#E4E9DD] dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:ring-offset-[#16211D] motion-reduce:transition-none";
+  "rounded-full border-foreground/40 bg-transparent text-foreground transition-colors hover:border-foreground hover:bg-foreground/5 hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 motion-reduce:transition-none";
 
-// Icons use the theme's accent role — foil gold on light surfaces and the
-// lighter gold on deep-green dark surfaces (see the palette table). Interactive
-// icons deepen to bottle-green ink on hover so the control reads as clickable.
-const iconAccent = "text-[#B08D4A] dark:text-[#D2AE62]";
+// Icons use the theme's accent role — foil gold on light surfaces and the same
+// gold on deep navy dark surfaces (gold is light enough to read on both).
+// Interactive icons deepen to the ink on hover so the control reads as clickable.
+// Icons keep the champagne-gold accent, but as the *text* tone on light paper —
+// plain gold on white measures 2.42:1, too faint for an icon that is the only
+// affordance of its control (WCAG 1.4.11 wants 3:1). On the dark theme plain
+// gold is 7.91:1 and needs no adjustment.
+const iconAccent = "text-gold-text dark:text-gold";
 const iconInteractive =
-  "text-[#B08D4A] transition-colors hover:text-[#1F3A32] dark:text-[#D2AE62] dark:hover:text-[#F7F4EE] motion-reduce:transition-none";
+  "text-gold-text dark:text-gold transition-colors hover:text-foreground motion-reduce:transition-none";
 
 // --- Small pieces ---
 
 const CartBadge = ({ count }: { count: number }) =>
   count > 0 ? (
-    <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#A24B4B] px-1 text-[11px] font-semibold leading-none text-white ring-2 ring-[#F3F5EE] dark:ring-[#16211D]">
+    <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-semibold leading-none text-primary-foreground ring-2 ring-background">
       {count > 9 ? "9+" : count}
     </span>
   ) : null;
 
+// Text wordmark, matching /auth (AuthShell): "INK OF MEMORIES" with the brand
+// accent on "OF". Replaces the light/dark logo bitmaps — text re-themes itself
+// through the semantic colour tokens, so one element covers both themes.
 const Logo = () => (
   <Link
     href="/"
     aria-label="Ink of Memories, go to home page"
-    className={cn("flex shrink-0 items-center rounded-md", focusRing)}
+    className={cn(
+      "shrink-0 rounded-md font-sans text-lg font-semibold tracking-wider text-foreground transition-colors hover:text-brand",
+      focusRing,
+    )}
   >
-    <Image
-      src="/inkofmemories.png"
-      alt="Ink of Memories"
-      className="h-24 w-auto object-contain lg:h-24 dark:hidden"
-      width={180}
-      height={60}
-      priority
-    />
-    <Image
-      src="/inkofmemories-dark.png"
-      alt="Ink of Memories"
-      className="hidden h-24 w-auto object-contain lg:h-24 dark:block"
-      width={180}
-      height={60}
-      priority
-    />
+    INK <span className="text-primary">OF</span> MEMORIES
   </Link>
 );
 
@@ -218,8 +219,8 @@ const NavbarInner = () => {
     <nav
       aria-label="Main"
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b border-[#1F3A32]/15 bg-[#E4E9DD] backdrop-blur-xl transition-shadow duration-300 dark:border-[#E4E9DD]/15 dark:bg-[#16211D]/95 motion-reduce:transition-none",
-        scrolled && "shadow-[0_12px_28px_-20px_rgba(31,58,50,.55)]",
+        "fixed inset-x-0 top-0 z-50 border-b border-border bg-background/95 backdrop-blur-xl transition-shadow duration-300 motion-reduce:transition-none",
+        scrolled && "shadow-[0_12px_28px_-20px_rgba(22,32,79,.35)]",
       )}
     >
       {/* ───────── Row 1: logo + toggle, cart, account ───────── */}
@@ -248,7 +249,7 @@ const NavbarInner = () => {
               href="/favourites"
               aria-label="Favourites"
               className={cn(
-                "rounded-full p-2 hover:bg-[#1F3A32]/10 dark:hover:bg-white/10",
+                "rounded-full p-2 hover:bg-foreground/10",
                 iconInteractive,
                 focusRing,
               )}
@@ -262,7 +263,7 @@ const NavbarInner = () => {
                 variant="ghost"
                 size="icon"
                 className={cn(
-                  "relative rounded-full hover:bg-[#1F3A32]/10 dark:hover:bg-white/10",
+                  "relative rounded-full hover:bg-foreground/10",
                   iconInteractive,
                   focusRing,
                 )}
@@ -275,7 +276,7 @@ const NavbarInner = () => {
             ) : (
               <div
                 aria-hidden="true"
-                className="h-10 w-10 animate-pulse rounded-full bg-[#1F3A32]/10 dark:bg-white/10"
+                className="h-10 w-10 animate-pulse rounded-full bg-foreground/10"
               />
             )}
 
@@ -287,12 +288,12 @@ const NavbarInner = () => {
             <div className="hidden items-center gap-3 lg:flex">
               <div
                 aria-hidden="true"
-                className="h-6 w-px bg-[#1F3A32]/20 dark:bg-[#E4E9DD]/20"
+                className="h-6 w-px bg-border"
               />
               {!mounted ? (
                 <div
                   aria-hidden="true"
-                  className="h-9 w-20 animate-pulse rounded-full bg-[#1F3A32]/10 dark:bg-white/10"
+                  className="h-9 w-20 animate-pulse rounded-full bg-foreground/10"
                 />
               ) : !isAuthenticated ? (
                 <>
@@ -314,7 +315,7 @@ const NavbarInner = () => {
             <button
               type="button"
               className={cn(
-                "rounded-full p-2 hover:bg-[#1F3A32]/10 dark:hover:bg-white/10 lg:hidden",
+                "rounded-full p-2 hover:bg-foreground/10 lg:hidden",
                 iconInteractive,
                 focusRing,
               )}
@@ -334,7 +335,7 @@ const NavbarInner = () => {
       </div>
 
       {/* ───────── Row 2: navigation (desktop) ───────── */}
-      <div className="hidden border-t border-[#1F3A32]/10 dark:border-[#E4E9DD]/10 lg:block">
+      <div className="hidden border-t border-border lg:block">
         <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8">
           <div className="flex h-10 items-stretch justify-center gap-1 xl:gap-2">
             <Link
@@ -348,7 +349,7 @@ const NavbarInner = () => {
             >
               Home
               {pathname === "/" && (
-                <span className="absolute inset-x-3 bottom-0 h-0.5 bg-[#B08D4A] xl:inset-x-4" />
+                <span className="absolute inset-x-3 bottom-0 h-0.5 bg-gold xl:inset-x-4" />
               )}
             </Link>
 
@@ -375,7 +376,7 @@ const NavbarInner = () => {
                     />
                     <span
                       className={cn(
-                        "absolute inset-x-3 bottom-0 h-0.5 origin-center bg-[#B08D4A] transition-transform duration-200 motion-reduce:transition-none xl:inset-x-4",
+                        "absolute inset-x-3 bottom-0 h-0.5 origin-center bg-gold transition-transform duration-200 motion-reduce:transition-none xl:inset-x-4",
                         active
                           ? "scale-x-100"
                           : "scale-x-0 group-focus-within:scale-x-100 group-hover:scale-x-100",
@@ -385,7 +386,7 @@ const NavbarInner = () => {
 
                   {/* Dropdown: opens on hover and on keyboard focus */}
                   <div className="invisible absolute left-1/2 top-full z-10 -translate-x-1/2 translate-y-1 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
-                    <div className="relative mt-px min-w-[240px] rounded-b-sm border border-t-0 border-[#1F3A32]/15 bg-[#F7F4EE] py-2 shadow-[0_24px_40px_-20px_rgba(31,58,50,.5)] dark:border-[#E4E9DD]/15 dark:bg-[#1C2B26]">
+                    <div className="relative mt-px min-w-[240px] rounded-b-sm border border-t-0 border-border bg-ivory py-2 shadow-[0_24px_40px_-20px_rgba(22,32,79,.35)]">
                       {link.subItems.map((sub) => {
                         const subActive = active && activeSub === slugify(sub);
                         return (
@@ -394,20 +395,20 @@ const NavbarInner = () => {
                             href={subCategoryHref(link.slug, sub)}
                             aria-current={subActive ? "page" : undefined}
                             className={cn(
-                              "block px-5 py-2.5 text-sm transition-colors hover:bg-[#1F3A32]/5 hover:text-[#1F3A32] focus-visible:bg-[#1F3A32]/5 focus-visible:text-[#1F3A32] focus-visible:outline-none dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white",
+                              "block px-5 py-2.5 text-sm transition-colors hover:bg-foreground/5 hover:text-foreground focus-visible:bg-foreground/5 focus-visible:text-foreground focus-visible:outline-none",
                               subActive
-                                ? "font-medium text-[#1F3A32] shadow-[inset_2px_0_0_#B08D4A] dark:text-white"
-                                : "text-[#1F3A32]/75 dark:text-[#E4E9DD]/75",
+                                ? "font-medium text-foreground shadow-[inset_2px_0_0_hsl(var(--gold))]"
+                                : "text-foreground/75",
                             )}
                           >
                             {sub}
                           </Link>
                         );
                       })}
-                      <div className="mx-5 my-1.5 h-px bg-[#1F3A32]/15 dark:bg-[#E4E9DD]/15" />
+                      <div className="mx-5 my-1.5 h-px bg-border" />
                       <Link
                         href={categoryHref(link.slug)}
-                        className="block px-5 py-2 text-xs font-medium text-[#1F3A32] underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-none dark:text-[#D2AE62]"
+                        className="block px-5 py-2 text-xs font-medium text-gold-text underline-offset-4 hover:underline hover:text-foreground focus-visible:underline focus-visible:text-foreground focus-visible:outline-none"
                       >
                         View all {link.name}
                       </Link>
@@ -431,7 +432,7 @@ const NavbarInner = () => {
         id="mobile-menu"
         aria-hidden={!isOpen}
         className={cn(
-          "absolute inset-x-0 top-full h-[calc(100dvh-3.75rem)] overflow-y-auto overscroll-contain bg-[#F3F5EE] transition-all duration-300 ease-out dark:bg-[#16211D] motion-reduce:transition-none lg:hidden",
+          "absolute inset-x-0 top-full h-[calc(100dvh-3.75rem)] overflow-y-auto overscroll-contain bg-background transition-all duration-300 ease-out motion-reduce:transition-none lg:hidden",
           isOpen
             ? "visible translate-y-0 opacity-100"
             : "invisible -translate-y-2 opacity-0",
@@ -447,12 +448,12 @@ const NavbarInner = () => {
           </div>
 
           <ul className="flex flex-col">
-            <li className="border-y border-[#1F3A32]/10 dark:border-[#E4E9DD]/10">
+            <li className="border-y border-border">
               <Link
                 href="/"
                 aria-current={pathname === "/" ? "page" : undefined}
                 className={cn(
-                  "block py-4 font-serif text-xl transition-colors",
+                  "block py-4 text-lg font-medium transition-colors",
                   focusRing,
                   pathname === "/" ? linkActive : linkIdle,
                 )}
@@ -468,14 +469,14 @@ const NavbarInner = () => {
               return (
                 <li
                   key={link.slug}
-                  className="border-b border-[#1F3A32]/10 dark:border-[#E4E9DD]/10"
+                  className="border-b border-border"
                 >
                   <div className="flex items-center justify-between">
                     <Link
                       href={categoryHref(link.slug)}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "flex-1 py-4 font-serif text-xl transition-colors",
+                        "flex-1 py-4 text-lg font-medium transition-colors",
                         focusRing,
                         active ? linkActive : linkIdle,
                       )}
@@ -492,7 +493,7 @@ const NavbarInner = () => {
                       aria-controls={panelId}
                       aria-label={`${isExpanded ? "Collapse" : "Expand"} ${link.name}`}
                       className={cn(
-                        "-mr-2 rounded-full p-2.5 hover:bg-[#1F3A32]/10 dark:hover:bg-white/10",
+                        "-mr-2 rounded-full p-2.5 hover:bg-foreground/10",
                         iconInteractive,
                         focusRing,
                       )}
@@ -534,7 +535,7 @@ const NavbarInner = () => {
                               >
                                 <span
                                   aria-hidden="true"
-                                  className="h-1 w-1 rounded-full bg-[#B08D4A]"
+                                  className="h-1 w-1 rounded-full bg-gold"
                                 />
                                 {sub}
                               </Link>
@@ -552,7 +553,7 @@ const NavbarInner = () => {
           {/* Mobile actions */}
           <div className="mt-8 space-y-3">
             {!mounted ? (
-              <div className="h-12 w-full animate-pulse rounded-full bg-[#1F3A32]/10 dark:bg-white/10" />
+              <div className="h-12 w-full animate-pulse rounded-full bg-foreground/10" />
             ) : !isAuthenticated ? (
               <>
                 <Button asChild size="lg" className={cn(primaryBtn, "w-full")}>
@@ -587,12 +588,12 @@ const NavbarInner = () => {
 const NavbarFallback = () => (
   <nav
     aria-label="Main"
-    className="fixed inset-x-0 top-0 z-50 border-b border-[#1F3A32]/15 bg-[#F3F5EE]/95 dark:border-[#E4E9DD]/15 dark:bg-[#16211D]/95"
+    className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/95"
   >
     <div className="mx-auto flex h-12 max-w-7xl items-center px-4 py-2 sm:px-6 lg:px-8">
       <Logo />
     </div>
-    <div className="hidden h-10 border-t border-[#1F3A32]/10 dark:border-[#E4E9DD]/10 lg:block" />
+    <div className="hidden h-10 border-t border-border lg:block" />
   </nav>
 );
 

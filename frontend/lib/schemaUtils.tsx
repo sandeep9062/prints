@@ -76,7 +76,7 @@ export function generateArticleSchema(journal: any, slug: string) {
     dateModified: journal.updatedAt || journal.createdAt || journal.date,
     author: {
       "@type": "Person",
-      name: journal.author || "Samlason Printing Press",
+      name: journal.author || "Ink of Memories",
     },
     publisher: {
       "@type": "Organization",

@@ -23,16 +23,17 @@ interface StepProgressProps {
   onNext: () => void;
 }
 
-// Confetti burst helper
+// Confetti burst helper, drawn from the brand palette (tokens resolve at runtime
+// so the pieces follow the active theme).
 function createConfetti() {
   const colors = [
-    "#C9A351",
-    "#FFD700",
-    "#FF6B6B",
-    "#48DBFB",
-    "#FF9FF3",
-    "#54A0FF",
-    "#5F27CD",
+    "hsl(var(--gold))",
+    "hsl(var(--gold-sheen))",
+    "hsl(var(--brand))",
+    "hsl(var(--brand-soft))",
+    "hsl(var(--blush))",
+    "hsl(var(--ivory))",
+    "hsl(var(--brand-hover))",
   ];
   const pieces: {
     color: string;

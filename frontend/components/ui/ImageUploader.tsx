@@ -50,15 +50,15 @@ export default function ImageUploader({
       <div
         {...getRootProps()}
         className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-          isDragActive ? "border-primary bg-primary-foreground" : "border-gray-300 hover:border-primary"
+          isDragActive ? "border-primary bg-primary/5" : "border-border hover:border-primary"
         }`}
       >
         <input {...getInputProps()} />
-        <UploadCloud className="mx-auto h-12 w-12 text-gray-400" />
+        <UploadCloud className="mx-auto h-12 w-12 text-muted-foreground" />
         {isDragActive ? (
           <p className="mt-2 text-primary">Drop the files here...</p>
         ) : (
-          <p className="mt-2 text-gray-500">
+          <p className="mt-2 text-muted-foreground">
             Drag & drop some files here, or click to select files
           </p>
         )}
@@ -76,7 +76,7 @@ export default function ImageUploader({
               <button
                 type="button"
                 onClick={() => removeFile(index)}
-                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 bg-destructive rounded-full p-1 text-destructive-foreground opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <X size={16} />
               </button>

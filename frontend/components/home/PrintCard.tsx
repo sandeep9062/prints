@@ -45,9 +45,9 @@ function PrintCard({ card, showDescription = false }: PrintCardProps) {
       : 0;
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all hover:-translate-y-0.5 hover:shadow-lg">
+    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-0.5 hover:shadow-lg">
       {/* media */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-slate-50">
+      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <Link href={`/products/${id}`} aria-label={title}>
           <Image
             src={image}
@@ -59,12 +59,12 @@ function PrintCard({ card, showDescription = false }: PrintCardProps) {
         </Link>
 
         {card.badge && (
-          <span className="absolute left-3 top-3 rounded-full bg-[#4161df] px-2.5 py-1 text-[11px] font-semibold text-white">
+          <span className="absolute left-3 top-3 rounded-full bg-brand px-2.5 py-1 text-[11px] font-semibold text-primary-foreground">
             {card.badge}
           </span>
         )}
         {discount > 0 && (
-          <span className="absolute right-3 top-3 rounded-full bg-red-500 px-2 py-1 text-[11px] font-bold text-white">
+          <span className="absolute right-3 top-3 rounded-full bg-primary px-2 py-1 text-[11px] font-bold text-primary-foreground">
             {discount}% off
           </span>
         )}
@@ -77,28 +77,28 @@ function PrintCard({ card, showDescription = false }: PrintCardProps) {
       {/* body */}
       <div className="flex flex-1 flex-col gap-3 p-5">
         {card.category && (
-          <span className="text-[11px] font-semibold uppercase tracking-wide text-[#4161df]">
+          <span className="text-[11px] font-semibold uppercase tracking-wide text-brand">
             {card.category}
           </span>
         )}
 
-        <h3 className="font-[Poppins] text-lg font-semibold leading-snug text-slate-900">
+        <h3 className="font-sans text-lg font-semibold leading-snug text-foreground">
           <Link href={`/products/${id}`}>{title}</Link>
         </h3>
 
         {showDescription && card.description && (
-          <p className="line-clamp-2 text-sm leading-relaxed text-slate-500">
+          <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
             {card.description}
           </p>
         )}
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-2">
           <div>
-            <span className="text-lg font-bold text-slate-900">
+            <span className="text-lg font-bold text-foreground">
               ₹{price.toLocaleString("en-IN")}
             </span>
             {discount > 0 && (
-              <span className="ml-2 text-sm text-slate-400 line-through">
+              <span className="ml-2 text-sm text-muted-foreground/80 line-through">
                 ₹{Number(card.originalPrice).toLocaleString("en-IN")}
               </span>
             )}
@@ -112,7 +112,7 @@ function PrintCard({ card, showDescription = false }: PrintCardProps) {
               target="_blank"
               rel="noopener noreferrer"
               title="Ask for a quote on WhatsApp"
-              className="flex size-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:border-green-500 hover:text-green-600"
+              className="flex size-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-card"
             >
               <FaWhatsapp />
             </a>

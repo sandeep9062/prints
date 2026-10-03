@@ -10,9 +10,13 @@ import { cn } from "@/lib/utils";
   Navbar search field.
 
   Design notes
-  - Palette matches the Navbar: bone field on sage, bottle-green ink (#1F3A32)
-    text, and the foil-gold accent (#B08D4A / #D2AE62 on dark) for the leading
-    icon and focus ring.
+  - Palette matches the Navbar: a cool off-white field on the bar, ink navy text
+    (--foreground), and the foil-gold accent (--gold on navy, --gold-text on
+    paper) for the leading icon and focus ring.
+  - The field outline is `border-foreground/50`, not `border`: against the white
+    bar `border` measures only 1.24:1 and `border-border/20` just 1.04:1, so the
+    search box had no visible edge at all. 50% ink clears the 3:1 that WCAG
+    1.4.11 asks for on a control boundary.
   - Submitting jumps to the catalogue (`/products`) with the term written under
     `?search=`, which ProductsListClient reads back. Pass `onSearch` to run a
     local filter instead, or `params` to carry context (such as the active
@@ -76,13 +80,13 @@ const SearchBar = ({
       role="search"
       onSubmit={handleSubmit}
       className={cn(
-        "flex h-10 w-full items-center gap-2 rounded-full border border-[#1F3A32]/20 bg-[#F7F4EE]/80 pl-4 pr-2 transition-colors focus-within:border-[#B08D4A] focus-within:ring-2 focus-within:ring-[#B08D4A]/40 dark:border-[#E4E9DD]/20 dark:bg-white/5 dark:focus-within:border-[#D2AE62] dark:focus-within:ring-[#D2AE62]/30",
+        "flex h-10 w-full items-center gap-2 rounded-full border border-foreground/50 bg-muted pl-4 pr-2 transition-colors focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/40 dark:focus-within:border-gold dark:focus-within:ring-gold/30",
         className,
       )}
     >
       <Search
         aria-hidden="true"
-        className="h-4 w-4 shrink-0 text-[#B08D4A] dark:text-[#D2AE62]"
+        className="h-4 w-4 shrink-0 text-gold-text dark:text-gold"
       />
 
       <label htmlFor={inputId} className="sr-only">
@@ -94,7 +98,7 @@ const SearchBar = ({
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         placeholder={placeholder}
-        className="h-full min-w-0 flex-1 bg-transparent text-sm text-[#1F3A32] outline-none placeholder:text-[#1F3A32]/50 dark:text-[#F7F4EE] dark:placeholder:text-[#E4E9DD]/50 [&::-webkit-search-cancel-button]:hidden"
+        className="h-full min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden"
       />
 
       {query && (
@@ -102,7 +106,7 @@ const SearchBar = ({
           type="button"
           onClick={() => setQuery("")}
           aria-label="Clear search"
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[#1F3A32]/50 transition-colors hover:bg-[#1F3A32]/10 hover:text-[#1F3A32] motion-reduce:transition-none dark:text-[#E4E9DD]/50 dark:hover:bg-white/10 dark:hover:text-white"
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-foreground/10 hover:text-foreground motion-reduce:transition-none"
         >
           <X className="h-4 w-4" />
         </button>

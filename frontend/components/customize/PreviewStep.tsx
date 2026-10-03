@@ -69,7 +69,7 @@ export default function PreviewStep({
           {/* Premium Badge */}
           <div className="absolute top-0 right-0">
             <div className="bg-gradient-to-l from-primary/20 to-transparent px-6 py-2 rounded-bl-xl">
-              <span className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium">
+              <span className="text-[10px] text-primary font-medium">
                 Final Preview
               </span>
             </div>
@@ -131,7 +131,7 @@ export default function PreviewStep({
               </div>
             </div>
 
-            <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-[0.25em] mb-5">
+            <h3 className="text-sm font-medium text-muted-foreground mb-5">
               ✨ Live Preview
             </h3>
 

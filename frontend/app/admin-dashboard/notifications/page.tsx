@@ -66,23 +66,23 @@ const typeConfig: Record<
 > = {
   order: {
     icon: ShoppingCart,
-    color: "bg-blue-100 text-blue-600",
+    color: "bg-brand-soft text-brand",
     label: "Order",
   },
-  user: { icon: UserPlus, color: "bg-green-100 text-green-600", label: "User" },
+  user: { icon: UserPlus, color: "bg-success/10 text-success", label: "User" },
   message: {
     icon: MessageSquare,
-    color: "bg-purple-100 text-purple-600",
+    color: "bg-brand-soft text-brand",
     label: "Message",
   },
   enquiry: {
     icon: Mail,
-    color: "bg-orange-100 text-orange-600",
+    color: "bg-gold/15 text-gold-text dark:text-gold",
     label: "Enquiry",
   },
   alert: {
     icon: AlertCircle,
-    color: "bg-red-100 text-red-600",
+    color: "bg-destructive/10 text-destructive",
     label: "Alert",
   },
 };
@@ -103,8 +103,8 @@ function NotificationItem({
 
   return (
     <div
-      className={`p-4 flex items-start gap-4 hover:bg-gray-50 transition-colors cursor-pointer relative group ${
-        !notification.read ? "bg-blue-50/60" : ""
+      className={`p-4 flex items-start gap-4 hover:bg-muted transition-colors cursor-pointer relative group ${
+        !notification.read ? "bg-brand-soft/60" : ""
       }`}
       onClick={() => onMarkRead(notification.id)}
     >
@@ -116,30 +116,30 @@ function NotificationItem({
           <h4
             className={`text-sm truncate ${
               !notification.read
-                ? "font-semibold text-gray-900"
-                : "font-medium text-gray-700"
+                ? "font-semibold text-foreground"
+                : "font-medium text-foreground"
             }`}
           >
             {notification.title}
           </h4>
-          <span className="text-xs text-gray-400 whitespace-nowrap flex-shrink-0">
+          <span className="text-xs text-muted-foreground whitespace-nowrap flex-shrink-0">
             {notification.time}
           </span>
         </div>
-        <p className="text-sm text-gray-500 mt-0.5 line-clamp-2">
+        <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">
           {notification.message}
         </p>
       </div>
       <div className="flex items-center gap-1.5 flex-shrink-0">
         {!notification.read && (
-          <span className="h-2 w-2 rounded-full bg-blue-500" />
+          <span className="h-2 w-2 rounded-full bg-primary" />
         )}
         <button
           onClick={(e) => {
             e.stopPropagation();
             onDismiss(notification.id);
           }}
-          className="p-1 rounded-full opacity-0 group-hover:opacity-100 hover:bg-gray-200 transition-all text-gray-400 hover:text-gray-600"
+          className="p-1 rounded-full opacity-0 group-hover:opacity-100 hover:bg-muted transition-all text-muted-foreground hover:text-muted-foreground"
           title="Dismiss"
         >
           <X className="h-3.5 w-3.5" />
@@ -230,7 +230,7 @@ const NotificationsPage = () => {
             timestamp: date,
             read: false,
             icon: Check,
-            color: "bg-green-100 text-green-600",
+            color: "bg-success/10 text-success",
             link: "/admin-dashboard/orders",
           });
         } else if (orderStatus === "cancelled") {
@@ -243,7 +243,7 @@ const NotificationsPage = () => {
             timestamp: date,
             read: false,
             icon: AlertCircle,
-            color: "bg-red-100 text-red-600",
+            color: "bg-destructive/10 text-destructive",
             link: "/admin-dashboard/orders",
           });
         }
@@ -388,10 +388,10 @@ const NotificationsPage = () => {
       {/* ==================== HEADER ==================== */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+          <h1 className="font-sans text-2xl lg:text-3xl font-semibold text-foreground">
             Notifications
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Manage and view all system notifications, alerts and updates
           </p>
         </div>
@@ -416,20 +416,20 @@ const NotificationsPage = () => {
       </div>
 
       {/* ==================== SUMMARY CARD ==================== */}
-      <Card className="mb-6 bg-gradient-to-r from-blue-50 to-white border-blue-100">
+      <Card className="mb-6 bg-gradient-to-r from-brand-soft to-white border-brand/40">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                <Bell className="h-5 w-5 text-blue-600" />
+              <div className="h-10 w-10 rounded-full bg-brand-soft flex items-center justify-center">
+                <Bell className="h-5 w-5 text-brand" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-foreground">
                   {unreadCount > 0
                     ? `You have ${unreadCount} unread notification${unreadCount !== 1 ? "s" : ""}`
                     : "All caught up!"}
                 </p>
-                <p className="text-xs text-gray-400 mt-0.5">
+                <p className="text-xs text-muted-foreground mt-0.5">
                   {notifications.length} total · {readIds.size} read ·{" "}
                   {dismissedIds.size} dismissed
                 </p>
@@ -437,7 +437,7 @@ const NotificationsPage = () => {
             </div>
             <Badge
               variant={unreadCount > 0 ? "default" : "secondary"}
-              className={unreadCount > 0 ? "bg-blue-500" : ""}
+              className={unreadCount > 0 ? "bg-primary" : ""}
             >
               {unreadCount > 0 ? `${unreadCount} new` : "None"}
             </Badge>
@@ -456,7 +456,7 @@ const NotificationsPage = () => {
           <TabsTrigger value="all">
             All
             {notifications.length > 0 && (
-              <span className="ml-1.5 text-xs text-gray-400">
+              <span className="ml-1.5 text-xs text-muted-foreground">
                 ({notifications.length})
               </span>
             )}
@@ -464,26 +464,26 @@ const NotificationsPage = () => {
           <TabsTrigger value="unread">
             Unread
             {unreadCount > 0 && (
-              <span className="ml-1.5 text-xs text-white bg-blue-500 rounded-full px-1.5">
+              <span className="ml-1.5 text-xs text-primary-foreground bg-primary rounded-full px-1.5">
                 {unreadCount}
               </span>
             )}
           </TabsTrigger>
           <TabsTrigger value="orders">
             Orders
-            <span className="ml-1.5 text-xs text-gray-400">
+            <span className="ml-1.5 text-xs text-muted-foreground">
               ({notifications.filter((n) => n.type === "order").length})
             </span>
           </TabsTrigger>
           <TabsTrigger value="users">
             Users
-            <span className="ml-1.5 text-xs text-gray-400">
+            <span className="ml-1.5 text-xs text-muted-foreground">
               ({notifications.filter((n) => n.type === "user").length})
             </span>
           </TabsTrigger>
           <TabsTrigger value="alerts">
             Alerts
-            <span className="ml-1.5 text-xs text-gray-400">
+            <span className="ml-1.5 text-xs text-muted-foreground">
               ({notifications.filter((n) => n.type === "alert").length})
             </span>
           </TabsTrigger>
@@ -498,54 +498,54 @@ const NotificationsPage = () => {
                   <div className="flex flex-col items-center justify-center py-16 px-4">
                     {tab === "unread" ? (
                       <>
-                        <Check className="h-12 w-12 text-green-300 mb-4" />
-                        <h3 className="text-lg font-semibold text-gray-600 mb-1">
+                        <Check className="h-12 w-12 text-success mb-4" />
+                        <h3 className="text-lg font-semibold text-muted-foreground mb-1">
                           All Caught Up
                         </h3>
-                        <p className="text-sm text-gray-400 text-center max-w-sm">
+                        <p className="text-sm text-muted-foreground text-center max-w-sm">
                           You have no unread notifications. New notifications
                           will appear here when something happens.
                         </p>
                       </>
                     ) : tab === "orders" ? (
                       <>
-                        <ShoppingCart className="h-12 w-12 text-gray-300 mb-4" />
-                        <h3 className="text-lg font-semibold text-gray-600 mb-1">
+                        <ShoppingCart className="h-12 w-12 text-muted-foreground/70 mb-4" />
+                        <h3 className="text-lg font-semibold text-muted-foreground mb-1">
                           No Order Notifications
                         </h3>
-                        <p className="text-sm text-gray-400 text-center max-w-sm">
+                        <p className="text-sm text-muted-foreground text-center max-w-sm">
                           Order-related notifications will appear here when
                           customers place or update orders.
                         </p>
                       </>
                     ) : tab === "users" ? (
                       <>
-                        <UserPlus className="h-12 w-12 text-gray-300 mb-4" />
-                        <h3 className="text-lg font-semibold text-gray-600 mb-1">
+                        <UserPlus className="h-12 w-12 text-muted-foreground/70 mb-4" />
+                        <h3 className="text-lg font-semibold text-muted-foreground mb-1">
                           No User Notifications
                         </h3>
-                        <p className="text-sm text-gray-400 text-center max-w-sm">
+                        <p className="text-sm text-muted-foreground text-center max-w-sm">
                           New user registration alerts will appear here.
                         </p>
                       </>
                     ) : tab === "alerts" ? (
                       <>
-                        <AlertCircle className="h-12 w-12 text-gray-300 mb-4" />
-                        <h3 className="text-lg font-semibold text-gray-600 mb-1">
+                        <AlertCircle className="h-12 w-12 text-muted-foreground/70 mb-4" />
+                        <h3 className="text-lg font-semibold text-muted-foreground mb-1">
                           No Alerts
                         </h3>
-                        <p className="text-sm text-gray-400 text-center max-w-sm">
+                        <p className="text-sm text-muted-foreground text-center max-w-sm">
                           Important alerts about cancellations or failed
                           payments will appear here.
                         </p>
                       </>
                     ) : (
                       <>
-                        <Bell className="h-12 w-12 text-gray-300 mb-4" />
-                        <h3 className="text-lg font-semibold text-gray-600 mb-1">
+                        <Bell className="h-12 w-12 text-muted-foreground/70 mb-4" />
+                        <h3 className="text-lg font-semibold text-muted-foreground mb-1">
                           No Notifications Yet
                         </h3>
-                        <p className="text-sm text-gray-400 text-center max-w-sm">
+                        <p className="text-sm text-muted-foreground text-center max-w-sm">
                           When something happens — new orders, user
                           registrations, contact form submissions — you'll see
                           it here.
@@ -574,7 +574,7 @@ const NotificationsPage = () => {
             {/* Footer with count */}
             {filteredNotifications.length > 0 && (
               <div className="flex items-center justify-between mt-4 px-1">
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-muted-foreground">
                   Showing {filteredNotifications.length} of{" "}
                   {notifications.length} notification
                   {notifications.length !== 1 ? "s" : ""}
@@ -582,7 +582,7 @@ const NotificationsPage = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-xs text-gray-400"
+                  className="text-xs text-muted-foreground"
                   onClick={() => {
                     setReadIds(new Set());
                     setDismissedIds(new Set());

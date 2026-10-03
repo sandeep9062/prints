@@ -94,10 +94,10 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCFBF9] dark:bg-[#0f111a]">
+    <div className="min-h-screen bg-background">
       <SEOHelper
         title="Shop Printing Products – Wedding Cards, Visiting Cards & More"
-        description="Browse our premium collection of printing products. Wedding invitation cards, visiting cards, brochures, banners, packaging & custom designs. Shop with Samlason Printing Press."
+        description="Browse our premium collection of printing products. Wedding invitation cards, visiting cards, brochures, banners, packaging & custom designs. Shop with Ink of Memories."
         path="/products"
         image="https://inkofmemories.com/inkofmemories.png"
         keywords="buy printing products, wedding cards online, visiting cards India, brochure printing, custom printing shop"
@@ -106,20 +106,20 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
       <main className="pb-24 pt-[calc(var(--navbar-height)+3rem)]">
         <div className="container mx-auto px-6">
           {/* Editorial header — mirrors CategoriesSection / FeaturedProducts */}
-          <div className="mb-10 flex flex-col justify-between gap-6 border-b border-stone-200 pb-6 md:flex-row md:items-end dark:border-stone-700">
+          <div className="mb-10 flex flex-col justify-between gap-6 border-b border-border pb-6 md:flex-row md:items-end dark:border-border">
             <div className="max-w-xl">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 dark:text-stone-500">
+              <span className="text-[10px] font-bold text-muted-foreground dark:text-muted-foreground">
                 Curated Suites
               </span>
-              <h1 className="mt-2 font-serif text-4xl leading-tight text-stone-900 md:text-5xl dark:text-stone-100">
+              <h1 className="mt-2 font-serif text-4xl leading-tight text-foreground md:text-5xl">
                 The Complete{" "}
-                <em className="font-light text-red-800 dark:text-red-600">
+                <em className="font-medium text-primary">
                   Collection
                 </em>
               </h1>
             </div>
-            <p className="mt-4 max-w-xs text-sm italic text-stone-500 md:mt-0 dark:text-stone-400">
-              Every suite is pressed, foiled and finished in-house at Samlason
+            <p className="mt-4 max-w-xs text-sm italic text-muted-foreground md:mt-0 dark:text-muted-foreground">
+              Every suite is pressed, foiled and finished in-house at Ink of Memories
               Printing Press.
             </p>
           </div>
@@ -141,11 +141,11 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                     onClick={() => handleCategoryChange(category)}
                     aria-pressed={active}
                     className={cn(
-                      "shrink-0 snap-start rounded-none border px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] transition-colors duration-300",
-                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#0f111a]",
+                      "shrink-0 snap-start rounded-none border px-4 py-2.5 text-[10px] font-semibold transition-colors duration-300",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 dark:focus-visible:ring-offset-footer",
                       active
-                        ? "border-stone-900 bg-stone-900 text-white dark:border-stone-100 dark:bg-stone-100 dark:text-stone-900"
-                        : "border-stone-200 text-stone-500 hover:border-stone-900 hover:text-stone-900 dark:border-stone-700 dark:text-stone-400 dark:hover:border-stone-500 dark:hover:text-stone-100",
+                        ? "border-foreground bg-primary text-primary-foreground dark:border-border dark:bg-muted dark:text-foreground"
+                        : "border-border text-muted-foreground hover:border-brand hover:text-foreground dark:border-border dark:text-muted-foreground dark:hover:border-foreground/40 dark:hover:text-muted-foreground/70",
                     )}
                   >
                     {category === "All" ? "All Suites" : category}
@@ -161,7 +161,7 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                 </label>
                 <Search
                   aria-hidden="true"
-                  className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-stone-500"
+                  className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground dark:text-muted-foreground"
                 />
                 <input
                   id="product-search"
@@ -169,11 +169,11 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                   placeholder="Search the collection"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-none border border-stone-200 bg-transparent py-3 pl-11 pr-4 text-sm text-stone-900 outline-none transition-colors placeholder-stone-400 focus:border-red-800 focus:ring-1 focus:ring-red-800 dark:border-stone-700 dark:text-stone-100 dark:placeholder-stone-500"
+                  className="w-full rounded-none border border-border bg-transparent py-3 pl-11 pr-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-brand/60 focus:ring-1 focus:ring-brand dark:border-border dark:text-muted-foreground/70 dark:placeholder:text-muted-foreground"
                 />
               </div>
 
-              <div className="flex items-center gap-px bg-stone-200 dark:bg-stone-700">
+              <div className="flex items-center gap-px bg-muted dark:bg-card">
                 {(
                   [
                     { mode: "grid", label: "Grid view", Icon: Grid3X3 },
@@ -191,10 +191,10 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                       title={label}
                       className={cn(
                         "flex h-11 w-11 items-center justify-center transition-colors duration-300",
-                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-800",
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand",
                         active
-                          ? "bg-stone-900 text-white dark:bg-stone-100 dark:text-stone-900"
-                          : "bg-[#FCFBF9] text-stone-400 hover:text-stone-900 dark:bg-[#0f111a] dark:text-stone-500 dark:hover:text-stone-100",
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-background text-muted-foreground hover:text-foreground dark:bg-card dark:text-muted-foreground dark:hover:text-muted-foreground/70",
                       )}
                     >
                       <Icon className="h-4 w-4" />
@@ -208,14 +208,14 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
           {/* Result count */}
           <p
             aria-live="polite"
-            className="mb-8 text-[10px] font-semibold uppercase tracking-[0.25em] text-stone-400 dark:text-stone-500"
+            className="mb-8 text-[10px] font-semibold text-muted-foreground dark:text-muted-foreground"
           >
             {filteredProducts.length}{" "}
             {filteredProducts.length === 1 ? "suite" : "suites"}
             {categoryParam !== "All" && (
               <>
                 {" "}in{" "}
-                <span className="text-red-800 dark:text-red-600">
+                <span className="text-brand">
                   {categoryLabel}
                 </span>
               </>
@@ -262,18 +262,18 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
           </div>
 {/* Empty state */}
           {filteredProducts.length === 0 && (
-            <div className="flex flex-col items-center border border-stone-200 py-24 text-center dark:border-stone-700">
+            <div className="flex flex-col items-center border border-border py-24 text-center dark:border-border">
               <div className="flex items-center gap-3">
-                <span aria-hidden="true" className="h-px w-8 bg-stone-300 dark:bg-stone-600" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 dark:text-stone-500">
+                <span aria-hidden="true" className="h-px w-8 bg-muted dark:bg-muted" />
+                <span className="text-[10px] font-bold text-muted-foreground dark:text-muted-foreground">
                   Empty Press
                 </span>
-                <span aria-hidden="true" className="h-px w-8 bg-stone-300 dark:bg-stone-600" />
+                <span aria-hidden="true" className="h-px w-8 bg-muted dark:bg-muted" />
               </div>
-              <p className="mt-6 font-serif text-2xl text-stone-900 dark:text-stone-100">
+              <p className="mt-6 font-sans text-2xl text-foreground dark:text-muted-foreground/70">
                 No suites match your search.
               </p>
-              <p className="mt-3 max-w-sm text-sm font-light text-stone-500 dark:text-stone-400">
+              <p className="mt-3 max-w-sm text-sm font-normal text-muted-foreground dark:text-muted-foreground">
                 Try another category, or browse the full catalogue to explore
                 everything we press in-house.
               </p>
@@ -283,7 +283,7 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                   setSearchQuery("");
                   if (categoryParam !== "All") handleCategoryChange("All");
                 }}
-                className="mt-8 rounded-none border border-red-900 px-8 py-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-red-900 transition-colors duration-300 hover:bg-red-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 dark:border-red-800 dark:text-red-400 dark:focus-visible:ring-offset-[#0f111a]"
+                className="mt-8 rounded-none border border-brand/50 px-8 py-4 text-[11px] font-semibold text-brand transition-colors duration-300 hover:bg-brand-hover hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 dark:border-brand/50 dark:text-brand dark:focus-visible:ring-offset-footer"
               >
                 View All Suites
               </button>
@@ -301,8 +301,8 @@ export default function ProductsListClient({
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-[60vh] items-center justify-center bg-[#FCFBF9] dark:bg-[#0f111a]">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-stone-400 dark:text-stone-500">
+        <div className="flex min-h-[60vh] items-center justify-center bg-background">
+          <span className="text-[10px] font-semibold text-muted-foreground dark:text-muted-foreground">
             Loading the catalogue
           </span>
         </div>

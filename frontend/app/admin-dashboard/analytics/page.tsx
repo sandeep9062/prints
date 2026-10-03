@@ -63,12 +63,12 @@ const formatCurrency = (amount: number): string =>
   }).format(amount);
 
 const COLORS = [
-  "#16a34a",
-  "#4f46e5",
-  "#7c3aed",
-  "#eab308",
-  "#f97316",
-  "#ef4444",
+  "hsl(var(--chart-1))",
+  "hsl(var(--chart-5))",
+  "hsl(var(--chart-4))",
+  "hsl(var(--chart-2))",
+  "hsl(var(--chart-3))",
+  "hsl(var(--destructive))",
 ];
 
 // ---------------------------------------------------------------------------
@@ -129,18 +129,18 @@ function StatsCard({
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-gray-500 truncate">
+            <p className="text-sm font-medium text-muted-foreground truncate">
               {title}
             </p>
-            <h3 className="text-2xl font-bold mt-1 truncate">{value}</h3>
+            <h3 className="font-sans text-2xl font-semibold mt-1 truncate">{value}</h3>
             {(trend || subtitle) && (
               <div
                 className={`flex items-center mt-1 text-sm ${
                   trend === "up"
-                    ? "text-green-600"
+                    ? "text-success"
                     : trend === "down"
-                      ? "text-red-600"
-                      : "text-gray-500"
+                      ? "text-destructive"
+                      : "text-muted-foreground"
                 }`}
               >
                 {trend === "up" && (
@@ -442,11 +442,11 @@ const AdminAnalytics = () => {
   if (hasError) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
-        <h2 className="text-xl font-semibold text-gray-700 mb-2">
+        <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+        <h2 className="text-xl font-semibold text-foreground mb-2">
           Failed to Load Analytics
         </h2>
-        <p className="text-gray-500 mb-6 max-w-md text-center">
+        <p className="text-muted-foreground mb-6 max-w-md text-center">
           There was an error fetching analytics data. Please check your
           connection and try again.
         </p>
@@ -468,10 +468,10 @@ const AdminAnalytics = () => {
       {/* ==================== HEADER ==================== */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+          <h1 className="font-sans text-2xl lg:text-3xl font-semibold text-foreground">
             Sales Analytics
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Detailed reports and performance insights
           </p>
         </div>
@@ -498,26 +498,26 @@ const AdminAnalytics = () => {
           trend={stats.revenueGrowth >= 0 ? "up" : "down"}
           trendLabel={revGrowthLabel}
           icon={DollarSign}
-          color="bg-green-100 text-green-700"
+          color="bg-success/10 text-success"
         />
         <StatsCard
           title="Total Orders"
           value={stats.totalOrders.toLocaleString()}
           subtitle={`${stats.completedOrders} completed (${stats.completedRate.toFixed(0)}%)`}
           icon={ShoppingCart}
-          color="bg-blue-100 text-blue-700"
+          color="bg-brand-soft text-brand"
         />
         <StatsCard
           title="Customers"
           value={stats.totalCustomers.toLocaleString()}
           icon={Users}
-          color="bg-purple-100 text-purple-700"
+          color="bg-brand-soft text-brand"
         />
         <StatsCard
           title="Avg. Order Value"
           value={formatCurrency(stats.avgOrderValue)}
           icon={BarChart3}
-          color="bg-orange-100 text-orange-700"
+          color="bg-gold/15 text-gold-text"
         />
       </div>
 
@@ -542,16 +542,16 @@ const AdminAnalytics = () => {
               </CardHeader>
               <CardContent>
                 {salesByMonth.every((d) => d.sales === 0 && d.orders === 0) ? (
-                  <div className="flex flex-col items-center justify-center h-[300px] text-gray-400">
+                  <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
                     <BarChart3 className="h-10 w-10 mb-2" />
                     <p className="text-sm">No sales data available yet</p>
                   </div>
                 ) : (
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={salesByMonth}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="name" stroke="#9ca3af" fontSize={12} />
-                      <YAxis stroke="#9ca3af" fontSize={12} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                      <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
                       <Tooltip
                         formatter={(value: any) => [
                           formatCurrency(value as number),
@@ -561,9 +561,9 @@ const AdminAnalytics = () => {
                       <Line
                         type="monotone"
                         dataKey="sales"
-                        stroke="#16a34a"
+                        stroke="hsl(var(--chart-1))"
                         strokeWidth={2}
-                        dot={{ fill: "#16a34a", r: 4 }}
+                        dot={{ fill: "hsl(var(--chart-1))", r: 4 }}
                         activeDot={{ r: 6 }}
                       />
                     </LineChart>
@@ -580,20 +580,20 @@ const AdminAnalytics = () => {
               </CardHeader>
               <CardContent>
                 {ordersByDay.every((d) => d.orders === 0) ? (
-                  <div className="flex flex-col items-center justify-center h-[300px] text-gray-400">
+                  <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
                     <BarChart3 className="h-10 w-10 mb-2" />
                     <p className="text-sm">No order data available yet</p>
                   </div>
                 ) : (
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={ordersByDay}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="name" stroke="#9ca3af" fontSize={12} />
-                      <YAxis stroke="#9ca3af" fontSize={12} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                      <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
                       <Tooltip />
                       <Bar
                         dataKey="orders"
-                        fill="#4f46e5"
+                        fill="hsl(var(--chart-5))"
                         radius={[4, 4, 0, 0]}
                       />
                     </BarChart>
@@ -610,7 +610,7 @@ const AdminAnalytics = () => {
               </CardHeader>
               <CardContent>
                 {categoryData.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-[300px] text-gray-400">
+                  <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
                     <Package className="h-10 w-10 mb-2" />
                     <p className="text-sm">No category data available</p>
                   </div>
@@ -649,7 +649,7 @@ const AdminAnalytics = () => {
               </CardHeader>
               <CardContent>
                 {statusDistribution.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-[300px] text-gray-400">
+                  <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
                     <ShoppingCart className="h-10 w-10 mb-2" />
                     <p className="text-sm">No orders to display</p>
                   </div>
@@ -687,31 +687,31 @@ const AdminAnalytics = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
                     Paid Orders
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-2xl font-bold">{stats.paidOrders}</p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-muted-foreground">
                     Out of {stats.totalOrders} total
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
                     Pending Payments
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-2xl font-bold">{stats.pendingPayment}</p>
-                  <p className="text-xs text-gray-400">Awaiting payment</p>
+                  <p className="text-xs text-muted-foreground">Awaiting payment</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
                     Completion Rate
                   </CardTitle>
                 </CardHeader>
@@ -719,7 +719,7 @@ const AdminAnalytics = () => {
                   <p className="text-2xl font-bold">
                     {stats.completedRate.toFixed(1)}%
                   </p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-muted-foreground">
                     {stats.completedOrders} of {stats.totalOrders} delivered
                   </p>
                 </CardContent>
@@ -735,16 +735,16 @@ const AdminAnalytics = () => {
               </CardHeader>
               <CardContent>
                 {salesByMonth.every((d) => d.sales === 0 && d.orders === 0) ? (
-                  <div className="flex flex-col items-center justify-center h-[300px] text-gray-400">
+                  <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
                     <BarChart3 className="h-10 w-10 mb-2" />
                     <p className="text-sm">No sales data available</p>
                   </div>
                 ) : (
                   <ResponsiveContainer width="100%" height={350}>
                     <BarChart data={salesByMonth}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="name" stroke="#9ca3af" fontSize={12} />
-                      <YAxis stroke="#9ca3af" fontSize={12} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                      <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
                       <Tooltip
                         formatter={(value: any, name: any) => [
                           name === "sales"
@@ -756,13 +756,13 @@ const AdminAnalytics = () => {
                       <Legend />
                       <Bar
                         dataKey="sales"
-                        fill="#16a34a"
+                        fill="hsl(var(--chart-1))"
                         radius={[4, 4, 0, 0]}
                         name="Revenue"
                       />
                       <Bar
                         dataKey="orders"
-                        fill="#4f46e5"
+                        fill="hsl(var(--chart-5))"
                         radius={[4, 4, 0, 0]}
                         name="Orders"
                       />
@@ -780,7 +780,7 @@ const AdminAnalytics = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
                     Total Products
                   </CardTitle>
                 </CardHeader>
@@ -792,7 +792,7 @@ const AdminAnalytics = () => {
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
                     Categories
                   </CardTitle>
                 </CardHeader>
@@ -802,7 +802,7 @@ const AdminAnalytics = () => {
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
                     Top Product Sales
                   </CardTitle>
                 </CardHeader>
@@ -812,7 +812,7 @@ const AdminAnalytics = () => {
                       .reduce((s, p) => s + p.qty, 0)
                       .toLocaleString()}
                   </p>
-                  <p className="text-xs text-gray-400">Units sold (top 5)</p>
+                  <p className="text-xs text-muted-foreground">Units sold (top 5)</p>
                 </CardContent>
               </Card>
             </div>
@@ -825,7 +825,7 @@ const AdminAnalytics = () => {
                 </CardHeader>
                 <CardContent>
                   {categoryData.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-[300px] text-gray-400">
+                    <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
                       <Package className="h-10 w-10 mb-2" />
                       <p className="text-sm">No categories available</p>
                     </div>
@@ -864,7 +864,7 @@ const AdminAnalytics = () => {
                 </CardHeader>
                 <CardContent>
                   {topProducts.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-[300px] text-gray-400">
+                    <div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground">
                       <Package className="h-10 w-10 mb-2" />
                       <p className="text-sm">No product sales data yet</p>
                     </div>
@@ -886,7 +886,7 @@ const AdminAnalytics = () => {
                         <TableBody>
                           {topProducts.map((p, idx) => (
                             <TableRow key={p.name}>
-                              <TableCell className="font-medium text-gray-400">
+                              <TableCell className="font-medium text-muted-foreground">
                                 {idx + 1}
                               </TableCell>
                               <TableCell className="font-medium truncate max-w-[200px]">
@@ -911,24 +911,24 @@ const AdminAnalytics = () => {
         </TabsContent>
       </Tabs>
 
-      <Card className="bg-gradient-to-r from-gray-50 to-white border-dashed">
+      <Card className="bg-gradient-to-r from-brand-soft to-white border-dashed">
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Analytics last updated from live data
               </p>
-              <p className="text-xs text-gray-400 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 {stats.totalOrders} orders · {stats.totalProducts} products ·{" "}
                 {stats.totalCustomers} customers
               </p>
             </div>
             <Badge
               variant="secondary"
-              className="bg-green-50 text-green-700 self-start"
+              className="bg-success/10 text-success self-start"
             >
               <span className="flex items-center gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
                 Live
               </span>
             </Badge>

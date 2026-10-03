@@ -38,13 +38,13 @@ const services = [
 
 export default function ServiceSection() {
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-gray-50 dark:from-[#0f111a] dark:to-[#0d1321]">
+    <section className="py-16 bg-background">
       <div className="container mx-auto px-4 text-center">
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-3xl md:text-4xl font-bold mb-6 text-gray-800 dark:text-stone-100"
+          className="text-3xl md:text-4xl font-bold mb-6 text-foreground"
         >
           Our Printing Services
         </motion.h2>
@@ -53,7 +53,7 @@ export default function ServiceSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7 }}
-          className="text-gray-600 dark:text-stone-300 max-w-2xl mx-auto mb-12"
+          className="text-muted-foreground max-w-2xl mx-auto mb-12"
         >
           We provide high-quality, professional printing services customized for
           your business, events, celebrations, and brand needs.
@@ -69,10 +69,10 @@ export default function ServiceSection() {
               transition={{ delay: index * 0.05 }}
               viewport={{ once: true }}
             >
-              <Card className="shadow-md hover:shadow-xl transition-all cursor-pointer rounded-2xl group dark:bg-[#0d1321] dark:border-stone-700">
+              <Card className="shadow-md hover:shadow-xl transition-all cursor-pointer rounded-2xl group">
                 <CardContent className="p-6 flex flex-col items-center justify-center">
-                  <service.icon className="w-10 h-10 text-rose-600 dark:text-rose-400 group-hover:text-rose-700 dark:group-hover:text-rose-300 transition-all mb-4" />
-                  <p className="font-semibold text-gray-700 dark:text-stone-200 group-hover:text-gray-900 dark:group-hover:text-white">
+                  <service.icon className="w-10 h-10 text-brand group-hover:text-brand-hover transition-all mb-4" />
+                  <p className="font-semibold text-foreground/80 group-hover:text-foreground">
                     {service.title}
                   </p>
                 </CardContent>

@@ -111,7 +111,7 @@ export default function MessageTemplates({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-4 border-b border-border/30 flex items-center justify-between">
-            <h3 className="font-display text-lg font-semibold flex items-center gap-2">
+            <h3 className="font-sans text-lg font-semibold flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-primary" />
               Message Templates
             </h3>
@@ -191,7 +191,7 @@ export default function MessageTemplates({
                               </div>
                               <div className="flex items-center gap-2">
                                 {copiedIndex === index ? (
-                                  <Check className="h-4 w-4 text-green-500" />
+                                  <Check className="h-4 w-4 text-success" />
                                 ) : (
                                   <Copy className="h-4 w-4 text-muted-foreground/50 group-hover:text-primary transition-colors" />
                                 )}

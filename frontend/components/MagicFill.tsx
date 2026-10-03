@@ -150,12 +150,12 @@ const MagicFill = ({
         <Paper
           p="md"
           withBorder
-          className="bg-gradient-to-br from-blue-50/90 to-indigo-50/50 border-blue-100/80 rounded-2xl"
+          className="bg-gradient-to-br from-brand-soft/90 to-card/50 border-border/80 rounded-2xl"
         >
           <Group justify="space-between" mb="xs">
             <Group gap="xs">
-              <Sparkles size={24} className="text-blue-600" />
-              <Text fw={800} size="lg" className="text-blue-950 tracking-tight">
+              <Sparkles size={24} className="text-brand" />
+              <Text fw={800} size="lg" className="text-foreground tracking-tight">
                 Quick Brief Fill
               </Text>
             </Group>
@@ -169,7 +169,7 @@ const MagicFill = ({
             size="sm"
             c="dimmed"
             spacing={4}
-            icon={<Wand2 size={14} className="text-blue-500" />}
+            icon={<Wand2 size={14} className="text-brand" />}
           >
             <List.Item>
               Reads quantities like &ldquo;500 cards&rdquo; or &ldquo;qty
@@ -202,9 +202,9 @@ const MagicFill = ({
               padding: "20px",
               lineHeight: 1.6,
               borderRadius: "16px",
-              backgroundColor: "#fff",
-              border: "2px solid #e9ecef",
-              "&:focus": { borderColor: "#4161df" },
+              backgroundColor: "hsl(var(--card))",
+              border: "2px solid hsl(var(--border))",
+              "&:focus": { borderColor: "hsl(var(--brand))" },
             },
           }}
           value={rawText}
@@ -214,7 +214,7 @@ const MagicFill = ({
         <Group justify="space-between">
           <Button
             variant="subtle"
-            color="#4161df"
+            color="hsl(var(--brand))"
             onClick={nextStep}
             size="md"
             radius="md"
@@ -228,7 +228,7 @@ const MagicFill = ({
             size="md"
             radius="md"
             leftSection={<Wand2 size={18} />}
-            className="bg-[#4161df] hover:bg-[#3a56c4] shadow-lg shadow-blue-100/80 px-8"
+            className="bg-brand hover:bg-brand-hover shadow-lg shadow-brand-soft/80 px-8"
           >
             Fill my brief
           </Button>

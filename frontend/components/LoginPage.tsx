@@ -81,13 +81,13 @@ export default function LoginPage({
           <>
             Welcome to your
             <br />
-            <em className="font-light text-red-800 dark:text-red-600">
+            <em className="font-medium text-brand">
               private atelier.
             </em>
           </>
         ),
         description:
-          "Sign in to revisit saved designs, approve digital proofs and re-order your favourite paper suites — every job pressed in-house at Samlason Printing Press.",
+          "Sign in to revisit saved designs, approve digital proofs and re-order your favourite paper suites — every job pressed in-house at Ink of Memories.",
         stats: [
           { value: "20", label: "Years" },
           { value: "50k", label: "Clients" },
@@ -97,10 +97,10 @@ export default function LoginPage({
     >
       <div className="space-y-8">
         <header className="space-y-3">
-          <h2 className="font-serif text-3xl leading-tight text-stone-900 dark:text-stone-100">
+          <h2 className="font-serif text-3xl leading-tight text-foreground">
             Welcome Back
           </h2>
-          <p className="text-sm font-light leading-relaxed text-stone-500 dark:text-stone-400">
+          <p className="text-sm font-normal leading-relaxed text-muted-foreground">
             Enter your credentials to continue to your account.
           </p>
         </header>
@@ -108,7 +108,7 @@ export default function LoginPage({
         {error && (
           <div
             role="alert"
-            className="border-l-2 border-red-700 bg-red-50/70 px-4 py-3 text-sm text-red-800 dark:border-red-600 dark:bg-red-950/40 dark:text-red-300"
+            className="border-l-2 border-destructive/10 px-4 py-3 text-sm text-destructive"
           >
             {error}
           </div>
@@ -135,7 +135,7 @@ export default function LoginPage({
               <AuthLabel>Password</AuthLabel>
               <Link
                 href="/forgot-password"
-                className="rounded-none text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-500 underline-offset-4 transition-colors hover:text-red-800 hover:underline dark:text-stone-400 dark:hover:text-red-600"
+                className="rounded-none text-[10px] font-semibold text-muted-foreground underline-offset-4 transition-colors hover:text-brand hover:underline dark:text-muted-foreground dark:hover:text-brand"
               >
                 Forgot?
               </Link>
@@ -152,7 +152,7 @@ export default function LoginPage({
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 flex items-center px-4 text-stone-400 transition-colors hover:text-red-800 focus-visible:outline-none focus-visible:text-red-800 dark:hover:text-red-600"
+                className="absolute inset-y-0 right-0 flex items-center px-4 text-muted-foreground transition-colors hover:text-brand focus-visible:outline-none focus-visible:text-brand dark:hover:text-brand"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
@@ -168,7 +168,7 @@ export default function LoginPage({
           <button
             type="submit"
             disabled={isLoading}
-            className="flex h-14 w-full items-center justify-center gap-3 rounded-none bg-red-900 px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-red-900/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-800 hover:shadow-xl hover:shadow-red-900/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none motion-reduce:hover:translate-y-0 dark:focus-visible:ring-offset-[#0f111a]"
+            className="flex h-14 w-full items-center justify-center gap-3 rounded-none bg-primary px-8 text-xs font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-xl hover:shadow-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none motion-reduce:hover:translate-y-0 dark:focus-visible:ring-offset-footer"
           >
             {isLoading ? (
               <>
@@ -183,11 +183,11 @@ export default function LoginPage({
 
         <SocialAuthButtons mode="login" onAuthSuccess={onLoginSuccess} />
 
-        <p className="border-t border-stone-200 pt-6 text-center text-xs text-stone-500 dark:border-stone-700 dark:text-stone-400">
+        <p className="border-t border-border pt-6 text-center text-xs text-muted-foreground">
           Don&apos;t have an account?{" "}
           <button
             onClick={toggleAuthMode}
-            className="rounded-none font-semibold uppercase tracking-[0.15em] text-red-800 underline-offset-4 transition-colors hover:underline dark:text-red-600"
+            className="rounded-none font-semibold text-brand underline-offset-4 transition-colors hover:underline"
           >
             Create one
           </button>

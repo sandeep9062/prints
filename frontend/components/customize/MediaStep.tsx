@@ -77,19 +77,19 @@ const FINISH_OPTIONS: {
     value: "matte",
     label: "Matte",
     desc: "Soft & understated",
-    color: "bg-zinc-200",
+    color: "bg-muted",
   },
   {
     value: "gloss",
     label: "Gloss",
     desc: "Crisp & reflective",
-    color: "bg-gradient-to-br from-blue-100 to-purple-100",
+    color: "bg-gradient-to-br from-accent to-brand-soft",
   },
   {
     value: "textured",
     label: "Textured",
     desc: "Hand-pressed grain",
-    color: "bg-gradient-to-br from-amber-100 to-orange-100",
+    color: "bg-gradient-to-br from-ivory to-blush",
   },
 ];
 
@@ -130,7 +130,7 @@ export default function MediaStep({
               <ImageIcon className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold">
+              <h2 className="font-sans text-xl font-semibold">
                 Upload Images
               </h2>
               <p className="text-sm text-muted-foreground">
@@ -247,7 +247,7 @@ export default function MediaStep({
               <Package className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold">
+              <h2 className="font-sans text-xl font-semibold">
                 Product Type
               </h2>
               <p className="text-sm text-muted-foreground">
@@ -264,7 +264,7 @@ export default function MediaStep({
                 className="p-4 rounded-xl border-2 border-border/60 hover:border-primary/30 hover:bg-primary/5 transition-all text-left group"
               >
                 <span className="text-xl mb-1 block">{opt.icon}</span>
-                <div className="font-display text-sm font-semibold">
+                <div className="font-sans text-sm font-semibold">
                   {opt.label}
                 </div>
                 <div className="text-[10px] text-muted-foreground/60 mt-0.5">
@@ -284,7 +284,7 @@ export default function MediaStep({
               <Palette className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold">Finish</h2>
+              <h2 className="font-sans text-xl font-semibold">Finish</h2>
               <p className="text-sm text-muted-foreground">
                 Select the paper finish
               </p>
@@ -299,7 +299,7 @@ export default function MediaStep({
                 className="p-4 rounded-xl border-2 border-border/60 hover:border-primary/30 hover:bg-primary/5 transition-all text-left group"
               >
                 <div className={cn("w-full h-8 rounded-lg mb-2", opt.color)} />
-                <div className="font-display text-sm font-semibold capitalize">
+                <div className="font-sans text-sm font-semibold capitalize">
                   {opt.label}
                 </div>
                 <div className="text-[10px] text-muted-foreground/60 mt-0.5">
@@ -326,7 +326,7 @@ export default function MediaStep({
               <Hash className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold">Quantity</h2>
+              <h2 className="font-sans text-xl font-semibold">Quantity</h2>
               <p className="text-sm text-muted-foreground">
                 How many copies do you need?
               </p>
@@ -348,15 +348,15 @@ export default function MediaStep({
                   onClick={() => onQuantityChange(q)}
                   className="relative py-3 rounded-xl border-2 border-border/60 hover:border-primary/30 hover:bg-primary/5 transition-all text-center group"
                 >
-                  <div className="font-display text-lg font-semibold">{q}</div>
+                  <div className="font-sans text-lg font-semibold tabular-nums">{q}</div>
                   {savings && (
-                    <div className="text-[9px] text-green-500 font-medium mt-0.5 bg-green-500/10 px-1.5 py-0.5 rounded-full inline-block">
+                    <div className="text-[9px] font-medium mt-0.5 bg-success/10 text-success px-1.5 py-0.5 rounded-full inline-block">
                       Save {savings}
                     </div>
                   )}
                   {i === 2 && (
                     <div className="absolute -top-2 -right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                      <Sparkles className="h-2.5 w-2.5 text-white" />
+                      <Sparkles className="h-2.5 w-2.5 text-primary-foreground" />
                     </div>
                   )}
                 </button>
@@ -374,7 +374,7 @@ export default function MediaStep({
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               Estimated total
             </span>
-            <span className="font-display text-lg font-semibold text-primary">
+            <span className="font-sans text-lg font-semibold text-primary tabular-nums">
               {calculateEstimatedPrice()}
             </span>
           </motion.div>

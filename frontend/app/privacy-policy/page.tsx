@@ -84,9 +84,9 @@ const PrivacyPolicy = () => {
   ];
 
   return (
-    <main className="relative min-h-screen bg-white">
+    <main className="relative min-h-screen bg-card">
       {/* HERO HEADER */}
-      <section className="bg-gradient-to-r from-[#E4E9DD] to-[#DDE3D3] pt-30 py-20 text-black relative overflow-hidden">
+      <section className="bg-gradient-to-r to-brand-hover from-muted to-brand-soft pt-30 py-20 text-black relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
           <Shield size={400} strokeWidth={0.5} />
         </div>
@@ -97,14 +97,14 @@ const PrivacyPolicy = () => {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl"
           >
-            <div className="flex items-center gap-2 text-[#1F3A32] font-bold uppercase tracking-widest text-sm mb-4">
+            <div className="flex items-center gap-2 text-foreground font-bold text-sm mb-4">
               <AlertTriangle size={18} />
               Privacy & Security
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold mb-6">
               Privacy Policy
             </h1>
-            <p className="text-gray-900 text-lg leading-relaxed">
+            <p className="text-foreground text-lg leading-relaxed">
               At <strong>Ink of Memories</strong>, your privacy is extremely
               important to us. This Privacy Policy explains how we collect,
               use, and safeguard your personal data when you order custom
@@ -117,7 +117,7 @@ const PrivacyPolicy = () => {
       {/* LAST UPDATED */}
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <p className="text-gray-400 text-sm mt-6 mb-2">
+          <p className="text-muted-foreground text-sm mt-6 mb-2">
             Last updated: November 8, 2025
           </p>
         </div>
@@ -128,10 +128,10 @@ const PrivacyPolicy = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* INTRO BOX */}
-            <div className="bg-[#F7F4EE] border-l-4 border-[#1F3A32] p-6 mb-12 rounded-r-xl shadow-sm">
+            <div className="bg-ivory border-l-4 border-foreground p-6 mb-12 rounded-r-xl shadow-sm">
               <div className="flex gap-4">
-                <Info className="text-[#1F3A32] shrink-0" />
-                <p className="text-slate-700 text-sm md:text-base italic">
+                <Info className="text-foreground shrink-0" />
+                <p className="text-foreground text-sm md:text-base italic">
                   By using our website, you consent to our Privacy Policy.
                   Please read the following information carefully to understand
                   our views and practices regarding your personal data.
@@ -151,19 +151,19 @@ const PrivacyPolicy = () => {
                   className="group"
                 >
                   <div className="flex items-start gap-5">
-                    <span className="flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 text-slate-500 shrink-0 group-hover:bg-[#1F3A32] group-hover:text-white transition-all duration-300">
+                    <span className="flex items-center justify-center w-12 h-12 rounded-full bg-muted text-muted-foreground shrink-0 group-hover:bg-footer group-hover:text-footer-foreground transition-all duration-300">
                       <section.icon size={22} />
                     </span>
                     <div className="flex-1">
-                      <h2 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-[#1F3A32] transition-colors">
+                      <h2 className="font-sans text-xl font-semibold text-foreground mb-3 group-hover:text-foreground transition-colors">
                         {section.title}
                       </h2>
-                      <p className="text-slate-600 leading-relaxed text-base md:text-lg mb-3">
+                      <p className="text-muted-foreground leading-relaxed text-base md:text-lg mb-3">
                         {section.content}
                       </p>
 
                       {section.items.length > 0 && (
-                        <ul className="list-disc pl-5 sm:pl-6 space-y-1.5 sm:space-y-2 text-slate-600 text-base md:text-lg">
+                        <ul className="list-disc pl-5 sm:pl-6 space-y-1.5 sm:space-y-2 text-muted-foreground text-base md:text-lg">
                           {section.items.map((item, i) => (
                             <li key={i}>{item}</li>
                           ))}
@@ -171,9 +171,9 @@ const PrivacyPolicy = () => {
                       )}
 
                       {section.email && (
-                        <p className="text-slate-900 font-semibold text-base md:text-lg mt-2">
+                        <p className="text-foreground font-semibold text-base md:text-lg mt-2">
                           Email:{" "}
-                          <span className="text-[#1F3A32]">
+                          <span className="text-foreground">
                             {section.email}
                           </span>
                         </p>
@@ -190,18 +190,18 @@ const PrivacyPolicy = () => {
       {/* HELP CALLOUT */}
       <section className="container mx-auto px-4 pb-20">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-[#1F3A32] rounded-2xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="bg-footer rounded-2xl p-8 md:p-12 text-footer-foreground flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">
+              <h2 className="font-sans text-2xl md:text-3xl font-semibold mb-2">
                 Have questions about your privacy?
               </h2>
-              <p className="text-[#E4E9DD] opacity-90">
+              <p className="text-muted-foreground opacity-90">
                 Our team is here to help with any concerns or clarifications.
               </p>
             </div>
             <button
               onClick={() => router.push("/contact")}
-              className="bg-white text-[#1F3A32] px-8 py-4 rounded-xl font-bold hover:bg-[#F7F4EE] transition-all whitespace-nowrap shadow-lg"
+              className="bg-card text-foreground px-8 py-4 rounded-xl font-bold hover:bg-ivory transition-all whitespace-nowrap shadow-lg"
             >
               Contact Us
             </button>

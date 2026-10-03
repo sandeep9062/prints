@@ -148,7 +148,7 @@ export default function DetailsStep({
               <div className="absolute inset-0 shimmer-wave opacity-50" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold">
+              <h2 className="font-sans text-xl font-semibold">
                 Names & Event Details
               </h2>
               <p className="text-sm text-muted-foreground">
@@ -167,7 +167,7 @@ export default function DetailsStep({
               <label className="text-sm font-medium flex items-center gap-1.5">
                 <Heart className="h-3.5 w-3.5 text-primary/60" />
                 Groom's Name
-                <span className="text-red-400">*</span>
+                <span className="text-destructive">*</span>
               </label>
               <Input
                 name="groomName"
@@ -179,7 +179,7 @@ export default function DetailsStep({
                 className={cn(
                   "h-11 transition-all duration-200 focus-visible:ring-primary",
                   validationErrors.groomName &&
-                    "border-red-400 focus-visible:ring-red-400",
+                    "border-destructive/50 focus-visible:ring-brand",
                   focusedField === "groomName" && "ring-2 ring-primary/20",
                 )}
               />
@@ -187,7 +187,7 @@ export default function DetailsStep({
                 <motion.p
                   initial={{ opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-xs text-red-400 flex items-center gap-1"
+                  className="text-xs text-destructive flex items-center gap-1"
                 >
                   <AlertCircle className="h-3 w-3" />
                   {validationErrors.groomName}
@@ -198,7 +198,7 @@ export default function DetailsStep({
               <label className="text-sm font-medium flex items-center gap-1.5">
                 <Gem className="h-3.5 w-3.5 text-primary/60" />
                 Bride's Name
-                <span className="text-red-400">*</span>
+                <span className="text-destructive">*</span>
               </label>
               <Input
                 name="brideName"
@@ -210,7 +210,7 @@ export default function DetailsStep({
                 className={cn(
                   "h-11 transition-all duration-200 focus-visible:ring-primary",
                   validationErrors.brideName &&
-                    "border-red-400 focus-visible:ring-red-400",
+                    "border-destructive/50 focus-visible:ring-brand",
                   focusedField === "brideName" && "ring-2 ring-primary/20",
                 )}
               />
@@ -218,7 +218,7 @@ export default function DetailsStep({
                 <motion.p
                   initial={{ opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-xs text-red-400 flex items-center gap-1"
+                  className="text-xs text-destructive flex items-center gap-1"
                 >
                   <AlertCircle className="h-3 w-3" />
                   {validationErrors.brideName}
@@ -232,7 +232,7 @@ export default function DetailsStep({
               <label className="text-sm font-medium flex items-center gap-1.5">
                 <PartyPopper className="h-3.5 w-3.5 text-primary/60" />
                 Event Date
-                <span className="text-red-400">*</span>
+                <span className="text-destructive">*</span>
               </label>
               <Input
                 type="date"
@@ -242,14 +242,14 @@ export default function DetailsStep({
                 className={cn(
                   "h-11 transition-all duration-200 focus-visible:ring-primary",
                   validationErrors.eventDate &&
-                    "border-red-400 focus-visible:ring-red-400",
+                    "border-destructive/50 focus-visible:ring-brand",
                 )}
               />
               {validationErrors.eventDate && (
                 <motion.p
                   initial={{ opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-xs text-red-400 flex items-center gap-1"
+                  className="text-xs text-destructive flex items-center gap-1"
                 >
                   <AlertCircle className="h-3 w-3" />
                   {validationErrors.eventDate}
@@ -275,7 +275,7 @@ export default function DetailsStep({
               <label className="text-sm font-medium flex items-center gap-1.5">
                 <MapPin className="h-3.5 w-3.5 text-primary/60" />
                 Venue
-                <span className="text-red-400">*</span>
+                <span className="text-destructive">*</span>
               </label>
               <Input
                 name="venue"
@@ -296,7 +296,7 @@ export default function DetailsStep({
                 className={cn(
                   "h-11 transition-all duration-200 focus-visible:ring-primary",
                   validationErrors.venue &&
-                    "border-red-400 focus-visible:ring-red-400",
+                    "border-destructive/50 focus-visible:ring-brand",
                   focusedField === "venue" && "ring-2 ring-primary/20",
                 )}
               />
@@ -333,7 +333,7 @@ export default function DetailsStep({
                 <motion.p
                   initial={{ opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-xs text-red-400 flex items-center gap-1"
+                  className="text-xs text-destructive flex items-center gap-1"
                 >
                   <AlertCircle className="h-3 w-3" />
                   {validationErrors.venue}

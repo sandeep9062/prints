@@ -52,7 +52,7 @@ export default function BlogDetailClient({ slug }: BlogDetailClientProps) {
       <Button
         component={Link}
         href="/admin-dashboard/blogs"
-        color="#4161df"
+        color="hsl(var(--brand))"
         variant="subtle"
         leftSection={<ArrowLeft size={16} />}
         mb="xl"
@@ -61,7 +61,7 @@ export default function BlogDetailClient({ slug }: BlogDetailClientProps) {
       </Button>
 
       <Stack gap="lg">
-        <Badge size="lg" variant="filled" color="#4161df">
+        <Badge size="lg" variant="filled" color="hsl(var(--brand))">
           {blog.category}
         </Badge>
 

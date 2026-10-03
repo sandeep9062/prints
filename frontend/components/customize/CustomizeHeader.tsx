@@ -64,7 +64,7 @@ export default function CustomizeHeader() {
         <Sparkles className="h-3.5 w-3.5 text-primary sparkle-animation" />
       </div>
 
-      <h1 className="font-display text-4xl md:text-6xl font-semibold mb-4 tracking-tight">
+      <h1 className="font-serif text-4xl md:text-6xl font-semibold mb-4 tracking-tight">
         Customize Your
         <span className="block text-primary mt-2 relative">
           <span className="relative inline-block">

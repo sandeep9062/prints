@@ -18,18 +18,18 @@ export const OrderCard = ({
   phone,
 }: OrderProps) => {
   return (
-    <div className="bg-white border border-stone-200 group hover:border-stone-400 transition-colors">
+    <div className="bg-card border border-border group hover:border-border transition-colors">
       <div className="p-6 md:p-8">
         {/* Header: ID & Status */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-8">
           <div>
-            <p className="text-[10px] font-bold tracking-[0.2em] text-stone-400 uppercase">
+            <p className="text-[10px] font-bold text-muted-foreground ">
               Order Reference
             </p>
-            <p className="text-sm font-semibold text-stone-900">{orderId}</p>
+            <p className="text-sm font-semibold text-foreground">{orderId}</p>
           </div>
           <div className="mt-3 md:mt-0">
-            <span className="text-[10px] font-bold tracking-widest uppercase px-3 py-1 bg-stone-100 text-stone-600 border border-stone-200">
+            <span className="text-[10px] font-bold px-3 py-1 bg-muted-foreground border border-border">
               {status}
             </span>
           </div>
@@ -38,20 +38,20 @@ export const OrderCard = ({
         {/* Content: Details & Actions */}
         <div className="grid md:grid-cols-2 gap-8 items-end">
           <div className="space-y-1">
-            <p className="text-sm font-bold text-stone-900 uppercase tracking-tight">
+            <p className="text-sm font-bold text-foreground uppercase tracking-tight">
               {customerName}
             </p>
-            <p className="text-xs text-stone-500 leading-relaxed max-w-xs">
+            <p className="text-xs text-muted-foreground leading-relaxed max-w-xs">
               {address}
             </p>
-            <p className="text-xs text-stone-400 pt-2 font-medium">{phone}</p>
+            <p className="text-xs text-muted-foreground pt-2 font-medium">{phone}</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 md:justify-end">
-            <button className="px-8 py-3 border border-stone-200 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-stone-50 transition-all">
+            <button className="px-8 py-3 border border-border text-[10px] font-bold hover:bg-muted transition-all">
               Reorder
             </button>
-            <button className="px-8 py-3 bg-stone-900 text-white text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-stone-800 transition-all">
+            <button className="px-8 py-3 bg-footer text-footer-foreground text-[10px] font-bold hover:bg-brand-hover hover:text-primary-foreground transition-all">
               Track Order
             </button>
           </div>

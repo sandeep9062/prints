@@ -53,7 +53,7 @@ const useMounted = () =>
   useSyncExternalStore(subscribeToNothing, getClientSnapshot, getServerSnapshot);
 
 const ctaClass =
-  "mt-8 inline-flex items-center gap-2 rounded-none border border-red-900 px-8 py-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-red-900 transition-colors duration-300 hover:bg-red-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 dark:border-red-800 dark:text-red-400 dark:focus-visible:ring-offset-[#0f111a]";
+  "mt-8 inline-flex items-center gap-2 rounded-none border border-brand/50 px-8 py-4 text-[11px] font-semibold text-brand transition-colors duration-300 hover:bg-brand-hover hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 dark:border-destructive/50 dark:text-brand dark:focus-visible:ring-offset-footer";
 
 export default function FavouritesPage() {
   const mounted = useMounted();
@@ -105,7 +105,7 @@ export default function FavouritesPage() {
   const showSkeleton = !mounted || (isAuthenticated && isLoading);
 
   return (
-    <div className="min-h-screen bg-[#FCFBF9] dark:bg-[#0f111a]">
+    <div className="min-h-screen bg-background">
       <SEOHelper
         title="Favourites"
         description="Your saved printing pieces — wedding cards, visiting cards, brochures and more, kept together so you can return to them any time."
@@ -130,10 +130,10 @@ export default function FavouritesPage() {
             <div className="mt-12 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="animate-pulse">
-                  <div className="aspect-[4/5] w-full bg-stone-100 dark:bg-stone-800" />
-                  <div className="mt-5 h-2.5 w-24 bg-stone-100 dark:bg-stone-800" />
-                  <div className="mt-3 h-4 w-40 bg-stone-100 dark:bg-stone-800" />
-                  <div className="mt-3 h-3 w-16 bg-stone-100 dark:bg-stone-800" />
+                  <div className="aspect-[4/5] w-full bg-muted dark:bg-card" />
+                  <div className="mt-5 h-2.5 w-24 bg-muted dark:bg-card" />
+                  <div className="mt-3 h-4 w-40 bg-muted dark:bg-card" />
+                  <div className="mt-3 h-3 w-16 bg-muted dark:bg-card" />
                 </div>
               ))}
             </div>
@@ -141,18 +141,18 @@ export default function FavouritesPage() {
 
           {/* Signed out */}
           {mounted && !isAuthenticated && (
-            <div className="mt-12 flex flex-col items-center border border-stone-200 py-24 text-center dark:border-stone-700">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-stone-100 dark:bg-stone-800">
+            <div className="mt-12 flex flex-col items-center border border-border py-24 text-center dark:border-border">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted dark:bg-card">
                 <Heart
                   aria-hidden="true"
-                  className="h-9 w-9 text-stone-400 dark:text-stone-500"
+                  className="h-9 w-9 text-muted-foreground dark:text-muted-foreground"
                   strokeWidth={1.4}
                 />
               </div>
-              <p className="mt-7 font-serif text-2xl text-stone-900 dark:text-stone-100">
+              <p className="mt-7 font-sans text-2xl text-foreground dark:text-muted-foreground/70">
                 Sign in to see your favourites
               </p>
-              <p className="mt-3 max-w-sm text-sm font-light text-stone-500 dark:text-stone-400">
+              <p className="mt-3 max-w-sm text-sm font-normal text-muted-foreground dark:text-muted-foreground">
                 Your saved pieces are tied to your account, so they follow you
                 across every device.
               </p>
@@ -164,11 +164,11 @@ export default function FavouritesPage() {
 
           {/* Signed in, request failed */}
           {mounted && isAuthenticated && isError && (
-            <div className="mt-12 flex flex-col items-center border border-stone-200 py-24 text-center dark:border-stone-700">
-              <p className="font-serif text-2xl text-stone-900 dark:text-stone-100">
+            <div className="mt-12 flex flex-col items-center border border-border py-24 text-center dark:border-border">
+              <p className="font-sans text-2xl text-foreground dark:text-muted-foreground/70">
                 We couldn&apos;t load your favourites.
               </p>
-              <p className="mt-3 max-w-sm text-sm font-light text-stone-500 dark:text-stone-400">
+              <p className="mt-3 max-w-sm text-sm font-normal text-muted-foreground dark:text-muted-foreground">
                 Something went wrong on the way to the press. Give it another
                 try.
               </p>
@@ -188,18 +188,18 @@ export default function FavouritesPage() {
             !isLoading &&
             !isError &&
             favourites.length === 0 && (
-              <div className="mt-12 flex flex-col items-center border border-stone-200 py-24 text-center dark:border-stone-700">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-stone-100 dark:bg-stone-800">
+              <div className="mt-12 flex flex-col items-center border border-border py-24 text-center dark:border-border">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted dark:bg-card">
                   <Heart
                     aria-hidden="true"
-                    className="h-9 w-9 text-stone-400 dark:text-stone-500"
+                    className="h-9 w-9 text-muted-foreground dark:text-muted-foreground"
                     strokeWidth={1.4}
                   />
                 </div>
-                <p className="mt-7 font-serif text-2xl text-stone-900 dark:text-stone-100">
+                <p className="mt-7 font-sans text-2xl text-foreground dark:text-muted-foreground/70">
                   No favourites yet
                 </p>
-                <p className="mt-3 max-w-sm text-sm font-light text-stone-500 dark:text-stone-400">
+                <p className="mt-3 max-w-sm text-sm font-normal text-muted-foreground dark:text-muted-foreground">
                   Tap the heart on any piece in the catalogue and it will be kept
                   here for you.
                 </p>
@@ -217,7 +217,7 @@ export default function FavouritesPage() {
               <>
                 <p
                   aria-live="polite"
-                  className="mb-8 mt-12 text-[10px] font-semibold uppercase tracking-[0.25em] text-stone-400 dark:text-stone-500"
+                  className="mb-8 mt-12 text-[10px] font-semibold text-muted-foreground dark:text-muted-foreground"
                 >
                   {favourites.length}{" "}
                   {favourites.length === 1 ? "piece" : "pieces"} saved
@@ -247,8 +247,8 @@ export default function FavouritesPage() {
                           index={index}
                         />
 
-                        <div className="mt-4 flex items-center justify-between border-t border-stone-200 pt-3 dark:border-stone-700">
-                          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-stone-500">
+                        <div className="mt-4 flex items-center justify-between border-t border-border pt-3 dark:border-border">
+                          <span className="text-[10px] font-semibold text-muted-foreground dark:text-muted-foreground">
                             Saved
                           </span>
                           <button
@@ -257,7 +257,7 @@ export default function FavouritesPage() {
                             disabled={removingId === id}
                             aria-label={`Remove ${item.name} from favourites`}
                             className={cn(
-                              "inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-500 transition-colors hover:text-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 disabled:opacity-50 dark:text-stone-400 dark:hover:text-red-600 dark:focus-visible:ring-offset-[#0f111a]",
+                              "inline-flex items-center gap-2 text-[10px] font-semibold text-muted-foreground transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:opacity-50 dark:text-muted-foreground dark:hover:text-brand dark:focus-visible:ring-offset-footer",
                             )}
                           >
                             {removingId === id ? (

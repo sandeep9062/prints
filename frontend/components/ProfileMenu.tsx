@@ -77,7 +77,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
     return (
       <div className="border-t border-border/40 pt-5 pb-4">
         <div className="flex items-center gap-4 mb-4">
-          <Avatar className="w-12 h-12 ring-2 ring-rose-400/40 shadow-sm">
+          <Avatar className="w-12 h-12 ring-2 ring-brand/40 shadow-sm">
             <AvatarImage src={preview || undefined} alt={user?.name} />
             <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
           </Avatar>
@@ -93,7 +93,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
             className="w-full justify-start rounded-xl py-5 shadow-sm"
             onClick={handleOpenProfile}
           >
-            <UserIcon className="mr-2 h-5 w-5 text-[#B08D4A] dark:text-[#D2AE62]" />
+            <UserIcon className="mr-2 h-5 w-5 text-gold-text dark:text-gold" />
             Edit Profile
           </Button>
 
@@ -102,7 +102,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
             className="w-full justify-start rounded-xl py-5 shadow-sm"
             onClick={handleDashboardRedirect}
           >
-            <Heart className="mr-2 h-5 w-5 text-[#B08D4A] dark:text-[#D2AE62]" />
+            <Heart className="mr-2 h-5 w-5 text-gold-text dark:text-gold" />
             Dashboard
           </Button>
 
@@ -126,14 +126,14 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Avatar className="cursor-pointer ring-2 ring-rose-400/40 shadow-md hover:scale-105 transition-all">
+          <Avatar className="cursor-pointer ring-2 ring-brand/40 shadow-md hover:scale-105 transition-all">
             <AvatarImage src={preview || undefined} alt={user?.name} />
             <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
-          className="w-60 rounded-xl shadow-xl border bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl dark:border-gray-700"
+          className="w-60 rounded-xl shadow-xl border bg-background/90 dark:bg-card/90 backdrop-blur-xl dark:border-border"
           align="end"
         >
           <DropdownMenuLabel className="pb-2">
@@ -146,7 +146,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
             className="rounded-md cursor-pointer"
             onClick={handleOpenProfile}
           >
-            <UserIcon className="mr-2 h-4 w-4 text-[#B08D4A] dark:text-[#D2AE62]" />
+            <UserIcon className="mr-2 h-4 w-4 text-gold-text dark:text-gold" />
             Profile
           </DropdownMenuItem>
 
@@ -154,14 +154,14 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, mobile }) => {
             className="rounded-md cursor-pointer"
             onClick={handleDashboardRedirect}
           >
-            <Heart className="mr-2 h-4 w-4 text-[#B08D4A] dark:text-[#D2AE62]" />
+            <Heart className="mr-2 h-4 w-4 text-gold-text dark:text-gold" />
             Dashboard
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={handleLogout}
-            className="text-red-500 dark:text-red-400 rounded-md cursor-pointer"
+            className="text-destructive dark:text-destructive rounded-md cursor-pointer"
           >
             <LogOut className="mr-2 h-4 w-4" />
             Logout

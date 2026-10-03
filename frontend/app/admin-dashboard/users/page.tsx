@@ -67,7 +67,7 @@ import type { User } from "@/services/userApi";
 import { formatDate } from "@/lib/utils";
 
 const getUserStatusColor = (status: boolean) => {
-  return status ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800";
+  return status ? "bg-success/10 text-success" : "bg-muted text-foreground";
 };
 
 const AdminUsers = () => {
@@ -185,10 +185,10 @@ const AdminUsers = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+          <h1 className="font-sans text-2xl lg:text-3xl font-semibold text-foreground">
             User Directory
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Manage all users, customers and merchants
           </p>
         </div>
@@ -211,8 +211,8 @@ const AdminUsers = () => {
       {isLoading && (
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
-            <Loader2 className="h-10 w-10 animate-spin text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500">Loading users...</p>
+            <Loader2 className="h-10 w-10 animate-spin text-muted-foreground mx-auto mb-4" />
+            <p className="text-muted-foreground">Loading users...</p>
           </div>
         </div>
       )}
@@ -221,11 +221,11 @@ const AdminUsers = () => {
       {isError && !isLoading && (
         <Card className="mb-6">
           <CardContent className="p-12 text-center">
-            <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               Failed to Load Users
             </h3>
-            <p className="text-gray-500 mb-4">
+            <p className="text-muted-foreground mb-4">
               {error?.toString() || "An error occurred while fetching users."}
             </p>
             <Button onClick={() => refetch()} variant="default">
@@ -244,20 +244,20 @@ const AdminUsers = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">
+                    <p className="text-sm font-medium text-muted-foreground">
                       Total Users
                     </p>
-                    <h3 className="text-2xl font-bold mt-1">
+                    <h3 className="font-sans text-2xl font-semibold mt-1">
                       {stats.total.toLocaleString()}
                     </h3>
                     {stats.total > 0 && (
-                      <p className="text-sm text-green-600 mt-1">
+                      <p className="text-sm text-success mt-1">
                         Registered users
                       </p>
                     )}
                   </div>
-                  <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                    <Users className="h-6 w-6 text-blue-700" />
+                  <div className="h-12 w-12 rounded-full bg-brand-soft flex items-center justify-center">
+                    <Users className="h-6 w-6 text-brand" />
                   </div>
                 </div>
               </CardContent>
@@ -266,21 +266,21 @@ const AdminUsers = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">
+                    <p className="text-sm font-medium text-muted-foreground">
                       Active Users
                     </p>
-                    <h3 className="text-2xl font-bold mt-1">
+                    <h3 className="font-sans text-2xl font-semibold mt-1">
                       {stats.active.toLocaleString()}
                     </h3>
                     {stats.total > 0 && (
-                      <p className="text-sm text-green-600 mt-1">
+                      <p className="text-sm text-success mt-1">
                         {Math.round((stats.active / stats.total) * 100)}%
                         engagement rate
                       </p>
                     )}
                   </div>
-                  <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
-                    <Users className="h-6 w-6 text-green-700" />
+                  <div className="h-12 w-12 rounded-full bg-success/10 flex items-center justify-center">
+                    <Users className="h-6 w-6 text-success" />
                   </div>
                 </div>
               </CardContent>
@@ -289,20 +289,20 @@ const AdminUsers = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">
+                    <p className="text-sm font-medium text-muted-foreground">
                       New This Month
                     </p>
-                    <h3 className="text-2xl font-bold mt-1">
+                    <h3 className="font-sans text-2xl font-semibold mt-1">
                       {stats.newThisMonth.toLocaleString()}
                     </h3>
                     {stats.total > 0 && (
-                      <p className="text-sm text-green-600 mt-1">
+                      <p className="text-sm text-success mt-1">
                         Registered this month
                       </p>
                     )}
                   </div>
-                  <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
-                    <UserPlus className="h-6 w-6 text-purple-700" />
+                  <div className="h-12 w-12 rounded-full bg-brand-soft flex items-center justify-center">
+                    <UserPlus className="h-6 w-6 text-brand" />
                   </div>
                 </div>
               </CardContent>
@@ -314,7 +314,7 @@ const AdminUsers = () => {
             <CardContent className="p-4">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     placeholder="Search users by name or email..."
                     className="pl-10"
@@ -365,11 +365,11 @@ const AdminUsers = () => {
             <CardContent>
               {filteredUsers.length === 0 ? (
                 <div className="text-center py-12">
-                  <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-1">
+                  <Users className="h-12 w-12 text-muted-foreground/70 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-foreground mb-1">
                     No users found
                   </h3>
-                  <p className="text-gray-500">
+                  <p className="text-muted-foreground">
                     {searchQuery ||
                     roleFilter !== "all" ||
                     statusFilter !== "all"
@@ -402,7 +402,7 @@ const AdminUsers = () => {
                             </Avatar>
                             <div>
                               <div className="font-medium">{user.name}</div>
-                              <div className="text-sm text-gray-500">
+                              <div className="text-sm text-muted-foreground">
                                 {user.email}
                               </div>
                             </div>
@@ -413,7 +413,7 @@ const AdminUsers = () => {
                             {user.role === "client" ? "Customer" : user.role}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-gray-500">
+                        <TableCell className="text-muted-foreground">
                           {user.phone || "—"}
                         </TableCell>
                         <TableCell>
@@ -424,7 +424,7 @@ const AdminUsers = () => {
                             {user.isActive ? "Active" : "Inactive"}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-gray-500">
+                        <TableCell className="text-muted-foreground">
                           {user.createdAt ? formatDate(user.createdAt) : "—"}
                         </TableCell>
                         <TableCell className="text-right">
@@ -489,16 +489,16 @@ const AdminUsers = () => {
                 </Avatar>
                 <div>
                   <h3 className="text-lg font-semibold">{selectedUser.name}</h3>
-                  <p className="text-sm text-gray-500">{selectedUser.email}</p>
+                  <p className="text-sm text-muted-foreground">{selectedUser.email}</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-gray-500">Role</p>
+                  <p className="text-muted-foreground">Role</p>
                   <p className="font-medium capitalize">{selectedUser.role}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500">Status</p>
+                  <p className="text-muted-foreground">Status</p>
                   <Badge
                     variant="secondary"
                     className={getUserStatusColor(selectedUser.isActive)}
@@ -507,13 +507,13 @@ const AdminUsers = () => {
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-gray-500">Phone</p>
+                  <p className="text-muted-foreground">Phone</p>
                   <p className="font-medium">
                     {selectedUser.phone || "Not provided"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-500">Joined</p>
+                  <p className="text-muted-foreground">Joined</p>
                   <p className="font-medium">
                     {selectedUser.createdAt
                       ? formatDate(selectedUser.createdAt)
@@ -544,7 +544,7 @@ const AdminUsers = () => {
             <AlertDialogAction
               onClick={handleDeleteConfirm}
               disabled={isDeleting}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-primary hover:bg-brand-hover"
             >
               {isDeleting ? (
                 <>

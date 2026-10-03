@@ -102,16 +102,16 @@ export default function NewBlogPage() {
   };
 
   return (
-    <div className="p-4 md:p-8 max-w-6xl mx-auto bg-gray-50 min-h-screen">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto bg-muted min-h-screen">
       <div className="mb-6 flex items-center justify-between">
         <Link
           href="/admin-dashboard/blogs"
-          className="flex items-center gap-2 text-slate-600 hover:text-[#4161df] transition-colors font-medium"
+          className="flex items-center gap-2 text-muted-foreground hover:text-brand transition-colors font-medium"
         >
           <ArrowLeft size={20} />
           <span>Back to Blogs</span>
         </Link>
-        <h1 className="text-xl font-bold text-slate-900">Create New Blog</h1>
+        <h1 className="font-sans text-xl font-semibold text-foreground">Create New Blog</h1>
       </div>
 
       <form
@@ -120,16 +120,16 @@ export default function NewBlogPage() {
       >
         {/* Main Content Column */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-5">
+          <div className="bg-card p-6 rounded-xl border border-border shadow-sm space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+              <label className="block text-sm font-semibold text-foreground mb-1.5">
                 Blog Title
               </label>
               <input
                 required
                 type="text"
                 placeholder="e.g. How to Choose the Right Property"
-                className="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#4161df]/20 outline-none transition-all"
+                className="w-full px-4 py-2.5 rounded-lg border border-border focus:ring-2 focus:ring-brand/20 outline-none transition-all"
                 value={formData.title}
                 onChange={(e) => {
                   const newTitle = e.target.value;
@@ -147,13 +147,13 @@ export default function NewBlogPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+              <label className="block text-sm font-semibold text-foreground mb-1.5">
                 Slug (URL-friendly)
               </label>
               <input
                 type="text"
                 placeholder="auto-generated-from-title"
-                className="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#4161df]/20 outline-none transition-all"
+                className="w-full px-4 py-2.5 rounded-lg border border-border focus:ring-2 focus:ring-brand/20 outline-none transition-all"
                 value={formData.slug}
                 onChange={(e) =>
                   setFormData({ ...formData, slug: e.target.value })
@@ -162,14 +162,14 @@ export default function NewBlogPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+              <label className="block text-sm font-semibold text-foreground mb-1.5">
                 Tags
               </label>
               <div className="flex gap-2 mb-2">
                 <input
                   type="text"
                   placeholder="Type tags separated by comma, then press Add"
-                  className="flex-1 px-4 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#4161df]/20 outline-none transition-all"
+                  className="flex-1 px-4 py-2 rounded-lg border border-border focus:ring-2 focus:ring-brand/20 outline-none transition-all"
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -182,7 +182,7 @@ export default function NewBlogPage() {
                 <button
                   type="button"
                   onClick={addTags}
-                  className="px-4 py-2 bg-[#4161df] text-white rounded-lg text-sm hover:bg-[#3551c0] transition-colors"
+                  className="px-4 py-2 bg-brand text-primary-foreground rounded-lg text-sm hover:bg-brand-hover transition-colors"
                 >
                   Add
                 </button>
@@ -192,13 +192,13 @@ export default function NewBlogPage() {
                   {formData.tags.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
+                      className="inline-flex items-center gap-1 px-3 py-1 bg-brand-soft text-brand rounded-full text-sm"
                     >
                       {tag}
                       <button
                         type="button"
                         onClick={() => removeTag(idx)}
-                        className="hover:text-red-500 transition-colors"
+                        className="hover:text-destructive transition-colors"
                       >
                         <X size={14} />
                       </button>
@@ -209,13 +209,13 @@ export default function NewBlogPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+              <label className="block text-sm font-semibold text-foreground mb-1.5">
                 Excerpt (Meta Description)
               </label>
               <textarea
                 rows={3}
                 placeholder="Briefly describe what this blog is about for SEO..."
-                className="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#4161df]/20 outline-none resize-none transition-all"
+                className="w-full px-4 py-2.5 rounded-lg border border-border focus:ring-2 focus:ring-brand/20 outline-none resize-none transition-all"
                 value={formData.excerpt}
                 onChange={(e) =>
                   setFormData({ ...formData, excerpt: e.target.value })
@@ -224,7 +224,7 @@ export default function NewBlogPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+              <label className="block text-sm font-semibold text-foreground mb-1.5">
                 Content
               </label>
               <RichTextEditor
@@ -238,13 +238,13 @@ export default function NewBlogPage() {
 
         {/* Sidebar Settings Column */}
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-5">
+          <div className="bg-card p-6 rounded-xl border border-border shadow-sm space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+              <label className="block text-sm font-semibold text-foreground mb-1.5">
                 Category
               </label>
               <select
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-[#4161df] transition-colors cursor-pointer"
+                className="w-full px-3 py-2 rounded-lg border border-border outline-none focus:border-brand transition-colors cursor-pointer"
                 value={formData.category}
                 onChange={(e) =>
                   setFormData({ ...formData, category: e.target.value })
@@ -265,12 +265,12 @@ export default function NewBlogPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+              <label className="block text-sm font-semibold text-foreground mb-1.5">
                 Cover Image
               </label>
               <div className="space-y-3">
                 {imagePreview && (
-                  <div className="relative aspect-video rounded-lg overflow-hidden border border-slate-200">
+                  <div className="relative aspect-video rounded-lg overflow-hidden border border-border">
                     <img
                       src={imagePreview}
                       alt="Preview"
@@ -288,7 +288,7 @@ export default function NewBlogPage() {
                   />
                   <label
                     htmlFor="coverImage"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-dashed border-slate-300 hover:border-[#4161df] hover:bg-[#4161df]/5 cursor-pointer transition-all text-sm text-slate-600"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-dashed border-border hover:border-brand hover:bg-brand/5 cursor-pointer transition-all text-sm text-muted-foreground"
                   >
                     <ImageIcon size={20} />
                     <span>
@@ -300,10 +300,10 @@ export default function NewBlogPage() {
                 </div>
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-slate-100"></span>
+                    <span className="w-full border-t border-border"></span>
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-2 text-slate-400">
+                    <span className="bg-card px-2 text-muted-foreground">
                       Or use URL
                     </span>
                   </div>
@@ -311,7 +311,7 @@ export default function NewBlogPage() {
                 <input
                   type="text"
                   placeholder="https://..."
-                  className="w-full px-4 py-2 rounded-lg border border-slate-200 outline-none text-sm"
+                  className="w-full px-4 py-2 rounded-lg border border-border outline-none text-sm"
                   value={
                     typeof formData.coverImage === "string"
                       ? formData.coverImage
@@ -325,12 +325,12 @@ export default function NewBlogPage() {
               </div>
             </div>
 
-            <hr className="border-slate-100" />
+            <hr className="border-border" />
 
             <button
               disabled={loading}
               type="submit"
-              className="w-full bg-[#4161df] text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-[#3551c0] disabled:opacity-50 transition-all shadow-lg shadow-[#4161df]/20"
+              className="w-full bg-brand text-primary-foreground py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-brand-hover disabled:opacity-50 transition-all shadow-lg shadow-brand/20"
             >
               {loading ? (
                 <Loader2 className="animate-spin" size={20} />

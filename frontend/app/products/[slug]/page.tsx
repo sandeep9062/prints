@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: product.name,
     description:
       product.description?.substring(0, 160) ||
-      `Buy ${product.name} online from Samlason Printing Press. Premium quality printing at the best price.`,
+      `Buy ${product.name} online from Ink of Memories. Premium quality printing at the best price.`,
     openGraph: {
       title: product.name,
       description: product.description?.substring(0, 160),
@@ -76,7 +76,7 @@ export default async function ProductDetailPage({ params }: Props) {
     ...(product.category && { category: product.category }),
     brand: {
       "@type": "Brand",
-      name: "Samlason Printing Press",
+      name: "Ink of Memories",
     },
     offers: {
       "@type": "Offer",

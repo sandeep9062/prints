@@ -8,15 +8,15 @@ import { cn } from "@/lib/utils";
  *
  * They mirror the editorial language used across the homepage: square corners,
  * hairline stone borders, uppercase micro-labels and the deep red accent
- * (`red-800`) instead of the generic rounded/rose defaults.
+ * (the brand ink blue) instead of the generic rounded defaults.
  */
 
 export const authInputClass =
-  "w-full rounded-none border border-stone-300 bg-white px-4 py-3.5 text-sm text-stone-900 " +
-  "placeholder-stone-400 shadow-none transition-colors duration-200 outline-none " +
-  "focus:border-red-800 focus:ring-1 focus:ring-red-800 " +
-  "dark:border-stone-700 dark:bg-stone-900/40 dark:text-stone-100 dark:placeholder-stone-500 " +
-  "dark:focus:border-red-600 dark:focus:ring-red-600";
+  "w-full rounded-none border border-border bg-card px-4 py-3.5 text-sm text-foreground " +
+  "placeholder:text-muted-foreground shadow-none transition-colors duration-200 outline-none " +
+  "focus:border-brand focus:ring-1 focus:ring-brand " +
+  "" +
+  "";
 
 /** Small caps label that sits above every auth input. */
 export function AuthLabel({
@@ -29,7 +29,7 @@ export function AuthLabel({
   return (
     <label
       htmlFor={htmlFor}
-      className="block text-[10px] font-semibold uppercase tracking-[0.25em] text-stone-500 dark:text-stone-400"
+      className="block text-[10px] font-semibold text-muted-foreground"
     >
       {children}
     </label>
@@ -42,7 +42,7 @@ export function AuthError({ message }: { message?: string }) {
   return (
     <p
       role="alert"
-      className="mt-2 flex items-start gap-2 text-xs text-red-700 dark:text-red-400"
+      className="mt-2 flex items-start gap-2 text-xs text-destructive"
     >
       <span aria-hidden="true" className="mt-1.5 h-px w-3 shrink-0 bg-current" />
       {message}
@@ -82,7 +82,7 @@ export function AuthField({
       <AuthLabel htmlFor={id}>{label}</AuthLabel>
       {children({ id, describedBy })}
       {hint && (
-        <p id={hintId} className="text-xs text-stone-400 dark:text-stone-500">
+        <p id={hintId} className="text-xs text-muted-foreground">
           {hint}
         </p>
       )}

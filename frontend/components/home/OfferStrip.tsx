@@ -18,23 +18,23 @@ export default function OfferStrip() {
   ];
 
   return (
-    <div className="w-full bg-stone-900 text-stone-100 py-2.5 relative border-b border-white/10 shadow-sm">
+    <div className="w-full bg-footer py-2.5 relative border-b border-gold/20 shadow-sm text-footer-foreground">
       <div className="container mx-auto flex items-center px-4">
         {/* Scrolling Offers */}
         <div className="flex-1 overflow-hidden">
           <Marquee
             gradient={true}
-            gradientColor="rgb(28, 25, 23)"
+            gradientColor="hsl(var(--footer))"
             gradientWidth={50}
             speed={35}
           >
             {offers.map((offer, index) => (
               <div key={index} className="flex items-center mx-12">
-                <span className="text-[11px] uppercase tracking-[0.25em] font-medium">
+                <span className="text-[11px] font-medium">
                   {offer}
                 </span>
                 <Link href="/offers" className="ml-3 group flex items-center">
-                  <span className="text-[10px] underline underline-offset-4 decoration-stone-500 hover:decoration-white transition-colors uppercase tracking-widest">
+                  <span className="text-[10px] underline underline-offset-4 decoration-footer-muted hover:decoration-gold transition-colors ">
                     Details
                   </span>
                   <ArrowRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />

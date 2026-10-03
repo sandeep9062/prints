@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title:
     "Printing Services - Ink of Memories | Wedding Cards, Visiting Cards, Brochures & More",
   description:
-    "Explore premium printing from Samlason Printing Press — wedding cards, invitation cards, visiting cards, shagun envelopes, letter pads, brochures, banners, packaging, stickers and rubber stamps. Customised in-house in Panchkula.",
+    "Explore premium printing from Ink of Memories — wedding cards, invitation cards, visiting cards, shagun envelopes, letter pads, brochures, banners, packaging, stickers and rubber stamps. Customised in-house in Panchkula.",
   openGraph: {
     title:
       "Printing Services - Ink of Memories | Hand-Pressed Stationery",
@@ -46,7 +46,7 @@ function OtherServicesStructuredData() {
     "@type": "ServicePage",
     name: "Printing Services - Ink of Memories",
     description:
-      "Premium printing from Samlason Printing Press — wedding cards, visiting cards, shagun envelopes, letter pads, brochures, banners, packaging, stickers and rubber stamps.",
+      "Premium printing from Ink of Memories — wedding cards, visiting cards, shagun envelopes, letter pads, brochures, banners, packaging, stickers and rubber stamps.",
     url: "https://inkofmemories.com/other-services",
     publisher: {
       "@type": "Organization",

@@ -15,14 +15,14 @@ const Companies = () => {
   ];
 
   return (
-    <section className="w-full py-5 sm:py-10 bg-gray-50">
+    <section className="w-full py-5 sm:py-10 bg-muted">
       <div className="max-w-7xl mx-auto px-4">
         <div className="relative w-full overflow-hidden">
           {/* LEFT GRADIENT */}
-          <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-gray-50 to-transparent z-20"></div>
+          <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-brand-soft to-transparent z-20"></div>
 
           {/* RIGHT GRADIENT */}
-          <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-gray-50 to-transparent z-20"></div>
+          <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-brand-soft to-transparent z-20"></div>
 
           {/* Slider Track */}
           <div className="flex items-center gap-10 animate-scroll whitespace-nowrap">

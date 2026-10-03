@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../contexts/CartContext";
 import { Providers } from "./providers";
@@ -9,25 +9,35 @@ import CompareDrawer from "@/components/CompareDrawer";
 import { Toaster } from "sonner";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { BRAND_NAME, FOUNDED_YEAR, LEGAL_NAME } from "@/lib/site-config";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+/* Typography — two families, loaded through next/font so they are self-hosted
+   and preloaded (no external <link>, no FOUT):
+     --font-cormorant → Cormorant Garamond: headings only, 500/600, >= 28px.
+     --font-dm-sans    → DM Sans: everything else (body, nav, buttons, forms).
+   The variables land on <html> so :root-scoped rules (e.g. the sonner toaster)
+   can read them too. */
+const serif = Cormorant_Garamond({
   subsets: ["latin"],
+  weight: ["500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const sans = DM_Sans({
   subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default:
-      "Ink of Memories | Premium Printing & Design Services by Samlason Printing Press",
-    template: "%s | Ink of Memories",
+    default: `${BRAND_NAME} | Premium Printing & Design Services`,
+    template: `%s | ${BRAND_NAME}`,
   },
   description:
-    "Premium printing services by Samlason Printing Press since 2004. Wedding cards, visiting cards, brochures, banners, packaging & personalized gifts in Panchkula, Chandigarh.",
+    `Premium printing services by ${LEGAL_NAME} since ${FOUNDED_YEAR}. Wedding cards, visiting cards, brochures, banners, packaging & personalized gifts in Panchkula, Chandigarh.`,
   keywords: [
     "printing press",
     "wedding cards",
@@ -41,36 +51,35 @@ export const metadata: Metadata = {
     "gold foil printing",
     "Panchkula printing",
     "Chandigarh printing",
-    "Samlason Printing",
     "Ink of Memories",
     "premium printing India",
   ],
-  authors: [{ name: "Samlason Printing Press" }],
-  creator: "Ink of Memories",
-  publisher: "Samlason Printing Press",
+  authors: [{ name: LEGAL_NAME }],
+  creator: BRAND_NAME,
+  publisher: LEGAL_NAME,
   metadataBase: new URL("https://inkofmemories.com"),
   openGraph: {
     type: "website",
     locale: "en_IN",
-    siteName: "Ink of Memories",
-    title: "Ink of Memories | Premium Printing & Design Services",
+    siteName: BRAND_NAME,
+    title: `${BRAND_NAME} | Premium Printing & Design Services`,
     description:
-      "Premium printing services by Samlason Printing Press since 2004. Wedding cards, visiting cards, brochures, banners, packaging & personalized gifts.",
+      `Premium printing services by ${LEGAL_NAME} since ${FOUNDED_YEAR}. Wedding cards, visiting cards, brochures, banners, packaging & personalized gifts.`,
     url: "https://inkofmemories.com",
     images: [
       {
         url: "https://inkofmemories.com/inkofmemories.png",
         width: 1200,
         height: 630,
-        alt: "Ink of Memories - Premium Printing",
+        alt: `${BRAND_NAME} - Premium Printing`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ink of Memories | Premium Printing",
+    title: `${BRAND_NAME} | Premium Printing`,
     description:
-      "Premium printing services by Samlason Printing Press since 2004. Wedding cards, visiting cards, brochures & more.",
+      `Premium printing services by ${LEGAL_NAME} since ${FOUNDED_YEAR}. Wedding cards, visiting cards, brochures & more.`,
     images: ["https://inkofmemories.com/inkofmemories.png"],
     creator: "@inkofmemories",
   },
@@ -92,10 +101,19 @@ export const metadata: Metadata = {
       "x-default": "https://inkofmemories.com",
     },
   },
-  verification: {
-    google: "YOUR_GOOGLE_VERIFICATION_CODE", // Add your Google Search Console verification code here
-  },
+  /*
+    `verification` intentionally omitted: it was still holding the literal
+    placeholder "YOUR_GOOGLE_VERIFICATION_CODE", which Next.js would have
+    rendered into the page as a real (and invalid) verification meta tag.
+    Add your own Search Console code here once you have one.
+  */
   category: "printing",
+};
+
+// Ink blue brand colour, so the browser UI (address bar, notch) matches the
+// page. Exported via `viewport` (Next 14+); `metadata.themeColor` is deprecated.
+export const viewport: Viewport = {
+  themeColor: "#2D47BE",
 };
 
 export default function RootLayout({
@@ -104,12 +122,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-IN" suppressHydrationWarning>
+    <html
+      lang="en-IN"
+      suppressHydrationWarning
+      className={`${serif.variable} ${sans.variable}`}
+    >
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="geo.region" content="IN-HR" />
         <meta name="geo.placename" content="Panchkula" />
-        <meta name="theme-color" content="#991b1b" />
         {/*
           Restore the colour scheme BEFORE first paint. Tailwind v4 keys its
           `dark:` variant off a `.dark` class on <html> (see globals.css), but
@@ -124,9 +145,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="font-sans antialiased">
         <Providers>
           <SmoothScroll>
             <RouteTransitionWrapper>

@@ -52,7 +52,7 @@ export default function ProductDetailClient({
     price: product.discountPrice || product.price,
     currency: "INR",
     category: product.category,
-    brand: "Samlason Printing Press",
+    brand: "Ink of Memories",
   });
 
   const { addItem } = useCart();
@@ -121,7 +121,7 @@ export default function ProductDetailClient({
         title={product.name}
         description={
           product.description?.substring(0, 160) ||
-          `Buy ${product.name} online from Samlason Printing Press. Premium quality printing at the best price.`
+          `Buy ${product.name} online from Ink of Memories. Premium quality printing at the best price.`
         }
         path={`/products/${slug}`}
         image={
@@ -151,7 +151,7 @@ export default function ProductDetailClient({
                   <CarouselContent>
                     {product.images.map((img: string, index: number) => (
                       <CarouselItem key={index}>
-                        <div className="aspect-square rounded-xl overflow-hidden bg-white">
+                        <div className="aspect-square rounded-xl overflow-hidden bg-card">
                           <Image
                             src={img}
                             alt={`${product.name} ${index + 1}`}
@@ -204,7 +204,7 @@ export default function ProductDetailClient({
 
               {/* Title */}
               <div>
-                <h1 className="text-4xl font-bold tracking-tight">
+                <h1 className="text-4xl font-medium tracking-tight">
                   {product.name}
                 </h1>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -219,12 +219,12 @@ export default function ProductDetailClient({
 
               {/* Pricing */}
               <div className="flex items-end gap-4">
-                <span className="text-4xl font-semibold text-primary">
+                <span className="text-4xl font-semibold tabular-nums text-primary">
                   ₹{Math.round(calculatedPrice).toLocaleString()}
                 </span>
 
                 {calculatedOriginal && (
-                  <span className="line-through text-gray-500 text-lg mt-1">
+                  <span className="line-through text-muted-foreground text-lg mt-1 tabular-nums">
                     ₹{Math.round(calculatedOriginal).toLocaleString()}
                   </span>
                 )}
@@ -271,7 +271,7 @@ export default function ProductDetailClient({
               <div>
                 <label className="font-medium text-sm">Quantity</label>
                 <div className="flex items-center gap-4 mt-2">
-                  <div className="flex border rounded-xl overflow-hidden bg-white shadow-sm">
+                  <div className="flex border rounded-xl overflow-hidden bg-card shadow-sm">
                     <button
                       onClick={() =>
                         setQuantity((q) =>
@@ -342,7 +342,7 @@ export default function ProductDetailClient({
 
           {/* ----------- PRODUCT SPECIFICATIONS ----------- */}
           <section className="mt-24">
-            <h2 className="text-2xl font-bold mb-6">Product Specifications</h2>
+            <h2 className="font-sans text-2xl font-semibold mb-6">Product Specifications</h2>
 
             <div className="grid md:grid-cols-3 gap-6">
               <DetailCard label="Category" value={product.category} />
@@ -392,8 +392,8 @@ function OptionSection({
             className={cn(
               "px-4 py-2 rounded-xl border text-sm font-medium transition shadow-sm",
               selected === opt
-                ? "bg-primary text-white border-primary shadow"
-                : "border-gray-300 hover:border-primary hover:bg-primary/5",
+                ? "bg-primary text-primary-foreground border-primary shadow"
+                : "border-border hover:border-primary hover:bg-primary/5",
             )}
           >
             {opt}

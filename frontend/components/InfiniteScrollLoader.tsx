@@ -71,7 +71,7 @@ export default function InfiniteScrollLoader({
       className="w-full flex justify-center py-6 animate-in"
     >
       {loading && (
-        <div className="flex items-center gap-3 text-gray-500">
+        <div className="flex items-center gap-3 text-muted-foreground">
           <Loader2 className="h-5 w-5 animate-spin" />
           <span className="text-sm font-medium">Loading more ...</span>
         </div>

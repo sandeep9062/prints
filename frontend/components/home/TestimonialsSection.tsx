@@ -6,10 +6,11 @@ import { motion, useReducedMotion } from "framer-motion";
 
 /*
   Design notes
-  - Matches the hero: bottle-green desk (#1F3A32), paper stocks, foil gold
-    (#D2AE62 on dark, #B08D4A on paper), wax-rose seals.
-  - Each review is a stationery card on its own paper stock (bone, blush,
-    mist, midnight). The avatar is a wax seal with the client's initials.
+  - Matches the hero: midnight navy desk (bg-footer), paper stocks, champagne
+    gold. The section is always dark, so text uses the fixed light-on-navy
+    tokens (footer-foreground / footer-muted) rather than `foreground`.
+  - Each review is a stationery card on its own paper stock (ivory, blush,
+    brand-soft, midnight). The avatar is a wax seal with the client's initials.
   - Autoplay can be paused (WCAG 2.2.2) and is off under reduced motion.
 */
 
@@ -30,7 +31,7 @@ const testimonials: Testimonial[] = [
     event: "Wedding, Mumbai",
     product: "Wedding invitations",
     content:
-      "The wedding cards were absolutely stunning. Every guest complimented the design and the quality of the paper. Samlason made our special day even more memorable.",
+      "The wedding cards were absolutely stunning. Every guest complimented the design and the quality of the paper. The studio made our special day even more memorable.",
     rating: 5,
   },
   {
@@ -98,35 +99,37 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-// Paper stocks, cycled across the cards
+// Paper stocks, cycled across the cards: ivory, blush, brand-soft and one
+// midnight navy card with gold foil. Fed into inline `style`s, so they read the
+// tokens as hsl(var(--…)) rather than as Tailwind class names.
 const PAPERS = [
   {
-    card: "#F7F4EE",
-    ink: "#1F3A32",
-    muted: "#4F655D",
-    rule: "#B08D4A",
-    star: "#B08D4A",
+    card: "hsl(var(--paper-1))",
+    ink: "hsl(var(--paper-ink))",
+    muted: "hsl(var(--paper-ink-muted))",
+    rule: "hsl(var(--gold))",
+    star: "hsl(var(--gold-text))",
   },
   {
-    card: "#F4E4E0",
-    ink: "#1F3A32",
-    muted: "#5B5A55",
-    rule: "#B08D4A",
-    star: "#B08D4A",
+    card: "hsl(var(--paper-2))",
+    ink: "hsl(var(--paper-ink))",
+    muted: "hsl(var(--paper-ink-muted))",
+    rule: "hsl(var(--gold))",
+    star: "hsl(var(--gold-text))",
   },
   {
-    card: "#E3EAEF",
-    ink: "#1F3A32",
-    muted: "#4F655D",
-    rule: "#B08D4A",
-    star: "#B08D4A",
+    card: "hsl(var(--paper-3))",
+    ink: "hsl(var(--paper-ink))",
+    muted: "hsl(var(--paper-ink-muted))",
+    rule: "hsl(var(--gold))",
+    star: "hsl(var(--gold-text))",
   },
   {
-    card: "#2A463C",
-    ink: "#F3EBDD",
-    muted: "#C9D3CC",
-    rule: "#D2AE62",
-    star: "#D2AE62",
+    card: "hsl(var(--paper-4))",
+    ink: "hsl(var(--paper-4-ink))",
+    muted: "hsl(var(--paper-4-muted))",
+    rule: "hsl(var(--gold))",
+    star: "hsl(var(--gold))",
   },
 ] as const;
 
@@ -136,10 +139,10 @@ const AUTOPLAY_DELAY = 5500;
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const navBtn =
-  "flex h-11 w-11 items-center justify-center rounded-full border border-[#E4E9DD]/40 " +
-  "text-[#F7F4EE] transition-colors duration-300 hover:bg-[#F7F4EE] hover:text-[#1F3A32] " +
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D2AE62] " +
-  "focus-visible:ring-offset-2 focus-visible:ring-offset-[#1F3A32] dark:focus-visible:ring-offset-[#121C18] " +
+  "flex h-11 w-11 items-center justify-center rounded-full border border-footer-foreground/40 " +
+  "text-footer-foreground transition-colors duration-300 hover:bg-gold hover:text-footer " +
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand " +
+  "focus-visible:ring-offset-2 focus-visible:ring-offset-footer " +
   "active:scale-95 motion-reduce:transition-none";
 
 const initials = (name: string) =>
@@ -151,18 +154,18 @@ const initials = (name: string) =>
     .join("")
     .toUpperCase();
 
+// The seal is pressed from the brand ink, so it shares --wax-seal with the hero.
 const WaxSeal = ({ text }: { text: string }) => (
   <span
     aria-hidden="true"
-    className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full font-serif text-base italic text-[#8E3D3D]"
+    className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full font-sans text-base italic text-[color:var(--wax-seal-ink)]"
     style={{
-      background:
-        "radial-gradient(circle at 35% 30%,#C26666 0,#A24B4B 45%,#7E3535 100%)",
+      background: "var(--wax-seal)",
       boxShadow: "0 4px 8px -3px rgba(0,0,0,.5)",
       textShadow: "0 1px 0 rgba(255,255,255,.25), 0 -1px 0 rgba(0,0,0,.35)",
     }}
   >
-    <span className="absolute inset-1.5 rounded-full border border-[#E9B5B5]/40" />
+    <span className="absolute inset-1.5 rounded-full border border-[color:var(--wax-seal-edge)] opacity-60" />
     {text}
   </span>
 );
@@ -332,7 +335,7 @@ export const TestimonialsSection = () => {
   return (
     <section
       aria-label="Customer testimonials"
-      className="relative overflow-hidden bg-[#1F3A32] py-20 md:py-28 dark:bg-[#121C18]"
+      className="relative overflow-hidden bg-footer py-20 md:py-28"
     >
       {/* Paper grain over the desk */}
       <div
@@ -345,11 +348,11 @@ export const TestimonialsSection = () => {
         {/* Header */}
         <div className="mb-10 flex flex-col gap-8 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
-            <h2 className="font-serif text-4xl font-medium leading-[1.05] tracking-tight text-[#F7F4EE] sm:text-5xl md:text-6xl">
+            <h2 className="font-serif text-4xl font-medium leading-[1.05] tracking-tight text-footer-foreground sm:text-5xl md:text-6xl">
               What our customers say
             </h2>
-            <p className="mt-5 max-w-[52ch] text-base leading-7 text-[#E4E9DD]/80">
-              Couples, founders and families who trusted Samlason with the
+            <p className="mt-5 max-w-[52ch] text-base leading-7 text-footer-muted">
+              Couples, founders and families who trusted the press with the
               pieces that matter most.
             </p>
             <div className="mt-6 flex items-center gap-3">
@@ -357,11 +360,11 @@ export const TestimonialsSection = () => {
                 {[0, 1, 2, 3, 4].map((i) => (
                   <Star
                     key={i}
-                    className="h-4 w-4 fill-[#D2AE62] text-[#D2AE62]"
+                    className="h-4 w-4 fill-gold text-gold"
                   />
                 ))}
               </div>
-              <span className="text-sm text-[#E4E9DD]/80">
+              <span className="text-sm text-footer-muted">
                 {average} average from {total} reviews
               </span>
             </div>
@@ -419,7 +422,7 @@ export const TestimonialsSection = () => {
           onBlur={() => (pausedRef.current = false)}
           onTouchStart={() => pauseFor()}
           onKeyDown={onKeyDown}
-          className="-mx-5 flex cursor-grab snap-x snap-mandatory gap-5 overflow-x-auto overscroll-x-contain scroll-px-5 px-5 pb-10 pt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D2AE62] [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-6 sm:scroll-px-6 sm:gap-6 sm:px-6 xl:mx-0 xl:scroll-px-0 xl:px-0 [&::-webkit-scrollbar]:hidden"
+          className="-mx-5 flex cursor-grab snap-x snap-mandatory gap-5 overflow-x-auto overscroll-x-contain scroll-px-5 px-5 pb-10 pt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-6 sm:scroll-px-6 sm:gap-6 sm:px-6 xl:mx-0 xl:scroll-px-0 xl:px-0 [&::-webkit-scrollbar]:hidden"
         >
           {testimonials.map((t, index) => {
             const paper = PAPERS[index % PAPERS.length];
@@ -478,7 +481,7 @@ export const TestimonialsSection = () => {
                     ))}
                   </div>
 
-                  <blockquote className="font-serif text-xl leading-8">
+                  <blockquote className="text-xl leading-8">
                     &ldquo;{t.content}&rdquo;
                   </blockquote>
                 </div>
@@ -486,7 +489,7 @@ export const TestimonialsSection = () => {
                 <figcaption className="relative mt-8 flex items-center gap-4">
                   <WaxSeal text={initials(t.name)} />
                   <span className="min-w-0">
-                    <span className="block font-serif text-lg font-medium leading-tight">
+                    <span className="block text-lg font-semibold leading-tight">
                       {t.name}
                     </span>
                     <span
@@ -516,15 +519,15 @@ export const TestimonialsSection = () => {
             aria-valuemin={1}
             aria-valuemax={total}
             aria-valuenow={activeIndex + 1}
-            className="relative h-0.5 flex-1 overflow-hidden rounded-full bg-[#E4E9DD]/20"
+            className="relative h-0.5 flex-1 overflow-hidden rounded-full bg-footer-foreground/20"
           >
             <div
               ref={barRef}
-              className="absolute inset-y-0 left-0 w-full origin-left bg-[#D2AE62] transition-transform duration-500 ease-out motion-reduce:transition-none"
+              className="absolute inset-y-0 left-0 w-full origin-left bg-gold transition-transform duration-500 ease-out motion-reduce:transition-none"
               style={{ transform: "scaleX(0.04)" }}
             />
           </div>
-          <span className="font-serif text-base tabular-nums text-[#E4E9DD]/80">
+          <span className="text-base tabular-nums text-footer-muted">
             {String(activeIndex + 1).padStart(2, "0")} /{" "}
             {String(total).padStart(2, "0")}
           </span>

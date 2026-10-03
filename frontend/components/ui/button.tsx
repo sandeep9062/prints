@@ -9,14 +9,25 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg hover:-translate-y-0.5",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground",
+        // Every variant keeps its fill/text PAIR. A previous pass dropped the
+        // `bg-*` half of each pair, which left `default` as bg-primary-foreground
+        // (white) and made `ghost` fill with accent-foreground without switching
+        // the text colour — i.e. invisible controls.
+        default:
+          "bg-primary text-primary-foreground hover:bg-brand-hover shadow-md hover:shadow-lg hover:-translate-y-0.5",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline:
+          "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        gold: "bg-primary text-primary-foreground hover:opacity-90 shadow-[0_8px_30px_-8px_hsl(var(--gold)/0.25)] hover:shadow-[0_12px_35px_-10px_hsl(var(--gold)/0.35)] hover:-translate-y-0.5",
-        elegant: "bg-transparent border-2 border-primary/30 text-foreground hover:border-primary hover:bg-primary/5",
+        // Gold is a light foil surface in BOTH themes, so the label must stay
+        // dark in both: text-footer is 7.28:1 light / 8.17:1 dark, whereas
+        // text-ink or text-primary-foreground would flip to light and fail.
+        gold: "bg-gold text-footer hover:opacity-90 shadow-[0_8px_30px_-8px_hsl(var(--gold)/0.25)] hover:shadow-[0_12px_35px_-10px_hsl(var(--gold)/0.35)] hover:-translate-y-0.5",
+        elegant:
+          "bg-transparent border-2 border-primary/30 text-foreground hover:border-primary hover:bg-primary/5",
       },
       size: {
         default: "h-10 px-4 py-2",

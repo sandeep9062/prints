@@ -4,14 +4,14 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Shop Printing Products – Wedding Cards, Visiting Cards & More",
   description:
-    "Browse our premium collection of printing products. Wedding invitation cards, visiting cards, brochures, banners, packaging & custom designs. Shop with Samlason Printing Press.",
+    "Browse our premium collection of printing products. Wedding invitation cards, visiting cards, brochures, banners, packaging & custom designs. Shop with Ink of Memories.",
   keywords: [
     "buy printing products",
     "wedding cards online",
     "visiting cards India",
     "brochure printing",
     "custom printing shop",
-    "Samlason Printing",
+    "Ink of Memories",
   ],
   openGraph: {
     title: "Shop Printing Products – Wedding Cards, Visiting Cards & More",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Shop Printing Products – Wedding Cards, Visiting Cards & More",
     description:
-      "Browse our premium collection of printing products from Samlason Printing Press.",
+      "Browse our premium collection of printing products from Ink of Memories.",
     images: ["https://inkofmemories.com/inkofmemories.png"],
   },
   alternates: {

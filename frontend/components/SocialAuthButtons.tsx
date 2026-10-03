@@ -265,10 +265,10 @@ export default function SocialAuthButtons({
     <div className="space-y-6">
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-stone-200 dark:border-stone-700" />
+          <div className="w-full border-t border-border" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-[#FCFBF9] px-4 text-[10px] font-semibold uppercase tracking-[0.25em] text-stone-400 dark:bg-[#0f111a] dark:text-stone-500">
+          <span className="bg-background px-4 text-[10px] font-semibold text-muted-foreground">
             {mode === "login" ? "Or continue with" : "Or sign up with"}
           </span>
         </div>
@@ -279,7 +279,7 @@ export default function SocialAuthButtons({
           type="button"
           onClick={handleGoogle}
           disabled={socialLoading === "google"}
-          className="flex h-12 w-full items-center justify-center gap-2.5 rounded-none border border-stone-300 bg-white text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-700 transition-colors duration-300 hover:border-stone-900 hover:bg-stone-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 disabled:opacity-60 dark:border-stone-700 dark:bg-stone-900/40 dark:text-stone-200 dark:hover:border-stone-500 dark:hover:bg-stone-900"
+          className="flex h-12 w-full items-center justify-center gap-2.5 rounded-none border border-border bg-card text-[11px] font-semibold text-muted-foreground transition-colors duration-300 hover:border-brand hover:bg-brand-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:opacity-60 dark:border-border dark:bg-muted dark:text-foreground dark:hover:border-brand dark:hover:bg-brand/10"
         >
           <FcGoogle className="h-4 w-4" />
           {socialLoading === "google"
@@ -293,7 +293,7 @@ export default function SocialAuthButtons({
           type="button"
           onClick={handleApple}
           disabled={socialLoading === "apple"}
-          className="flex h-12 w-full items-center justify-center gap-2.5 rounded-none bg-stone-900 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors duration-300 hover:bg-stone-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 disabled:opacity-60 dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-white dark:focus-visible:ring-offset-[#0f111a]"
+          className="flex h-12 w-full items-center justify-center gap-2.5 rounded-none bg-footer text-[11px] font-semibold text-footer-foreground transition-colors duration-300 hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:opacity-60 dark:focus-visible:ring-offset-footer"
         >
           <FaApple className="h-4 w-4" />
           {socialLoading === "apple" ? "Connecting…" : "Continue with Apple"}

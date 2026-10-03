@@ -115,7 +115,7 @@ export default function ShareDraftModal({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-4 border-b border-border/30 flex items-center justify-between">
-            <h3 className="font-display text-lg font-semibold">
+            <h3 className="font-sans text-lg font-semibold">
               Share Your Design
             </h3>
             <button
@@ -130,7 +130,7 @@ export default function ShareDraftModal({
             {/* Design preview */}
             <div className="text-center p-4 bg-secondary/30 rounded-xl">
               <p className="text-sm text-muted-foreground mb-1">Sharing:</p>
-              <p className="font-display text-lg font-semibold">
+              <p className="font-sans text-lg font-semibold">
                 {designData.groomName} & {designData.brideName}
               </p>
               <p className="text-sm text-muted-foreground">

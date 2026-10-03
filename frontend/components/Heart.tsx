@@ -30,7 +30,7 @@ const Heart: React.FC<HeartProps> = ({ card }) => {
   const handleLike = async () => {
     if (!user) {
       toast.error("You must be logged in to do that");
-      router.push("/login");
+      router.push("/auth");
       return;
     }
 
@@ -57,8 +57,8 @@ const Heart: React.FC<HeartProps> = ({ card }) => {
         "group rounded-full p-2 transition-all duration-300",
         "backdrop-blur-md  cursor-pointer",
         favourited
-          ? "bg-rose-50/60 border-rose-300 shadow-[0_0_12px_rgba(255,87,87,0.25)]"
-          : "bg-white/60 border-gray-300 hover:border-gray-400 hover:bg-white/80",
+          ? "bg-primary/10 border-brand shadow-[0_0_12px_hsl(var(--brand)/0.25)]"
+          : "bg-background/60 border-border hover:border-foreground/40 hover:bg-background/80",
       ].join(" ")}
       style={{
         transform: favourited ? "scale(1.07)" : "scale(1)",
@@ -67,7 +67,9 @@ const Heart: React.FC<HeartProps> = ({ card }) => {
       <AiFillHeart
         size={22}
         className="transition-all duration-300 group-hover:scale-110"
-        color={favourited ? "#ff3b5c" : "#9ca3af"}
+        color={
+          favourited ? "hsl(var(--brand))" : "hsl(var(--muted-foreground))"
+        }
       />
     </button>
   );

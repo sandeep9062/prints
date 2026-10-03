@@ -36,30 +36,28 @@ const AUTOPLAY_DELAY = 4500;
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const navBtn =
-  "flex h-11 w-11 items-center justify-center rounded-full border border-stone-300 " +
-  "bg-white text-stone-800 transition-colors duration-300 " +
-  "hover:border-stone-900 hover:bg-stone-900 hover:text-white " +
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-900 focus-visible:ring-offset-2 " +
+  "flex h-11 w-11 items-center justify-center rounded-full border border-border " +
+  "bg-card text-foreground transition-colors duration-300 " +
+  "hover:border-brand hover:text-primary-foreground " +
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background " +
   "active:scale-95 " +
-  "dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200 " +
-  "dark:hover:border-stone-100 dark:hover:bg-stone-100 dark:hover:text-stone-900 " +
-  "dark:focus-visible:ring-stone-100 dark:focus-visible:ring-offset-[#0d0f16]";
+  "motion-reduce:transition-none";
 
 const FeaturedSkeleton = () => (
-  <section className="bg-[#FCFBF9] py-20 md:py-28 dark:bg-[#0d0f16]">
+  <section className="bg-background py-20 md:py-28">
     <div className="mx-auto max-w-7xl px-5 sm:px-6">
       <div className="mb-12 space-y-4">
-        <div className="h-12 w-72 animate-pulse rounded-lg bg-stone-200 dark:bg-stone-800" />
-        <div className="h-4 w-full max-w-md animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
+        <div className="h-12 w-72 animate-pulse rounded-lg bg-muted" />
+        <div className="h-4 w-full max-w-md animate-pulse rounded bg-muted" />
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
           <div key={i} className={i > 1 ? "hidden lg:block" : ""}>
-            <div className="aspect-[4/5] animate-pulse rounded-2xl bg-stone-200 dark:bg-stone-800" />
+            <div className="aspect-[4/5] animate-pulse rounded-2xl bg-muted" />
             <div className="mt-5 space-y-3">
-              <div className="h-3 w-20 animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
-              <div className="h-5 w-3/4 animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
-              <div className="h-4 w-1/2 animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
+              <div className="h-3 w-20 animate-pulse rounded bg-muted" />
+              <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
+              <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
             </div>
           </div>
         ))}
@@ -251,15 +249,15 @@ export const FeaturedProducts = () => {
   return (
     <section
       aria-label="Featured collection"
-      className="relative overflow-hidden bg-[#FCFBF9] py-20 md:py-28 dark:bg-[#0d0f16]"
+      className="relative overflow-hidden bg-background py-20 md:py-28"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-40 top-0 h-[420px] w-[420px] rounded-full bg-stone-200/40 blur-3xl dark:bg-stone-800/20"
+        className="pointer-events-none absolute -right-40 top-0 h-[420px] w-[420px] rounded-full bg-brand-soft blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -left-40 h-[420px] w-[420px] rounded-full bg-[#e8dfd4]/30 blur-3xl dark:bg-[#29231e]/20"
+        className="pointer-events-none absolute -bottom-40 -left-40 h-[420px] w-[420px] rounded-full bg-gold/30 blur-3xl dark:bg-footer/20"
       />
 
       <div className="relative mx-auto max-w-7xl px-5 sm:px-6">
@@ -272,10 +270,10 @@ export const FeaturedProducts = () => {
           className="mb-10 flex flex-col gap-8 md:mb-14 md:flex-row md:items-end md:justify-between"
         >
           <div className="max-w-2xl">
-            <h2 className="font-serif text-4xl leading-[1.05] tracking-tight text-stone-900 sm:text-5xl md:text-6xl dark:text-stone-100">
+            <h2 className="font-serif text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl">
               The featured collection
             </h2>
-            <p className="mt-5 max-w-lg text-[15px] leading-7 text-stone-600 dark:text-stone-400">
+            <p className="mt-5 max-w-lg text-[15px] leading-7 text-muted-foreground">
               A carefully selected edit of pieces made to bring a little more
               character, craft, and meaning to every occasion.
             </p>
@@ -284,7 +282,7 @@ export const FeaturedProducts = () => {
           <div className="flex items-center justify-between gap-6 md:justify-end">
             <Link
               href="/products"
-              className="group inline-flex items-center gap-2 border-b border-stone-400 pb-1 text-sm font-medium text-stone-900 transition-colors duration-300 hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-900 focus-visible:ring-offset-4 dark:border-stone-600 dark:text-stone-200 dark:hover:border-stone-200 dark:focus-visible:ring-stone-100 dark:focus-visible:ring-offset-[#0d0f16]"
+              className="group inline-flex items-center gap-2 border-b border-foreground/40 pb-1 text-sm font-medium text-foreground transition-colors duration-300 hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-4 focus-visible:ring-offset-background motion-reduce:transition-none"
             >
               Browse all products
               <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -356,16 +354,16 @@ export const FeaturedProducts = () => {
             aria-valuemin={1}
             aria-valuemax={total}
             aria-valuenow={activeIndex + 1}
-            className="relative h-px flex-1 overflow-hidden bg-stone-300 dark:bg-stone-700"
+            className="relative h-px flex-1 overflow-hidden bg-border"
           >
             <div
               ref={barRef}
-              className="absolute inset-y-0 left-0 w-full origin-left bg-stone-900 transition-transform duration-500 ease-out dark:bg-stone-100"
+              className="absolute inset-y-0 left-0 w-full origin-left bg-brand transition-transform duration-500 ease-out motion-reduce:transition-none"
               style={{ transform: "scaleX(0.04)" }}
             />
           </div>
 
-          <span className="tabular-nums text-sm text-stone-500 dark:text-stone-400">
+          <span className="tabular-nums text-sm text-muted-foreground">
             {String(activeIndex + 1).padStart(2, "0")} /{" "}
             {String(total).padStart(2, "0")}
           </span>

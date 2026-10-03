@@ -41,16 +41,16 @@ export default function BlogsDashboard() {
   );
 
   return (
-    <div className="p-4 md:p-8 space-y-6 bg-gray-50 min-h-screen">
+    <div className="p-4 md:p-8 space-y-6 bg-muted min-h-screen">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Blog Management</h1>
-          <p className="text-slate-500">Create and manage blog posts</p>
+          <h1 className="font-sans text-2xl font-semibold text-foreground">Blog Management</h1>
+          <p className="text-muted-foreground">Create and manage blog posts</p>
         </div>
         <Link
           href="/admin-dashboard/blogs/new"
-          className="flex items-center justify-center gap-2 bg-[#4161df] text-white px-4 py-2 rounded-lg hover:bg-[#3551c0] transition-colors shadow-sm font-medium"
+          className="flex items-center justify-center gap-2 bg-brand text-primary-foreground px-4 py-2 rounded-lg hover:bg-brand-hover transition-colors shadow-sm font-medium"
         >
           <Plus size={18} />
           Add New Blog
@@ -58,13 +58,13 @@ export default function BlogsDashboard() {
       </div>
 
       {/* Filter & Search Section */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4">
+      <div className="bg-card p-4 rounded-xl border border-border shadow-sm flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-4" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground size-4" />
           <input
             type="text"
             placeholder="Search by title or category..."
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#4161df]/20 transition-all"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -72,31 +72,31 @@ export default function BlogsDashboard() {
       </div>
 
       {/* Blogs Table/List */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
         {isLoading ? (
           <div className="p-20 flex justify-center items-center">
-            <Loader2 className="animate-spin text-[#4161df]" size={40} />
+            <Loader2 className="animate-spin text-brand" size={40} />
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50 border-b border-slate-200">
-                  <th className="px-6 py-4 text-xs font-semibold uppercase text-slate-500 tracking-wider">
+                <tr className="bg-muted border-b border-border">
+                  <th className="px-6 py-4 text-xs font-semibold uppercase text-muted-foreground tracking-wider">
                     Blog
                   </th>
-                  <th className="px-6 py-4 text-xs font-semibold uppercase text-slate-500 tracking-wider">
+                  <th className="px-6 py-4 text-xs font-semibold uppercase text-muted-foreground tracking-wider">
                     Category
                   </th>
-                  <th className="px-6 py-4 text-xs font-semibold uppercase text-slate-500 tracking-wider">
+                  <th className="px-6 py-4 text-xs font-semibold uppercase text-muted-foreground tracking-wider">
                     Date
                   </th>
-                  <th className="px-6 py-4 text-xs font-semibold uppercase text-slate-500 tracking-wider text-right">
+                  <th className="px-6 py-4 text-xs font-semibold uppercase text-muted-foreground tracking-wider text-right">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-border">
                 {[...filteredBlogs]
                   .sort(
                     (a, b) =>
@@ -106,11 +106,11 @@ export default function BlogsDashboard() {
                   .map((blog) => (
                     <tr
                       key={blog._id}
-                      className="hover:bg-slate-50/50 transition-colors group"
+                      className="hover:bg-muted/50 transition-colors group"
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-4">
-                          <div className="relative size-12 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
+                          <div className="relative size-12 rounded-lg overflow-hidden border border-border bg-muted shrink-0">
                             <Image
                               src={blog.image || "/placeholder.svg"}
                               alt={blog.title}
@@ -119,10 +119,10 @@ export default function BlogsDashboard() {
                             />
                           </div>
                           <div className="min-w-0">
-                            <p className="font-semibold text-slate-900 truncate max-w-[200px] md:max-w-xs">
+                            <p className="font-semibold text-foreground truncate max-w-[200px] md:max-w-xs">
                               {blog.title}
                             </p>
-                            <p className="text-xs text-slate-500 truncate italic">
+                            <p className="text-xs text-muted-foreground truncate italic">
                               /{blog.slug}
                             </p>
                           </div>
@@ -130,33 +130,33 @@ export default function BlogsDashboard() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col gap-1">
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700 w-fit">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-muted text-foreground w-fit">
                             {blog.category || "Uncategorized"}
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-500">
+                      <td className="px-6 py-4 text-sm text-muted-foreground">
                         {new Date(blog.createdAt).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end gap-2">
                           <Link
                             href={`/admin-dashboard/blogs/${blog.slug}`}
-                            className="p-2 text-slate-400 hover:text-[#4161df] transition-colors"
+                            className="p-2 text-muted-foreground hover:text-brand transition-colors"
                             title="View Live"
                           >
                             <ExternalLink size={18} />
                           </Link>
                           <Link
                             href={`/admin-dashboard/blogs/edit/${blog._id}`}
-                            className="p-2 text-slate-400 hover:text-amber-600 transition-colors"
+                            className="p-2 text-muted-foreground hover:text-gold transition-colors"
                             title="Edit"
                           >
                             <Edit2 size={18} />
                           </Link>
                           <button
                             onClick={() => handleDelete(blog._id)}
-                            className="p-2 text-slate-400 hover:text-red-600 transition-colors"
+                            className="p-2 text-muted-foreground hover:text-brand transition-colors"
                             title="Delete"
                           >
                             <Trash2 size={18} />
@@ -173,15 +173,15 @@ export default function BlogsDashboard() {
 
       {/* Empty State */}
       {!isLoading && filteredBlogs.length === 0 && (
-        <div className="text-center py-20 bg-white rounded-xl border border-dashed border-slate-300">
-          <FileText className="mx-auto size-12 text-slate-300 mb-4" />
-          <h3 className="text-lg font-medium text-slate-900">No blogs found</h3>
-          <p className="text-slate-500 mb-6">
+        <div className="text-center py-20 bg-card rounded-xl border border-dashed border-border">
+          <FileText className="mx-auto size-12 text-muted-foreground/70 mb-4" />
+          <h3 className="text-lg font-medium text-foreground">No blogs found</h3>
+          <p className="text-muted-foreground mb-6">
             Start by creating your first blog post.
           </p>
           <Link
             href="/admin-dashboard/blogs/new"
-            className="bg-[#4161df] text-white px-6 py-2 rounded-lg hover:bg-[#3551c0]"
+            className="bg-brand text-primary-foreground px-6 py-2 rounded-lg hover:bg-brand-hover"
           >
             Create Blog
           </Link>

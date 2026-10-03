@@ -1,25 +1,21 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 
 const LogoSpinner = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white">
+    <div className="flex items-center justify-center min-h-screen bg-card">
       <div className="flex flex-col items-center space-y-8">
         {/* Logo Container with a subtle, thin spinner */}
         <div className="relative flex items-center justify-center w-70 h-70">
           {/* Minimalist Spinner */}
-          <div className="absolute inset-0 rounded-full border-[2px] border-gray-100 border-t-gray-800 animate-spin" />
 
-          <Image
-            src="/inkofmemories-spinner.png"
-            alt="Ink of Memories"
-            width={780}
-            height={780}
-            priority
-            className="object-contain"
-          />
+          {/* Text wordmark, matching the Navbar and /auth. The loader renders on
+              bg-card, which re-points per theme, so the same page-level
+              text-foreground / text-primary roles stay readable in both themes. */}
+          <span className="relative z-10 px-8 text-center font-sans text-xl font-semibold tracking-wider text-foreground">
+            INK <span className="text-primary">OF</span> MEMORIES
+          </span>
         </div>
       </div>
 

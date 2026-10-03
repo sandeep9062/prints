@@ -173,11 +173,11 @@ const SettingsPage = () => {
         : "Failed to load settings";
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
-        <h2 className="text-xl font-semibold text-gray-700 mb-2">
+        <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+        <h2 className="text-xl font-semibold text-foreground mb-2">
           Failed to Load Settings
         </h2>
-        <p className="text-gray-500 mb-6 max-w-md text-center">{errMsg}</p>
+        <p className="text-muted-foreground mb-6 max-w-md text-center">{errMsg}</p>
         <Button onClick={refetch} variant="default">
           <RefreshCw className="mr-2 h-4 w-4" />
           Retry
@@ -193,10 +193,10 @@ const SettingsPage = () => {
       {/* ==================== HEADER ==================== */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+          <h1 className="font-sans text-2xl lg:text-3xl font-semibold text-foreground">
             Settings
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Configure system settings, preferences and manage site configuration
           </p>
         </div>
@@ -418,7 +418,7 @@ const SettingsPage = () => {
                 {/* Logo */}
                 <div className="space-y-3">
                   <Label>Logo</Label>
-                  <div className="flex flex-col items-center gap-3 p-4 border-2 border-dashed rounded-lg bg-gray-50">
+                  <div className="flex flex-col items-center gap-3 p-4 border-2 border-dashed rounded-lg bg-muted">
                     {form.logoUrl ? (
                       <img
                         src={form.logoUrl}
@@ -426,14 +426,14 @@ const SettingsPage = () => {
                         className="h-20 object-contain"
                       />
                     ) : (
-                      <div className="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center">
-                        <Image className="h-8 w-8 text-gray-400" />
+                      <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center">
+                        <Image className="h-8 w-8 text-muted-foreground" />
                       </div>
                     )}
                     <div className="w-full space-y-2">
                       <Label
                         htmlFor="logoUrl"
-                        className="text-xs text-gray-500"
+                        className="text-xs text-muted-foreground"
                       >
                         Logo URL
                       </Label>
@@ -452,7 +452,7 @@ const SettingsPage = () => {
                 {/* Banner */}
                 <div className="space-y-3">
                   <Label>Banner Image</Label>
-                  <div className="flex flex-col items-center gap-3 p-4 border-2 border-dashed rounded-lg bg-gray-50">
+                  <div className="flex flex-col items-center gap-3 p-4 border-2 border-dashed rounded-lg bg-muted">
                     {form.bannerUrl ? (
                       <img
                         src={form.bannerUrl}
@@ -460,14 +460,14 @@ const SettingsPage = () => {
                         className="h-20 w-full object-cover rounded"
                       />
                     ) : (
-                      <div className="h-20 w-full rounded bg-gray-200 flex items-center justify-center">
-                        <Image className="h-8 w-8 text-gray-400" />
+                      <div className="h-20 w-full rounded bg-muted flex items-center justify-center">
+                        <Image className="h-8 w-8 text-muted-foreground" />
                       </div>
                     )}
                     <div className="w-full space-y-2">
                       <Label
                         htmlFor="bannerUrl"
-                        className="text-xs text-gray-500"
+                        className="text-xs text-muted-foreground"
                       >
                         Banner URL
                       </Label>
@@ -486,7 +486,7 @@ const SettingsPage = () => {
                 {/* Favicon */}
                 <div className="space-y-3">
                   <Label>Favicon</Label>
-                  <div className="flex flex-col items-center gap-3 p-4 border-2 border-dashed rounded-lg bg-gray-50">
+                  <div className="flex flex-col items-center gap-3 p-4 border-2 border-dashed rounded-lg bg-muted">
                     {form.favicon ? (
                       <img
                         src={form.favicon}
@@ -494,14 +494,14 @@ const SettingsPage = () => {
                         className="h-12 w-12 object-contain"
                       />
                     ) : (
-                      <div className="h-12 w-12 rounded bg-gray-200 flex items-center justify-center">
-                        <Image className="h-6 w-6 text-gray-400" />
+                      <div className="h-12 w-12 rounded bg-muted flex items-center justify-center">
+                        <Image className="h-6 w-6 text-muted-foreground" />
                       </div>
                     )}
                     <div className="w-full space-y-2">
                       <Label
                         htmlFor="favicon"
-                        className="text-xs text-gray-500"
+                        className="text-xs text-muted-foreground"
                       >
                         Favicon URL
                       </Label>
@@ -535,7 +535,7 @@ const SettingsPage = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Order Notifications</Label>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       Receive email when new order is placed
                     </p>
                   </div>
@@ -544,7 +544,7 @@ const SettingsPage = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>New User Alerts</Label>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       Notify when new user registers
                     </p>
                   </div>
@@ -553,7 +553,7 @@ const SettingsPage = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Payment Alerts</Label>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       Alert on successful and failed payments
                     </p>
                   </div>
@@ -562,7 +562,7 @@ const SettingsPage = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Contact Form Submissions</Label>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       Get notified for contact form entries
                     </p>
                   </div>
@@ -629,7 +629,7 @@ const SettingsPage = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Cash on Delivery</Label>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       Allow cash on delivery option
                     </p>
                   </div>
@@ -735,9 +735,9 @@ const SettingsPage = () => {
                   <Input
                     value={form.email || ""}
                     readOnly
-                    className="bg-gray-50"
+                    className="bg-muted"
                   />
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-muted-foreground">
                     This is the email configured in General settings
                   </p>
                 </div>
@@ -746,9 +746,9 @@ const SettingsPage = () => {
                   <Input
                     value={form.websiteName || ""}
                     readOnly
-                    className="bg-gray-50"
+                    className="bg-muted"
                   />
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-muted-foreground">
                     Used as sender name in emails
                   </p>
                 </div>
@@ -756,7 +756,7 @@ const SettingsPage = () => {
 
               <Separator />
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-700">
+              <div className="bg-brand-soft border border-brand/40 rounded-lg p-4 text-sm text-brand">
                 <p className="font-medium mb-1">SMTP Configuration</p>
                 <p>
                   SMTP credentials are configured on the server side via

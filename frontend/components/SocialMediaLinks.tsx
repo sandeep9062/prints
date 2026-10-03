@@ -87,7 +87,7 @@ export default function SocialMediaLinks({
             target="_blank"
             rel="noopener noreferrer"
             aria-label={item.label}
-            className="flex h-10 w-10 items-center justify-center border border-stone-200 text-stone-500 transition-all duration-300 hover:-translate-y-0.5 hover:border-red-900 hover:text-red-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 dark:border-stone-700 dark:text-stone-400 dark:hover:border-red-600 dark:hover:text-red-600 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+            className="flex h-10 w-10 items-center justify-center border border-border text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand dark:border-border dark:text-muted-foreground dark:hover:border-brand/50 dark:hover:text-brand motion-reduce:transition-none motion-reduce:hover:translate-y-0"
           >
             {item.icon}
           </a>

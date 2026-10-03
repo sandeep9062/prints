@@ -62,19 +62,19 @@ const RefundPolicy = () => {
   ];
 
   return (
-    <main className="relative pt-20 min-h-screen bg-white">
+    <main className="relative pt-20 min-h-screen bg-card">
       {/* HERO HEADER */}
-      <section className="bg-slate-50 border-b border-gray-200 py-16">
+      <section className="bg-muted border-b border-border py-16">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl"
           >
-            <h1 className="text-4xl font-extrabold text-slate-900 mb-4">
+            <h1 className="text-4xl font-extrabold text-foreground mb-4">
               Refund Policy
             </h1>
-            <p className="text-gray-600 text-lg">
+            <p className="text-muted-foreground text-lg">
               Everything you need to know about the Ink of Memories reprint and
               refund process for custom printing orders.
             </p>
@@ -86,7 +86,7 @@ const RefundPolicy = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
-            <h2 className="text-2xl font-bold text-slate-900 mb-8 border-b-2 border-[#1F3A32] w-fit pb-2">
+            <h2 className="font-sans text-2xl font-semibold text-foreground mb-8 border-b-2 border-border w-fit pb-2">
               Refund Guidelines
             </h2>
 
@@ -100,10 +100,10 @@ const RefundPolicy = () => {
                   transition={{ delay: index * 0.05 }}
                   className="group"
                 >
-                  <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-[#1F3A32] transition-colors">
+                  <h3 className="font-sans text-lg font-semibold text-foreground mb-2 group-hover:text-foreground transition-colors">
                     {section.title}:
                   </h3>
-                  <p className="text-gray-700 leading-relaxed text-base md:text-lg">
+                  <p className="text-foreground leading-relaxed text-base md:text-lg">
                     {section.content}
                   </p>
                 </motion.div>
@@ -115,19 +115,19 @@ const RefundPolicy = () => {
 
       {/* HELP CALLOUT */}
       <section className="container mx-auto px-4 pb-20">
-        <div className="bg-[#1F3A32] rounded-2xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="bg-footer rounded-2xl p-8 md:p-12 text-footer-foreground flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-2">
+            <h2 className="font-sans text-2xl md:text-3xl font-semibold mb-2">
               Need clarification?
             </h2>
-            <p className="text-[#E4E9DD] opacity-90">
+            <p className="text-foreground opacity-90">
               Our support team is available Mon – Sat, 9:00 AM – 7:00 PM to help
               you with refund and reprint queries.
             </p>
           </div>
           <button
             onClick={() => router.push("/contact")}
-            className="bg-white text-[#1F3A32] px-8 py-4 rounded-xl font-bold hover:bg-[#F7F4EE] transition-all whitespace-nowrap shadow-lg"
+            className="bg-card text-foreground px-8 py-4 rounded-xl font-bold hover:bg-ivory transition-all whitespace-nowrap shadow-lg"
           >
             Contact Support
           </button>

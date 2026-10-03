@@ -143,11 +143,11 @@ export default function ToolbarPlugin() {
 
   const buttonBase =
     "p-2 rounded-lg transition-all duration-150 flex items-center justify-center";
-  const activeButton = `${buttonBase} bg-[#4161df] text-white shadow-md`;
-  const inactiveButton = `${buttonBase} text-slate-600 hover:bg-slate-100 hover:text-[#4161df]`;
+  const activeButton = `${buttonBase} bg-brand text-primary-foreground shadow-md`;
+  const inactiveButton = `${buttonBase} text-foreground/70 hover:bg-muted hover:text-brand`;
 
   return (
-    <div className="toolbar flex flex-wrap items-center gap-1 px-3 py-2 bg-white border-b border-slate-200 rounded-t-xl sticky top-0 z-10">
+    <div className="toolbar flex flex-wrap items-center gap-1 px-3 py-2 bg-card border-b border-border rounded-t-xl sticky top-0 z-10">
       {/* History */}
       <button
         onClick={() => editor.dispatchCommand("undo" as any, undefined)}
@@ -164,7 +164,7 @@ export default function ToolbarPlugin() {
         <Redo size={16} />
       </button>
 
-      <div className="w-px h-6 bg-slate-200 mx-1" />
+      <div className="w-px h-6 bg-border mx-1" />
 
       {/* Block Format */}
       <button
@@ -201,7 +201,7 @@ export default function ToolbarPlugin() {
         <Pilcrow size={18} />
       </button>
 
-      <div className="w-px h-6 bg-slate-200 mx-1" />
+      <div className="w-px h-6 bg-border mx-1" />
 
       {/* Lists */}
       <button
@@ -219,7 +219,7 @@ export default function ToolbarPlugin() {
         <ListOrdered size={18} />
       </button>
 
-      <div className="w-px h-6 bg-slate-200 mx-1" />
+      <div className="w-px h-6 bg-border mx-1" />
 
       {/* Text Format */}
       <button

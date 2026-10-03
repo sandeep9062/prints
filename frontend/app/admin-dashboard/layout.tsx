@@ -12,16 +12,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-stone-50 flex">
+    <div className="min-h-screen bg-muted flex">
       <aside
-        className={`bg-white border-r border-stone-200 flex flex-col transition-all duration-300 ${
+        className={`bg-card border-r border-border flex flex-col transition-all duration-300 ${
           collapsed ? "w-16" : "w-64"
         }`}
       >
-        <div className="flex items-center justify-end p-2 border-b border-stone-200 h-14">
+        <div className="flex items-center justify-end p-2 border-b border-border h-14">
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-1.5 rounded-md hover:bg-stone-100 text-stone-500 transition-colors"
+            className="p-1.5 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {collapsed ? (

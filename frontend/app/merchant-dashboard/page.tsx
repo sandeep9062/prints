@@ -152,7 +152,7 @@ export default function DashboardPage() {
 
   const maxStock = getMaxStock();
 
-  const chartConfig = { sales: { label: "Sales", color: "#ec4899" } };
+  const chartConfig = { sales: { label: "Sales", color: "hsl(var(--chart-3))" } };
 
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
@@ -171,22 +171,22 @@ export default function DashboardPage() {
         animate="animate"
       >
         <motion.div variants={fadeInUp}>
-          <Card className="relative overflow-hidden bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-8 -mb-8 group-hover:scale-150 transition-transform duration-700 delay-100"></div>
+          <Card className="relative overflow-hidden bg-gradient-to-br from-brand via-brand to-brand-hover text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-card/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-card/5 rounded-full -ml-8 -mb-8 group-hover:scale-150 transition-transform duration-700 delay-100"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-sm font-medium text-white/80">
+              <CardTitle className="text-sm font-medium text-primary-foreground/80">
                 Total Products
               </CardTitle>
-              <div className="p-2 bg-white/15 rounded-xl group-hover:bg-white/25 group-hover:scale-110 transition-all duration-300">
-                <Package className="h-5 w-5 text-white" />
+              <div className="p-2 bg-card/15 rounded-xl group-hover:bg-card/25 group-hover:scale-110 transition-all duration-300">
+                <Package className="h-5 w-5 text-primary-foreground" />
               </div>
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">
                 {productsArray.length}
               </div>
-              <div className="flex items-center gap-1 text-xs text-blue-200">
+              <div className="flex items-center gap-1 text-xs text-foreground">
                 <TrendingUp className="h-3 w-3" />
                 <span>Active listings</span>
               </div>
@@ -195,22 +195,22 @@ export default function DashboardPage() {
         </motion.div>
 
         <motion.div variants={fadeInUp}>
-          <Card className="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-8 -mb-8 group-hover:scale-150 transition-transform duration-700 delay-100"></div>
+          <Card className="relative overflow-hidden bg-gradient-to-br from-brand via-brand to-brand-hover text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-card/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-card/5 rounded-full -ml-8 -mb-8 group-hover:scale-150 transition-transform duration-700 delay-100"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-sm font-medium text-white/80">
+              <CardTitle className="text-sm font-medium text-primary-foreground/80">
                 Total Revenue
               </CardTitle>
-              <div className="p-2 bg-white/15 rounded-xl group-hover:bg-white/25 group-hover:scale-110 transition-all duration-300">
-                <DollarSign className="h-5 w-5 text-white" />
+              <div className="p-2 bg-card/15 rounded-xl group-hover:bg-card/25 group-hover:scale-110 transition-all duration-300">
+                <DollarSign className="h-5 w-5 text-primary-foreground" />
               </div>
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">
                 ₹{totalRevenue.toFixed(2)}
               </div>
-              <div className="flex items-center gap-1 text-xs text-emerald-200">
+              <div className="flex items-center gap-1 text-xs text-brand">
                 <TrendingUp className="h-3 w-3" />
                 <span>Revenue from all sales</span>
               </div>
@@ -219,20 +219,20 @@ export default function DashboardPage() {
         </motion.div>
 
         <motion.div variants={fadeInUp}>
-          <Card className="relative overflow-hidden bg-gradient-to-br from-purple-500 via-purple-600 to-fuchsia-700 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-8 -mb-8 group-hover:scale-150 transition-transform duration-700 delay-100"></div>
+          <Card className="relative overflow-hidden bg-gradient-to-br from-brand via-brand to-brand-hover text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-card/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-card/5 rounded-full -ml-8 -mb-8 group-hover:scale-150 transition-transform duration-700 delay-100"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-sm font-medium text-white/80">
+              <CardTitle className="text-sm font-medium text-primary-foreground/80">
                 Active Orders
               </CardTitle>
-              <div className="p-2 bg-white/15 rounded-xl group-hover:bg-white/25 group-hover:scale-110 transition-all duration-300">
-                <ShoppingCart className="h-5 w-5 text-white" />
+              <div className="p-2 bg-card/15 rounded-xl group-hover:bg-card/25 group-hover:scale-110 transition-all duration-300">
+                <ShoppingCart className="h-5 w-5 text-primary-foreground" />
               </div>
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">{newOrdersCount}</div>
-              <div className="flex items-center gap-1 text-xs text-purple-200">
+              <div className="flex items-center gap-1 text-xs text-brand">
                 <TrendingUp className="h-3 w-3" />
                 <span>Pending & processing</span>
               </div>
@@ -242,23 +242,23 @@ export default function DashboardPage() {
 
         <motion.div variants={fadeInUp}>
           <Card
-            className={`relative overflow-hidden text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group ${lowStockItems.length > 0 ? "bg-gradient-to-br from-amber-500 via-orange-500 to-red-500" : "bg-gradient-to-br from-emerald-500 to-green-600"}`}
+            className={`relative overflow-hidden text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group ${lowStockItems.length > 0 ? "bg-gradient-to-br from-brand via-brand to-brand-hover" : "bg-gradient-to-br from-brand to-brand-hover"}`}
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-8 -mb-8 group-hover:scale-150 transition-transform duration-700 delay-100"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-card/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-card/5 rounded-full -ml-8 -mb-8 group-hover:scale-150 transition-transform duration-700 delay-100"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-sm font-medium text-white/80">
+              <CardTitle className="text-sm font-medium text-primary-foreground/80">
                 Low Stock Items
               </CardTitle>
-              <div className="p-2 bg-white/15 rounded-xl group-hover:bg-white/25 group-hover:scale-110 transition-all duration-300">
-                <AlertTriangle className="h-5 w-5 text-white" />
+              <div className="p-2 bg-card/15 rounded-xl group-hover:bg-card/25 group-hover:scale-110 transition-all duration-300">
+                <AlertTriangle className="h-5 w-5 text-primary-foreground" />
               </div>
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">
                 {lowStockItems.length}
               </div>
-              <div className="flex items-center gap-1 text-xs text-amber-200">
+              <div className="flex items-center gap-1 text-xs text-gold-text dark:text-gold">
                 <Clock className="h-3 w-3" />
                 <span>
                   {lowStockItems.length > 0
@@ -273,19 +273,19 @@ export default function DashboardPage() {
 
       {/* Charts */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="shadow-lg rounded-xl bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm border border-gray-100 dark:border-gray-700/50 hover:shadow-xl transition-shadow duration-300">
+        <Card className="shadow-lg rounded-xl bg-card/80 dark:bg-card/40 backdrop-blur-sm border border-border dark:border-border/50 hover:shadow-xl transition-shadow duration-300">
           <CardHeader className="pb-0">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-rose-500" /> Sales
+                <CardTitle className="text-lg font-bold text-foreground dark:text-primary-foreground flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5 text-brand" /> Sales
                   Analytics
                 </CardTitle>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">
                   Monthly sales performance
                 </p>
               </div>
-              <div className="px-3 py-1.5 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 text-xs font-medium rounded-full flex items-center gap-1">
+              <div className="px-3 py-1.5 bg-brand-soft dark:bg-footer/20 text-brand dark:text-brand text-xs font-medium rounded-full flex items-center gap-1">
                 <Sparkles className="h-3 w-3" /> Real-time
               </div>
             </div>
@@ -295,17 +295,17 @@ export default function DashboardPage() {
               <BarChart data={chartData} barGap={4}>
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="#e5e7eb"
+                  stroke="hsl(var(--border))"
                   opacity={0.5}
                 />
                 <XAxis
                   dataKey="month"
-                  tick={{ fill: "#9ca3af", fontSize: 12 }}
+                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
                   tickLine={false}
-                  axisLine={{ stroke: "#e5e7eb" }}
+                  axisLine={{ stroke: "hsl(var(--border))" }}
                 />
                 <YAxis
-                  tick={{ fill: "#9ca3af", fontSize: 12 }}
+                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
                   tickLine={false}
                   axisLine={false}
                   tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`}
@@ -314,7 +314,7 @@ export default function DashboardPage() {
                   contentStyle={{
                     backgroundColor: "rgba(255,255,255,0.95)",
                     borderRadius: "12px",
-                    border: "1px solid #e5e7eb",
+                    border: "1px solid hsl(var(--border))",
                     boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
                   }}
                   formatter={(v: any) => [
@@ -332,8 +332,8 @@ export default function DashboardPage() {
                 />
                 <defs>
                   <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#ec4899" />
-                    <stop offset="100%" stopColor="#f43f5e" />
+                    <stop offset="0%" stopColor="hsl(var(--chart-3))" />
+                    <stop offset="100%" stopColor="hsl(var(--chart-3))" />
                   </linearGradient>
                 </defs>
               </BarChart>
@@ -341,19 +341,19 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="shadow-lg rounded-xl bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm border border-gray-100 dark:border-gray-700/50 hover:shadow-xl transition-shadow duration-300">
+        <Card className="shadow-lg rounded-xl bg-card/80 dark:bg-card/40 backdrop-blur-sm border border-border dark:border-border/50 hover:shadow-xl transition-shadow duration-300">
           <CardHeader className="pb-0">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-violet-500" /> Revenue
+                <CardTitle className="text-lg font-bold text-foreground dark:text-primary-foreground flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-brand" /> Revenue
                   Trend
                 </CardTitle>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">
                   Monthly revenue growth
                 </p>
               </div>
-              <div className="px-3 py-1.5 bg-violet-50 dark:bg-violet-900/20 text-violet-600 dark:text-violet-400 text-xs font-medium rounded-full flex items-center gap-1">
+              <div className="px-3 py-1.5 bg-brand-soft dark:bg-brand-soft/20 text-brand dark:text-brand text-xs font-medium rounded-full flex items-center gap-1">
                 <BadgePercent className="h-3 w-3" />+
                 {totalRevenue > 0
                   ? Math.round(
@@ -377,23 +377,23 @@ export default function DashboardPage() {
                     x2="0"
                     y2="1"
                   >
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                    <stop offset="5%" stopColor="hsl(var(--chart-4))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--chart-4))" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="#e5e7eb"
+                  stroke="hsl(var(--border))"
                   opacity={0.5}
                 />
                 <XAxis
                   dataKey="month"
-                  tick={{ fill: "#9ca3af", fontSize: 12 }}
+                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
                   tickLine={false}
-                  axisLine={{ stroke: "#e5e7eb" }}
+                  axisLine={{ stroke: "hsl(var(--border))" }}
                 />
                 <YAxis
-                  tick={{ fill: "#9ca3af", fontSize: 12 }}
+                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
                   tickLine={false}
                   axisLine={false}
                   tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`}
@@ -402,7 +402,7 @@ export default function DashboardPage() {
                   contentStyle={{
                     backgroundColor: "rgba(255,255,255,0.95)",
                     borderRadius: "12px",
-                    border: "1px solid #e5e7eb",
+                    border: "1px solid hsl(var(--border))",
                     boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
                   }}
                   formatter={(v: any) => [
@@ -413,10 +413,10 @@ export default function DashboardPage() {
                 <Area
                   type="monotone"
                   dataKey="revenue"
-                  stroke="#8b5cf6"
+                  stroke="hsl(var(--chart-4))"
                   strokeWidth={3}
                   fill="url(#revenueGradient)"
-                  dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 4 }}
+                  dot={{ fill: "hsl(var(--chart-4))", strokeWidth: 2, r: 4 }}
                   activeDot={{ r: 6, strokeWidth: 0 }}
                   animationBegin={200}
                   animationDuration={1500}
@@ -428,15 +428,15 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Orders */}
-      <Card className="shadow-lg rounded-xl bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm border border-gray-100 dark:border-gray-700/50">
+      <Card className="shadow-lg rounded-xl bg-card/80 dark:bg-card/40 backdrop-blur-sm border border-border dark:border-border/50">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <ShoppingCart className="h-5 w-5 text-purple-500" /> Recent
+              <CardTitle className="text-lg font-bold text-foreground dark:text-primary-foreground flex items-center gap-2">
+                <ShoppingCart className="h-5 w-5 text-brand" /> Recent
                 Orders
               </CardTitle>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">
                 Latest {recentOrders.length} orders from your store
               </p>
             </div>
@@ -444,7 +444,7 @@ export default function DashboardPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="hover:bg-purple-50 border-purple-200 text-purple-600 dark:border-purple-900 dark:hover:bg-purple-900/20"
+                className="hover:bg-brand-soft border-brand/40 text-brand dark:border-brand/60 dark:hover:bg-brand-soft/20"
               >
                 View All
                 <ArrowUpRight className="h-3.5 w-3.5 ml-1" />
@@ -458,15 +458,15 @@ export default function DashboardPage() {
               {recentOrders.map((order: any) => {
                 const statusColors: Record<string, string> = {
                   pending:
-                    "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+                    "bg-gold/15 text-gold-text dark:bg-footer/30 dark:text-gold",
                   processing:
-                    "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+                    "bg-brand-soft text-brand dark:bg-footer/30 dark:text-brand",
                   shipped:
-                    "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+                    "bg-brand-soft text-brand dark:bg-brand-soft/30 dark:text-brand",
                   delivered:
-                    "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+                    "bg-success/10 text-success dark:bg-footer/30 dark:text-brand",
                   cancelled:
-                    "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+                    "bg-destructive/10 text-destructive dark:bg-destructive/30 dark:text-destructive",
                 };
                 const statusIcon: Record<string, React.ReactNode> = {
                   pending: <Clock className="h-3 w-3" />,
@@ -478,30 +478,30 @@ export default function DashboardPage() {
                 return (
                   <div
                     key={order._id}
-                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/40 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-colors"
+                    className="flex items-center justify-between p-3 bg-muted dark:bg-card/40 rounded-xl hover:bg-muted dark:hover:bg-brand-hover/60 transition-colors"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-9 h-9 bg-gradient-to-br from-purple-100 to-fuchsia-100 dark:from-purple-900/20 dark:to-fuchsia-900/20 rounded-lg flex items-center justify-center shrink-0">
-                        <ShoppingCart className="h-4 w-4 text-purple-500" />
+                      <div className="w-9 h-9 bg-gradient-to-br from-brand-soft to-card dark:from-brand/20 dark:to-brand-hover/20 rounded-lg flex items-center justify-center shrink-0">
+                        <ShoppingCart className="h-4 w-4 text-brand" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                        <p className="text-sm font-semibold text-foreground dark:text-primary-foreground truncate">
                           #{order._id?.slice(-8).toUpperCase()}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                           {order.user?.name || "Customer"} · ₹
                           {(order.totalAmount || 0).toLocaleString()}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-muted-foreground">
                         {order.createdAt
                           ? new Date(order.createdAt).toLocaleDateString()
                           : ""}
                       </span>
                       <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[order.orderStatus] || "bg-gray-100 text-gray-600"}`}
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[order.orderStatus] || "bg-muted text-muted-foreground"}`}
                       >
                         {statusIcon[order.orderStatus] || null}
                         {(order.orderStatus || "pending")
@@ -516,8 +516,8 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="text-center py-8">
-              <ShoppingCart className="mx-auto h-8 w-8 text-gray-300 dark:text-gray-600 mb-2" />
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <ShoppingCart className="mx-auto h-8 w-8 text-muted-foreground/70 dark:text-muted-foreground mb-2" />
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 No orders yet
               </p>
             </div>
@@ -527,18 +527,18 @@ export default function DashboardPage() {
 
       {/* Products */}
       <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/50 dark:bg-gray-800/20 rounded-xl p-4 border border-gray-100 dark:border-gray-700/30">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-card/50 dark:bg-card/20 rounded-xl p-4 border border-border dark:border-border/30">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              <Boxes className="h-6 w-6 text-rose-500" /> Your Products
+            <h2 className="font-sans text-2xl font-semibold text-foreground dark:text-primary-foreground flex items-center gap-2">
+              <Boxes className="h-6 w-6 text-brand" /> Your Products
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground">
               Manage your product inventory and stock levels
             </p>
           </div>
           <Button
             onClick={() => router.push("/merchant-dashboard/add-product")}
-            className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+            className="bg-gradient-to-r from-brand to-brand-hover hover:from-brand hover:to-brand-hover text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
           >
             <Plus className="mr-2 h-4 w-4" /> Add Product
           </Button>
@@ -551,42 +551,42 @@ export default function DashboardPage() {
                 key={i}
                 className="animate-pulse overflow-hidden border-0 shadow-lg"
               >
-                <div className="h-48 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600"></div>
+                <div className="h-48 bg-gradient-to-r from-brand-soft to-card dark:from-brand dark:to-brand-hover"></div>
                 <CardContent className="p-4 space-y-3">
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                  <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  <div className="h-4 bg-muted dark:bg-card rounded w-3/4"></div>
+                  <div className="h-6 bg-muted dark:bg-card rounded w-1/2"></div>
+                  <div className="h-8 bg-muted dark:bg-card rounded"></div>
                 </CardContent>
               </Card>
             ))}
           </div>
         ) : isError ? (
-          <Card className="border-red-200 bg-red-50 dark:bg-red-900/10 border-2">
+          <Card className="border-destructive/40 bg-destructive/10 dark:bg-destructive/10 border-2">
             <CardContent className="p-8 text-center">
-              <AlertTriangle className="mx-auto h-12 w-12 text-red-400 mb-4" />
-              <p className="text-red-600 dark:text-red-400 font-medium">
+              <AlertTriangle className="mx-auto h-12 w-12 text-destructive mb-4" />
+              <p className="text-destructive dark:text-destructive font-medium">
                 Failed to load products.
               </p>
-              <p className="text-red-500/70 text-sm mt-1">
+              <p className="text-destructive/70 text-sm mt-1">
                 Please check your connection and try again.
               </p>
             </CardContent>
           </Card>
         ) : productsArray.length === 0 ? (
-          <Card className="border-dashed border-2 border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-800/20 backdrop-blur-sm">
+          <Card className="border-dashed border-2 border-border dark:border-border bg-card/50 dark:bg-card/20 backdrop-blur-sm">
             <CardContent className="p-16 text-center">
-              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-rose-100 to-pink-100 dark:from-rose-900/20 dark:to-pink-900/20 rounded-full flex items-center justify-center mb-6">
-                <Package className="h-10 w-10 text-rose-400" />
+              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-brand-soft to-card dark:from-brand/20 dark:to-brand-hover/20 rounded-full flex items-center justify-center mb-6">
+                <Package className="h-10 w-10 text-brand" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              <h3 className="font-sans text-2xl font-semibold text-foreground dark:text-primary-foreground mb-2">
                 No products yet
               </h3>
-              <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
+              <p className="text-muted-foreground dark:text-muted-foreground mb-6 max-w-md mx-auto">
                 Start building your store by adding your first product!
               </p>
               <Button
                 onClick={() => router.push("/merchant-dashboard/add-product")}
-                className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                className="bg-gradient-to-r from-brand to-brand-hover hover:from-brand hover:to-brand-hover text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                 size="lg"
               >
                 <Plus className="mr-2 h-5 w-5" /> Add Your First Product
@@ -602,7 +602,7 @@ export default function DashboardPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05, duration: 0.4 }}
               >
-                <Card className="group overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-white dark:bg-gray-800/40 backdrop-blur-sm border border-gray-100 dark:border-gray-700/30 h-full flex flex-col">
+                <Card className="group overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-card dark:bg-card/40 backdrop-blur-sm border border-border dark:border-border/30 h-full flex flex-col">
                   <div className="relative overflow-hidden aspect-[4/3]">
                     <img
                       src={p.images?.[0] || "/placeholder.svg"}
@@ -614,7 +614,7 @@ export default function DashboardPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="bg-white/90 hover:bg-white shadow-md backdrop-blur-sm border-0"
+                        className="bg-card/90 hover:bg-card shadow-md backdrop-blur-sm border-0"
                         onClick={() =>
                           router.push(
                             `/merchant-dashboard/edit-product/${p._id}`,
@@ -627,7 +627,7 @@ export default function DashboardPage() {
                         <div className="flex gap-1">
                           <Button
                             size="sm"
-                            className="bg-red-500 hover:bg-red-600 text-white shadow-md"
+                            className="bg-destructive hover:bg-brand-hover text-primary-foreground shadow-md"
                             onClick={() => handleDeleteProduct(p._id)}
                           >
                             <CheckCircle className="h-4 w-4" />
@@ -635,7 +635,7 @@ export default function DashboardPage() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="bg-white/90 hover:bg-white shadow-md border-0"
+                            className="bg-card/90 hover:bg-card shadow-md border-0"
                             onClick={() => setShowDeleteConfirm(null)}
                           >
                             <ArrowLeft className="h-4 w-4" />
@@ -645,7 +645,7 @@ export default function DashboardPage() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="bg-white/90 hover:bg-red-50 shadow-md border-0 text-red-600 hover:text-red-700"
+                          className="bg-card/90 hover:bg-destructive/10 shadow-md border-0 text-destructive hover:text-brand"
                           onClick={() => setShowDeleteConfirm(p._id)}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -653,40 +653,40 @@ export default function DashboardPage() {
                       )}
                     </div>
                     {p.stock <= 5 && p.stock > 0 && (
-                      <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg animate-pulse">
+                      <div className="absolute top-3 left-3 bg-gradient-to-r from-brand to-brand-hover text-primary-foreground px-3 py-1 rounded-full text-xs font-medium shadow-lg animate-pulse">
                         Low Stock
                       </div>
                     )}
                     {p.stock === 0 && (
-                      <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
+                      <div className="absolute top-3 left-3 bg-gradient-to-r from-brand to-brand-hover text-primary-foreground px-3 py-1 rounded-full text-xs font-medium shadow-lg">
                         Out of Stock
                       </div>
                     )}
                     {p.badge && (
-                      <div className="absolute bottom-3 left-3 bg-gradient-to-r from-rose-500 to-pink-600 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
+                      <div className="absolute bottom-3 left-3 bg-gradient-to-r from-brand to-brand-hover text-primary-foreground px-3 py-1 rounded-full text-xs font-medium shadow-lg">
                         {p.badge}
                       </div>
                     )}
                   </div>
                   <CardContent className="p-4 flex flex-col flex-1">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1 truncate">
+                    <h3 className="font-semibold text-foreground dark:text-primary-foreground mb-1 truncate">
                       {p.name}
                     </h3>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 line-clamp-1">
+                    <p className="text-xs text-muted-foreground dark:text-muted-foreground mb-3 line-clamp-1">
                       {p.category || p.description?.slice(0, 60)}
                     </p>
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 dark:from-emerald-400 dark:to-green-400 bg-clip-text text-transparent">
+                      <span className="text-2xl font-bold bg-gradient-to-r from-brand to-brand-hover dark:from-brand dark:to-brand-hover bg-clip-text text-transparent">
                         ₹{p.price.toFixed(2)}
                       </span>
-                      <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground dark:text-muted-foreground">
                         <ShoppingCart className="h-3.5 w-3.5" />
                         {p.sold || 0} sold
                       </div>
                     </div>
                     <div className="mt-auto space-y-3">
                       <div className="relative">
-                        <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">
+                        <label className="text-xs font-medium text-muted-foreground dark:text-muted-foreground mb-1.5 block">
                           Stock Quantity
                         </label>
                         <div className="relative">
@@ -697,14 +697,14 @@ export default function DashboardPage() {
                             onBlur={(e) =>
                               handleStockChange(p._id, Number(e.target.value))
                             }
-                            className="w-full text-center font-medium pr-8 bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus:border-rose-300 dark:focus:border-rose-600"
+                            className="w-full text-center font-medium pr-8 bg-muted dark:bg-card/60 border-border dark:border-border focus:border-brand/40 dark:focus:border-brand"
                             min="0"
                           />
                           <div className="absolute right-2 top-1/2 -translate-y-1/2">
                             {stockLoadingId === p._id ? (
-                              <RefreshCw className="h-3.5 w-3.5 text-gray-400 animate-spin" />
+                              <RefreshCw className="h-3.5 w-3.5 text-muted-foreground animate-spin" />
                             ) : (
-                              <Package className="h-3.5 w-3.5 text-gray-400" />
+                              <Package className="h-3.5 w-3.5 text-muted-foreground" />
                             )}
                           </div>
                         </div>
@@ -713,7 +713,7 @@ export default function DashboardPage() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="flex-1 hover:bg-rose-50 border-rose-200 text-rose-600 hover:text-rose-700 dark:border-rose-900 dark:hover:bg-rose-900/20 transition-all duration-200"
+                          className="flex-1 hover:bg-brand-soft border-brand/40 text-brand hover:text-brand dark:border-destructive/50 dark:hover:bg-footer/20 transition-all duration-200"
                           asChild
                         >
                           <Link
@@ -727,7 +727,7 @@ export default function DashboardPage() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="hover:bg-blue-50 border-blue-200 text-blue-600 hover:text-blue-700 dark:border-blue-900 dark:hover:bg-blue-900/20 transition-all duration-200"
+                            className="hover:bg-brand-soft border-brand/40 text-brand hover:text-brand dark:border-brand/60 dark:hover:bg-footer/20 transition-all duration-200"
                           >
                             <Eye className="h-4 w-4" />
                           </Button>

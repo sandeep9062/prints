@@ -68,11 +68,11 @@ const resolveImage = (image?: string | null) => {
 };
 
 const fieldLabel =
-  "block text-[10px] font-bold tracking-[0.15em] text-stone-400 uppercase mb-1 dark:text-stone-500";
+  "block text-[10px] font-bold text-muted-foreground mb-1 dark:text-muted-foreground";
 const infoRow =
-  "flex items-start gap-4 p-4 rounded-xl bg-stone-50/80 dark:bg-white/[0.03]";
+  "flex items-start gap-4 p-4 rounded-xl bg-muted/80 dark:bg-card/[0.03]";
 const inputClass =
-  "w-full text-stone-900 font-medium bg-transparent border-b-2 border-stone-300 focus:border-red-800 outline-none pb-1 transition-colors dark:text-stone-100 dark:border-stone-600 dark:focus:border-red-600";
+  "w-full text-foreground font-medium bg-transparent border-b-2 border-border focus:border-brand/60 outline-none pb-1 transition-colors dark:text-muted-foreground/70 dark:border-border dark:focus:border-brand";
 
 export default function ProfilePage() {
   const mounted = useMounted();
@@ -195,13 +195,13 @@ export default function ProfilePage() {
 
   // ── Loading shell (avoids an SSR/client hydration mismatch) ──
   if (!mounted) {
-    return <div className="min-h-screen bg-[#FCFBF9] dark:bg-[#0f111a]" />;
+    return <div className="min-h-screen bg-background" />;
   }
 
   // ── Guests ──
   if (!isAuthenticated || !user) {
     return (
-      <div className="min-h-screen bg-[#FCFBF9] dark:bg-[#0f111a]">
+      <div className="min-h-screen bg-background">
         <main className="pt-[calc(var(--navbar-height)+3rem)]">
           <div className="container mx-auto px-6">
             <PageHeader
@@ -213,7 +213,7 @@ export default function ProfilePage() {
             <div className="py-16">
               <Link
                 href="/auth"
-                className="inline-flex items-center gap-3 border border-red-900 px-8 py-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-red-900 transition-colors duration-300 hover:bg-red-900 hover:text-white dark:border-red-800 dark:text-red-400 dark:hover:bg-red-800 dark:hover:text-white"
+                className="inline-flex items-center gap-3 border border-brand/50 px-8 py-4 text-[11px] font-semibold text-brand transition-colors duration-300 hover:bg-brand-hover hover:text-primary-foreground dark:border-brand/50 dark:text-brand dark:hover:bg-brand-hover"
               >
                 Sign in
                 <ArrowRight className="h-4 w-4" />
@@ -226,7 +226,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FCFBF9] pb-24 dark:bg-[#0f111a]">
+    <div className="min-h-screen bg-background pb-24">
       <SEOHelper
         title="My Profile"
         description="View and update your Ink of Memories profile — manage your name, email, phone number and profile photo."
@@ -252,16 +252,16 @@ export default function ProfilePage() {
           <div className="mt-16 grid gap-10 lg:grid-cols-[300px_1fr]">
             {/* ───────── Identity card ───────── */}
             <div className="lg:sticky lg:top-28 lg:self-start">
-              <div className="flex flex-col items-center rounded-2xl border border-stone-200 bg-white p-8 text-center shadow-sm dark:border-stone-700 dark:bg-white/[0.03]">
+              <div className="flex flex-col items-center rounded-2xl border border-border bg-card p-8 text-center shadow-sm dark:border-border dark:bg-card/[0.03]">
                 <div
                   onDrop={isEditing ? handleDrop : undefined}
                   onDragOver={isEditing ? handleDragOver : undefined}
                   onDragLeave={isEditing ? handleDragLeave : undefined}
                   onClick={handleImageClick}
                   className={cn(
-                    "relative flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-white shadow-lg transition-all duration-200 dark:border-stone-700",
-                    isEditing && "cursor-pointer hover:border-red-200",
-                    isDragOver && "scale-105 border-red-800 shadow-xl",
+                    "relative flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-border shadow-lg transition-all duration-200 dark:border-border",
+                    isEditing && "cursor-pointer hover:border-brand/50",
+                    isDragOver && "scale-105 border-brand/50 shadow-xl",
                   )}
                 >
                   {displayImage ? (
@@ -271,19 +271,19 @@ export default function ProfilePage() {
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <UserIcon className="h-12 w-12 text-stone-400" />
+                    <UserIcon className="h-12 w-12 text-muted-foreground" />
                   )}
 
                   {isEditing && !isDragOver && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity hover:opacity-100">
-                      <Camera className="h-7 w-7 text-white" />
+                      <Camera className="h-7 w-7 text-primary-foreground" />
                     </div>
                   )}
 
                   {isDragOver && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-stone-900/70">
-                      <Upload className="h-6 w-6 text-white" />
-                      <span className="text-[10px] font-medium text-white">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-black/70">
+                      <Upload className="h-6 w-6 text-primary-foreground" />
+                      <span className="text-[10px] font-medium text-primary-foreground">
                         Drop image
                       </span>
                     </div>
@@ -299,36 +299,36 @@ export default function ProfilePage() {
                 />
 
                 {isEditing && (
-                  <p className="mt-3 text-[11px] text-stone-400 dark:text-stone-500">
+                  <p className="mt-3 text-[11px] text-muted-foreground dark:text-muted-foreground">
                     Drag &amp; drop or click to change photo
                   </p>
                 )}
 
-                <h3 className="mt-5 font-serif text-2xl text-stone-900 dark:text-stone-100">
+                <h3 className="mt-5 font-sans text-2xl text-foreground dark:text-muted-foreground/70">
                   {user.name || "User"}
                 </h3>
 
                 <div className="mt-2 flex items-center gap-2">
-                  <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-                  <span className="text-sm font-medium text-green-600 dark:text-green-500">
+                  <span className="inline-block h-2 w-2 rounded-full bg-success" />
+                  <span className="text-sm font-medium text-success dark:text-success">
                     Active
                   </span>
                 </div>
 
-                <span className="mt-6 inline-block rounded-full border border-stone-200 px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500 dark:border-stone-700 dark:text-stone-400">
+                <span className="mt-6 inline-block rounded-full border border-border px-4 py-1 text-[10px] font-bold text-muted-foreground dark:border-border dark:text-muted-foreground">
                   {user.role || "Client"}
                 </span>
               </div>
             </div>
 
             {/* ───────── Details card ───────── */}
-            <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm dark:border-stone-700 dark:bg-white/[0.03]">
-              <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-stone-100 pb-6 dark:border-stone-700">
+            <div className="rounded-2xl border border-border bg-card p-8 shadow-sm dark:border-border dark:bg-card/[0.03]">
+              <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6 dark:border-border">
                 <div>
-                  <h2 className="font-serif text-xl text-stone-900 dark:text-stone-100">
+                  <h2 className="font-sans text-xl text-foreground dark:text-muted-foreground/70">
                     Personal Information
                   </h2>
-                  <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+                  <p className="mt-1 text-sm text-muted-foreground dark:text-muted-foreground">
                     Manage your personal details
                   </p>
                 </div>
@@ -337,7 +337,7 @@ export default function ProfilePage() {
                   <button
                     type="button"
                     onClick={() => setIsEditing(true)}
-                    className="inline-flex items-center gap-2 rounded bg-stone-900 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
+                    className="inline-flex items-center gap-2 rounded bg-footer px-5 py-2.5 text-[11px] font-bold text-footer-foreground transition-colors hover:bg-brand-hover hover:text-primary-foreground dark:bg-card dark:text-foreground dark:hover:bg-muted"
                   >
                     <UserIcon className="h-3.5 w-3.5" />
                     Edit Profile
@@ -347,7 +347,7 @@ export default function ProfilePage() {
                     <button
                       type="button"
                       onClick={handleCancel}
-                      className="inline-flex items-center gap-2 rounded border border-stone-200 px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-stone-600 transition-colors hover:bg-stone-50 dark:border-stone-700 dark:text-stone-300 dark:hover:bg-white/5"
+                      className="inline-flex items-center gap-2 rounded border border-border px-4 py-2.5 text-[11px] font-bold text-muted-foreground transition-colors hover:bg-muted dark:border-border dark:text-muted-foreground/70"
                     >
                       <X className="h-3.5 w-3.5" />
                       Cancel
@@ -356,7 +356,7 @@ export default function ProfilePage() {
                       type="button"
                       onClick={handleSave}
                       disabled={isLoading}
-                      className="inline-flex items-center gap-2 rounded bg-stone-900 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-stone-800 disabled:opacity-50 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
+                      className="inline-flex items-center gap-2 rounded bg-footer px-5 py-2.5 text-[11px] font-bold text-footer-foreground transition-colors hover:bg-brand-hover hover:text-primary-foreground disabled:opacity-50 dark:bg-card dark:text-foreground dark:hover:bg-muted"
                     >
                       <Save className="h-3.5 w-3.5" />
                       {isLoading ? "Saving..." : "Save"}
@@ -368,8 +368,8 @@ export default function ProfilePage() {
               <div className="grid gap-6 sm:grid-cols-2">
                 {/* Name */}
                 <div className={infoRow}>
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-white shadow-sm dark:bg-white/10">
-                    <UserIcon className="h-5 w-5 text-stone-600 dark:text-stone-300" />
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-card shadow-sm">
+                    <UserIcon className="h-5 w-5 text-muted-foreground dark:text-muted-foreground/70" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <label className={fieldLabel}>Full Name</label>
@@ -384,7 +384,7 @@ export default function ProfilePage() {
                         placeholder="Your name"
                       />
                     ) : (
-                      <p className="truncate font-medium text-stone-900 dark:text-stone-100">
+                      <p className="truncate font-medium text-foreground dark:text-muted-foreground/70">
                         {user.name || "N/A"}
                       </p>
                     )}
@@ -393,8 +393,8 @@ export default function ProfilePage() {
 
                 {/* Email */}
                 <div className={infoRow}>
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-white shadow-sm dark:bg-white/10">
-                    <Mail className="h-5 w-5 text-stone-600 dark:text-stone-300" />
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-card shadow-sm">
+                    <Mail className="h-5 w-5 text-muted-foreground dark:text-muted-foreground/70" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <label className={fieldLabel}>Email Address</label>
@@ -409,7 +409,7 @@ export default function ProfilePage() {
                         placeholder="your@email.com"
                       />
                     ) : (
-                      <p className="truncate font-medium text-stone-900 dark:text-stone-100">
+                      <p className="truncate font-medium text-foreground dark:text-muted-foreground/70">
                         {user.email || "N/A"}
                       </p>
                     )}
@@ -418,8 +418,8 @@ export default function ProfilePage() {
 
                 {/* Phone */}
                 <div className={infoRow}>
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-white shadow-sm dark:bg-white/10">
-                    <Phone className="h-5 w-5 text-stone-600 dark:text-stone-300" />
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-card shadow-sm">
+                    <Phone className="h-5 w-5 text-muted-foreground dark:text-muted-foreground/70" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <label className={fieldLabel}>Phone Number</label>
@@ -433,7 +433,7 @@ export default function ProfilePage() {
                         className="phone-input mt-1 text-sm"
                       />
                     ) : (
-                      <p className="truncate font-medium text-stone-900 dark:text-stone-100">
+                      <p className="truncate font-medium text-foreground dark:text-muted-foreground/70">
                         {user.phone || "N/A"}
                       </p>
                     )}
@@ -442,12 +442,12 @@ export default function ProfilePage() {
 
                 {/* Member since */}
                 <div className={infoRow}>
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-white shadow-sm dark:bg-white/10">
-                    <Save className="h-5 w-5 text-stone-600 dark:text-stone-300" />
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-card shadow-sm">
+                    <Save className="h-5 w-5 text-muted-foreground dark:text-muted-foreground/70" />
                   </div>
                   <div>
                     <label className={fieldLabel}>Member Since</label>
-                    <p className="font-medium text-stone-900 dark:text-stone-100">
+                    <p className="font-medium text-foreground dark:text-muted-foreground/70">
                       {memberSince}
                     </p>
                   </div>

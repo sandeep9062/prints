@@ -3,10 +3,12 @@
 import React from "react";
 import { Award, Users, Leaf, Clock } from "lucide-react";
 
+import { FOUNDED_YEAR } from "@/lib/site-config";
+
 /*
   Design notes
-  - Blush paper section in the same system as the other sections: bottle-green
-    ink, foil-gold accents.
+  - Blush paper section in the same system as the other sections: ink blue
+    text, champagne gold accents — all semantic tokens.
   - The photos are loose prints with captions, slightly rotated. The Atelier
     section already uses the "press sheet" frame, so this one stays different.
 */
@@ -21,7 +23,7 @@ const features: FeatureItem[] = [
   {
     icon: Award,
     title: "Heritage excellence",
-    description: "Two decades of mastery in precision printing.",
+    description: `Four decades of mastery in precision printing.`,
   },
   {
     icon: Users,
@@ -56,7 +58,7 @@ const Print = ({
   className: string;
 }) => (
   <figure
-    className={`absolute rounded-sm bg-[#F7F4EE] p-2.5 pb-9 shadow-[0_24px_48px_-24px_rgba(31,58,50,.6)] ${className}`}
+    className={`absolute rounded-sm bg-ivory p-2.5 pb-9 shadow-[0_24px_48px_-24px_rgba(22,32,79,.4)] ${className}`}
   >
     <img
       src={src}
@@ -64,7 +66,7 @@ const Print = ({
       loading="lazy"
       className={`w-full object-cover ${aspect}`}
     />
-    <figcaption className="absolute inset-x-0 bottom-2.5 text-center font-serif text-sm italic text-[#1F3A32]/70">
+    <figcaption className="absolute inset-x-0 bottom-2.5 text-center font-sans text-sm italic text-muted-foreground">
       {caption}
     </figcaption>
   </figure>
@@ -74,11 +76,11 @@ export const AboutSection: React.FC = () => {
   return (
     <section
       aria-labelledby="about-heading"
-      className="relative overflow-hidden bg-[#F4E8E4] py-24 dark:bg-[#16211D] lg:py-32"
+      className="relative overflow-hidden bg-blush py-24 lg:py-32"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[.12] mix-blend-multiply dark:hidden"
+        className="pointer-events-none absolute inset-0 opacity-[.12] mix-blend-multiply"
         style={{ backgroundImage: GRAIN }}
       />
 
@@ -113,38 +115,38 @@ export const AboutSection: React.FC = () => {
           <div className="lg:col-span-6">
             <h2
               id="about-heading"
-              className="max-w-[16ch] font-serif text-5xl font-medium leading-[1.05] tracking-tight text-[#1F3A32] dark:text-[#F7F4EE] md:text-6xl lg:text-7xl"
+              className="max-w-[16ch] font-serif text-5xl font-medium leading-[1.05] tracking-tight text-foreground md:text-6xl lg:text-7xl"
             >
               Crafting dreams into tangible reality.
             </h2>
 
             <div className="mt-8 max-w-[54ch] space-y-6">
-              <p className="text-base leading-[1.75] text-[#1F3A32]/80 dark:text-[#E4E9DD]/80 md:text-lg">
-                For over two decades, Samlason Printing has served as a
+              <p className="text-base leading-[1.75] text-foreground/80 md:text-lg">
+                Since {FOUNDED_YEAR}, Ink of Memories has served as a
                 cornerstone of quality in the printing industry. What began as a
                 dedicated family studio has evolved into a premier destination
                 for those who value the tactile beauty of ink on paper.
               </p>
-              <p className="border-l-2 border-[#B08D4A] pl-5 font-serif text-xl italic text-[#1F3A32] dark:text-[#F7F4EE]">
+              <p className="border-l-2 border-gold pl-5 font-sans text-xl italic text-foreground">
                 &ldquo;Every print is an artifact of a memory yet to be
                 made.&rdquo;
               </p>
             </div>
 
             {/* Features */}
-            <ul className="mt-12 grid gap-x-10 gap-y-8 border-t border-[#1F3A32]/20 pt-8 dark:border-[#E4E9DD]/20 sm:grid-cols-2">
+            <ul className="mt-12 grid gap-x-10 gap-y-8 border-t border-border pt-8 sm:grid-cols-2">
               {features.map((feature) => (
                 <li key={feature.title}>
                   <div className="flex items-center gap-3">
                     <feature.icon
                       aria-hidden="true"
-                      className="h-5 w-5 shrink-0 text-[#B08D4A]"
+                      className="h-5 w-5 shrink-0 text-gold"
                     />
-                    <h3 className="font-serif text-xl font-medium text-[#1F3A32] dark:text-[#F7F4EE]">
+                    <h3 className="text-xl font-semibold text-foreground">
                       {feature.title}
                     </h3>
                   </div>
-                  <p className="mt-2 pl-8 text-sm leading-relaxed text-[#1F3A32]/75 dark:text-[#E4E9DD]/75">
+                  <p className="mt-2 pl-8 text-sm leading-relaxed text-muted-foreground">
                     {feature.description}
                   </p>
                 </li>

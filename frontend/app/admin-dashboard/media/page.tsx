@@ -242,8 +242,8 @@ const MediaPage = () => {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <Loader2 className="h-10 w-10 animate-spin text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">Loading media library...</p>
+          <Loader2 className="h-10 w-10 animate-spin text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading media library...</p>
         </div>
       </div>
     );
@@ -253,11 +253,11 @@ const MediaPage = () => {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-          <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-foreground mb-2">
             Failed to load media
           </h2>
-          <p className="text-gray-500 mb-6">
+          <p className="text-muted-foreground mb-6">
             {(error as any)?.data?.message ||
               "There was an error fetching media files."}
           </p>
@@ -283,10 +283,10 @@ const MediaPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+          <h1 className="font-sans text-2xl lg:text-3xl font-semibold text-foreground">
             Media Library
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Manage and organize all uploaded images ({mediaFiles.length} total)
           </p>
         </div>
@@ -311,7 +311,7 @@ const MediaPage = () => {
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search by name, alt text, or filename..."
                 className="pl-10"
@@ -359,9 +359,9 @@ const MediaPage = () => {
       {filteredMedia.length === 0 ? (
         <Card>
           <CardContent className="p-12 text-center">
-            <Image className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+            <Image className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="font-medium text-lg mb-2">No media files found</h3>
-            <p className="text-gray-500 mb-4">
+            <p className="text-muted-foreground mb-4">
               {searchQuery || contextFilter !== "all"
                 ? "Try a different search term or filter"
                 : "Upload your first file to get started"}
@@ -377,7 +377,7 @@ const MediaPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredMedia.map((file: any) => (
             <Card key={file._id || file.id} className="overflow-hidden group">
-              <div className="relative aspect-square bg-gray-100">
+              <div className="relative aspect-square bg-muted">
                 <img
                   src={file.url}
                   alt={file.altText || file.filename || "Image"}
@@ -406,14 +406,14 @@ const MediaPage = () => {
                     size="icon"
                     onClick={() => openDeleteDialog(file)}
                   >
-                    <Trash2 className="h-4 w-4 text-red-500" />
+                    <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
                 </div>
                 {!file.active && (
                   <div className="absolute top-2 left-2">
                     <Badge
                       variant="secondary"
-                      className="bg-yellow-100 text-yellow-800 border-yellow-300"
+                      className="bg-gold/15 text-gold-text border-gold/50"
                     >
                       Inactive
                     </Badge>
@@ -430,9 +430,9 @@ const MediaPage = () => {
                       {file.altText || file.filename || "Untitled"}
                     </p>
                     {file.context && (
-                      <p className="text-xs text-gray-500">{file.context}</p>
+                      <p className="text-xs text-muted-foreground">{file.context}</p>
                     )}
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-muted-foreground">
                       {file.createdAt ? formatDate(file.createdAt) : ""}
                     </p>
                   </div>
@@ -469,7 +469,7 @@ const MediaPage = () => {
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        className="text-red-600"
+                        className="text-destructive"
                         onClick={() => openDeleteDialog(file)}
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
@@ -492,9 +492,9 @@ const MediaPage = () => {
             {filteredMedia.map((file: any) => (
               <div
                 key={file._id || file.id}
-                className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-4 p-4 hover:bg-muted transition-colors"
               >
-                <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                   <img
                     src={file.url}
                     alt={file.altText || file.filename || "Image"}
@@ -506,7 +506,7 @@ const MediaPage = () => {
                   <p className="font-medium text-sm truncate">
                     {file.altText || file.filename || "Untitled"}
                   </p>
-                  <div className="flex gap-3 text-xs text-gray-500 mt-1">
+                  <div className="flex gap-3 text-xs text-muted-foreground mt-1">
                     {file.context && <span>{file.context}</span>}
                     <span>
                       {file.width && file.height
@@ -524,7 +524,7 @@ const MediaPage = () => {
                 {!file.active && (
                   <Badge
                     variant="secondary"
-                    className="bg-yellow-100 text-yellow-800 flex-shrink-0"
+                    className="bg-gold/15 text-gold-text flex-shrink-0"
                   >
                     Inactive
                   </Badge>
@@ -562,7 +562,7 @@ const MediaPage = () => {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      className="text-red-600"
+                      className="text-destructive"
                       onClick={() => openDeleteDialog(file)}
                     >
                       <Trash2 className="mr-2 h-4 w-4" />
@@ -604,7 +604,7 @@ const MediaPage = () => {
               )}
             </DialogDescription>
           </DialogHeader>
-          <div className="flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden max-h-[60vh]">
+          <div className="flex items-center justify-center bg-muted rounded-lg overflow-hidden max-h-[60vh]">
             {previewImage && (
               <img
                 src={previewImage.url}
@@ -737,7 +737,7 @@ const MediaPage = () => {
                 onChange={(e) =>
                   setEditForm((prev) => ({ ...prev, active: e.target.checked }))
                 }
-                className="rounded border-gray-300"
+                className="rounded border-border"
               />
               <Label htmlFor="edit-active" className="cursor-pointer">
                 Active
@@ -772,8 +772,8 @@ const MediaPage = () => {
             </DialogDescription>
           </DialogHeader>
           {deleteImage && (
-            <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
-              <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+            <div className="flex items-center gap-4 p-4 bg-muted rounded-lg">
+              <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                 <img
                   src={deleteImage.url}
                   alt={deleteImage.altText || "Image"}
@@ -784,7 +784,7 @@ const MediaPage = () => {
                 <p className="font-medium text-sm">
                   {deleteImage.altText || deleteImage.filename || "Untitled"}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {deleteImage.context || "No context"}
                 </p>
               </div>

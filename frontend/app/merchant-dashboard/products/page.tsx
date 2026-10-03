@@ -59,15 +59,15 @@ interface Product {
 }
 
 const ProductCardSkeleton = () => (
-  <div className="group overflow-hidden animate-pulse rounded-xl bg-white dark:bg-gray-800/40 shadow-sm">
-    <div className="aspect-square w-full bg-gray-200 dark:bg-gray-700 rounded-t-xl"></div>
+  <div className="group overflow-hidden animate-pulse rounded-xl bg-card dark:bg-card/40 shadow-sm">
+    <div className="aspect-square w-full bg-muted dark:bg-card rounded-t-xl"></div>
     <div className="p-5 space-y-3">
-      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-      <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
-      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+      <div className="h-4 bg-muted dark:bg-card rounded w-3/4"></div>
+      <div className="h-6 bg-muted dark:bg-card rounded w-2/3"></div>
+      <div className="h-4 bg-muted dark:bg-card rounded w-full"></div>
       <div className="flex items-center justify-between pt-4">
-        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
-        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+        <div className="h-8 bg-muted dark:bg-card rounded w-1/4"></div>
+        <div className="h-8 bg-muted dark:bg-card rounded w-1/3"></div>
       </div>
     </div>
   </div>
@@ -148,68 +148,68 @@ function ProductsContent() {
         variants={{ animate: { transition: { staggerChildren: 0.1 } } }}
       >
         <motion.div variants={fadeInUp}>
-          <Card className="relative overflow-hidden bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
+          <Card className="relative overflow-hidden bg-gradient-to-br from-brand to-brand-hover text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-card/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-sm font-medium text-white/80">
+              <CardTitle className="text-sm font-medium text-primary-foreground/80">
                 Total Products
               </CardTitle>
-              <Package className="h-5 w-5 text-white" />
+              <Package className="h-5 w-5 text-primary-foreground" />
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">{totalProducts}</div>
-              <p className="text-xs text-emerald-200 flex items-center gap-1">
+              <p className="text-xs text-brand flex items-center gap-1">
                 <TrendingUp className="h-3 w-3" /> In catalog
               </p>
             </CardContent>
           </Card>
         </motion.div>
         <motion.div variants={fadeInUp}>
-          <Card className="relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
+          <Card className="relative overflow-hidden bg-gradient-to-br from-brand to-brand-hover text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-card/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-sm font-medium text-white/80">
+              <CardTitle className="text-sm font-medium text-primary-foreground/80">
                 Inventory Value
               </CardTitle>
-              <Tag className="h-5 w-5 text-white" />
+              <Tag className="h-5 w-5 text-primary-foreground" />
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">
                 ₹{totalValue.toLocaleString()}
               </div>
-              <p className="text-xs text-blue-200">Total stock value</p>
+              <p className="text-xs text-foreground">Total stock value</p>
             </CardContent>
           </Card>
         </motion.div>
         <motion.div variants={fadeInUp}>
-          <Card className="relative overflow-hidden bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
+          <Card className="relative overflow-hidden bg-gradient-to-br from-brand to-brand-hover text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-card/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-sm font-medium text-white/80">
+              <CardTitle className="text-sm font-medium text-primary-foreground/80">
                 Total Stock
               </CardTitle>
-              <ShoppingBag className="h-5 w-5 text-white" />
+              <ShoppingBag className="h-5 w-5 text-primary-foreground" />
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">{totalStock}</div>
-              <p className="text-xs text-purple-200">Total units in stock</p>
+              <p className="text-xs text-brand">Total units in stock</p>
             </CardContent>
           </Card>
         </motion.div>
         <motion.div variants={fadeInUp}>
           <Card
-            className={`relative overflow-hidden text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group ${outOfStock > 0 ? "bg-gradient-to-br from-amber-500 to-orange-600" : "bg-gradient-to-br from-green-500 to-green-600"}`}
+            className={`relative overflow-hidden text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group ${outOfStock > 0 ? "bg-gradient-to-br from-brand to-brand-hover" : "bg-gradient-to-br from-brand to-brand-hover"}`}
           >
-            <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
+            <div className="absolute top-0 right-0 w-24 h-24 bg-card/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-sm font-medium text-white/80">
+              <CardTitle className="text-sm font-medium text-primary-foreground/80">
                 Out of Stock
               </CardTitle>
-              <AlertTriangle className="h-5 w-5 text-white" />
+              <AlertTriangle className="h-5 w-5 text-primary-foreground" />
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">{outOfStock}</div>
-              <p className="text-xs text-amber-200">
+              <p className="text-xs text-gold-text">
                 {outOfStock > 0 ? "Needs attention" : "All in stock"}
               </p>
             </CardContent>
@@ -218,7 +218,7 @@ function ProductsContent() {
       </motion.div>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white/50 dark:bg-gray-800/20 rounded-xl p-4 border border-gray-100 dark:border-gray-700/30">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-card/50 dark:bg-card/20 rounded-xl p-4 border border-border dark:border-border/30">
         <div className="flex flex-wrap gap-2">
           {categories.map((category) => (
             <button
@@ -228,8 +228,8 @@ function ProductsContent() {
                 "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
                 categoryParam === category ||
                   (category === "All" && !categoryParam)
-                  ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg scale-105"
-                  : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 border border-gray-200 dark:border-gray-700",
+                  ? "bg-gradient-to-r from-brand to-brand-hover text-primary-foreground shadow-lg scale-105"
+                  : "bg-card dark:bg-card text-muted-foreground dark:text-muted-foreground hover:bg-success/10 dark:hover:bg-success/20/20 hover:text-success border border-border dark:border-border",
               )}
             >
               {category}
@@ -238,24 +238,24 @@ function ProductsContent() {
         </div>
         <div className="flex items-center gap-4 w-full md:w-auto">
           <div className="relative flex-1 md:flex-initial">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-emerald-300 dark:focus:ring-emerald-600 transition-all"
+              className="pl-10 pr-4 py-2.5 rounded-xl border border-border dark:border-border bg-card dark:bg-card text-sm w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-success dark:focus:ring-success transition-all"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground"
               >
                 <X className="h-4 w-4" />
               </button>
             )}
           </div>
-          <div className="flex items-center gap-1 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-1">
+          <div className="flex items-center gap-1 bg-card dark:bg-card rounded-xl border border-border dark:border-border p-1">
             <Button
               variant={viewMode === "grid" ? "default" : "ghost"}
               size="sm"
@@ -263,7 +263,7 @@ function ProductsContent() {
               className={cn(
                 "rounded-lg transition-all",
                 viewMode === "grid" &&
-                  "bg-emerald-500 text-white hover:bg-emerald-600",
+                  "bg-success text-primary-foreground hover:bg-success",
               )}
             >
               <Grid3X3 className="h-4 w-4" />
@@ -275,7 +275,7 @@ function ProductsContent() {
               className={cn(
                 "rounded-lg transition-all",
                 viewMode === "large" &&
-                  "bg-emerald-500 text-white hover:bg-emerald-600",
+                  "bg-success text-primary-foreground hover:bg-success",
               )}
             >
               <LayoutGrid className="h-4 w-4" />
@@ -299,13 +299,13 @@ function ProductsContent() {
           ))}
         </div>
       ) : error ? (
-        <Card className="border-red-200 bg-red-50 dark:bg-red-900/10 border-2">
+        <Card className="border-destructive/40 bg-destructive/10 dark:bg-destructive/10 border-2">
           <CardContent className="p-8 text-center">
-            <AlertTriangle className="mx-auto h-12 w-12 text-red-400 mb-4" />
-            <p className="text-red-600 dark:text-red-400 font-medium">
+            <AlertTriangle className="mx-auto h-12 w-12 text-destructive mb-4" />
+            <p className="text-destructive dark:text-destructive font-medium">
               Failed to load products.
             </p>
-            <p className="text-red-500/70 text-sm mt-1">
+            <p className="text-destructive/70 text-sm mt-1">
               Please try again later.
             </p>
           </CardContent>
@@ -326,7 +326,7 @@ function ProductsContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05, duration: 0.4 }}
             >
-              <div className="group relative rounded-xl border border-gray-100 dark:border-gray-700/30 overflow-hidden bg-white dark:bg-gray-800/40 backdrop-blur-sm shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="group relative rounded-xl border border-border dark:border-border/30 overflow-hidden bg-card dark:bg-card/40 backdrop-blur-sm shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
                 <div
                   className={cn(
                     "relative overflow-hidden",
@@ -339,17 +339,17 @@ function ProductsContent() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   {product.badge && (
-                    <span className="absolute top-3 left-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-medium px-2.5 py-1 rounded-full shadow-lg">
+                    <span className="absolute top-3 left-3 bg-gradient-to-r from-brand to-brand-hover text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-full shadow-lg">
                       {product.badge}
                     </span>
                   )}
                   {(product.stock || 0) <= 5 && (product.stock || 0) > 0 && (
-                    <span className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-medium px-2.5 py-1 rounded-full shadow-lg">
+                    <span className="absolute top-3 right-3 bg-gradient-to-r from-brand to-brand-hover text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-full shadow-lg">
                       Low Stock
                     </span>
                   )}
                   {(product.stock || 0) === 0 && (
-                    <span className="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-medium px-2.5 py-1 rounded-full shadow-lg">
+                    <span className="absolute top-3 right-3 bg-gradient-to-r from-brand to-brand-hover text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-full shadow-lg">
                       Out of Stock
                     </span>
                   )}
@@ -359,7 +359,7 @@ function ProductsContent() {
                       <Button
                         variant="outline"
                         size="icon"
-                        className="h-9 w-9 bg-white/90 hover:bg-white shadow-lg border-0 backdrop-blur-sm"
+                        className="h-9 w-9 bg-card/90 hover:bg-card shadow-lg border-0 backdrop-blur-sm"
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
@@ -370,7 +370,7 @@ function ProductsContent() {
                       <Button
                         variant="outline"
                         size="icon"
-                        className="h-9 w-9 bg-white/90 hover:bg-white shadow-lg border-0 backdrop-blur-sm"
+                        className="h-9 w-9 bg-card/90 hover:bg-card shadow-lg border-0 backdrop-blur-sm"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -378,7 +378,7 @@ function ProductsContent() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="h-9 w-9 bg-white/90 hover:bg-red-50 shadow-lg border-0 text-red-600 backdrop-blur-sm"
+                      className="h-9 w-9 bg-card/90 hover:bg-destructive/10 shadow-lg border-0 text-destructive backdrop-blur-sm"
                       onClick={() => setProductToDelete(product)}
                     >
                       <Trash className="h-4 w-4" />
@@ -387,19 +387,19 @@ function ProductsContent() {
                 </div>
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-medium">
+                    <span className="text-xs text-muted-foreground dark:text-muted-foreground uppercase tracking-wider font-medium">
                       {product.category}
                     </span>
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-muted-foreground">
                       {product.stock || 0} in stock
                     </span>
                   </div>
-                  <h3 className="font-semibold text-base text-gray-900 dark:text-white mb-2 truncate">
+                  <h3 className="font-semibold text-base text-foreground dark:text-primary-foreground mb-2 truncate">
                     {product.name}
                   </h3>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-lg bg-gradient-to-r from-emerald-600 to-green-600 dark:from-emerald-400 dark:to-green-400 bg-clip-text text-transparent">
+                      <span className="font-bold text-lg bg-gradient-to-r from-brand to-brand-hover dark:from-brand dark:to-brand-hover bg-clip-text text-transparent">
                         ₹
                         {(
                           product.discountPrice || product.price
@@ -407,7 +407,7 @@ function ProductsContent() {
                       </span>
                       {product.discountPrice &&
                         product.discountPrice < product.price && (
-                          <span className="text-sm text-gray-400 line-through">
+                          <span className="text-sm text-muted-foreground line-through">
                             ₹{product.price.toLocaleString()}
                           </span>
                         )}
@@ -417,10 +417,10 @@ function ProductsContent() {
                       className={cn(
                         "text-xs",
                         (product.stock || 0) > 10
-                          ? "border-green-200 text-green-600"
+                          ? "border-success/40 text-success"
                           : (product.stock || 0) > 0
-                            ? "border-amber-200 text-amber-600"
-                            : "border-red-200 text-red-600",
+                            ? "border-gold/50 text-gold-text dark:border-gold/40 dark:text-gold"
+                            : "border-destructive/40 text-destructive",
                       )}
                     >
                       {product.stock || 0} in stock
@@ -432,21 +432,21 @@ function ProductsContent() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 bg-white/50 dark:bg-gray-800/20 rounded-xl border border-dashed border-gray-300 dark:border-gray-600">
-          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-full flex items-center justify-center mb-4">
-            <ShoppingBag className="mx-auto h-8 w-8 text-emerald-400" />
+        <div className="text-center py-16 bg-card/50 dark:bg-card/20 rounded-xl border border-dashed border-border dark:border-border">
+          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-brand-soft to-card dark:from-brand/20 dark:to-brand-hover/20 rounded-full flex items-center justify-center mb-4">
+            <ShoppingBag className="mx-auto h-8 w-8 text-brand" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+          <h3 className="text-xl font-semibold text-foreground dark:text-primary-foreground mb-2">
             {searchQuery ? "No products found" : "No products yet"}
           </h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
+          <p className="text-muted-foreground dark:text-muted-foreground mb-6 max-w-md mx-auto">
             {searchQuery
               ? "Try adjusting your search."
               : "Get started by adding your first product."}
           </p>
           {!searchQuery && (
             <Link href="/merchant-dashboard/add-product">
-              <Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg">
+              <Button className="bg-gradient-to-r from-brand to-brand-hover hover:from-brand hover:to-brand-hover text-primary-foreground shadow-lg">
                 <PlusCircle className="h-4 w-4 mr-2" />
                 Add Product
               </Button>
@@ -462,7 +462,7 @@ function ProductsContent() {
         <AlertDialogContent className="rounded-2xl">
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-500" />
+              <AlertTriangle className="h-5 w-5 text-destructive" />
               Delete Product
             </AlertDialogTitle>
             <AlertDialogDescription>
@@ -474,7 +474,7 @@ function ProductsContent() {
             <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
-              className="rounded-xl bg-red-500 hover:bg-red-600"
+              className="rounded-xl bg-primary hover:bg-brand-hover"
             >
               Delete
             </AlertDialogAction>
@@ -494,11 +494,11 @@ export default function Products() {
             {Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800/40 p-6 h-28"
+                className="animate-pulse rounded-xl bg-muted dark:bg-card/40 p-6 h-28"
               />
             ))}
           </div>
-          <div className="animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800/40 h-16" />
+          <div className="animate-pulse rounded-xl bg-muted dark:bg-card/40 h-16" />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (
               <ProductCardSkeleton key={i} />

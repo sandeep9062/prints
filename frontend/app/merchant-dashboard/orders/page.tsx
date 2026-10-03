@@ -58,33 +58,33 @@ const statusConfig: Record<
 > = {
   delivered: {
     color:
-      "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800",
+      "bg-success/10 text-success border-success/40 dark:bg-footer/20 dark:text-brand dark:border-success/60",
     icon: CheckCircle,
-    gradient: "from-green-500 to-emerald-600",
+    gradient: "from-brand to-brand-hover",
   },
   shipped: {
     color:
-      "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800",
+      "bg-brand-soft text-foreground border-brand/40 dark:bg-footer/20 dark:text-brand dark:border-brand/60",
     icon: Truck,
-    gradient: "from-blue-500 to-indigo-600",
+    gradient: "from-brand to-brand-hover",
   },
   processing: {
     color:
-      "bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800",
+      "bg-gold/15 text-gold-text border-gold/50 dark:bg-gold/20/20 dark:text-gold dark:border-gold/40",
     icon: RefreshCw,
-    gradient: "from-yellow-500 to-orange-500",
+    gradient: "from-brand-hover to-brand-hover",
   },
   pending: {
     color:
-      "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/20 dark:text-orange-400 dark:border-orange-800",
+      "bg-gold/15 text-gold-text border-gold/50 dark:bg-footer/20 dark:text-gold dark:border-gold/40",
     icon: Clock,
-    gradient: "from-orange-500 to-red-500",
+    gradient: "from-brand to-destructive",
   },
   cancelled: {
     color:
-      "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800",
+      "bg-destructive/10 text-destructive border-destructive/40 dark:bg-destructive/20 dark:text-destructive dark:border-destructive/50",
     icon: XCircle,
-    gradient: "from-red-500 to-rose-600",
+    gradient: "from-destructive to-brand-hover",
   },
 };
 
@@ -92,9 +92,9 @@ const getStatusConfig = (status: string) => {
   const key = status.toLowerCase();
   return (
     statusConfig[key] || {
-      color: "bg-gray-100 text-gray-800 border-gray-200",
+      color: "bg-muted text-foreground border-border",
       icon: Package,
-      gradient: "from-gray-500 to-gray-600",
+      gradient: "from-brand-soft to-brand-soft",
     }
   );
 };
@@ -214,19 +214,19 @@ export default function OrdersPage() {
         variants={{ animate: { transition: { staggerChildren: 0.08 } } }}
       >
         <motion.div variants={fadeInUp} className="lg:col-span-2">
-          <Card className="relative overflow-hidden bg-gradient-to-br from-purple-500 via-purple-600 to-fuchsia-700 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group h-full">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
+          <Card className="relative overflow-hidden bg-gradient-to-br from-brand via-brand to-brand-hover text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group h-full">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-card/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-sm font-medium text-white/80">
+              <CardTitle className="text-sm font-medium text-primary-foreground/80">
                 Total Revenue
               </CardTitle>
-              <IndianRupee className="h-5 w-5 text-white" />
+              <IndianRupee className="h-5 w-5 text-primary-foreground" />
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">
                 ₹{stats.totalRevenue.toLocaleString()}
               </div>
-              <p className="text-xs text-purple-200 flex items-center gap-1">
+              <p className="text-xs text-brand flex items-center gap-1">
                 <TrendingUp className="h-3 w-3" />
                 From {stats.totalOrders} orders
               </p>
@@ -234,66 +234,66 @@ export default function OrdersPage() {
           </Card>
         </motion.div>
         <motion.div variants={fadeInUp}>
-          <Card className="relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
+          <Card className="relative overflow-hidden bg-gradient-to-br from-brand to-brand-hover text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-card/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-xs font-medium text-white/80">
+              <CardTitle className="text-xs font-medium text-primary-foreground/80">
                 Pending
               </CardTitle>
-              <Clock className="h-4 w-4 text-white" />
+              <Clock className="h-4 w-4 text-primary-foreground" />
             </CardHeader>
             <CardContent className="relative">
               <div className="text-2xl font-bold mb-1">{stats.pending}</div>
-              <p className="text-[10px] text-blue-200">Awaiting processing</p>
+              <p className="text-[10px] text-foreground">Awaiting processing</p>
             </CardContent>
           </Card>
         </motion.div>
         <motion.div variants={fadeInUp}>
-          <Card className="relative overflow-hidden bg-gradient-to-br from-amber-500 to-yellow-600 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
+          <Card className="relative overflow-hidden bg-gradient-to-br from-brand to-brand-hover text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-card/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-xs font-medium text-white/80">
+              <CardTitle className="text-xs font-medium text-primary-foreground/80">
                 Processing
               </CardTitle>
-              <RefreshCw className="h-4 w-4 text-white" />
+              <RefreshCw className="h-4 w-4 text-primary-foreground" />
             </CardHeader>
             <CardContent className="relative">
               <div className="text-2xl font-bold mb-1">{stats.processing}</div>
-              <p className="text-[10px] text-amber-200">In progress</p>
+              <p className="text-[10px] text-gold-text">In progress</p>
             </CardContent>
           </Card>
         </motion.div>
         <motion.div variants={fadeInUp}>
-          <Card className="relative overflow-hidden bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
+          <Card className="relative overflow-hidden bg-gradient-to-br from-brand to-brand-hover text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 group">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-card/5 rounded-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-700"></div>
             <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
-              <CardTitle className="text-xs font-medium text-white/80">
+              <CardTitle className="text-xs font-medium text-primary-foreground/80">
                 Delivered
               </CardTitle>
-              <CheckCircle className="h-4 w-4 text-white" />
+              <CheckCircle className="h-4 w-4 text-primary-foreground" />
             </CardHeader>
             <CardContent className="relative">
               <div className="text-2xl font-bold mb-1">{stats.delivered}</div>
-              <p className="text-[10px] text-emerald-200">Completed</p>
+              <p className="text-[10px] text-brand">Completed</p>
             </CardContent>
           </Card>
         </motion.div>
       </motion.div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-white/50 dark:bg-gray-800/20 rounded-xl p-4 border border-gray-100 dark:border-gray-700/30">
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-card/50 dark:bg-card/20 rounded-xl p-4 border border-border dark:border-border/30">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center w-full sm:w-auto">
           <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search by order ID, customer..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+              className="pl-10 w-full bg-card dark:bg-card border-border dark:border-border"
             />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-40 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+            <SelectTrigger className="w-full sm:w-40 bg-card dark:bg-card border-border dark:border-border">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -307,8 +307,8 @@ export default function OrdersPage() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-          <Sparkles className="h-4 w-4 text-purple-400" />
+        <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
+          <Sparkles className="h-4 w-4 text-brand" />
           <span>
             {filteredOrders.length} order
             {filteredOrders.length !== 1 ? "s" : ""} found
@@ -324,16 +324,16 @@ export default function OrdersPage() {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="space-y-2">
-                    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-48"></div>
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
+                    <div className="h-6 bg-muted dark:bg-card rounded w-48"></div>
+                    <div className="h-4 bg-muted dark:bg-card rounded w-32"></div>
                   </div>
-                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+                  <div className="h-6 bg-muted dark:bg-card rounded w-24"></div>
                 </div>
                 <div className="grid md:grid-cols-3 gap-4 mb-4">
                   {[...Array(3)].map((_, j) => (
                     <div
                       key={j}
-                      className="h-4 bg-gray-200 dark:bg-gray-700 rounded"
+                      className="h-4 bg-muted dark:bg-card rounded"
                     ></div>
                   ))}
                 </div>
@@ -342,29 +342,29 @@ export default function OrdersPage() {
           ))}
         </div>
       ) : isError ? (
-        <Card className="border-red-200 bg-red-50 dark:bg-red-900/10 border-2">
+        <Card className="border-destructive/40 bg-destructive/10 dark:bg-destructive/10 border-2">
           <CardContent className="p-8 text-center">
-            <AlertTriangle className="mx-auto h-12 w-12 text-red-400 mb-4" />
-            <p className="text-red-600 dark:text-red-400 font-medium">
+            <AlertTriangle className="mx-auto h-12 w-12 text-destructive mb-4" />
+            <p className="text-destructive dark:text-destructive font-medium">
               Failed to load orders.
             </p>
-            <p className="text-red-500/70 text-sm mt-1">
+            <p className="text-destructive/70 text-sm mt-1">
               Please check your connection and try again.
             </p>
           </CardContent>
         </Card>
       ) : filteredOrders.length === 0 ? (
-        <Card className="border-dashed border-2 border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-800/20">
+        <Card className="border-dashed border-2 border-border dark:border-border bg-card/50 dark:bg-card/20">
           <CardContent className="p-12 text-center">
-            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-100 to-fuchsia-100 dark:from-purple-900/20 dark:to-fuchsia-900/20 rounded-full flex items-center justify-center mb-4">
-              <ShoppingCart className="h-8 w-8 text-purple-400" />
+            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-brand-soft to-card dark:from-brand/20 dark:to-brand-hover/20 rounded-full flex items-center justify-center mb-4">
+              <ShoppingCart className="h-8 w-8 text-brand" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-foreground dark:text-primary-foreground mb-2">
               {searchQuery || statusFilter !== "All"
                 ? "No matching orders"
                 : "No orders yet"}
             </h3>
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-muted-foreground dark:text-muted-foreground">
               {searchQuery || statusFilter !== "All"
                 ? "Try adjusting your search."
                 : "Orders will appear once customers purchase."}
@@ -386,19 +386,19 @@ export default function OrdersPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05, duration: 0.3 }}
                 >
-                  <Card className="hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-gray-800/40 backdrop-blur-sm border border-gray-100 dark:border-gray-700/30">
+                  <Card className="hover:shadow-xl transition-all duration-300 bg-card/80 dark:bg-card/40 backdrop-blur-sm border border-border dark:border-border/30">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                            <h3 className="font-sans text-lg font-semibold text-foreground dark:text-primary-foreground">
                               #{order.id.slice(-8).toUpperCase()}
                             </h3>
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-muted-foreground">
                               ID: {order.id.slice(0, 8)}...
                             </span>
                           </div>
-                          <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+                          <p className="text-sm text-muted-foreground dark:text-muted-foreground flex items-center gap-1.5">
                             <Calendar className="h-4 w-4" />
                             {order.orderDate}
                           </p>
@@ -414,7 +414,7 @@ export default function OrdersPage() {
                             order.status.slice(1)}
                         </Badge>
                       </div>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 p-3 bg-gray-50 dark:bg-gray-800/40 rounded-xl">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 p-3 bg-muted dark:bg-card/40 rounded-xl">
                         {[
                           {
                             icon: User,
@@ -426,7 +426,7 @@ export default function OrdersPage() {
                             label: "Total",
                             value: `₹${order.totalAmount.toLocaleString()}`,
                             className:
-                              "text-green-600 dark:text-green-400 font-bold",
+                              "text-success dark:text-brand font-bold",
                           },
                           {
                             icon: Box,
@@ -440,13 +440,13 @@ export default function OrdersPage() {
                           },
                         ].map((item, i) => (
                           <div key={i} className="flex items-center gap-2">
-                            <item.icon className="h-4 w-4 text-gray-400" />
+                            <item.icon className="h-4 w-4 text-muted-foreground" />
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                              <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                                 {item.label}
                               </p>
                               <p
-                                className={`text-sm font-medium text-gray-900 dark:text-white truncate ${item.className || ""}`}
+                                className={`text-sm font-medium text-foreground dark:text-primary-foreground truncate ${item.className || ""}`}
                               >
                                 {item.value}
                               </p>
@@ -458,7 +458,7 @@ export default function OrdersPage() {
                         onClick={() =>
                           setExpandedOrder(isExpanded ? null : order.id)
                         }
-                        className="flex items-center gap-2 text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 font-medium transition-colors mb-4"
+                        className="flex items-center gap-2 text-sm text-brand dark:text-brand hover:text-brand font-medium transition-colors mb-4"
                       >
                         <span>
                           {isExpanded ? "Hide Details" : "View Details"}
@@ -481,43 +481,43 @@ export default function OrdersPage() {
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
-                          className="space-y-4 pt-4 border-t border-gray-100 dark:border-gray-700/30"
+                          className="space-y-4 pt-4 border-t border-border dark:border-border/30"
                         >
                           <div className="flex items-start gap-2 text-sm">
-                            <MapPin className="h-4 w-4 text-gray-400 mt-0.5 shrink-0" />
+                            <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-0.5">
+                              <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium mb-0.5">
                                 Shipping Address
                               </p>
-                              <p className="text-gray-700 dark:text-gray-300">
+                              <p className="text-foreground dark:text-muted-foreground/70">
                                 {order.shippingAddress}
                               </p>
                             </div>
                           </div>
                           <div>
-                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                              <Box className="h-4 w-4 text-purple-500" />
+                            <h4 className="text-sm font-semibold text-foreground dark:text-primary-foreground mb-3 flex items-center gap-2">
+                              <Box className="h-4 w-4 text-brand" />
                               Order Items ({order.items.length})
                             </h4>
                             <div className="space-y-2">
                               {order.items.map((item, idx) => (
                                 <div
                                   key={idx}
-                                  className="flex justify-between items-center text-sm bg-gray-50 dark:bg-gray-800/40 p-3 rounded-xl border border-gray-100 dark:border-gray-700/20"
+                                  className="flex justify-between items-center text-sm bg-muted dark:bg-card/40 p-3 rounded-xl border border-border dark:border-border/20"
                                 >
                                   <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 bg-gradient-to-br from-purple-100 to-fuchsia-100 dark:from-purple-900/20 dark:to-fuchsia-900/20 rounded-lg flex items-center justify-center">
-                                      <Package className="h-4 w-4 text-purple-500" />
+                                    <div className="w-8 h-8 bg-gradient-to-br from-brand-soft to-card dark:from-brand/20 dark:to-brand-hover/20 rounded-lg flex items-center justify-center">
+                                      <Package className="h-4 w-4 text-brand" />
                                     </div>
-                                    <span className="font-medium text-gray-900 dark:text-white">
+                                    <span className="font-medium text-foreground dark:text-primary-foreground">
                                       {item.name}
                                     </span>
                                   </div>
                                   <div className="flex items-center gap-4">
-                                    <span className="text-gray-500 dark:text-gray-400">
+                                    <span className="text-muted-foreground dark:text-muted-foreground">
                                       x{item.quantity}
                                     </span>
-                                    <span className="font-semibold text-gray-900 dark:text-white">
+                                    <span className="font-semibold text-foreground dark:text-primary-foreground">
                                       ₹
                                       {(
                                         item.price * item.quantity
@@ -535,7 +535,7 @@ export default function OrdersPage() {
                                 <Button
                                   size="sm"
                                   className={cn(
-                                    "bg-gradient-to-r text-white shadow-lg hover:shadow-xl",
+                                    "bg-gradient-to-r to-brand-hover text-primary-foreground shadow-lg hover:shadow-xl",
                                     statusInfo.gradient,
                                   )}
                                   onClick={() =>
@@ -554,7 +554,7 @@ export default function OrdersPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="hover:bg-purple-50 border-purple-200 text-purple-600"
+                              className="hover:bg-brand-soft border-brand/40 text-brand"
                             >
                               <Eye className="h-4 w-4 mr-1.5" />
                               Full Details

@@ -9,11 +9,11 @@ import { cn } from "@/lib/utils";
  */
 
 export const fieldClass =
-  "w-full rounded-none border border-stone-300 bg-white px-4 py-3.5 text-sm text-stone-900 " +
-  "placeholder-stone-400 transition-colors duration-200 outline-none " +
-  "focus:border-red-800 focus:ring-1 focus:ring-red-800 " +
-  "dark:border-stone-700 dark:bg-stone-900/40 dark:text-stone-100 dark:placeholder-stone-500 " +
-  "dark:focus:border-red-600 dark:focus:ring-red-600";
+  "w-full rounded-none border border-border bg-card px-4 py-3.5 text-sm text-foreground " +
+  "placeholder:text-muted-foreground transition-colors duration-200 outline-none " +
+  "focus:border-brand focus:ring-1 focus:ring-brand " +
+  "" +
+  "";
 
 export function Field({
   label,
@@ -30,7 +30,7 @@ export function Field({
     <div className={cn("space-y-2", className)}>
       <label
         htmlFor={id}
-        className="block text-[10px] font-semibold uppercase tracking-[0.25em] text-stone-500 dark:text-stone-400"
+        className="block text-[10px] font-semibold text-muted-foreground"
       >
         {label}
       </label>

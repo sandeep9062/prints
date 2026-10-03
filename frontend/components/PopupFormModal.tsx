@@ -77,11 +77,11 @@ export default function PopupFormModal() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="relative w-full max-w-lg bg-[#1e1e1f] text-white rounded-xl shadow-2xl p-6 sm:p-8"
+            className="relative w-full max-w-lg bg-footer text-footer-foreground rounded-xl shadow-2xl p-6 sm:p-8"
           >
             {/* Close Button */}
             <button
-              className="absolute top-4 right-4 text-white hover:text-gray-400 transition"
+              className="absolute top-4 right-4 text-primary-foreground hover:text-muted-foreground transition"
               onClick={handleClose}
             >
               <X className="w-6 h-6" />
@@ -94,9 +94,9 @@ export default function PopupFormModal() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
-                  className="mt-6 text-center text-white p-4 rounded-md"
+                  className="mt-6 text-center text-primary-foreground p-4 rounded-md"
                 >
-                  <h2 className="text-2xl font-bold mb-2">Thank you!</h2>
+                  <h2 className="font-sans text-2xl font-semibold mb-2">Thank you!</h2>
                   <p>Your message has been sent successfully.</p>
                 </motion.div>
               ) : (
@@ -106,7 +106,7 @@ export default function PopupFormModal() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
                 >
-                  <h2 className="text-2xl font-bold mb-6 text-center text-gold">
+                  <h2 className="font-sans text-2xl font-semibold mb-6 text-center text-gold-text dark:text-gold">
                     Request a Free Quote
                   </h2>
 
@@ -120,7 +120,7 @@ export default function PopupFormModal() {
                         value={form.name}
                         onChange={handleChange}
                         required
-                        className="bg-transparent border-b border-gray-400 py-2 px-1 placeholder:text-gray-300 focus:outline-none focus:border-gold transition"
+                        className="bg-transparent border-b border-border py-2 px-1 placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
                       />
                       <input
                         type="email"
@@ -129,7 +129,7 @@ export default function PopupFormModal() {
                         value={form.email}
                         onChange={handleChange}
                         required
-                        className="bg-transparent border-b border-gray-400 py-2 px-1 placeholder:text-gray-300 focus:outline-none focus:border-gold transition"
+                        className="bg-transparent border-b border-border py-2 px-1 placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
                       />
                     </div>
 
@@ -141,7 +141,7 @@ export default function PopupFormModal() {
                         placeholder="Enter phone number"
                         value={form.phone}
                         onChange={handlePhoneChange}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full p-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand"
                         defaultCountry="IN"
                       />
 
@@ -152,7 +152,7 @@ export default function PopupFormModal() {
                         value={form.subject}
                         onChange={handleChange}
                         required
-                        className="bg-transparent border-b border-gray-400 py-2 px-1 placeholder:text-gray-300 focus:outline-none focus:border-gold transition"
+                        className="bg-transparent border-b border-border py-2 px-1 placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
                       />
                     </div>
 
@@ -164,14 +164,14 @@ export default function PopupFormModal() {
                       onChange={handleChange}
                       required
                       rows={3}
-                      className="w-full bg-transparent border-b border-gray-400 py-2 px-1 placeholder:text-gray-300 focus:outline-none focus:border-gold transition"
+                      className="w-full bg-transparent border-b border-border py-2 px-1 placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
                     />
 
                     {/* Submit Button */}
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full mt-6 bg-gold text-black py-3 font-semibold rounded hover:bg-yellow-500 transition disabled:opacity-50"
+                      className="w-full mt-6 bg-gold text-footer py-3 font-semibold rounded hover:bg-gold/90 transition disabled:opacity-50"
                     >
                       {isLoading ? "Sending..." : "Request a Free Quote"}
                     </button>

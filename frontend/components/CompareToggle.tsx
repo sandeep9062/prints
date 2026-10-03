@@ -63,10 +63,10 @@ export default function CompareToggle({
       title={selected ? "Remove from compare" : "Add to compare"}
       className={cn(
         "group/compare inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border backdrop-blur-md transition-all duration-300",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 dark:focus-visible:ring-red-600 dark:focus-visible:ring-offset-[#0f111a]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 dark:focus-visible:ring-brand dark:focus-visible:ring-offset-footer",
         selected
-          ? "scale-105 border-stone-900 bg-stone-900 text-white shadow-[0_0_12px_rgba(15,23,42,0.25)] dark:border-stone-100 dark:bg-stone-100 dark:text-stone-900"
-          : "border-stone-300 bg-white/60 text-stone-500 hover:border-stone-900 hover:bg-white/80 hover:text-stone-900 dark:border-stone-600 dark:bg-stone-900/60 dark:text-stone-400 dark:hover:border-stone-100 dark:hover:text-stone-100",
+          ? "scale-105 border-brand bg-footer text-footer-foreground shadow-[0_0_12px_rgba(15,23,42,0.25)] dark:border-border dark:bg-muted dark:text-foreground"
+          : "border-border bg-card/60 text-muted-foreground hover:border-brand hover:bg-card/80 hover:text-foreground dark:border-brand dark:bg-card/60 dark:text-muted-foreground dark:hover:border-border dark:hover:text-foreground",
         className,
       )}
     >

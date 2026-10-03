@@ -18,14 +18,14 @@ function CompareThumb({
 }) {
   return (
     <div
-      className="group relative flex items-center gap-1.5 rounded-lg bg-white pl-1.5 pr-2 py-1.5 transition-all duration-200 shrink-0"
+      className="group relative flex items-center gap-1.5 rounded-lg bg-card pl-1.5 pr-2 py-1.5 transition-all duration-200 shrink-0"
       style={{
-        border: "1px solid #e8eaf0",
-        boxShadow: "0 1px 4px rgba(15,23,42,.05)",
+        border: "1px solid hsl(var(--border))",
+        boxShadow: "0 1px 4px hsl(var(--foreground) / 0.05)",
       }}
     >
       {/* thumbnail */}
-      <div className="relative h-7 w-7 shrink-0 overflow-hidden rounded-md bg-slate-100">
+      <div className="relative h-7 w-7 shrink-0 overflow-hidden rounded-md bg-muted">
         <Image
           src={item.image || "/inkofmemories.png"}
           alt={item.title}
@@ -36,7 +36,7 @@ function CompareThumb({
       </div>
 
       {/* title */}
-      <span className="max-w-[80px] sm:max-w-[120px] truncate text-[11px] font-medium text-slate-700">
+      <span className="max-w-[80px] sm:max-w-[120px] truncate text-[11px] font-medium text-foreground/80">
         {item.title}
       </span>
 
@@ -44,7 +44,7 @@ function CompareThumb({
       <button
         type="button"
         onClick={() => onRemove(item._id)}
-        className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
+        className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
         aria-label={`Remove ${item.title} from comparison`}
         title="Remove"
       >
@@ -78,10 +78,10 @@ export default function CompareDrawer() {
           >
             <div className="mx-auto w-full max-w-4xl px-2 pb-1.5 sm:px-4 sm:pb-2">
               <div
-                className="rounded-lg sm:rounded-[12px] bg-white/95 backdrop-blur-md px-2.5 py-2 sm:px-4 sm:py-2.5"
+                className="rounded-lg sm:rounded-[12px] bg-card/95 backdrop-blur-md px-2.5 py-2 sm:px-4 sm:py-2.5"
                 style={{
-                  border: "1px solid #e8eaf0",
-                  boxShadow: "0 -4px 28px rgba(15,23,42,.10)",
+                  border: "1px solid hsl(var(--border))",
+                  boxShadow: "0 -4px 28px hsl(var(--foreground) / 0.10)",
                 }}
               >
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -91,22 +91,22 @@ export default function CompareDrawer() {
                     <div className="flex items-center gap-1.5 shrink-0">
                       <div
                         className="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0"
-                        style={{ background: "rgba(65,97,223,.10)" }}
+                        style={{ background: "hsl(var(--brand) / 0.10)" }}
                       >
                         <Scale
                           size={11}
-                          style={{ color: "#4161df" }}
+                          style={{ color: "hsl(var(--brand))" }}
                           strokeWidth={2.4}
                         />
                       </div>
-                      <span className="font-[Playfair_Display] text-[12px] font-semibold text-slate-900 leading-none">
+                      <span className="font-[Playfair_Display] text-[12px] font-semibold text-foreground leading-none">
                         Compare
                       </span>
                       <span
                         className="inline-flex items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold leading-none"
                         style={{
-                          background: "rgba(65,97,223,.10)",
-                          color: "#4161df",
+                          background: "hsl(var(--brand) / 0.10)",
+                          color: "hsl(var(--brand))",
                         }}
                       >
                         {count}/{MAX_COMPARE_ITEMS}
@@ -127,8 +127,8 @@ export default function CompareDrawer() {
                       {Array.from({ length: slotsLeft }).map((_, i) => (
                         <div
                           key={`empty-${i}`}
-                          className="hidden sm:flex items-center justify-center h-[30px] w-[30px] shrink-0 rounded-lg text-slate-300 text-[10px] font-medium"
-                          style={{ border: "1.5px dashed #e2e8f0" }}
+                          className="hidden sm:flex items-center justify-center h-[30px] w-[30px] shrink-0 rounded-lg text-muted-foreground/60 text-[10px] font-medium"
+                          style={{ border: "1.5px dashed hsl(var(--border))" }}
                         >
                           +
                         </div>
@@ -142,8 +142,8 @@ export default function CompareDrawer() {
                     <button
                       type="button"
                       onClick={clearAll}
-                      className="inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-[11px] font-medium text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"
-                      style={{ border: "1px solid #e8eaf0" }}
+                      className="inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                      style={{ border: "1px solid hsl(var(--border))" }}
                     >
                       <Trash2 size={10} />
                     </button>
@@ -151,10 +151,10 @@ export default function CompareDrawer() {
                     {/* compare now */}
                     <Link
                       href="/compare"
-                      className="inline-flex items-center justify-center gap-1 rounded-md px-3 py-1.5 text-[11px] font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-[.98]"
+                      className="inline-flex items-center justify-center gap-1 rounded-md px-3 py-1.5 text-[11px] font-semibold text-primary-foreground transition-all duration-200 hover:bg-brand-hover active:scale-[.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
                       style={{
-                        background: "#4161df",
-                        boxShadow: "0 4px 16px rgba(15,23,42,.18)",
+                        background: "hsl(var(--brand))",
+                        boxShadow: "0 4px 16px hsl(var(--foreground) / 0.18)",
                       }}
                     >
                       Compare

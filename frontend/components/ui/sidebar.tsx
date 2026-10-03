@@ -20,36 +20,36 @@ const links = [
     href: "/merchant-dashboard",
     icon: Home,
     label: "Dashboard",
-    color: "from-blue-500 to-blue-600",
-    gradient: "from-blue-400 to-indigo-500",
+    color: "from-brand to-brand-hover",
+    gradient: "from-brand-soft to-brand/20",
   },
   {
     href: "/merchant-dashboard/products",
     icon: Package,
     label: "Products",
-    color: "from-emerald-500 to-emerald-600",
-    gradient: "from-emerald-400 to-teal-500",
+    color: "from-brand to-brand-hover",
+    gradient: "from-brand-soft to-brand/20",
   },
   {
     href: "/merchant-dashboard/orders",
     icon: ShoppingCart,
     label: "Orders",
-    color: "from-purple-500 to-purple-600",
-    gradient: "from-purple-400 to-fuchsia-500",
+    color: "from-brand to-brand-hover",
+    gradient: "from-brand-soft to-brand/20",
   },
   {
     href: "/merchant-dashboard/customers",
     icon: Users,
     label: "Customers",
-    color: "from-orange-500 to-orange-600",
-    gradient: "from-amber-400 to-orange-500",
+    color: "from-brand to-brand-hover",
+    gradient: "from-brand-soft to-brand/20",
   },
   {
     href: "/merchant-dashboard/settings",
     icon: Settings,
     label: "Settings",
-    color: "from-blue-500 to-indigo-600",
-    gradient: "from-blue-400 to-indigo-500",
+    color: "from-brand to-brand-hover",
+    gradient: "from-brand-soft to-brand/20",
   },
 ];
 
@@ -78,8 +78,8 @@ export function Sidebar({ collapsed }: SidebarProps) {
         transition={{ duration: 0.4 }}
         className={`flex items-center gap-3 mb-2 ${collapsed ? "justify-center" : ""}`}
       >
-        <div className="p-2.5 bg-gradient-to-br from-rose-500 via-pink-600 to-rose-700 rounded-xl shadow-lg shadow-rose-200/50 dark:shadow-rose-900/30 shrink-0">
-          <Store className="h-6 w-6 text-white" />
+        <div className="p-2.5 bg-gradient-to-br from-brand via-brand-hover to-brand-hover rounded-xl shadow-lg shadow-brand/25 shrink-0">
+          <Store className="h-6 w-6 text-primary-foreground" />
         </div>
         {!collapsed && (
           <motion.div
@@ -88,10 +88,10 @@ export function Sidebar({ collapsed }: SidebarProps) {
             exit={{ opacity: 0, width: 0 }}
             className="overflow-hidden whitespace-nowrap"
           >
-            <h2 className="text-xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+            <h2 className="font-sans text-xl font-semibold bg-gradient-to-r from-brand to-brand-hover bg-clip-text text-transparent">
               My Store
             </h2>
-            <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+            <p className="text-xs text-muted-foreground dark:text-muted-foreground flex items-center gap-1">
               <Sparkles className="h-3 w-3" />
               Merchant Dashboard
             </p>
@@ -100,12 +100,12 @@ export function Sidebar({ collapsed }: SidebarProps) {
       </motion.div>
 
       {/* Divider */}
-      <div className="border-b border-gray-100 dark:border-gray-700/50"></div>
+      <div className="border-b border-border dark:border-border/50"></div>
 
       {/* Navigation Links */}
       <div className="space-y-1">
         {!collapsed && (
-          <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-3 mb-3">
+          <p className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground uppercase tracking-wider px-3 mb-3">
             Main Menu
           </p>
         )}
@@ -123,29 +123,29 @@ export function Sidebar({ collapsed }: SidebarProps) {
                   collapsed ? "justify-center p-3" : "gap-3.5 px-4 py-3"
                 } ${
                   isActive(href)
-                    ? `bg-gradient-to-r ${color} text-white shadow-lg shadow-${color.split(" ")[1]}/30 scale-[1.02]`
-                    : "hover:bg-gray-50 dark:hover:bg-gray-800/40 hover:scale-[1.01]"
+                    ? `bg-gradient-to-r ${color} text-primary-foreground shadow-lg shadow-${color.split(" ")[1]}/30 scale-[1.02]`
+                    : "hover:bg-muted dark:hover:bg-brand-hover/40 hover:scale-[1.01]"
                 }`}
                 title={collapsed ? label : undefined}
               >
                 {/* Active Indicator */}
                 {isActive(href) && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white/90 rounded-r-full" />
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-card/90 rounded-r-full" />
                 )}
 
                 {/* Icon Container */}
                 <div
                   className={`relative p-2 rounded-lg transition-all duration-300 shrink-0 ${
                     isActive(href)
-                      ? "bg-white/15"
-                      : "bg-gray-50 dark:bg-gray-800/60 group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-rose-50 group-hover:to-pink-50 dark:group-hover:from-rose-900/20 dark:group-hover:to-pink-900/20"
+                      ? "bg-card/15"
+                      : "bg-muted group-hover:scale-110 group-hover:bg-brand-soft"
                   }`}
                 >
                   <Icon
                     className={`h-5 w-5 transition-all duration-300 ${
                       isActive(href)
-                        ? "text-white"
-                        : "text-gray-500 dark:text-gray-400 group-hover:text-rose-500"
+                        ? "text-primary-foreground"
+                        : "text-muted-foreground dark:text-muted-foreground group-hover:text-brand"
                     }`}
                   />
                 </div>
@@ -155,8 +155,8 @@ export function Sidebar({ collapsed }: SidebarProps) {
                   <span
                     className={`font-medium text-sm transition-all duration-300 whitespace-nowrap ${
                       isActive(href)
-                        ? "text-white"
-                        : "text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+                        ? "text-primary-foreground"
+                        : "text-foreground dark:text-muted-foreground/70 group-hover:text-foreground dark:group-hover:text-primary-foreground"
                     }`}
                   >
                     {label}
@@ -176,26 +176,26 @@ export function Sidebar({ collapsed }: SidebarProps) {
       {/* Quick Actions */}
       <div className="space-y-1">
         {!collapsed && (
-          <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-3 mb-3">
+          <p className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground uppercase tracking-wider px-3 mb-3">
             Quick Actions
           </p>
         )}
         <Link
           href="/merchant-dashboard/add-product"
-          className={`group flex items-center rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-rose-50 hover:to-pink-50 dark:hover:from-rose-900/20 dark:hover:to-pink-900/20 hover:scale-[1.01] ${
+          className={`group flex items-center rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-brand-soft hover:to-brand-soft dark:hover:to-brand-hover/20 hover:scale-[1.01] ${
             collapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
           }`}
           title={collapsed ? "Add Product" : undefined}
         >
-          <div className="p-2 rounded-lg bg-gradient-to-br from-rose-100 to-pink-100 dark:from-rose-900/30 dark:to-pink-900/30 group-hover:scale-110 transition-all duration-300 shrink-0">
-            <PlusCircle className="h-5 w-5 text-rose-500" />
+          <div className="p-2 rounded-lg bg-gradient-to-br from-brand-soft to-brand-soft dark:from-brand-hover/30 dark:to-brand-hover/30 group-hover:scale-110 transition-all duration-300 shrink-0">
+            <PlusCircle className="h-5 w-5 text-brand" />
           </div>
           {!collapsed && (
             <div>
-              <span className="font-medium text-sm text-gray-700 dark:text-gray-300 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+              <span className="font-medium text-sm text-foreground dark:text-muted-foreground/70 group-hover:text-brand dark:group-hover:text-brand transition-colors">
                 Add Product
               </span>
-              <p className="text-xs text-gray-400 dark:text-gray-500">
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                 Create new listing
               </p>
             </div>
@@ -211,20 +211,20 @@ export function Sidebar({ collapsed }: SidebarProps) {
           transition={{ delay: 0.3, duration: 0.5 }}
           className="mt-auto"
         >
-          <div className="p-4 bg-gradient-to-br from-rose-50 to-pink-50 dark:from-gray-800 dark:to-gray-800/50 rounded-2xl border border-rose-100 dark:border-gray-700/30">
+          <div className="p-4 bg-gradient-to-br from-brand-soft to-brand-soft dark:from-ink dark:to-ink/50 rounded-2xl border border-border">
             <div className="text-center">
-              <div className="mx-auto w-10 h-10 bg-gradient-to-br from-rose-400 to-pink-500 rounded-xl flex items-center justify-center mb-3 shadow-lg shadow-rose-200/50 dark:shadow-rose-900/20">
-                <Sparkles className="h-5 w-5 text-white" />
+              <div className="mx-auto w-10 h-10 bg-gradient-to-br from-brand to-brand-hover rounded-xl flex items-center justify-center mb-3 shadow-lg shadow-brand/25">
+                <Sparkles className="h-5 w-5 text-primary-foreground" />
               </div>
-              <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+              <p className="text-sm font-semibold text-foreground dark:text-muted-foreground/70">
                 Need help?
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1 mb-3">
                 We're here to assist you
               </p>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 bg-white dark:bg-gray-800 px-4 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-brand hover:text-brand dark:text-brand dark:hover:text-brand bg-card dark:bg-card px-4 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
               >
                 Contact Support
                 <ArrowLeftRight className="h-3.5 w-3.5" />

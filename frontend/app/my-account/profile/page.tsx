@@ -115,19 +115,19 @@ export default function ProfilePage() {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pb-6 border-b border-stone-100">
+      <div className="flex items-center justify-between mb-8 pb-6 border-b border-border">
         <div>
-          <h2 className="text-2xl md:text-3xl font-serif text-stone-900">
+          <h2 className="text-2xl md:text-3xl font-sans text-foreground">
             My Profile
           </h2>
-          <p className="text-stone-500 text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             Manage your personal information
           </p>
         </div>
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-stone-900 text-white text-xs font-bold tracking-widest uppercase rounded-xl hover:bg-stone-800 transition-all duration-200 shadow-sm"
+            className="flex items-center gap-2 px-5 py-2.5 bg-footer text-footer-foreground text-xs font-bold rounded-xl hover:bg-brand-hover hover:text-primary-foreground transition-all duration-200 shadow-sm"
           >
             <Edit2 className="w-3.5 h-3.5" />
             Edit Profile
@@ -136,7 +136,7 @@ export default function ProfilePage() {
           <div className="flex gap-2">
             <button
               onClick={handleCancel}
-              className="flex items-center gap-2 px-4 py-2.5 border border-stone-200 text-stone-600 text-xs font-bold tracking-widest uppercase rounded-xl hover:bg-stone-50 transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 border border-border text-muted-foreground text-xs font-bold rounded-xl hover:bg-muted transition-all"
             >
               <X className="w-3.5 h-3.5" />
               Cancel
@@ -144,7 +144,7 @@ export default function ProfilePage() {
             <button
               onClick={handleSave}
               disabled={isLoading}
-              className="flex items-center gap-2 px-5 py-2.5 bg-stone-900 text-white text-xs font-bold tracking-widest uppercase rounded-xl hover:bg-stone-800 transition-all duration-200 shadow-sm disabled:opacity-50"
+              className="flex items-center gap-2 px-5 py-2.5 bg-footer text-footer-foreground text-xs font-bold rounded-xl hover:bg-brand-hover hover:text-primary-foreground transition-all duration-200 shadow-sm disabled:opacity-50"
             >
               <Save className="w-3.5 h-3.5" />
               {isLoading ? "Saving..." : "Save"}
@@ -154,9 +154,9 @@ export default function ProfilePage() {
       </div>
 
       {/* Profile Card */}
-      <div className="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
+      <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
         {/* Profile Header with gradient backdrop */}
-        <div className="relative h-32 bg-gradient-to-r from-stone-900 via-stone-800 to-stone-700">
+        <div className="relative h-32 bg-gradient-to-r from-brand via-brand to-brand-hover">
           {/* Avatar with drag & drop support */}
           <div className="absolute -bottom-12 left-8 flex flex-col items-start">
             <div
@@ -164,9 +164,9 @@ export default function ProfilePage() {
               onDragOver={isEditing ? handleDragOver : undefined}
               onDragLeave={isEditing ? handleDragLeave : undefined}
               onClick={handleImageClick}
-              className={`relative w-24 h-24 rounded-2xl bg-white shadow-lg flex items-center justify-center border-4 border-white overflow-hidden transition-all duration-200 ${
-                isEditing ? "cursor-pointer hover:border-stone-400" : ""
-              } ${isDragOver ? "scale-105 border-stone-900 shadow-xl" : ""}`}
+              className={`relative w-24 h-24 rounded-2xl bg-card shadow-lg flex items-center justify-center border-4 border-border overflow-hidden transition-all duration-200 ${
+                isEditing ? "cursor-pointer hover:border-border" : ""
+              } ${isDragOver ? "scale-105 border-foreground shadow-xl" : ""}`}
             >
               {displayImage ? (
                 <img
@@ -175,21 +175,21 @@ export default function ProfilePage() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <User className="w-10 h-10 text-stone-400" />
+                <User className="w-10 h-10 text-muted-foreground" />
               )}
 
               {/* Camera overlay on hover in edit mode */}
               {isEditing && !isDragOver && (
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                  <Camera className="w-7 h-7 text-white" />
+                  <Camera className="w-7 h-7 text-primary-foreground" />
                 </div>
               )}
 
               {/* Drag-over overlay */}
               {isDragOver && (
-                <div className="absolute inset-0 bg-stone-900/70 flex flex-col items-center justify-center gap-1">
-                  <Upload className="w-7 h-7 text-white" />
-                  <span className="text-white text-[10px] font-medium">
+                <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-1">
+                  <Upload className="w-7 h-7 text-primary-foreground" />
+                  <span className="text-primary-foreground text-[10px] font-medium">
                     Drop image
                   </span>
                 </div>
@@ -197,7 +197,7 @@ export default function ProfilePage() {
 
               {/* Dashed border indicator in edit mode */}
               {isEditing && !isDragOver && (
-                <div className="absolute inset-0 border-2 border-dashed border-white/40 rounded-2xl pointer-events-none" />
+                <div className="absolute inset-0 border-2 border-dashed border-border/40 rounded-2xl pointer-events-none" />
               )}
             </div>
 
@@ -212,7 +212,7 @@ export default function ProfilePage() {
 
             {/* Edit hint */}
             {isEditing && (
-              <p className="text-[11px] text-stone-400 mt-2">
+              <p className="text-[11px] text-muted-foreground mt-2">
                 Drag & drop or click to change photo
               </p>
             )}
@@ -229,17 +229,17 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="text-2xl font-semibold text-stone-900 bg-transparent border-b-2 border-stone-300 focus:border-stone-900 outline-none pb-1 w-full"
+                  className="text-2xl font-semibold text-foreground bg-transparent border-b-2 border-border focus:border-foreground outline-none pb-1 w-full"
                   placeholder="Your name"
                 />
               ) : (
-                <h3 className="text-2xl font-semibold text-stone-900">
+                <h3 className="text-2xl font-semibold text-foreground">
                   {user?.name || "User"}
                 </h3>
               )}
               <div className="flex items-center gap-2 mt-1.5">
-                <span className="inline-block w-2 h-2 rounded-full bg-green-500" />
-                <span className="text-sm text-green-600 font-medium">
+                <span className="inline-block w-2 h-2 rounded-full bg-success" />
+                <span className="text-sm text-success font-medium">
                   Active
                 </span>
               </div>
@@ -248,12 +248,12 @@ export default function ProfilePage() {
 
           {/* Info Grid */}
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="flex items-start gap-4 p-4 rounded-xl bg-stone-50/80">
-              <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center flex-shrink-0">
-                <Mail className="w-5 h-5 text-stone-600" />
+            <div className="flex items-start gap-4 p-4 rounded-xl bg-muted/80">
+              <div className="w-10 h-10 rounded-lg bg-card shadow-sm flex items-center justify-center flex-shrink-0">
+                <Mail className="w-5 h-5 text-muted-foreground" />
               </div>
               <div className="flex-1 min-w-0">
-                <label className="block text-[10px] font-bold tracking-[0.1em] text-stone-400 uppercase mb-1">
+                <label className="block text-[10px] font-bold text-muted-foreground mb-1">
                   Email Address
                 </label>
                 {isEditing ? (
@@ -263,23 +263,23 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
-                    className="w-full text-stone-900 font-medium bg-transparent border-b-2 border-stone-300 focus:border-stone-900 outline-none pb-0.5"
+                    className="w-full text-foreground font-medium bg-transparent border-b-2 border-border focus:border-foreground outline-none pb-0.5"
                     placeholder="your@email.com"
                   />
                 ) : (
-                  <p className="text-stone-900 font-medium truncate">
+                  <p className="text-foreground font-medium truncate">
                     {user?.email || "N/A"}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="flex items-start gap-4 p-4 rounded-xl bg-stone-50/80">
-              <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center flex-shrink-0">
-                <Phone className="w-5 h-5 text-stone-600" />
+            <div className="flex items-start gap-4 p-4 rounded-xl bg-muted/80">
+              <div className="w-10 h-10 rounded-lg bg-card shadow-sm flex items-center justify-center flex-shrink-0">
+                <Phone className="w-5 h-5 text-muted-foreground" />
               </div>
               <div className="flex-1 min-w-0">
-                <label className="block text-[10px] font-bold tracking-[0.1em] text-stone-400 uppercase mb-1">
+                <label className="block text-[10px] font-bold text-muted-foreground mb-1">
                   Phone Number
                 </label>
                 {isEditing ? (
@@ -289,38 +289,38 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setFormData({ ...formData, phone: e.target.value })
                     }
-                    className="w-full text-stone-900 font-medium bg-transparent border-b-2 border-stone-300 focus:border-stone-900 outline-none pb-0.5"
+                    className="w-full text-foreground font-medium bg-transparent border-b-2 border-border focus:border-foreground outline-none pb-0.5"
                     placeholder="+91 9876543210"
                   />
                 ) : (
-                  <p className="text-stone-900 font-medium truncate">
+                  <p className="text-foreground font-medium truncate">
                     {user?.phone || "N/A"}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="flex items-start gap-4 p-4 rounded-xl bg-stone-50/80">
-              <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center flex-shrink-0">
-                <Calendar className="w-5 h-5 text-stone-600" />
+            <div className="flex items-start gap-4 p-4 rounded-xl bg-muted/80">
+              <div className="w-10 h-10 rounded-lg bg-card shadow-sm flex items-center justify-center flex-shrink-0">
+                <Calendar className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
-                <label className="block text-[10px] font-bold tracking-[0.1em] text-stone-400 uppercase mb-1">
+                <label className="block text-[10px] font-bold text-muted-foreground mb-1">
                   Member Since
                 </label>
-                <p className="text-stone-900 font-medium">{memberSince}</p>
+                <p className="text-foreground font-medium">{memberSince}</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-4 p-4 rounded-xl bg-stone-50/80">
-              <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center flex-shrink-0">
-                <MapPin className="w-5 h-5 text-stone-600" />
+            <div className="flex items-start gap-4 p-4 rounded-xl bg-muted/80">
+              <div className="w-10 h-10 rounded-lg bg-card shadow-sm flex items-center justify-center flex-shrink-0">
+                <MapPin className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
-                <label className="block text-[10px] font-bold tracking-[0.1em] text-stone-400 uppercase mb-1">
+                <label className="block text-[10px] font-bold text-muted-foreground mb-1">
                   Role
                 </label>
-                <p className="text-stone-900 font-medium capitalize">
+                <p className="text-foreground font-medium capitalize">
                   {user?.role || "Client"}
                 </p>
               </div>

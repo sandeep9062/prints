@@ -74,7 +74,7 @@ export default function DesignStep({
               <Frame className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold">
+              <h2 className="font-sans text-xl font-semibold">
                 Border Style
               </h2>
               <p className="text-sm text-muted-foreground">
@@ -96,7 +96,7 @@ export default function DesignStep({
                   className={cn(
                     "p-5 rounded-xl border-2 text-center transition-all duration-200 relative group",
                     selectedBorder.name === border.name
-                      ? "border-primary bg-primary/5 shadow-lg shadow-primary/10"
+                      ? "border-primary/5 shadow-lg shadow-primary/10"
                       : "border-border/60 hover:border-primary/30",
                   )}
                 >
@@ -126,7 +126,7 @@ export default function DesignStep({
                   </span>
                   {selectedBorder.name === border.name && (
                     <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                      <Check className="h-3 w-3 text-white" />
+                      <Check className="h-3 w-3 text-primary-foreground" />
                     </div>
                   )}
                 </motion.button>
@@ -144,7 +144,7 @@ export default function DesignStep({
               <Layout className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold">
+              <h2 className="font-sans text-xl font-semibold">
                 Card Template
               </h2>
               <p className="text-sm text-muted-foreground">
@@ -166,7 +166,7 @@ export default function DesignStep({
                   className={cn(
                     "p-5 rounded-xl border-2 text-left transition-all duration-200 relative group",
                     selectedTemplate.name === template.name
-                      ? "border-primary bg-primary/5 shadow-lg shadow-primary/10"
+                      ? "border-primary/5 shadow-lg shadow-primary/10"
                       : "border-border/60 hover:border-primary/30",
                   )}
                 >
@@ -194,7 +194,7 @@ export default function DesignStep({
                   </span>
                   {selectedTemplate.name === template.name && (
                     <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                      <Check className="h-3 w-3 text-white" />
+                      <Check className="h-3 w-3 text-primary-foreground" />
                     </div>
                   )}
                 </motion.button>

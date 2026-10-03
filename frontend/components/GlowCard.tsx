@@ -44,7 +44,7 @@ const GlowCard: React.FC<GlowCardProps> = ({ card, index, children }) => {
       </div>
 
       <div className="mb-5">
-        <p className="text-white/50 text-lg">{card?.review}</p>
+        <p className="text-foreground/50 text-lg">{card?.review}</p>
       </div>
 
       {children}
@@ -73,12 +73,12 @@ const GlowCard: React.FC<GlowCardProps> = ({ card, index, children }) => {
   border: 2px solid transparent;
   background: var(--gradient);
   background-attachment: fixed;
-  mask: linear-gradient(#0000, #0000),
+  mask: linear-gradient(transparent, transparent),
     conic-gradient(
       from calc((var(--start) - 15) * 1deg),
-      #ffffff1f 0deg,
-      white,
-      #ffffff00 100deg
+      hsl(var(--footer-foreground) / 0.12) 0deg,
+      hsl(var(--footer-foreground)),
+      transparent 100deg
     );
   mask-composite: intersect;
   mask-clip: padding-box, border-box;

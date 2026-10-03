@@ -194,15 +194,15 @@ function SectionLabel({
     <div className="flex items-center gap-3 mb-5">
       <div
         className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-        style={{ background: "rgba(65,97,223,.10)", color: "#4161df" }}
+        style={{ background: "hsl(var(--brand) / 0.10)", color: "hsl(var(--brand))" }}
       >
         {icon}
       </div>
       <div>
-        <p className="text-[10.5px] tracking-[0.14em] uppercase font-semibold text-slate-400">
+        <p className="text-[10.5px] font-semibold text-muted-foreground">
           {step}
         </p>
-        <h3 className="text-[18px] text-slate-900 leading-tight font-medium">
+        <h3 className="text-[18px] text-foreground leading-tight font-medium">
           {title}
         </h3>
       </div>
@@ -218,15 +218,15 @@ function FieldLabel({
   required?: boolean;
 }) {
   return (
-    <label className="block text-[12.5px] font-medium text-slate-600 mb-1.5">
+    <label className="block text-[12.5px] font-medium text-muted-foreground mb-1.5">
       {children}
-      {required && <span style={{ color: "#4161df" }}> *</span>}
+      {required && <span style={{ color: "hsl(var(--brand))" }}> *</span>}
     </label>
   );
 }
 
 const inputClass =
-  "w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[13.5px] text-slate-800 placeholder:text-slate-400 outline-none transition-colors focus:border-[#4161df] focus:ring-2 focus:ring-[#4161df]/15";
+  "w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-[13.5px] text-foreground placeholder:text-muted-foreground outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/15";
 
 function Toggle({
   label,
@@ -245,14 +245,14 @@ function Toggle({
       style={
         active
           ? {
-              background: "#4161df",
-              color: "#fff",
-              borderColor: "#4161df",
+              background: "hsl(var(--brand))",
+              color: "hsl(var(--card))",
+              borderColor: "hsl(var(--brand))",
             }
           : {
-              background: "#fff",
-              color: "#64748b",
-              borderColor: "#e2e8f0",
+              background: "hsl(var(--card))",
+              color: "hsl(var(--muted-foreground))",
+              borderColor: "hsl(var(--border))",
             }
       }
     >
@@ -359,25 +359,25 @@ export default function ServiceProviderRegisterPage() {
     return (
       <>
         <main className="min-h-screen flex items-center justify-center px-4 bg-background">
-          <div className="max-w-md w-full bg-white rounded-2xl border border-slate-100 shadow-sm p-8 text-center">
+          <div className="max-w-md w-full bg-card rounded-2xl border border-border shadow-sm p-8 text-center">
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5"
-              style={{ background: "rgba(22,163,74,.10)" }}
+              style={{ background: "hsl(var(--success) / 0.10)" }}
             >
-              <CheckCircle2 size={28} style={{ color: "#16a34a" }} />
+              <CheckCircle2 size={28} style={{ color: "hsl(var(--success))" }} />
             </div>
-            <h1 className="text-[26px] text-slate-900 mb-2 font-semibold">
+            <h1 className="text-[26px] text-foreground mb-2 font-semibold">
               Enquiry received
             </h1>
-            <p className="text-[13.5px] text-slate-500 leading-relaxed mb-6">
+            <p className="text-[13.5px] text-muted-foreground leading-relaxed mb-6">
               Thanks {form.name.split(" ")[0] || "there"} — your print enquiry
               is with our team. We&apos;ll get back to you with paper, finish
               and pricing options shortly.
             </p>
             <button
               onClick={() => router.push("/")}
-              className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-[13px] font-semibold text-white transition-opacity hover:opacity-90"
-              style={{ background: "#0f172a" }}
+              className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+              style={{ background: "hsl(var(--footer))" }}
             >
               Back to home
               <ArrowRight size={14} />
@@ -398,7 +398,7 @@ export default function ServiceProviderRegisterPage() {
           className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(65,97,223,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(65,97,223,.045) 1px,transparent 1px)",
+              "linear-gradient(hsl(var(--brand) / 0.045) 1px,transparent 1px),linear-gradient(90deg,hsl(var(--brand) / 0.045) 1px,transparent 1px)",
             backgroundSize: "40px 40px",
           }}
         />
@@ -408,8 +408,8 @@ export default function ServiceProviderRegisterPage() {
           className="pointer-events-none absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full"
           style={{
             background:
-              "linear-gradient(135deg,rgba(65,97,223,.10),rgba(129,140,248,.18))",
-            border: "1px solid rgba(65,97,223,.10)",
+              "linear-gradient(135deg,hsl(var(--brand) / 0.10),hsl(var(--brand) / 0.18))",
+            border: "1px solid hsl(var(--brand) / 0.10)",
           }}
         />
 
@@ -419,21 +419,21 @@ export default function ServiceProviderRegisterPage() {
             <span
               className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11.5px] font-medium mb-5"
               style={{
-                background: "rgba(65,97,223,.09)",
-                border: "1px solid rgba(65,97,223,.22)",
-                color: "#2a3ebf",
+                background: "hsl(var(--brand) / 0.09)",
+                border: "1px solid hsl(var(--brand) / 0.22)",
+                color: "hsl(var(--brand-hover))",
               }}
             >
               <Sparkles size={12} />
               For print orders & business enquiries
             </span>
-            <h1 className="text-[34px] sm:text-[46px] leading-[1.08] text-slate-900 mb-3 font-semibold">
+            <h1 className="text-[34px] sm:text-[46px] leading-[1.08] text-foreground mb-3 font-semibold">
               Start your{" "}
-              <em style={{ color: "#4161df", fontStyle: "italic" }}>
+              <em style={{ color: "hsl(var(--brand))", fontStyle: "italic" }}>
                 custom print
               </em>
             </h1>
-            <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed font-light">
+            <p className="text-[14px] text-muted-foreground max-w-md mx-auto leading-relaxed font-normal">
               Tell us what you need printed — wedding cards, visiting cards,
               shagun envelopes, brochures or packaging — and our design team will
               get back with paper, finish and pricing options.
@@ -450,9 +450,9 @@ export default function ServiceProviderRegisterPage() {
             ].map((t) => (
               <span
                 key={t}
-                className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-600 bg-white border border-slate-100 rounded-full px-3 py-1.5 shadow-sm"
+                className="inline-flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground bg-card border border-border rounded-full px-3 py-1.5 shadow-sm"
               >
-                <CheckCircle2 size={12} style={{ color: "#16a34a" }} />
+                <CheckCircle2 size={12} style={{ color: "hsl(var(--success))" }} />
                 {t}
               </span>
             ))}
@@ -461,7 +461,7 @@ export default function ServiceProviderRegisterPage() {
           {/* ── FORM CARD ── */}
           <form
             onSubmit={handleSubmit}
-            className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 sm:p-9 flex flex-col gap-9"
+            className="bg-card rounded-2xl border border-border shadow-sm p-6 sm:p-9 flex flex-col gap-9"
           >
             {/* ════ STEP 1 — Personal info ════ */}
             <section>
@@ -485,7 +485,7 @@ export default function ServiceProviderRegisterPage() {
                   <div className="relative">
                     <Phone
                       size={14}
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
                     />
                     <input
                       className={`${inputClass} pl-9`}
@@ -500,7 +500,7 @@ export default function ServiceProviderRegisterPage() {
                   <div className="relative">
                     <Phone
                       size={14}
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
                     />
                     <input
                       className={`${inputClass} pl-9`}
@@ -515,7 +515,7 @@ export default function ServiceProviderRegisterPage() {
                   <div className="relative">
                     <Mail
                       size={14}
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
                     />
                     <input
                       type="email"
@@ -529,7 +529,7 @@ export default function ServiceProviderRegisterPage() {
               </div>
             </section>
 
-            <div className="h-px bg-slate-100" />
+            <div className="h-px bg-border" />
 
             {/* ════ STEP 2 — Address ════ */}
             <section>
@@ -553,7 +553,7 @@ export default function ServiceProviderRegisterPage() {
                   <div className="relative">
                     <MapPin
                       size={14}
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
                     />
                     <input
                       className={`${inputClass} pl-9`}
@@ -577,7 +577,7 @@ export default function ServiceProviderRegisterPage() {
                   <div className="relative">
                     <Hash
                       size={14}
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
                     />
                     <input
                       className={`${inputClass} pl-9`}
@@ -590,7 +590,7 @@ export default function ServiceProviderRegisterPage() {
               </div>
             </section>
 
-            <div className="h-px bg-slate-100" />
+            <div className="h-px bg-border" />
 
             {/* ════ STEP 3 — Services & coverage ════ */}
             <section>
@@ -647,7 +647,7 @@ export default function ServiceProviderRegisterPage() {
               </div>
             </section>
 
-            <div className="h-px bg-slate-100" />
+            <div className="h-px bg-border" />
 
             {/* ════ STEP 4 — Company / Business details ════ */}
             <section>
@@ -662,9 +662,9 @@ export default function ServiceProviderRegisterPage() {
                   type="checkbox"
                   checked={form.isCompany}
                   onChange={(e) => update("isCompany", e.target.checked)}
-                  className="w-4 h-4 rounded border-slate-300 accent-[#4161df]"
+                  className="w-4 h-4 rounded border-border accent-brand"
                 />
-                <span className="text-[12.5px] text-slate-600 font-medium">
+                <span className="text-[12.5px] text-muted-foreground font-medium">
                   I am registering as a company / firm
                 </span>
               </label>
@@ -676,7 +676,7 @@ export default function ServiceProviderRegisterPage() {
                     <div className="relative">
                       <Building2
                         size={14}
-                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
                       />
                       <input
                         className={`${inputClass} pl-9`}
@@ -708,7 +708,7 @@ export default function ServiceProviderRegisterPage() {
               )}
             </section>
 
-            <div className="h-px bg-slate-100" />
+            <div className="h-px bg-border" />
 
             {/* ════ STEP 5 — Profile photo ════ */}
             <section>
@@ -719,24 +719,24 @@ export default function ServiceProviderRegisterPage() {
               />
               <label
                 htmlFor="photo-upload"
-                className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 py-8 cursor-pointer transition-colors hover:border-[#4161df]/40 hover:bg-[#4161df]/[0.03]"
+                className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border py-8 cursor-pointer transition-colors hover:border-brand/40 hover:bg-brand/[0.03]"
               >
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center"
-                  style={{ background: "rgba(65,97,223,.08)" }}
+                  style={{ background: "hsl(var(--brand) / 0.08)" }}
                 >
-                  <Upload size={16} style={{ color: "#4161df" }} />
+                  <Upload size={16} style={{ color: "hsl(var(--brand))" }} />
                 </div>
                 {photo ? (
-                  <p className="text-[13px] font-medium text-slate-700">
+                  <p className="text-[13px] font-medium text-foreground/85">
                     {photo.name}
                   </p>
                 ) : (
-                  <p className="text-[13px] font-medium text-slate-600">
+                  <p className="text-[13px] font-medium text-muted-foreground">
                     Click to upload your photo
                   </p>
                 )}
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-muted-foreground">
                   PNG or JPG, up to 5MB
                 </p>
                 <input
@@ -763,7 +763,7 @@ export default function ServiceProviderRegisterPage() {
                 onChange={(e) => update("bio", e.target.value)}
                 maxLength={400}
               />
-              <p className="text-[11px] text-slate-400 mt-1 text-right">
+              <p className="text-[11px] text-muted-foreground mt-1 text-right">
                 {form.bio.length}/400
               </p>
             </section>
@@ -773,9 +773,9 @@ export default function ServiceProviderRegisterPage() {
               <div
                 className="text-[12.5px] font-medium rounded-xl px-4 py-3"
                 style={{
-                  background: "rgba(239,68,68,.08)",
-                  color: "#dc2626",
-                  border: "1px solid rgba(239,68,68,.18)",
+                  background: "hsl(var(--destructive) / 0.08)",
+                  color: "hsl(var(--destructive))",
+                  border: "1px solid hsl(var(--destructive) / 0.18)",
                 }}
               >
                 {error}
@@ -788,12 +788,12 @@ export default function ServiceProviderRegisterPage() {
                 type="checkbox"
                 checked={form.agreeTerms}
                 onChange={(e) => update("agreeTerms", e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded border-slate-300 accent-[#4161df]"
+                className="mt-0.5 w-4 h-4 rounded border-border accent-brand"
               />
-              <span className="text-[12.5px] text-slate-500 leading-relaxed">
+              <span className="text-[12.5px] text-muted-foreground leading-relaxed">
                 I confirm the information above is accurate and agree to
                 Ink of Memories'{" "}
-                <span style={{ color: "#4161df" }} className="font-medium">
+                <span style={{ color: "hsl(var(--brand))" }} className="font-medium">
                   Terms of Service & Privacy Policy
                 </span>
                 .
@@ -805,7 +805,7 @@ export default function ServiceProviderRegisterPage() {
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="inline-flex items-center gap-2 text-[13px] font-medium text-slate-500 hover:text-slate-700 transition-colors order-2 sm:order-1"
+                className="inline-flex items-center gap-2 text-[13px] font-medium text-muted-foreground hover:text-foreground/85 transition-colors order-2 sm:order-1"
               >
                 <ArrowLeft size={14} />
                 Back
@@ -813,10 +813,10 @@ export default function ServiceProviderRegisterPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 text-[13.5px] font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-[.98] disabled:opacity-60 order-1 sm:order-2"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 text-[13.5px] font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-[.98] disabled:opacity-60 order-1 sm:order-2"
                 style={{
-                  background: "#0f172a",
-                  boxShadow: "0 4px 16px rgba(15,23,42,.18)",
+                  background: "hsl(var(--footer))",
+                  boxShadow: "0 4px 16px hsl(var(--foreground) / 0.18)",
                 }}
               >
                 {submitting ? "Submitting…" : "Create service profile"}
@@ -826,9 +826,9 @@ export default function ServiceProviderRegisterPage() {
           </form>
 
           {/* footer note */}
-          <p className="text-center text-[12px] text-slate-400 mt-6">
+          <p className="text-center text-[12px] text-muted-foreground mt-6">
             Already have a profile?{" "}
-            <span style={{ color: "#4161df" }} className="font-medium">
+            <span style={{ color: "hsl(var(--brand))" }} className="font-medium">
               Log in to your dashboard
             </span>
           </p>

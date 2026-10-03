@@ -45,7 +45,7 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email Us",
-      details: email ? [email] : ["info@samlason.com"],
+      details: email ? [email] : ["info@inkofmemories.com"],
       href: email ? `mailto:${email}` : undefined,
     },
     {
@@ -95,13 +95,13 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCFBF9] dark:bg-[#0f111a]">
+    <div className="min-h-screen bg-background">
       <SEOHelper
-        title="Contact Us – Samlason Printing Press, Panchkula"
-        description="Get in touch with Samlason Printing Press. Call, email, or visit us in Panchkula for premium wedding cards, visiting cards, brochures & custom printing."
+        title="Contact Us – Ink of Memories, Panchkula"
+        description="Get in touch with Ink of Memories. Call, email, or visit us in Panchkula for premium wedding cards, visiting cards, brochures & custom printing."
         path="/contact"
         image="https://inkofmemories.com/inkofmemories.png"
-        keywords="contact printing press, Samlason Printing contact, Panchkula printing press, custom printing inquiry"
+        keywords="contact printing press, Ink of Memories contact, Panchkula printing press, custom printing inquiry"
         jsonLd={breadcrumbSchema}
       />
 
@@ -116,14 +116,14 @@ const Contact = () => {
           />
 
           {/* ───────── Contact details ───────── */}
-          <section className="grid gap-px border border-stone-200 bg-stone-200 sm:grid-cols-2 lg:grid-cols-4 dark:border-stone-700 dark:bg-stone-700">
+          <section className="grid gap-px border border-border bg-muted sm:grid-cols-2 lg:grid-cols-4 dark:border-border dark:bg-border">
             {contactInfo.map(({ icon: Icon, title, details, href }) => (
-              <div key={title} className="bg-[#FCFBF9] p-8 dark:bg-[#0f111a]">
-                <div className="flex h-10 w-10 items-center justify-center border border-stone-200 text-stone-500 transition-colors duration-300 hover:border-red-900 hover:text-red-900 dark:border-stone-700 dark:text-stone-400 dark:hover:border-red-600 dark:hover:text-red-600">
+              <div key={title} className="bg-card p-8 dark:bg-card">
+                <div className="flex h-10 w-10 items-center justify-center border border-border text-muted-foreground transition-colors duration-300 hover:border-brand/50 hover:text-brand dark:border-border dark:text-muted-foreground dark:hover:border-brand dark:hover:text-brand">
                   <Icon aria-hidden="true" className="h-4 w-4" />
                 </div>
 
-                <h2 className="mt-5 text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400 dark:text-stone-500">
+                <h2 className="font-sans mt-5 text-[10px] font-semibold text-muted-foreground dark:text-muted-foreground">
                   {title}
                 </h2>
 
@@ -133,14 +133,14 @@ const Contact = () => {
                       <a
                         key={i}
                         href={href}
-                        className="block text-sm font-light leading-relaxed text-stone-700 underline-offset-4 transition-colors hover:text-red-900 hover:underline dark:text-stone-300 dark:hover:text-red-600"
+                        className="block text-sm font-normal leading-relaxed text-foreground underline-offset-4 transition-colors hover:text-brand hover:underline dark:text-muted-foreground/70 dark:hover:text-brand"
                       >
                         {detail}
                       </a>
                     ) : (
                       <p
                         key={i}
-                        className="text-sm font-light leading-relaxed text-stone-700 dark:text-stone-300"
+                        className="text-sm font-normal leading-relaxed text-foreground dark:text-muted-foreground/70"
                       >
                         {detail}
                       </p>
@@ -156,16 +156,16 @@ const Contact = () => {
               <div className="flex items-center gap-3">
                 <span
                   aria-hidden="true"
-                  className="h-px w-10 bg-red-800 dark:bg-red-600"
+                  className="h-px w-10 bg-gold"
                 />
-                <h2 className="text-[10px] font-semibold uppercase tracking-[0.3em] text-stone-500 dark:text-stone-400">
+                <h2 className="text-[10px] font-semibold text-muted-foreground dark:text-muted-foreground">
                   Send us a Message
                 </h2>
               </div>
-              <h3 className="mt-4 font-serif text-3xl leading-tight text-stone-900 md:text-4xl dark:text-stone-100">
+              <h3 className="mt-4 font-serif text-3xl leading-tight text-foreground md:text-4xl dark:text-muted-foreground/70">
                 Tell us what you&apos;re
                 <br />
-                <em className="font-light text-red-800 dark:text-red-600">
+                <em className="font-medium text-primary">
                   looking to print.
                 </em>
               </h3>
@@ -226,7 +226,7 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="group inline-flex h-14 w-full items-center justify-center gap-3 rounded-none bg-red-900 px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-red-900/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-800 hover:shadow-xl hover:shadow-red-900/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0 dark:focus-visible:ring-offset-[#0f111a]"
+                  className="group inline-flex h-14 w-full items-center justify-center gap-3 rounded-none bg-primary px-8 text-xs font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-xl hover:shadow-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0 dark:focus-visible:ring-offset-footer"
                 >
                   Send Message
                   <Send
@@ -239,22 +239,22 @@ const Contact = () => {
 
             {/* WhatsApp panel */}
             <aside className="lg:col-span-2">
-              <div className="sticky top-28 border border-stone-200 bg-[#F4F1EE] p-10 dark:border-stone-700 dark:bg-[#0d1321]">
+              <div className="sticky top-28 border border-border bg-ivory p-10 dark:border-border">
                 <div className="flex items-center gap-3">
                   <MessageCircle
                     aria-hidden="true"
                     className="h-4 w-4 text-[#25D366]"
                   />
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-stone-500 dark:text-stone-400">
+                  <span className="text-[10px] font-semibold text-muted-foreground dark:text-muted-foreground">
                     Instant Connect
                   </span>
                 </div>
 
-                <p className="mt-6 font-serif text-2xl leading-snug text-stone-900 dark:text-stone-100">
+                <p className="mt-6 font-sans text-2xl leading-snug text-foreground dark:text-muted-foreground/70">
                   Prefer a quick chat? Message us on WhatsApp.
                 </p>
 
-                <p className="mt-4 text-sm font-light leading-[1.8] text-stone-600 dark:text-stone-300">
+                <p className="mt-4 text-sm font-normal leading-[1.8] text-muted-foreground dark:text-muted-foreground/70">
                   Share your card size, quantity and finish preferences and
                   we&apos;ll send indicative pricing straight away.
                 </p>
@@ -262,13 +262,13 @@ const Contact = () => {
                 <button
                   type="button"
                   onClick={openWhatsApp}
-                  className="mt-8 inline-flex h-14 w-full items-center justify-center gap-2.5 rounded-none border border-[#25D366] bg-transparent px-8 text-xs font-semibold uppercase tracking-[0.2em] text-[#25D366] transition-colors duration-300 hover:bg-[#25D366] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#0d1321]"
+                  className="mt-8 inline-flex h-14 w-full items-center justify-center gap-2.5 rounded-none border border-[#25D366] bg-transparent px-8 text-xs font-semibold text-[#25D366] transition-colors duration-300 hover:bg-[#25D366] hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-footer"
                 >
                   <MessageCircle aria-hidden="true" className="h-4 w-4" />
                   Chat on WhatsApp
                 </button>
 
-                <p className="mt-6 border-t border-stone-200 pt-6 text-[10px] uppercase tracking-[0.25em] text-stone-400 dark:border-stone-700 dark:text-stone-500">
+                <p className="mt-6 border-t border-border pt-6 text-[10px] text-muted-foreground dark:border-border dark:text-muted-foreground">
                   Mon - Sat · 9:00 AM - 7:00 PM
                 </p>
               </div>

@@ -29,7 +29,7 @@ const ScrollToTopButton = () => {
         <button
           type="button"
           onClick={() => scrollToTop()}
-          className="p-3 rounded-full bg-[#4161df] hover:bg-[#3759dd] text-white shadow-lg  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-opacity duration-300"
+          className="p-3 rounded-full bg-brand hover:bg-brand-hover text-primary-foreground shadow-lgfocus:outline-none focus:ring-2 focus:ring-brand focus:ring-opacity-50 transition-opacity duration-300"
           aria-label="Scroll to top"
         >
           <FaArrowUp />

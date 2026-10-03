@@ -77,13 +77,13 @@ export default function SignupPage({
       aside={{
         image: "/gallery-cards.jpg",
         imageAlt:
-          "Letterpress business card suites pressed at Samlason Printing Press",
+          "Letterpress business card suites pressed at Ink of Memories",
         eyebrow: "Join the Studio",
         title: (
           <>
             Begin your
             <br />
-            <em className="font-light text-red-800 dark:text-red-600">
+            <em className="font-medium text-brand">
               first commission.
             </em>
           </>
@@ -99,10 +99,10 @@ export default function SignupPage({
     >
       <div className="space-y-8">
         <header className="space-y-3">
-          <h2 className="font-serif text-3xl leading-tight text-stone-900 dark:text-stone-100">
+          <h2 className="font-serif text-3xl leading-tight text-foreground">
             Create an Account
           </h2>
-          <p className="text-sm font-light leading-relaxed text-stone-500 dark:text-stone-400">
+          <p className="text-sm font-normal leading-relaxed text-muted-foreground">
             A few details and your studio portfolio is ready.
           </p>
         </header>
@@ -110,7 +110,7 @@ export default function SignupPage({
         {error && (
           <div
             role="alert"
-            className="border-l-2 border-red-700 bg-red-50/70 px-4 py-3 text-sm text-red-800 dark:border-red-600 dark:bg-red-950/40 dark:text-red-300"
+            className="border-l-2 border-destructive/10 px-4 py-3 text-sm text-destructive"
           >
             {error}
           </div>
@@ -174,7 +174,7 @@ export default function SignupPage({
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 flex items-center px-4 text-stone-400 transition-colors hover:text-red-800 focus-visible:outline-none focus-visible:text-red-800 dark:hover:text-red-600"
+                className="absolute inset-y-0 right-0 flex items-center px-4 text-muted-foreground transition-colors hover:text-brand focus-visible:outline-none focus-visible:text-brand dark:hover:text-brand"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
@@ -188,14 +188,14 @@ export default function SignupPage({
           </div>
 
           <fieldset className="space-y-2">
-            <legend className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-stone-500 dark:text-stone-400">
+            <legend className="mb-3 text-[10px] font-semibold text-muted-foreground">
               I am a
             </legend>
-            <div className="grid grid-cols-2 gap-px bg-stone-200 dark:bg-stone-700">
+            <div className="grid grid-cols-2 gap-px bg-border">
               {(["client", "merchant"] as const).map((value) => (
                 <label
                   key={value}
-                  className="group relative cursor-pointer bg-white px-4 py-4 text-center transition-colors hover:bg-stone-50 dark:bg-stone-900/40 dark:hover:bg-stone-900"
+                  className="group relative cursor-pointer bg-card px-4 py-4 text-center transition-colors hover:bg-muted"
                 >
                   <input
                     type="radio"
@@ -203,12 +203,12 @@ export default function SignupPage({
                     {...register("role")}
                     className="peer sr-only"
                   />
-                  <span className="block text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500 transition-colors peer-checked:text-stone-900 peer-focus-visible:text-stone-900 group-hover:text-stone-900 dark:text-stone-400 dark:peer-checked:text-stone-50 dark:peer-focus-visible:text-stone-50 dark:group-hover:text-stone-50">
+                  <span className="block text-[11px] font-semibold text-muted-foreground transition-colors peer-checked:text-foreground peer-focus-visible:text-foreground group-hover:text-foreground dark:text-muted-foreground dark:peer-checked:text-foreground dark:peer-focus-visible:text-foreground dark:group-hover:text-foreground">
                     {value === "client" ? "Client" : "Merchant"}
                   </span>
                   <span
                     aria-hidden="true"
-                    className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-red-800 transition-transform duration-300 peer-checked:scale-x-100 dark:bg-red-600 motion-reduce:transition-none"
+                    className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-gold transition-transform duration-300 peer-checked:scale-x-100 motion-reduce:transition-none"
                   />
                 </label>
               ))}
@@ -219,7 +219,7 @@ export default function SignupPage({
           <button
             type="submit"
             disabled={isLoading}
-            className="flex h-14 w-full items-center justify-center gap-3 rounded-none bg-red-900 px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-red-900/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-800 hover:shadow-xl hover:shadow-red-900/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none motion-reduce:hover:translate-y-0 dark:focus-visible:ring-offset-[#0f111a]"
+            className="flex h-14 w-full items-center justify-center gap-3 rounded-none bg-primary px-8 text-xs font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-xl hover:shadow-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none motion-reduce:hover:translate-y-0 dark:focus-visible:ring-offset-footer"
           >
             {isLoading ? (
               <>
@@ -234,11 +234,11 @@ export default function SignupPage({
 
         <SocialAuthButtons mode="signup" />
 
-        <p className="border-t border-stone-200 pt-6 text-center text-xs text-stone-500 dark:border-stone-700 dark:text-stone-400">
+        <p className="border-t border-border pt-6 text-center text-xs text-muted-foreground">
           Already have an account?{" "}
           <button
             onClick={toggleAuthMode}
-            className="rounded-none font-semibold uppercase tracking-[0.15em] text-red-800 underline-offset-4 transition-colors hover:underline dark:text-red-600"
+            className="rounded-none font-semibold text-brand underline-offset-4 transition-colors hover:underline"
           >
             Sign in
           </button>

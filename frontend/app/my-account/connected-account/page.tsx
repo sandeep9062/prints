@@ -49,34 +49,34 @@ export default function ConnectedAccountPage() {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pb-6 border-b border-stone-100">
+      <div className="flex items-center justify-between mb-8 pb-6 border-b border-border">
         <div>
-          <h2 className="text-2xl md:text-3xl font-serif text-stone-900">
+          <h2 className="text-2xl md:text-3xl font-sans text-foreground">
             Connected Accounts
           </h2>
-          <p className="text-stone-500 text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             Link your Google or Apple account for easy login. Linking is
             automatic when you sign in with the same email.
           </p>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
+      <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
         {accounts.map((account, index) => (
           <div
             key={account.name}
             className={`flex items-center justify-between p-5 ${
-              index !== accounts.length - 1 ? "border-b border-stone-100" : ""
-            } hover:bg-stone-50/50 transition-colors duration-150`}
+              index !== accounts.length - 1 ? "border-b border-border" : ""
+            } hover:bg-muted/50 transition-colors duration-150`}
           >
             <div className="flex items-center gap-4">
               <div
                 className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg ${
                   account.name === "Apple"
-                    ? "bg-black text-white"
+                    ? "bg-footer text-footer-foreground"
                     : account.connected
-                      ? "bg-stone-900 text-white"
-                      : "bg-stone-100 text-stone-400"
+                      ? "bg-footer text-footer-foreground"
+                      : "bg-muted-foreground"
                 }`}
               >
                 {account.name === "Apple" ? (
@@ -93,24 +93,24 @@ export default function ConnectedAccountPage() {
                 )}
               </div>
               <div>
-                <h3 className="font-semibold text-stone-900">{account.name}</h3>
+                <h3 className="font-semibold text-foreground">{account.name}</h3>
                 <div className="flex items-center gap-2 mt-0.5">
                   <span
                     className={`inline-flex items-center gap-1 text-xs ${
-                      account.connected ? "text-green-600" : "text-stone-400"
+                      account.connected ? "text-success" : "text-muted-foreground"
                     }`}
                   >
                     <span
                       className={`w-1.5 h-1.5 rounded-full ${
-                        account.connected ? "bg-green-500" : "bg-stone-300"
+                        account.connected ? "bg-success" : "bg-muted"
                       }`}
                     />
                     {account.connected ? "Connected" : "Not connected"}
                   </span>
                   {account.connected && account.email && (
                     <>
-                      <span className="text-stone-300">•</span>
-                      <span className="text-xs text-stone-500">
+                      <span className="text-muted-foreground/70">•</span>
+                      <span className="text-xs text-muted-foreground">
                         {account.email}
                       </span>
                     </>
@@ -121,10 +121,10 @@ export default function ConnectedAccountPage() {
 
             <button
               onClick={account.onClick}
-              className={`flex items-center gap-2 px-5 py-2.5 text-xs font-bold tracking-widest uppercase rounded-xl transition-all duration-200 active:scale-[0.98] ${
+              className={`flex items-center gap-2 px-5 py-2.5 text-xs font-medium rounded-xl transition-all duration-200 active:scale-[0.98] ${
                 account.connected
-                  ? "bg-stone-100 text-stone-600 hover:bg-stone-200"
-                  : "bg-stone-900 text-white hover:bg-stone-800 shadow-sm"
+                  ? "bg-muted-foreground hover:bg-muted"
+                  : "bg-footer text-footer-foreground hover:bg-brand-hover hover:text-primary-foreground shadow-sm"
               }`}
             >
               {account.connected ? (

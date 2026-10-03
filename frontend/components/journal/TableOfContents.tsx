@@ -89,12 +89,12 @@ export default function TableOfContents({ blocks }: TableOfContentsProps) {
   return (
     <nav
       aria-label="Table of contents"
-      className="rounded-sm border border-[#1F3A32]/15 bg-[#F7F4EE] p-5 shadow-[0_18px_36px_-28px_rgba(31,58,50,.5)] dark:border-[#E4E9DD]/15 dark:bg-[#1C2B26]"
+      className="rounded-sm border border-border/15 bg-ivory p-5 shadow-[0_18px_36px_-28px_rgba(31,58,50,.5)]"
     >
-      <p className="mb-3 text-[11px] tracking-[0.18em] text-[#1F3A32]/60 uppercase dark:text-[#E4E9DD]/60">
+      <p className="mb-3 text-[11px] text-muted-foreground ">
         In this note
       </p>
-      <ul className="space-y-[2px] border-l border-[#1F3A32]/15 dark:border-[#E4E9DD]/15">
+      <ul className="space-y-[2px] border-l border-border/15">
         {headings.map((heading) => {
           const isActive = heading.id === activeId;
           return (
@@ -107,8 +107,8 @@ export default function TableOfContents({ blocks }: TableOfContentsProps) {
                   heading.level === "h3" ? "pl-6 pr-1" : "pl-4 pr-1"
                 } ${
                   isActive
-                    ? "border-[#B08D4A] font-medium text-[#1F3A32] dark:text-[#F7F4EE]"
-                    : "border-transparent text-[#1F3A32]/60 hover:border-[#B08D4A]/50 hover:text-[#1F3A32] dark:text-[#E4E9DD]/60 dark:hover:text-[#F7F4EE]"
+                    ? "border-gold font-medium text-foreground"
+                    : "border-transparent text-muted-foreground hover:border-gold/50 hover:text-foreground dark:hover:text-foreground"
                 }`}
               >
                 {heading.text}

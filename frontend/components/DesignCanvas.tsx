@@ -127,7 +127,7 @@ const DesignCanvas = ({
     <div className={cn("space-y-6", className)}>
       {/* Product type */}
       <div className="card-elegant p-6">
-        <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-4">
+        <div className="text-[10px] text-muted-foreground mb-4">
           Product
         </div>
         <div className="grid grid-cols-3 gap-2">
@@ -138,7 +138,7 @@ const DesignCanvas = ({
               className={cn(
                 "px-3 py-3 text-[11px] tracking-wider uppercase border transition-all",
                 product === k
-                  ? "border-primary bg-primary/10 text-primary"
+                  ? "border-primary/10 text-primary"
                   : "border-border hover:border-primary/50",
               )}
             >
@@ -170,7 +170,7 @@ const DesignCanvas = ({
             <Upload className="h-4 w-4 text-muted-foreground" />
           </div>
           <div>
-            <div className="font-display text-lg">
+            <div className="font-sans text-lg">
               {image ? "Replace artwork" : "Upload artwork"}
             </div>
             <div className="text-xs text-muted-foreground">
@@ -182,7 +182,7 @@ const DesignCanvas = ({
 
       {/* Quantity */}
       <div className="card-elegant p-6">
-        <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-4">
+        <div className="text-[10px] text-muted-foreground mb-4">
           Quantity
           {qty < p.min && (
             <span className="text-destructive normal-case tracking-normal">
@@ -202,7 +202,7 @@ const DesignCanvas = ({
             value={qty}
             min={p.min}
             onChange={(e) => handleQtyChange(parseInt(e.target.value) || p.min)}
-            className="font-display text-3xl text-center w-full bg-transparent focus:outline-none"
+            className="font-serif text-3xl text-center w-full bg-transparent focus:outline-none"
           />
           <button
             onClick={() => handleQtyChange(qty + (qty >= 100 ? 25 : 5))}
@@ -217,9 +217,9 @@ const DesignCanvas = ({
               key={t.qty}
               onClick={() => handleQtyChange(t.qty)}
               className={cn(
-                "py-2 text-[10px] tracking-[0.2em] uppercase border rounded transition-colors",
+                "py-2 text-[10px] border rounded transition-colors",
                 qty >= t.qty
-                  ? "border-primary text-primary"
+                  ? "border-primary"
                   : "border-border text-muted-foreground hover:border-primary/50",
               )}
             >
@@ -240,15 +240,15 @@ const DesignCanvas = ({
         className="card-elegant p-6 bg-primary text-primary-foreground"
       >
         <div className="flex justify-between items-baseline mb-2 opacity-80">
-          <span className="text-[11px] tracking-[0.25em] uppercase">
+          <span className="text-[11px] ">
             Per unit
           </span>
-          <span className="font-display text-xl">${unit.toFixed(2)}</span>
+          <span className="font-sans text-xl tabular-nums">${unit.toFixed(2)}</span>
         </div>
         <div className="w-full h-px bg-current opacity-20 my-4" />
         <div className="flex justify-between items-baseline">
-          <span className="text-[11px] tracking-[0.25em] uppercase">Total</span>
-          <span className="font-display text-4xl">${total.toFixed(2)}</span>
+          <span className="text-[11px] ">Total</span>
+          <span className="font-serif text-4xl tabular-nums">${total.toFixed(2)}</span>
         </div>
 
         {showCheckoutButton && (
@@ -259,14 +259,14 @@ const DesignCanvas = ({
           </Button>
         )}
 
-        <div className="mt-4 text-[10px] tracking-[0.2em] uppercase opacity-50 text-center">
+        <div className="mt-4 text-[10px] opacity-50 text-center">
           Ships within 7 days &middot; Premium packaging included
         </div>
       </motion.div>
 
       {/* Finish Toggles */}
       <div className="card-elegant p-6">
-        <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-4">
+        <div className="text-[10px] text-muted-foreground mb-4">
           Finish
         </div>
         <div className="grid grid-cols-3 gap-3">
@@ -277,14 +277,14 @@ const DesignCanvas = ({
               className={cn(
                 "p-4 border text-left transition-all rounded-lg",
                 finish === f
-                  ? "border-primary bg-primary/10"
+                  ? "border-primary/10"
                   : "border-border hover:border-primary/50",
               )}
             >
-              <div className="text-[10px] tracking-[0.3em] uppercase mb-1 opacity-60">
+              <div className="text-[10px] mb-1 opacity-60">
                 Finish
               </div>
-              <div className="font-display text-lg capitalize">{f}</div>
+              <div className="font-sans text-lg capitalize">{f}</div>
               <div className="text-[10px] mt-2 opacity-60">
                 {f === "matte"
                   ? "Soft & understated"
@@ -299,7 +299,7 @@ const DesignCanvas = ({
 
       {/* Preview Card */}
       <div className="card-elegant p-6">
-        <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-4">
+        <div className="text-[10px] text-muted-foreground mb-4">
           Preview &middot; {finish}
         </div>
         <div
@@ -332,7 +332,7 @@ const DesignCanvas = ({
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground/40 p-6 text-center">
               <ImageIcon className="h-8 w-8 mb-3" />
-              <div className="font-display italic text-lg">
+              <div className="font-sans italic text-lg">
                 Awaiting your artwork
               </div>
             </div>
