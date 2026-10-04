@@ -31,7 +31,19 @@ const sans = DM_Sans({
   display: "swap",
 });
 
+/*
+    App icon. Next.js turns this into the `apple-touch-icon`, the favicon link and
+    the manifest entry, and indexes it as a favicon candidate in search results.
+
+    The brand spec sheet (public/logo-directory.png) calls for app/icon.svg with a
+    crimson rounded-square pen-nib mark. An SVG is declared directly rather than a
+    raster PNG so the mark stays sharp at every size.
+  */
 export const metadata: Metadata = {
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icon.svg" }],
+  },
   title: {
     default: `${BRAND_NAME} | Premium Printing & Design Services`,
     template: `%s | ${BRAND_NAME}`,

@@ -27,12 +27,18 @@ export const SITE_CONFIG = {
   */
   defaultImage: "https://inkofmemories.com/opengraph-image",
   /*
-    Points at inkofmemories.png rather than logo.png: the latter has been
-    renamed in the working tree, so a /logo.png reference would 404 and drop the
-    logo out of the search result / knowledge panel. Swap to /logo.png once the
-    asset rename is settled.
+    Points at logo-directory.png, not inkofmemories.png.
+
+    Google requires an Organization `logo` to be at least 112x112px and to fit
+    within a 1,000,000px bounding box. inkofmemories.png is a 388x108 wordmark
+    — under half the minimum height, so it is ineligible for the knowledge panel
+    and silently ignored.
+
+    logo-directory.png (1536x1024) clears the minimum comfortably. Swap to a
+    dedicated icon-only asset if one is ever exported from the brand spec — it
+    calls for public/logo.svg, which does not exist in the repo yet.
   */
-  logo: "https://inkofmemories.com/inkofmemories.png",
+  logo: "https://inkofmemories.com/logo-directory.png",
   favicon: "/favicon.ico",
   locale: "en_IN",
   language: "en",
@@ -192,7 +198,9 @@ export function getOrganizationSchema() {
     name: SITE_CONFIG.businessName,
     alternateName: SITE_CONFIG.name,
     url: SITE_CONFIG.url,
-    logo: `${SITE_CONFIG.url}/inkofmemories.png`,
+    // Read from SITE_CONFIG rather than hard-coded, so the Organization logo and
+    // the social/image logo can never drift apart.
+    logo: SITE_CONFIG.logo,
     image: SITE_CONFIG.defaultImage,
     description: SITE_CONFIG.description,
     foundingDate: String(FOUNDED_YEAR),

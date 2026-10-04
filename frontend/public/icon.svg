@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Ink of Memories">
+  <title>Ink of Memories</title>
+  <!--
+    Crimson rounded-square app icon with the pen-nib mark, per the brand spec
+    sheet in public/logo-directory.png ("app/icon.svg - favicon").
+
+    Colours come from the CSS custom properties declared in that sheet:
+    crimson #B3122A, with a brighter crimson #E04058 for dark surfaces.
+  -->
+  <rect width="512" height="512" rx="112" fill="#B3122A" />
+
+  <!-- Pen nib body: wide shoulder tapering to the point. -->
+  <path
+    d="M256 96c-6 0-11 4-12 10-4 24-14 46-31 63-17 17-39 27-63 31-6 1-10 6-10 12v78c0 6 4 11 10 12 24 4 46 14 63 31 17 17 27 39 31 63 1 6 6 10 12 10s11-4 12-10c4-24 14-46 31-63 17-17 39-27 63-31 6-1 10-6 10-12v-78c0-6-4-11-10-12-24-4-46-14-63-31-17-17-27-39-31-63-1-6-6-10-12-10z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Heart counterform in the nib's throat. -->
+  <path
+    d="M256 322c-4 0-7-1-10-4l-20-20c-24-24-34-42-34-58 0-13 10-23 23-23 8 0 15 4 20 10l1 1 1-1c5-6 12-10 20-10 13 0 23 10 23 23 0 16-10 34-34 58l-20 20c-3 3-6 4-10 4z"
+    fill="#B3122A"
+  />
+</svg>
