@@ -11,13 +11,11 @@ import {
   type CompareItem,
 } from "@/store/CompareProvider";
 import { SEOHelper } from "@/components/SEOHelper";
-import { cn } from "@/lib/utils";
+import { cn, formatINR } from "@/lib/utils";
 
 /** Money helper — keeps the ₹ formatting consistent with the product cards. */
 const inr = (n?: number) =>
-  typeof n === "number" && Number.isFinite(n)
-    ? `₹${n.toLocaleString("en-IN")}`
-    : "—";
+  typeof n === "number" && Number.isFinite(n) ? formatINR(n) : "—";
 
 /** Small corner control so each column is dismissible in place. */
 function RemoveChip({ item }: { item: CompareItem }) {

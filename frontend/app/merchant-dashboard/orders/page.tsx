@@ -40,7 +40,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { cn, formatINR } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
 const orderStatuses = [
@@ -224,7 +224,7 @@ export default function OrdersPage() {
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">
-                ₹{stats.totalRevenue.toLocaleString()}
+                {formatINR(stats.totalRevenue)}
               </div>
               <p className="text-xs text-brand flex items-center gap-1">
                 <TrendingUp className="h-3 w-3" />
@@ -424,7 +424,7 @@ export default function OrdersPage() {
                           {
                             icon: IndianRupee,
                             label: "Total",
-                            value: `₹${order.totalAmount.toLocaleString()}`,
+                            value: formatINR(order.totalAmount),
                             className:
                               "text-success dark:text-brand font-bold",
                           },
@@ -518,10 +518,7 @@ export default function OrdersPage() {
                                       x{item.quantity}
                                     </span>
                                     <span className="font-semibold text-foreground dark:text-primary-foreground">
-                                      ₹
-                                      {(
-                                        item.price * item.quantity
-                                      ).toLocaleString()}
+                                      {formatINR(item.price * item.quantity)}
                                     </span>
                                   </div>
                                 </div>

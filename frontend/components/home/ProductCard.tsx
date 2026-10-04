@@ -5,6 +5,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import Heart from "@/components/Heart";
 import CompareToggle from "@/components/CompareToggle";
+import { formatINR } from "@/lib/utils";
 
 type Product = {
   id: string;
@@ -138,11 +139,11 @@ export const ProductCard = ({
 
         <div className="flex items-center gap-3 pt-1">
           <span className="text-sm font-medium tabular-nums text-foreground">
-            ₹{product.price.toLocaleString()}
+            {formatINR(product.price)}
           </span>
           {product.originalPrice && product.originalPrice > product.price && (
             <span className="text-xs tabular-nums text-muted-foreground/70 line-through">
-              ₹{product.originalPrice.toLocaleString()}
+              {formatINR(product.originalPrice)}
             </span>
           )}
         </div>

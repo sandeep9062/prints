@@ -9,6 +9,8 @@ import {
   deleteProduct,
   deleteProductImage,
   getProductsByUser,
+  getAllProductsAdmin,
+  updateProductStatus,
   seedProducts,
 } from "../controllers/productController.js";
 import { protect } from "../middlewares/authMiddleware.js";
@@ -24,9 +26,15 @@ router.post("/seed", seedProducts);
 // -------------------------
 // PROTECTED (Merchant/Admin)
 // -------------------------
+// Admin listing — includes `inactive` products so hidden ones stay editable.
+// Declared before `/:id` so the literal path isn't captured as an id.
+router.get("/admin/all", protect, getAllProductsAdmin);
 router.get("/user", protect, getProductsByUser); // Must be before /:id
 router.post("/", protect, upload.array("image", 12), createProduct);
 router.put("/:id", protect, upload.array("image", 12), updateProduct);
+// Single-field status write — no multipart/upload middleware needed, which also
+// keeps it off the `/:id` PUT above.
+router.patch("/:id/status", protect, updateProductStatus);
 router.delete("/:id", protect, deleteProduct);
 router.delete("/:id/images", protect, deleteProductImage);
 

@@ -5,7 +5,7 @@ import {
   Users,
   Package,
   ShoppingCart,
-  DollarSign,
+  IndianRupee,
   TrendingUp,
   TrendingDown,
   Activity,
@@ -28,6 +28,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/store/authSlice";
+import { formatINR } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -69,12 +70,6 @@ const getStatusColor = (status: string) => {
       return "bg-muted text-foreground";
   }
 };
-
-const formatCurrency = (amount: number) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount);
 
 const AdminDashboard = () => {
   const currentUser = useSelector(selectUser);
@@ -123,10 +118,10 @@ const AdminDashboard = () => {
     return [
       {
         title: "Total Revenue",
-        value: formatCurrency(totalRevenue),
+        value: formatINR(totalRevenue),
         change: `${totalOrders > 0 ? "+" : ""}${totalOrders} orders`,
         trend: totalOrders > 0 ? "up" : ("down" as const),
-        icon: DollarSign,
+        icon: IndianRupee,
       },
       {
         title: "Total Orders",
@@ -221,7 +216,7 @@ const AdminDashboard = () => {
           order.user?.email ??
           order.email ??
           "",
-        amount: formatCurrency(order.totalAmount ?? order.amount ?? 0),
+        amount: formatINR(order.totalAmount ?? order.amount ?? 0),
         status: order.orderStatus ?? order.status ?? "Pending",
         date: order.createdAt ? timeAgo(new Date(order.createdAt)) : "N/A",
       }));

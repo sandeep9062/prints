@@ -5,7 +5,7 @@ import {
   Pencil,
   Trash2,
   Package,
-  DollarSign,
+  IndianRupee,
   ShoppingCart,
   ArrowLeft,
   Eye,
@@ -52,6 +52,7 @@ import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { formatINR } from "@/lib/utils";
 
 export default function DashboardPage() {
   const { data, isLoading, isError } = useGetProductsByUserQuery();
@@ -203,12 +204,12 @@ export default function DashboardPage() {
                 Total Revenue
               </CardTitle>
               <div className="p-2 bg-card/15 rounded-xl group-hover:bg-card/25 group-hover:scale-110 transition-all duration-300">
-                <DollarSign className="h-5 w-5 text-primary-foreground" />
+                <IndianRupee className="h-5 w-5 text-primary-foreground" />
               </div>
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">
-                ₹{totalRevenue.toFixed(2)}
+                {formatINR(totalRevenue, { decimals: true })}
               </div>
               <div className="flex items-center gap-1 text-xs text-brand">
                 <TrendingUp className="h-3 w-3" />
@@ -317,10 +318,7 @@ export default function DashboardPage() {
                     border: "1px solid hsl(var(--border))",
                     boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
                   }}
-                  formatter={(v: any) => [
-                    `₹${Number(v).toLocaleString()}`,
-                    "Sales",
-                  ]}
+                  formatter={(v: any) => [formatINR(Number(v)), "Sales"]}
                 />
                 <Bar
                   dataKey="sales"
@@ -405,10 +403,7 @@ export default function DashboardPage() {
                     border: "1px solid hsl(var(--border))",
                     boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
                   }}
-                  formatter={(v: any) => [
-                    `₹${Number(v).toLocaleString()}`,
-                    "Revenue",
-                  ]}
+                  formatter={(v: any) => [formatINR(Number(v)), "Revenue"]}
                 />
                 <Area
                   type="monotone"
@@ -489,8 +484,8 @@ export default function DashboardPage() {
                           #{order._id?.slice(-8).toUpperCase()}
                         </p>
                         <p className="text-xs text-muted-foreground dark:text-muted-foreground">
-                          {order.user?.name || "Customer"} · ₹
-                          {(order.totalAmount || 0).toLocaleString()}
+                          {order.user?.name || "Customer"} ·{" "}
+                          {formatINR(order.totalAmount)}
                         </p>
                       </div>
                     </div>
@@ -677,7 +672,7 @@ export default function DashboardPage() {
                     </p>
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-2xl font-bold bg-gradient-to-r from-brand to-brand-hover dark:from-brand dark:to-brand-hover bg-clip-text text-transparent">
-                        ₹{p.price.toFixed(2)}
+                        {formatINR(p.price, { decimals: true })}
                       </span>
                       <div className="flex items-center gap-1 text-sm text-muted-foreground dark:text-muted-foreground">
                         <ShoppingCart className="h-3.5 w-3.5" />

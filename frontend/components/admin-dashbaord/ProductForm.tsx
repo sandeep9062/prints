@@ -25,7 +25,41 @@ interface ProductFormData {
   category: string;
   stock: string;
   featured: boolean;
+  /** Product.js → dimensions.length (Number, default 0) */
+  dimensionLength: string;
+  /** Product.js → dimensions.width (Number, default 0) */
+  dimensionWidth: string;
+  /** Product.js → dimensions.height (Number, default 0) */
+  dimensionHeight: string;
+  /** Product.js → options.sizes ([String]) — comma separated */
+  sizes: string;
+  /** Product.js → options.paperTypes ([String]) — comma separated */
+  paperTypes: string;
+  /** Product.js → options.colors ([String]) — comma separated */
+  colors: string;
 }
+
+/** Mirrors the `stock` default on the Mongoose schema. */
+const DEFAULT_STOCK = 50;
+
+/**
+ * Blank input → `undefined` so the Mongoose default applies instead of
+ * overwriting it with a meaningless 0.
+ */
+const toNumberOrUndefined = (value: string): number | undefined => {
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+
+  const parsed = Number(trimmed);
+  return Number.isFinite(parsed) ? parsed : undefined;
+};
+
+/** "A, B , C" → ["A", "B", "C"] for the model's `[String]` option arrays. */
+const toStringArray = (value: string): string[] =>
+  value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
 
 interface ProductFormProps {
   mode: "add" | "edit";
@@ -51,6 +85,12 @@ export default function ProductForm({
     category: "",
     stock: "",
     featured: false,
+    dimensionLength: "",
+    dimensionWidth: "",
+    dimensionHeight: "",
+    sizes: "",
+    paperTypes: "",
+    colors: "",
   });
 
   const [newImages, setNewImages] = useState<File[]>([]);
@@ -68,6 +108,13 @@ export default function ProductForm({
         category: initialData.category || "",
         stock: initialData.stock?.toString() || "",
         featured: initialData.featured || false,
+        // `dimensions` is optional on the schema — guard before reading.
+        dimensionLength: initialData.dimensions?.length?.toString() || "",
+        dimensionWidth: initialData.dimensions?.width?.toString() || "",
+        dimensionHeight: initialData.dimensions?.height?.toString() || "",
+        sizes: initialData.options?.sizes?.join(", ") || "",
+        paperTypes: initialData.options?.paperTypes?.join(", ") || "",
+        colors: initialData.options?.colors?.join(", ") || "",
       });
       if (initialData.images && initialData.images.length > 0) {
         setImagePreviews(initialData.images);
@@ -111,18 +158,61 @@ export default function ProductForm({
   }, []);
 
   const handleSubmit = async () => {
+    // Mirror the schema's `required` flags so the user gets an inline error
+    // instead of a server-side 500 / silent bad data.
+    if (!formData.name.trim()) {
+      toast.error("Product name is required");
+      return;
+    }
+    if (!formData.category.trim()) {
+      toast.error("Category is required");
+      return;
+    }
+
+    const price = toNumberOrUndefined(formData.price);
+    if (price === undefined || price <= 0) {
+      toast.error("Price is required and must be greater than 0");
+      return;
+    }
+
+    const discountPrice = toNumberOrUndefined(formData.discountPrice);
+    if (discountPrice !== undefined && discountPrice >= price) {
+      toast.error("Discount price must be lower than the price");
+      return;
+    }
+
+    // createProduct rejects the upload outright when no file arrives.
+    if (mode === "add" && newImages.length === 0) {
+      toast.error("Add at least one product image");
+      return;
+    }
+
     try {
+      // Only include dimensions when at least one side was filled in —
+      // otherwise let the schema defaults apply.
+      const length = toNumberOrUndefined(formData.dimensionLength);
+      const width = toNumberOrUndefined(formData.dimensionWidth);
+      const height = toNumberOrUndefined(formData.dimensionHeight);
+      const hasDimensions =
+        length !== undefined || width !== undefined || height !== undefined;
+
       const productData = JSON.stringify({
-        name: formData.name,
+        name: formData.name.trim(),
         description: formData.description,
         badge: formData.badge,
-        price: parseFloat(formData.price) || 0,
-        discountPrice: formData.discountPrice
-          ? parseFloat(formData.discountPrice)
-          : undefined,
-        category: formData.category,
-        stock: parseInt(formData.stock) || 0,
+        price,
+        discountPrice,
+        category: formData.category.trim(),
+        stock: toNumberOrUndefined(formData.stock) ?? DEFAULT_STOCK,
         featured: formData.featured,
+        ...(hasDimensions
+          ? { dimensions: { length, width, height } }
+          : {}),
+        options: {
+          sizes: toStringArray(formData.sizes),
+          paperTypes: toStringArray(formData.paperTypes),
+          colors: toStringArray(formData.colors),
+        },
         // For edit mode, keep existing images that weren't removed
         ...(mode === "edit"
           ? { images: imagePreviews.filter((img) => !img.startsWith("blob:")) }
@@ -194,7 +284,12 @@ export default function ProductForm({
           </Button>
           <Button
             onClick={handleSubmit}
-            disabled={isSubmitting || !formData.name || !formData.price}
+            disabled={
+              isSubmitting ||
+              !formData.name.trim() ||
+              !formData.category.trim() ||
+              !toNumberOrUndefined(formData.price)
+            }
           >
             {isSubmitting ? (
               <>
@@ -335,7 +430,7 @@ export default function ProductForm({
                 <Label htmlFor="price">Price *</Label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                    $
+                    ₹
                   </span>
                   <Input
                     id="price"
@@ -354,7 +449,7 @@ export default function ProductForm({
                 <Label htmlFor="discountPrice">Discount Price</Label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                    $
+                    ₹
                   </span>
                   <Input
                     id="discountPrice"
@@ -380,15 +475,18 @@ export default function ProductForm({
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="stock">Stock Quantity *</Label>
+                <Label htmlFor="stock">Stock Quantity</Label>
                 <Input
                   id="stock"
                   type="number"
                   min="0"
                   value={formData.stock}
                   onChange={(e) => handleFormChange("stock", e.target.value)}
-                  placeholder="0"
+                  placeholder={`${DEFAULT_STOCK}`}
                 />
+                <p className="text-xs text-muted-foreground">
+                  Defaults to {DEFAULT_STOCK} when left blank
+                </p>
               </div>
 
               <div className="flex items-center justify-between">
@@ -404,6 +502,107 @@ export default function ProductForm({
                     handleFormChange("featured", checked)
                   }
                 />
+              </div>
+            </CardContent>
+          </Card>
+        {/* Dimensions */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Dimensions (cm)</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-3 gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="dimensionLength">Length</Label>
+                  <Input
+                    id="dimensionLength"
+                    type="number"
+                    step="any"
+                    min="0"
+                    value={formData.dimensionLength}
+                    onChange={(e) =>
+                      handleFormChange("dimensionLength", e.target.value)
+                    }
+                    placeholder="0"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="dimensionWidth">Width</Label>
+                  <Input
+                    id="dimensionWidth"
+                    type="number"
+                    step="any"
+                    min="0"
+                    value={formData.dimensionWidth}
+                    onChange={(e) =>
+                      handleFormChange("dimensionWidth", e.target.value)
+                    }
+                    placeholder="0"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="dimensionHeight">Height</Label>
+                  <Input
+                    id="dimensionHeight"
+                    type="number"
+                    step="any"
+                    min="0"
+                    value={formData.dimensionHeight}
+                    onChange={(e) =>
+                      handleFormChange("dimensionHeight", e.target.value)
+                    }
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Options */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Options</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="sizes">Sizes</Label>
+                <Input
+                  id="sizes"
+                  value={formData.sizes}
+                  onChange={(e) => handleFormChange("sizes", e.target.value)}
+                  placeholder="e.g. 5x7, 6x9"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Comma separated
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="paperTypes">Paper Types</Label>
+                <Input
+                  id="paperTypes"
+                  value={formData.paperTypes}
+                  onChange={(e) =>
+                    handleFormChange("paperTypes", e.target.value)
+                  }
+                  placeholder="e.g. Matte, Gloss"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Comma separated
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="colors">Colors</Label>
+                <Input
+                  id="colors"
+                  value={formData.colors}
+                  onChange={(e) => handleFormChange("colors", e.target.value)}
+                  placeholder="e.g. Gold, Silver"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Comma separated
+                </p>
               </div>
             </CardContent>
           </Card>

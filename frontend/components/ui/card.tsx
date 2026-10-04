@@ -2,8 +2,13 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+// `bg-card` + `text-card-foreground` — the paired fill/text tokens.
+// This previously used `bg-card-foreground`, which is a TEXT colour: it painted
+// every card with the foreground value (dark navy in light mode, near-white in
+// dark mode) while the inherited text stayed on the same value, making card
+// content unreadable across the admin/merchant dashboards.
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("rounded-lg border bg-card-foreground shadow-sm", className)} {...props} />
+  <div ref={ref} className={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)} {...props} />
 ));
 Card.displayName = "Card";
 

@@ -27,6 +27,15 @@ export const productsApi = createApi({
       providesTags: ["Products"],
     }),
 
+    // ✅ GET all products (admin — includes inactive)
+    // Separate from getProducts, which filters `inactive` out for the
+    // storefront. Without this the admin could hide a product and never
+    // see it again to switch it back on.
+    getAllProductsAdmin: builder.query<any, void>({
+      query: () => `/admin/all`,
+      providesTags: ["Products"],
+    }),
+
     // ✅ GET product by ID
     getProductById: builder.query<any, string>({
       query: (id) => `/${id}`,
@@ -65,6 +74,22 @@ export const productsApi = createApi({
       invalidatesTags: ["Products"],
     }),
 
+    // ✅ UPDATE product status only (admin Active/Inactive toggle)
+    // Uses the dedicated PATCH /:id/status route rather than updateProduct:
+    // the PUT handler rebuilds `images` from the body, so a partial payload
+    // there would wipe the product's images.
+    updateProductStatus: builder.mutation<
+      any,
+      { id: string; status: "active" | "inactive" }
+    >({
+      query: ({ id, status }) => ({
+        url: `/${id}/status`,
+        method: "PATCH",
+        body: { status },
+      }),
+      invalidatesTags: ["Products"],
+    }),
+
     // ✅ DELETE
     deleteProduct: builder.mutation<any, string>({
       query: (id) => ({
@@ -92,11 +117,13 @@ export const productsApi = createApi({
 // 📌 Auto-generated hooks
 export const {
   useGetProductsQuery,
+  useGetAllProductsAdminQuery,
   useGetProductByIdQuery,
   useGetProductBySlugQuery,
   useGetProductsByUserQuery,
   useAddProductMutation,
   useUpdateProductMutation,
+  useUpdateProductStatusMutation,
   useDeleteProductMutation,
   useDeleteProductImageMutation,
 } = productsApi;
@@ -119,13 +146,19 @@ export interface Product {
   category: string;
   stock: number;
   images: string[];
-  dimensions: { length: number; width: number; height: number };
+  // Optional on purpose: the Mongoose schema does not require `dimensions`,
+  // so older/slim documents come back from the API without it.
+  dimensions?: {
+    length?: number | null;
+    width?: number | null;
+    height?: number | null;
+  };
   options?: {
     sizes?: string[];
     paperTypes?: string[];
     colors?: string[];
   };
-  minQuantity: number;
+  minQuantity?: number;
   featured?: boolean;
   createdAt: string;
   updatedAt: string;

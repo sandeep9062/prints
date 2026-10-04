@@ -31,7 +31,7 @@ import {
   FileImage,
   Lightbulb,
   Keyboard,
-  DollarSign,
+  IndianRupee,
   PartyPopper,
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
@@ -47,6 +47,7 @@ import {
 import { SEOHelper } from "@/components/SEOHelper";
 import { getBreadcrumbSchema } from "@/lib/seo";
 import { scrollToTop } from "@/lib/smooth-scroll";
+import { formatINR } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { type Product, type Finish } from "@/components/DesignCanvas";
 
@@ -419,24 +420,24 @@ function PricingCalculator({
       className="p-4 rounded-xl bg-gradient-to-br from-primary/5 to-primary /[0.02] border border-primary/10 space-y-3"
     >
       <div className="flex items-center gap-2">
-        <DollarSign className="h-4 w-4 text-primary" />
+        <IndianRupee className="h-4 w-4 text-primary" />
         <span className="text-sm font-semibold">Price Breakdown</span>
       </div>
       <div className="space-y-1.5 text-sm">
         <div className="flex justify-between text-muted-foreground">
           <span>Base price</span>
-          <span>₹{pricingConfig.basePrice}</span>
+          <span>{formatINR(pricingConfig.basePrice)}</span>
         </div>
         <div className="flex justify-between text-muted-foreground">
           <span>
-            Per unit ({canvasQty} × ₹{effectivePrice})
+            Per unit ({canvasQty} × {formatINR(effectivePrice)})
           </span>
-          <span>₹{effectivePrice * canvasQty}</span>
+          <span>{formatINR(effectivePrice * canvasQty)}</span>
         </div>
         {finishPremium > 0 && (
           <div className="flex justify-between text-muted-foreground text-xs">
             <span>Finish premium ({canvasFinish})</span>
-            <span>+₹{finishPremium}/unit</span>
+            <span>+{formatINR(finishPremium)}/unit</span>
           </div>
         )}
         {productPremium !== 0 && (
@@ -444,8 +445,8 @@ function PricingCalculator({
             <span>Product adjustment ({canvasProduct})</span>
             <span>
               {productPremium > 0
-                ? `+₹${productPremium}`
-                : `₹${productPremium}`}
+                ? `+${formatINR(productPremium)}`
+                : `-${formatINR(Math.abs(productPremium))}`}
               /unit
             </span>
           </div>
@@ -456,7 +457,7 @@ function PricingCalculator({
             Total
           </span>
           <span className="text-primary text-lg">
-            ₹{total.toLocaleString()}
+            {formatINR(total)}
           </span>
         </div>
       </div>

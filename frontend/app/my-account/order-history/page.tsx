@@ -10,6 +10,7 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { useGetMyOrdersQuery } from "@/services/userApi";
+import { formatINR } from "@/lib/utils";
 
 const statusColors: Record<string, { bg: string; text: string }> = {
   pending: { bg: "bg-gold/15", text: "text-gold-text" },
@@ -123,7 +124,7 @@ export default function OrderHistoryPage() {
                         Items ({order.items?.length || 0})
                       </span>
                       <span className="font-medium text-foreground tabular-nums">
-                        ₹{order.totalAmount?.toLocaleString()}
+                        {formatINR(order.totalAmount)}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
@@ -135,7 +136,7 @@ export default function OrderHistoryPage() {
                         Total
                       </span>
                       <span className="font-semibold text-foreground tabular-nums">
-                        ₹{order.totalAmount?.toLocaleString()}
+                        {formatINR(order.totalAmount)}
                       </span>
                     </div>
                   </div>

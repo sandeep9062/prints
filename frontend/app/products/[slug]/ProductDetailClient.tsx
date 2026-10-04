@@ -24,7 +24,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { cn } from "@/lib/utils";
+import { cn, formatINR } from "@/lib/utils";
 import { SEOHelper } from "@/components/SEOHelper";
 import { getBreadcrumbSchema, getProductSchema } from "@/lib/seo";
 import type { Product } from "@/services/productsApi";
@@ -75,6 +75,24 @@ export default function ProductDetailClient({
 
   /* ------------ PRICE CALCULATION ------------ */
   const basePrice = product?.price || 0;
+
+  const minQuantity = product?.minQuantity || 1;
+
+  /* ------------ DIMENSIONS ------------ */
+  // `dimensions` is optional in the API payload — older documents don't have
+  // it. Build the label from whatever numbers actually came back instead of
+  // dereferencing `product.dimensions.length` directly.
+  const dimensionsLabel = (() => {
+    const { length, width, height } = product?.dimensions ?? {};
+
+    // Tolerate numeric strings too — the merchant edit form posts raw input
+    // values, which are strings until Mongoose casts them on save.
+    const sides = [length, width, height]
+      .map((side) => (side === null || side === undefined ? NaN : Number(side)))
+      .filter((side) => Number.isFinite(side));
+
+    return sides.length > 0 ? `${sides.join(" × ")} cm` : "Not specified";
+  })();
 
   const calculatedPrice = useMemo(() => {
     return basePrice * (quantity / (product?.minQuantity || 1));
@@ -220,12 +238,12 @@ export default function ProductDetailClient({
               {/* Pricing */}
               <div className="flex items-end gap-4">
                 <span className="text-4xl font-semibold tabular-nums text-primary">
-                  ₹{Math.round(calculatedPrice).toLocaleString()}
+                  {formatINR(Math.round(calculatedPrice))}
                 </span>
 
                 {calculatedOriginal && (
                   <span className="line-through text-muted-foreground text-lg mt-1 tabular-nums">
-                    ₹{Math.round(calculatedOriginal).toLocaleString()}
+                    {formatINR(Math.round(calculatedOriginal))}
                   </span>
                 )}
 
@@ -275,7 +293,7 @@ export default function ProductDetailClient({
                     <button
                       onClick={() =>
                         setQuantity((q) =>
-                          Math.max(product.minQuantity, q - 25),
+                          Math.max(minQuantity, q - 25),
                         )
                       }
                       className="px-4 py-3 hover:bg-muted transition"
@@ -288,7 +306,7 @@ export default function ProductDetailClient({
                       value={quantity}
                       onChange={(e) =>
                         setQuantity(
-                          Math.max(product.minQuantity, Number(e.target.value)),
+                          Math.max(minQuantity, Number(e.target.value)),
                         )
                       }
                       className="w-24 text-center bg-transparent text-lg font-medium"
@@ -346,16 +364,16 @@ export default function ProductDetailClient({
 
             <div className="grid md:grid-cols-3 gap-6">
               <DetailCard label="Category" value={product.category} />
-              <DetailCard label="Price" value={`₹${product.price}`} />
+              <DetailCard label="Price" value={formatINR(product.price)} />
               {product.discountPrice && (
                 <DetailCard
                   label="Discount Price"
-                  value={`₹${product.discountPrice}`}
+                  value={formatINR(product.discountPrice)}
                 />
               )}
               <DetailCard
                 label="Dimensions"
-                value={`${product.dimensions.length} × ${product.dimensions.width} × ${product.dimensions.height} cm`}
+                value={dimensionsLabel}
               />
               <DetailCard label="Stock" value={`${product.stock} units`} />
               <DetailCard label="Slug" value={product.slug} />

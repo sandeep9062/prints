@@ -29,7 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetAllCustomersQuery } from "@/services/userApi";
-import { cn } from "@/lib/utils";
+import { cn, formatINR } from "@/lib/utils";
 import { motion } from "framer-motion";
 
 export default function CustomersPage() {
@@ -118,7 +118,7 @@ export default function CustomersPage() {
             </CardHeader>
             <CardContent className="relative">
               <div className="text-2xl font-bold mb-1">
-                ₹{customerStats.totalRevenue.toLocaleString()}
+                {formatINR(customerStats.totalRevenue)}
               </div>
               <p className="text-[10px] text-brand">
                 Customer lifetime value
@@ -160,7 +160,7 @@ export default function CustomersPage() {
             </CardHeader>
             <CardContent className="relative">
               <div className="text-2xl font-bold mb-1">
-                ₹{customerStats.averageOrderValue.toLocaleString()}
+                {formatINR(customerStats.averageOrderValue)}
               </div>
               <p className="text-[10px] text-gold-text">Per customer</p>
             </CardContent>
@@ -328,10 +328,7 @@ export default function CustomersPage() {
                     <div className="text-center p-2 bg-gradient-to-b from-brand-soft to-transparent dark:from-brand/10 rounded-lg">
                       <IndianRupee className="h-4 w-4 text-success mx-auto mb-1" />
                       <p className="text-lg font-bold text-success dark:text-brand">
-                        ₹
-                        {(
-                          customer.orderStats?.totalSpent || 0
-                        ).toLocaleString()}
+                        {formatINR(customer.orderStats?.totalSpent)}
                       </p>
                       <p className="text-[10px] text-muted-foreground dark:text-muted-foreground">
                         Spent

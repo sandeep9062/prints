@@ -6,7 +6,7 @@ import {
   TrendingUp,
   TrendingDown,
   Download,
-  DollarSign,
+  IndianRupee,
   ShoppingCart,
   Users,
   Package,
@@ -52,15 +52,11 @@ import { toast } from "sonner";
 import { useGetOrdersByUserQuery } from "@/services/ordersApi";
 import { useGetProductsQuery } from "@/services/productsApi";
 import { useGetAllCustomersQuery } from "@/services/userApi";
+import { formatINR } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-const formatCurrency = (amount: number): string =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount);
 
 const COLORS = [
   "hsl(var(--chart-1))",
@@ -494,10 +490,10 @@ const AdminAnalytics = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatsCard
           title="Total Revenue"
-          value={formatCurrency(stats.totalRevenue)}
+          value={formatINR(stats.totalRevenue)}
           trend={stats.revenueGrowth >= 0 ? "up" : "down"}
           trendLabel={revGrowthLabel}
-          icon={DollarSign}
+          icon={IndianRupee}
           color="bg-success/10 text-success"
         />
         <StatsCard
@@ -515,7 +511,7 @@ const AdminAnalytics = () => {
         />
         <StatsCard
           title="Avg. Order Value"
-          value={formatCurrency(stats.avgOrderValue)}
+          value={formatINR(stats.avgOrderValue)}
           icon={BarChart3}
           color="bg-gold/15 text-gold-text"
         />
@@ -554,7 +550,7 @@ const AdminAnalytics = () => {
                       <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
                       <Tooltip
                         formatter={(value: any) => [
-                          formatCurrency(value as number),
+                          formatINR(value as number),
                           "Revenue",
                         ]}
                       />
@@ -748,7 +744,7 @@ const AdminAnalytics = () => {
                       <Tooltip
                         formatter={(value: any, name: any) => [
                           name === "sales"
-                            ? formatCurrency(value as number)
+                            ? formatINR(value as number)
                             : value,
                           name === "sales" ? "Revenue" : "Orders",
                         ]}
@@ -896,7 +892,7 @@ const AdminAnalytics = () => {
                                 {p.qty}
                               </TableCell>
                               <TableCell className="text-right font-semibold">
-                                {formatCurrency(p.revenue)}
+                                {formatINR(p.revenue)}
                               </TableCell>
                             </TableRow>
                           ))}
@@ -911,7 +907,8 @@ const AdminAnalytics = () => {
         </TabsContent>
       </Tabs>
 
-      <Card className="bg-gradient-to-r from-brand-soft to-white border-dashed">
+      {/* `to-card` instead of `to-white` so the gradient follows the theme tokens. */}
+      <Card className="bg-gradient-to-r from-brand-soft to-card border-dashed">
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>

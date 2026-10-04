@@ -37,7 +37,7 @@ import {
 } from "@/services/productsApi";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { cn, formatINR } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { categories as allCategories } from "@/data/products";
 
@@ -175,7 +175,7 @@ function ProductsContent() {
             </CardHeader>
             <CardContent className="relative">
               <div className="text-3xl font-bold mb-1">
-                ₹{totalValue.toLocaleString()}
+                {formatINR(totalValue)}
               </div>
               <p className="text-xs text-foreground">Total stock value</p>
             </CardContent>
@@ -400,15 +400,12 @@ function ProductsContent() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-lg bg-gradient-to-r from-brand to-brand-hover dark:from-brand dark:to-brand-hover bg-clip-text text-transparent">
-                        ₹
-                        {(
-                          product.discountPrice || product.price
-                        ).toLocaleString()}
+                        {formatINR(product.discountPrice || product.price)}
                       </span>
                       {product.discountPrice &&
                         product.discountPrice < product.price && (
                           <span className="text-sm text-muted-foreground line-through">
-                            ₹{product.price.toLocaleString()}
+                            {formatINR(product.price)}
                           </span>
                         )}
                     </div>

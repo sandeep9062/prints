@@ -135,7 +135,12 @@ export const deleteProductImage = async (req, res) => {
 // =====================================
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find().populate("category");
+    // Hide products the admin has switched off. `$ne: "inactive"` (rather than
+    // `status: "active"`) also matches documents created before the field
+    // existed, so no legacy product disappears on deploy.
+    const products = await Product.find({ status: { $ne: "inactive" } }).populate(
+      "category",
+    );
 
     res.status(200).json({
       success: true,
@@ -184,6 +189,23 @@ export const getProductBySlug = async (req, res) => {
     res.status(200).json({ success: true, product });
   } catch (error) {
     console.error("Get Product By Slug Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getAllProductsAdmin = async (req, res) => {
+  try {
+    // Admin listing: includes `inactive` products so a hidden product can still
+    // be found and switched back on. The public getProducts omits them.
+    const products = await Product.find().populate("category");
+
+    res.status(200).json({
+      success: true,
+      count: products.length,
+      products,
+    });
+  } catch (error) {
+    console.error("Get All Products (Admin) Error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -275,6 +297,45 @@ export const updateProduct = async (req, res) => {
     });
   } catch (error) {
     console.error("Update Product Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// =====================================
+// UPDATE PRODUCT STATUS (admin publish toggle)
+// =====================================
+// Deliberately NOT folded into `updateProduct`: that handler rebuilds `images`
+// from the request body, so a partial `{ status }` payload would wipe every
+// image on the product. This writes the one field and nothing else.
+export const updateProductStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    if (status !== "active" && status !== "inactive") {
+      return res.status(400).json({
+        success: false,
+        message: 'Status must be either "active" or "inactive"',
+      });
+    }
+
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true, runValidators: true },
+    );
+
+    if (!product)
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+
+    res.status(200).json({
+      success: true,
+      message: "Product status updated successfully",
+      product,
+    });
+  } catch (error) {
+    console.error("Update Product Status Error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

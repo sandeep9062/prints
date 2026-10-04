@@ -69,7 +69,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatINR } from "@/lib/utils";
 import {
   useGetOrdersByUserQuery,
   useUpdateOrderStatusMutation,
@@ -131,19 +131,22 @@ const statusConfig: Record<
     color: "bg-brand-soft text-foreground border-brand/40",
     icon: <RefreshCw className="h-3 w-3" />,
   },
+  // Status pills: a `bg-*/10` tint paired with the FULL-strength text colour.
+  // `text-*/40` (shipped/delivered/cancelled) dropped the label to ~1.6:1
+  // against its own tinted background, so those three badges were unreadable.
   shipped: {
     label: "Shipped",
-    color: "bg-brand-soft text-brand/40",
+    color: "bg-brand-soft text-brand border-brand/30",
     icon: <Truck className="h-3 w-3" />,
   },
   delivered: {
     label: "Delivered",
-    color: "bg-success/10 text-success/40",
+    color: "bg-success/10 text-success border-success/30",
     icon: <CheckCircle className="h-3 w-3" />,
   },
   cancelled: {
     label: "Cancelled",
-    color: "bg-destructive/10 text-destructive/40",
+    color: "bg-destructive/10 text-destructive border-destructive/30",
     icon: <X className="h-3 w-3" />,
   },
 };
@@ -152,15 +155,10 @@ const paymentConfig: Record<string, { label: string; color: string }> = {
   pending: { label: "Pending", color: "bg-gold/15 text-gold-text" },
   paid: { label: "Paid", color: "bg-success/10 text-success" },
   failed: { label: "Failed", color: "bg-destructive/10 text-destructive" },
-  refunded: { label: "Refunded", color: "bg-muted-foreground" },
+  // Was `bg-muted-foreground`, which painted the dark muted-foreground colour
+  // behind default (dark) text — a dark-on-dark badge. Kept as a tint + text pair.
+  refunded: { label: "Refunded", color: "bg-muted text-muted-foreground border-border" },
 };
-
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount);
-}
 
 function getInitials(name?: string): string {
   if (!name) return "U";
@@ -306,11 +304,11 @@ function OrderDetailModal({
                       {item.product?.name || "Custom Product"}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Qty: {item.quantity} × {formatCurrency(item.price)}
+                      Qty: {item.quantity} × {formatINR(item.price)}
                     </p>
                   </div>
                   <p className="font-semibold text-sm">
-                    {formatCurrency(item.quantity * item.price)}
+                    {formatINR(item.quantity * item.price)}
                   </p>
                 </div>
               ))}
@@ -337,7 +335,7 @@ function OrderDetailModal({
                 Total
               </h4>
               <p className="text-xl font-bold">
-                {formatCurrency(order.totalAmount)}
+                {formatINR(order.totalAmount)}
               </p>
             </div>
           </div>
@@ -626,7 +624,7 @@ const AdminOrders = () => {
         />
         <StatsCard
           title="Revenue"
-          value={formatCurrency(stats.revenue)}
+          value={formatINR(stats.revenue)}
           icon={<ShoppingCart className="h-6 w-6 text-brand" />}
           color="bg-brand-soft"
         />
@@ -742,7 +740,7 @@ const AdminOrders = () => {
                           {(order.items?.length || 0) !== 1 ? "s" : ""}
                         </TableCell>
                         <TableCell className="font-semibold">
-                          {formatCurrency(order.totalAmount)}
+                          {formatINR(order.totalAmount)}
                         </TableCell>
                         <TableCell>
                           {renderStatusBadge(order.orderStatus)}

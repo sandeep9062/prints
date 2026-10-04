@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { useCart } from "@/contexts/CartContext";
 import { SEOHelper } from "@/components/SEOHelper";
 import { getBreadcrumbSchema } from "@/lib/seo";
+import { formatINR } from "@/lib/utils";
 
 interface CartItem {
   id: string;
@@ -155,7 +156,7 @@ const Cart = () => {
 
                         <div className="flex items-center gap-4">
                           <span className="font-semibold tabular-nums">
-                            ₹{(item.price * item.quantity).toLocaleString()}
+                            {formatINR(item.price * item.quantity)}
                           </span>
 
                           <button
@@ -200,7 +201,7 @@ const Cart = () => {
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Subtotal</span>
                     <span className="tabular-nums">
-                      ₹{totalPrice.toLocaleString()}
+                      {formatINR(totalPrice)}
                     </span>
                   </div>
 
@@ -214,7 +215,7 @@ const Cart = () => {
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
                     <span className="tabular-nums">
-                      ₹{totalPrice.toLocaleString()}
+                      {formatINR(totalPrice)}
                     </span>
                   </div>
                 </div>

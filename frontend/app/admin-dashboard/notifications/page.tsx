@@ -416,7 +416,9 @@ const NotificationsPage = () => {
       </div>
 
       {/* ==================== SUMMARY CARD ==================== */}
-      <Card className="mb-6 bg-gradient-to-r from-brand-soft to-white border-brand/40">
+      {/* `to-card` instead of `to-white`: the literal white stop stayed glaring
+          white in dark mode. `from-brand-soft to-card` follows the tokens. */}
+      <Card className="mb-6 bg-gradient-to-r from-brand-soft to-card border-brand/40">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">

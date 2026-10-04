@@ -7,6 +7,7 @@ import { FaWhatsapp } from "react-icons/fa";
 
 import Heart from "@/components/Heart";
 import CompareToggle from "@/components/CompareToggle";
+import { formatINR } from "@/lib/utils";
 
 export interface PrintCardProps {
   card: {
@@ -95,11 +96,11 @@ function PrintCard({ card, showDescription = false }: PrintCardProps) {
         <div className="mt-auto flex items-end justify-between gap-3 pt-2">
           <div>
             <span className="text-lg font-bold text-foreground">
-              ₹{price.toLocaleString("en-IN")}
+              {formatINR(price)}
             </span>
             {discount > 0 && (
               <span className="ml-2 text-sm text-muted-foreground/80 line-through">
-                ₹{Number(card.originalPrice).toLocaleString("en-IN")}
+                {formatINR(Number(card.originalPrice))}
               </span>
             )}
           </div>

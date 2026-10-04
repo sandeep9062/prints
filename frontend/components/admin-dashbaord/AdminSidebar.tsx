@@ -13,6 +13,7 @@ import {
   CreditCard,
   Bell,
   Notebook,
+  Home,
 } from "lucide-react";
 
 // Admin-specific menu items with routes
@@ -90,32 +91,33 @@ export const AdminSidebar = ({ activeTab, collapsed }: SidebarProps) => {
   };
 
   return (
-    <nav className="flex flex-col space-y-1">
+    <nav className="flex flex-col gap-0.5 p-2">
       {adminMenuItems.map((item) => (
         <Link
           key={item.id}
           href={item.href}
-          className={`flex items-center justify-between px-4 py-4 transition-all border-l-2 ${
+          className={`flex items-center justify-between rounded-r-lg py-2.5 pl-4 pr-3 transition-colors border-l-2 ${
             isActive(item.href, item.id)
-              ? "bg-muted border-foreground shadow-sm"
-              : "border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50"
-          } ${collapsed ? "justify-center" : ""}`}
+              ? "bg-brand-soft border-brand text-brand"
+              : "border-transparent text-muted-foreground hover:text-foreground hover:bg-muted"
+          } ${collapsed ? "justify-center px-0" : ""}`}
           title={collapsed ? item.label : undefined}
+          aria-current={isActive(item.href, item.id) ? "page" : undefined}
         >
-          <div className={`flex items-center ${collapsed ? "" : "gap-4"}`}>
+          <div className={`flex items-center ${collapsed ? "" : "gap-3"}`}>
             <item.icon
-              className={`w-5 h-5 transition-colors ${
+              className={`w-5 h-5 shrink-0 transition-colors ${
                 isActive(item.href, item.id)
-                  ? "text-foreground"
-                  : "text-muted-foreground group-hover:text-muted-foreground"
+                  ? "text-brand"
+                  : "text-muted-foreground"
               }`}
             />
             {!collapsed && (
               <span
-                className={`text-[10px] font-medium transition-colors ${
+                className={`text-sm transition-colors ${
                   isActive(item.href, item.id)
-                    ? "text-foreground"
-                    : "text-muted-foreground"
+                    ? "text-brand font-semibold"
+                    : "text-muted-foreground font-medium"
                 }`}
               >
                 {item.label}
@@ -124,12 +126,33 @@ export const AdminSidebar = ({ activeTab, collapsed }: SidebarProps) => {
           </div>
 
           {!collapsed && item.count !== undefined && item.count > 0 && (
-            <span className="bg-muted text-foreground text-[9px] font-bold px-2 py-0.5 min-w-[1.5rem] text-center">
+            <span className="bg-brand text-primary-foreground text-[11px] font-bold px-2 py-0.5 min-w-[1.5rem] text-center rounded-full">
               {item.count}
             </span>
           )}
         </Link>
       ))}
+
+      {/* The storefront Navbar is hidden on /admin-dashboard (see HIDDEN_ROUTES
+          in components/layout/Navbar.tsx), so without this the admin has no way
+          back to the public site. Pinned below a divider and styled distinctly
+          from the admin nav so it never reads as another dashboard section. */}
+      <div className="mt-2 border-t border-border pt-2">
+        <Link
+          href="/"
+          className={`flex items-center rounded-r-lg py-2.5 pl-4 pr-3 transition-colors border-l-2 border-transparent text-muted-foreground hover:text-foreground hover:bg-muted ${
+            collapsed ? "justify-center px-0" : "gap-3"
+          }`}
+          title={collapsed ? "Back to Home" : undefined}
+        >
+          <Home className="w-5 h-5 shrink-0 text-muted-foreground transition-colors" />
+          {!collapsed && (
+            <span className="text-sm font-medium transition-colors">
+              Back to Home
+            </span>
+          )}
+        </Link>
+      </div>
     </nav>
   );
 };
