@@ -2,7 +2,12 @@ import { ProductsListServer } from "./_components/ProductsListServer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Shop Printing Products – Wedding Cards, Visiting Cards & More",
+  /*
+    `absolute` because this title already ends with the brand — the root layout's
+    `title.template` would otherwise append "| Ink of Memories" a second time.
+    Kept near 60 characters so Google does not truncate it mid-phrase.
+  */
+  title: { absolute: "Shop Printing Products – Wedding & Visiting Cards" },
   description:
     "Browse our premium collection of printing products. Wedding invitation cards, visiting cards, brochures, banners, packaging & custom designs. Shop with Ink of Memories.",
   keywords: [

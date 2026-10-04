@@ -1,10 +1,18 @@
 import { MetadataRoute } from "next";
 import { SITE_CONFIG } from "@/lib/seo";
+import { getRootSeoSlugs } from "@/lib/seoListings";
 
 const BASE_URL = SITE_CONFIG.url;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Static pages
+  // Static pages.
+  //
+  // NOTE: /cart, /auth and /my-account were listed here but are `noindex`
+  // (they are per-visitor, empty-by-default surfaces). Advertising them in the
+  // sitemap while asking Google not to index them is a contradictory signal,
+  // and /cart in particular is the classic "soft 404" that drags down a
+  // site's quality rating. Only genuinely indexable, content-bearing pages
+  // belong here.
   const staticPages = [
     {
       url: BASE_URL,
@@ -37,12 +45,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     },
     {
-      url: `${BASE_URL}/cart`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.3,
-    },
-    {
       url: `${BASE_URL}/business`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
@@ -53,6 +55,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.6,
+    },
+    {
+      url: `${BASE_URL}/other-services`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
     },
     {
       url: `${BASE_URL}/privacy-policy`,
@@ -67,18 +75,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.3,
     },
     {
-      url: `${BASE_URL}/auth`,
+      url: `${BASE_URL}/refund`,
       lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.2,
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
     },
     {
-      url: `${BASE_URL}/my-account`,
+      url: `${BASE_URL}/disclaimer`,
       lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.2,
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
     },
   ];
+
+  /*
+    Programmatic root SEO pages (/{category}-printing-in-{city} and
+    ...-printing-near-{locality}). These are 140 of the site's highest-intent
+    landing pages — city + service combinations — and they were entirely absent
+    from the sitemap, so Google had no cheap way to discover or re-crawl them.
+    The list is derived from the same taxonomy that feeds generateStaticParams
+    (lib/seoListings.ts), so it can never drift from the routes that exist.
+  */
+  const rootSeoPages: MetadataRoute.Sitemap = getRootSeoSlugs().map((slug) => ({
+    url: `${BASE_URL}/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
 
   // Try to fetch products for dynamic product sitemap entries
   let productPages: MetadataRoute.Sitemap = [];
@@ -126,5 +149,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.warn("Could not fetch blogs for sitemap");
   }
 
-  return [...staticPages, ...productPages, ...blogPages];
+  return [...staticPages, ...rootSeoPages, ...productPages, ...blogPages];
 }

@@ -1,41 +1,41 @@
-"use client";
+import type { Metadata } from "next";
 
-import React, { useState } from "react";
-import { AdminSidebar } from "@/components/admin-dashbaord/AdminSidebar";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { noIndexMetadata } from "@/lib/seo";
+import AdminDashboardShell from "./AdminDashboardShell";
 
-interface AdminLayoutProps {
-  children: React.ReactNode;
-}
+/*
+  Server layout for the admin area.
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
-  const [collapsed, setCollapsed] = useState(true);
+  The dashboard UI itself is a client component (it owns the sidebar collapse
+  state), so it lives in AdminDashboardShell.tsx and cannot export metadata from
+  here. Keeping metadata in a server layout means the `noindex` directive is
+  present in the SSR HTML — previously every /admin-dashboard/* page was fully
+  indexable, which risks exposing internal admin URLs in search results.
 
-  return (
-    <div className="min-h-screen bg-muted text-foreground flex">
-      <aside
-        className={`bg-card border-r border-border flex flex-col transition-all duration-300 shrink-0 sticky top-0 h-screen ${
-          collapsed ? "w-16" : "w-64"
-        }`}
-      >
-        <div className="flex items-center justify-end p-2 border-b border-border h-14 shrink-0">
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="p-1.5 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? (
-              <ChevronRight className="w-4 h-4" />
-            ) : (
-              <ChevronLeft className="w-4 h-4" />
-            )}
-          </button>
-        </div>
-        <div className="flex-1 overflow-y-auto">
-          <AdminSidebar collapsed={collapsed} />
-        </div>
-      </aside>
-      <main className="flex-1 min-w-0 p-6 lg:p-8 overflow-x-hidden">{children}</main>
-    </div>
-  );
+  `nofollow` is set as well: there is nothing here worth passing link equity to,
+  and admin screens link out to many internal routes.
+*/
+export const metadata: Metadata = {
+  ...noIndexMetadata(
+    "Admin Dashboard",
+    "/admin-dashboard",
+    "Internal administration area for Ink of Memories.",
+  ),
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+      "max-image-preview": "none",
+      "max-snippet": 0,
+      "max-video-preview": -1,
+    },
+  },
+};
+
+export default function AdminLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  return <AdminDashboardShell>{children}</AdminDashboardShell>;
 }

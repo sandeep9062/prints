@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Ink of Memories",
+  title: { absolute: "Privacy Policy | Ink of Memories" },
   description:
     "Read the privacy policy of Ink of Memories. We are committed to protecting your personal information and being transparent about how we handle your order and account data.",
   openGraph: {

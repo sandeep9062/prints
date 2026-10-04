@@ -2,6 +2,8 @@
 // SEO Constants & Configuration for Ink of Memories
 // ============================================================
 
+import type { Metadata } from "next";
+
 import { BRAND_NAME, FOUNDED_YEAR, LEGAL_NAME } from "./site-config";
 
 export const SITE_CONFIG = {
@@ -14,7 +16,22 @@ export const SITE_CONFIG = {
   shortDescription:
     "Premium printing services for weddings, business & personal needs. Custom invitation cards, visiting cards & packaging.",
   url: "https://inkofmemories.com",
-  defaultImage: "https://inkofmemories.com/inkofmemories.png",
+  /*
+    Served by app/opengraph-image.tsx (Satori, rendered at build time). It is a
+    real 1200x630 PNG, which the old `inkofmemories.png` was not — that file is a
+    6250x6250 square, so every declared `width=1200 height=630` was a lie and
+    social platforms cropped the preview into an unreadable sliver.
+
+    Kept as an absolute URL because this object is also consumed outside React
+    (e.g. schema.org `image`), where there is no `metadataBase` to resolve against.
+  */
+  defaultImage: "https://inkofmemories.com/opengraph-image",
+  /*
+    Points at inkofmemories.png rather than logo.png: the latter has been
+    renamed in the working tree, so a /logo.png reference would 404 and drop the
+    logo out of the search result / knowledge panel. Swap to /logo.png once the
+    asset rename is settled.
+  */
   logo: "https://inkofmemories.com/inkofmemories.png",
   favicon: "/favicon.ico",
   locale: "en_IN",
@@ -162,7 +179,15 @@ export function generatePageMeta({
 export function getOrganizationSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "PrintingBusiness",
+    /*
+      "PrintingBusiness" is NOT a valid schema.org type — it does not exist in
+      the vocabulary, so Google silently discards the whole node. "LocalBusiness"
+      is the correct supertype for a physical print shop and is what qualifies
+      the business for local results / the knowledge panel. "Store" is appended
+      because the catalogue is the point of the site; a multi-type array is valid
+      and lets Google match the most specific one.
+    */
+    "@type": ["LocalBusiness", "Store"],
     "@id": `${SITE_CONFIG.url}/#organization`,
     name: SITE_CONFIG.businessName,
     alternateName: SITE_CONFIG.name,
@@ -172,6 +197,23 @@ export function getOrganizationSchema() {
     description: SITE_CONFIG.description,
     foundingDate: String(FOUNDED_YEAR),
     foundingLocation: "Panchkula, Haryana",
+    telephone: SITE_CONFIG.contact.phone,
+    email: SITE_CONFIG.contact.email,
+    priceRange: "₹₹",
+    currenciesAccepted: "INR",
+    paymentAccepted: "Cash, UPI, Bank Transfer, Cards",
+    /*
+      Coordinates drive the "map pack" / local pack ranking. Keep them in sync
+      with the physical press address in SITE_CONFIG.address.
+    */
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 30.6938,
+      longitude: 76.8509,
+    },
+    hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      `${SITE_CONFIG.name}, ${SITE_CONFIG.address.street}, ${SITE_CONFIG.address.city}, ${SITE_CONFIG.address.state} ${SITE_CONFIG.address.pincode}`,
+    )}`,
     areaServed: [
       { "@type": "City", name: "Panchkula" },
       { "@type": "City", name: "Chandigarh" },
@@ -205,6 +247,7 @@ export function getOrganizationSchema() {
     sameAs: [
       SITE_CONFIG.social.facebook,
       SITE_CONFIG.social.instagram,
+      // Normalised to digits so wa.me receives a bare phone number.
       `https://wa.me/${SITE_CONFIG.social.whatsapp.replace(/[^0-9]/g, "")}`,
     ],
     openingHoursSpecification: [
@@ -360,5 +403,50 @@ export function getFAQSchema(
         text: q.answer,
       },
     })),
+  };
+}
+
+// ============================================================
+// noindex metadata helper
+// ============================================================
+
+/**
+ * Metadata for pages that must never appear in search results.
+ *
+ * Covers the per-visitor surfaces — cart, favourites, compare, profile, auth,
+ * dashboards — whose content is either empty by default or unique to a logged-in
+ * user. Indexing them produces thin/duplicate results and, for the cart, the
+ * classic "soft 404" that degrades a site's perceived quality.
+ *
+ * `follow` stays true so crawlers can still traverse the links out of these
+ * pages and discover the rest of the site.
+ *
+ * These routes are client components, so this is consumed from a server
+ * `layout.tsx` per route — see app/cart/layout.tsx for the usage pattern.
+ */
+export function noIndexMetadata(
+  title: string,
+  path: string,
+  description: string,
+): Metadata {
+  return {
+    title,
+    description,
+    robots: {
+      index: false,
+      follow: true,
+      googleBot: {
+        index: false,
+        follow: true,
+        "max-image-preview": "none",
+        "max-snippet": 0,
+        "max-video-preview": -1,
+      },
+    },
+    alternates: {
+      // Self-referencing: a noindexed URL still wants a canonical so it is not
+      // treated as a duplicate of an unrelated page.
+      canonical: path,
+    },
   };
 }

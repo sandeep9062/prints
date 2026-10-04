@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Disclaimer | Ink of Memories",
+  title: { absolute: "Disclaimer | Ink of Memories" },
   description:
     "Read the legal disclaimer for Ink of Memories. Understand the limitations of liability, accuracy of information, colour reproduction and third-party content on our printing platform.",
   alternates: {

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Ink of Memories",
+  title: { absolute: "Terms & Conditions | Ink of Memories" },
   description:
     "Read the Terms & Conditions for using Ink of Memories, the printing platform by Ink of Memories. Understand your rights and responsibilities when ordering wedding cards, visiting cards, brochures or custom stationery.",
   alternates: {

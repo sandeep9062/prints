@@ -1,8 +1,13 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Printing Services - Ink of Memories | Wedding Cards, Visiting Cards, Brochures & More",
+  /*
+    `absolute` opts out of the root layout's `title.template`, which would
+    otherwise append "| Ink of Memories" a second time (the string below already
+    contains the brand). Also trimmed to ~60 characters — anything longer is
+    truncated mid-word in Google results, wasting the most valuable real estate.
+  */
+  title: { absolute: "Printing Services — Wedding Cards, Brochures & More" },
   description:
     "Explore premium printing from Ink of Memories — wedding cards, invitation cards, visiting cards, shagun envelopes, letter pads, brochures, banners, packaging, stickers and rubber stamps. Customised in-house in Panchkula.",
   openGraph: {

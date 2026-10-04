@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Refund Policy | Ink of Memories",
+  title: { absolute: "Refund Policy | Ink of Memories" },
   description:
     "Learn about Ink of Memories' refund policy, reprint and cancellation terms, and conditions for custom printing orders. Understand reprint windows and refund timelines.",
   alternates: {

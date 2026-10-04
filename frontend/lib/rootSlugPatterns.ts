@@ -58,7 +58,6 @@ export function quickLinkLabel(slug: string): string | null {
   }
   return `${resolved.categoryName} in ${resolved.city}`;
 }
-
 const CITY_MARKER = "-printing-in-";
 const PRINTER_MARKER = "-printer-in-";
 const NEAR_MARKER = "-printing-near-";

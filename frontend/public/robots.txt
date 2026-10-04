@@ -1,9 +1,30 @@
 # ── Ink of Memories – Robots.txt ──────────────────────────
 # Live domain: https://inkofmemories.com
 
-# ── Allow all search engines to crawl everything ──
 User-agent: *
 Allow: /
 
+# ── Private / per-visitor areas ───────────────────────────
+# These carry no search value and mostly render empty shells without a session.
+# Disallowing them stops crawlers wasting budget on them. (They are *also*
+# noindex at the page level — this is a crawl-efficiency measure, not the
+# mechanism that keeps them out of the index.)
+Disallow: /admin-dashboard
+Disallow: /merchant-dashboard
+Disallow: /my-account
+Disallow: /cart
+Disallow: /auth
+Disallow: /favourites
+Disallow: /compare
+Disallow: /profile
+
+# Filter permutations of the catalogue are the same page in a different
+# arrangement — crawl the clean URL instead. (These are the exact params the
+# filter UI writes; see PARAMS in app/products/_components/ProductsListClient.)
+Disallow: /*?minPrice=
+Disallow: /*?maxPrice=
+Disallow: /*?color=
+
 # ── Sitemap ──
+# Includes the 140 programmatic city/service landing pages.
 Sitemap: https://inkofmemories.com/sitemap.xml

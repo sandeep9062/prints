@@ -4,7 +4,9 @@ import Link from "next/link";
 import { Home, ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "404 - Page Not Found | Ink of Memories",
+  // `absolute` — the title already contains the brand, and the root layout's
+  // `title.template` would otherwise append "| Ink of Memories" a second time.
+  title: { absolute: "404 - Page Not Found | Ink of Memories" },
   description:
     "The page you're looking for doesn't exist. Browse our premium printing products or contact us for help.",
   robots: { index: false, follow: true },

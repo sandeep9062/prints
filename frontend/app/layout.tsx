@@ -94,17 +94,23 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  alternates: {
-    canonical: "https://inkofmemories.com",
-    languages: {
-      "en-IN": "https://inkofmemories.com",
-      "x-default": "https://inkofmemories.com",
-    },
-  },
   /*
-    `verification` intentionally omitted: it was still holding the literal
-    placeholder "YOUR_GOOGLE_VERIFICATION_CODE", which Next.js would have
-    rendered into the page as a real (and invalid) verification meta tag.
+    No `alternates` here on purpose.
+
+    Next.js inherits `alternates` from the root layout into every route that
+    does not declare its own. A root-level `canonical` therefore stamped
+    "https://inkofmemories.com" onto all 160+ pages, telling Google to collapse
+    the whole site onto the homepage and de-index everything else. A root-level
+    `languages` map is just as harmful — it emits hreflang="en-IN" href="/"
+    on every page.
+
+    Only `metadataBase` belongs here (it resolves relative OG/canonical URLs).
+    Each page declares its own canonical via buildRootSeoMetadata or its own
+    layout/page metadata.
+
+    `verification` is also intentionally omitted: it was still holding the
+    literal placeholder "YOUR_GOOGLE_VERIFICATION_CODE", which Next.js would
+    have rendered into the page as a real (and invalid) verification meta tag.
     Add your own Search Console code here once you have one.
   */
   category: "printing",

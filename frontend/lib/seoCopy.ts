@@ -10,13 +10,57 @@ import type { Metadata } from "next";
 
 import { SITE_CONFIG } from "@/lib/seo";
 import { FOUNDED_YEAR } from "@/lib/site-config";
+import { SERVICE_LOCALITIES } from "@/lib/printCategories";
 import type { ResolvedSlug } from "@/lib/rootSlugPatterns";
 
 const TITLE_MAX = 60;
 
-function clampTitle(value: string): string {
-  if (value.length <= TITLE_MAX) return value;
-  return `${value.slice(0, TITLE_MAX - 1).trimEnd()}…`;
+/**
+ * Budget the page-specific part of the title so that
+ * "<part> | Ink of Memories" lands inside the ~60 character display window.
+ *
+ * Clamping the *whole* title instead truncated the brand name off the end
+ * ("...near Manimajra, Chandigarh | Ink of…"), which wastes the part of the
+ * title that actually carries recognition and search weight.
+ */
+const BRAND_SUFFIX = ` | ${SITE_CONFIG.siteName}`;
+const TITLE_BODY_MAX = TITLE_MAX - BRAND_SUFFIX.length;
+
+function clampTitleBody(value: string): string {
+  if (value.length <= TITLE_BODY_MAX) return value;
+  return `${value.slice(0, TITLE_BODY_MAX - 1).trimEnd()}…`;
+}
+
+/**
+ * True when more than one served locality shares this display name.
+ *
+ * Derived from the taxonomy at module scope rather than hard-coded, so adding a
+ * second "Model Town" or renaming a locality keeps titles unique automatically.
+ */
+const AMBIGUOUS_LOCALITY_NAMES: ReadonlySet<string> = (() => {
+  const counts = new Map<string, number>();
+  for (const locality of SERVICE_LOCALITIES) {
+    counts.set(locality.name, (counts.get(locality.name) ?? 0) + 1);
+  }
+  return new Set(
+    [...counts.entries()].filter(([, count]) => count > 1).map(([name]) => name),
+  );
+})();
+
+function isAmbiguousLocalityName(name: string | null): boolean {
+  return !!name && AMBIGUOUS_LOCALITY_NAMES.has(name);
+}
+
+/**
+ * Uppercase the first letter only.
+ *
+ * `PRINT_CATEGORIES` stores singular labels in lower case ("wedding card") because
+ * they are written mid-sentence in descriptions. Dropped straight into a <title>
+ * they produced "wedding card printing in Chandigarh", which reads like a slug
+ * rather than a headline.
+ */
+function sentenceCase(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
 // The root layout declares `title.template: "%s | Ink of Memories"`, so a plain
@@ -29,17 +73,46 @@ export function buildRootSeoMetadata(
   if (!resolved) return null;
 
   const isNear = resolved.spec.kind === "category-near-locality";
-  const place = isNear && resolved.locality ? resolved.locality : resolved.city;
 
-  const title = clampTitle(
+  /*
+    Disambiguate the locality label.
+
+    `SERVICE_LOCALITIES` deliberately contains `manimajra-chandigarh` AND
+    `manimajra-panchkula` — two genuinely different areas that happen to share a
+    name. Using the bare locality name produced two pages with an identical
+    title ("Wedding Cards Printing near Manimajra | Ink of Memories") and an
+    identical description, which Google treats as duplicate content and picks one
+    to drop.
+
+    Prefixing the owning city only when the locality name would otherwise be
+    ambiguous keeps the common case ("near Sector 17") reading naturally while
+    guaranteeing uniqueness where it matters.
+  */
+  const placeLabel =
+    isNear && isAmbiguousLocalityName(resolved.locality)
+      ? `${resolved.locality}, ${resolved.city}`
+      : isNear && resolved.locality
+        ? resolved.locality
+        : resolved.city;
+
+  /*
+    Title body, clamped to TITLE_BODY_MAX before the brand suffix is attached.
+
+    Wording is deliberately terse ("Books & Bindings near Manimajra") because the
+    full "X Printing near Y" form overflowed the budget for the longer category
+    labels. When it overflowed, clampTitleBody cut the trailing ", Panchkula" —
+    the very disambiguator that separates the two Manimajra pages — and they
+    collapsed back onto an identical title.
+  */
+  const title = `${clampTitleBody(
     isNear
-      ? `${resolved.categoryName} Printing near ${place} | ${SITE_CONFIG.siteName}`
-      : `${resolved.categorySingular} Printing in ${place} | ${SITE_CONFIG.siteName}`,
-  );
+      ? `${resolved.categoryName} near ${placeLabel}`
+      : `${sentenceCase(resolved.categorySingular)} printing in ${placeLabel}`,
+  )}${BRAND_SUFFIX}`;
 
   const description = isNear
-    ? `${resolved.categoryName} printing near ${place}. ${resolved.blurb} Printed in-house at our ${SITE_CONFIG.address.city} press since ${FOUNDED_YEAR}.`
-    : `${resolved.categorySingular} printing in ${place}. ${resolved.blurb} Custom finishing, proof before print and bulk orders welcome.`;
+    ? `${resolved.categoryName} printing near ${placeLabel}. ${resolved.blurb} Printed in-house at our ${SITE_CONFIG.address.city} press since ${FOUNDED_YEAR}.`
+    : `${resolved.categorySingular} printing in ${placeLabel}. ${resolved.blurb} Custom finishing, proof before print and bulk orders welcome.`;
 
   const url = slug ? `${SITE_CONFIG.url}/${slug}` : SITE_CONFIG.url;
 

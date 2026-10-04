@@ -1,7 +1,9 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Press Notes | Printing Guides, Paper & Design Inspiration",
+  // `absolute` so the root layout's `title.template` doesn't append the brand a
+  // second time; this title is already near the ~60 character display limit.
+  title: { absolute: "Press Notes — Printing Guides & Design Inspiration" },
   description:
     "Printing guides, paper notes and design inspiration from Ink of Memories — wedding cards, visiting cards, shagun envelopes, brochures & bespoke stationery. Read the Ink of Memories blog from Panchkula.",
   alternates: {
