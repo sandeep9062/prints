@@ -68,12 +68,16 @@ const GRAIN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
 const focusRing =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer";
 
-const footerLink = `inline-block rounded-sm py-1 text-sm text-footer-muted underline decoration-transparent decoration-1 underline-offset-4 transition-colors hover:text-footer-foreground hover:decoration-gold motion-reduce:transition-none ${focusRing}`;
+// -my-1 offsets the py-2 so each link reaches a comfortable tap height without
+// changing the visual rhythm of the stacked link lists.
+const footerLink = `inline-block -my-1 rounded-sm py-2 text-sm text-footer-muted underline decoration-transparent decoration-1 underline-offset-4 transition-colors hover:text-footer-foreground hover:decoration-gold motion-reduce:transition-none ${focusRing}`;
 
 // --- Small pieces ---
 
+/* Kept a step smaller than the desktop size: on phones this sits inside a
+   two-column grid track, where 20px headings wrap mid-phrase. */
 const ColumnHeading = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="mb-5 text-xl font-semibold text-footer-foreground">
+  <h2 className="mb-4 text-base font-semibold text-footer-foreground sm:mb-5 sm:text-xl">
     {children}
   </h2>
 );
@@ -190,24 +194,27 @@ export const Footer = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Call to action: a stationery card on the desk */}
-        <div className="relative my-12 rounded-sm bg-ivory px-8 py-10 text-foreground shadow-[0_28px_60px_-28px_rgba(0,0,0,.7)] md:px-12 md:py-12 lg:my-16">
+        <div className="relative my-10 rounded-sm bg-ivory px-6 py-8 text-foreground shadow-[0_28px_60px_-28px_rgba(0,0,0,.7)] sm:px-8 sm:py-10 md:px-12 md:py-12 lg:my-16">
           <span
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 rounded-sm opacity-[.2] mix-blend-multiply"
             style={{ backgroundImage: GRAIN }}
           />
+          {/* The double gold rule is inset closer on phones: the card's padding
+              scales down faster than a fixed inset would, so at 12px/16px the
+              frame sat almost against the copy. */}
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-3 border border-gold"
+            className="pointer-events-none absolute inset-2 border border-gold sm:inset-3"
           />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-4 border border-gold opacity-50"
+            className="pointer-events-none absolute inset-3 border border-gold opacity-50 sm:inset-4"
           />
 
           <div className="relative flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
             <div className="max-w-xl">
-              <h3 className="font-serif text-3xl font-medium leading-tight sm:text-4xl">
+              <h3 className="font-serif text-[1.75rem] font-medium leading-tight sm:text-3xl md:text-4xl">
                 Have an occasion to print for?
               </h3>
               <p className="mt-3 max-w-[48ch] text-base leading-relaxed text-foreground/75">
@@ -216,11 +223,11 @@ export const Footer = () => {
               </p>
             </div>
 
-            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row md:shrink-0">
               <Button
                 asChild
                 size="lg"
-                className="h-12 rounded-full bg-primary px-7 text-primary-foreground transition-colors hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 motion-reduce:transition-none"
+                className="h-12 w-full rounded-full bg-primary px-7 text-primary-foreground transition-colors hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 motion-reduce:transition-none sm:w-auto"
               >
                 <Link href="/products">Order now</Link>
               </Button>
@@ -228,7 +235,7 @@ export const Footer = () => {
                 asChild
                 size="lg"
                 variant="outline"
-                className="h-12 rounded-full border-foreground/40 bg-transparent px-7 text-foreground transition-colors hover:border-foreground hover:bg-foreground/5 hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 motion-reduce:transition-none"
+                className="h-12 w-full rounded-full border-foreground/40 bg-transparent px-7 text-foreground transition-colors hover:border-foreground hover:bg-foreground/5 hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 motion-reduce:transition-none sm:w-auto"
               >
                 <Link href="/contact">Talk to us</Link>
               </Button>
@@ -236,10 +243,14 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Link grid */}
-        <div className="grid grid-cols-1 gap-x-8 gap-y-12 pb-12 pt-4 sm:grid-cols-2 lg:grid-cols-12 lg:pb-16">
+        {/* Link grid
+            Mobile keeps two tracks (brand + contact span the full width) so the
+            footer doesn't become a single endless column. The old `sm:` 2-col
+            step also stranded "Contact us" alone in a half-empty row, since
+            nothing after it could fill the track. */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 pb-12 pt-4 lg:grid-cols-12 lg:gap-x-8 lg:gap-y-12 lg:pb-16">
           {/* Brand */}
-          <div className="flex flex-col items-start sm:col-span-2 lg:col-span-4">
+          <div className="col-span-2 flex flex-col items-start lg:col-span-4">
             {/* Text wordmark, same wording as the Navbar and /auth. The footer
                 sits on the midnight-navy --footer surface, so it uses the footer
                 colour roles (light ink + gold accent), NOT the page-level
@@ -247,7 +258,7 @@ export const Footer = () => {
             <Link
               href="/"
               aria-label={`${websiteName}, go to home page`}
-              className={`mb-5 inline-block rounded-md font-sans text-lg font-semibold tracking-wider text-footer-foreground transition-colors hover:text-gold motion-reduce:transition-none ${focusRing}`}
+              className={`-mt-2 mb-3 inline-block rounded-md py-2 font-sans text-lg font-semibold tracking-wider text-footer-foreground transition-colors hover:text-gold motion-reduce:transition-none ${focusRing}`}
             >
               INK <span className="text-gold">OF</span> MEMORIES
             </Link>
@@ -307,7 +318,7 @@ export const Footer = () => {
           </nav>
 
           {/* Contact */}
-          <div className="lg:col-span-3">
+          <div className="col-span-2 lg:col-span-3">
             <ColumnHeading>Contact us</ColumnHeading>
             <ul className="space-y-4">
               {mainOffice && (
@@ -325,7 +336,10 @@ export const Footer = () => {
               )}
               {email && (
                 <ContactRow icon={Mail} href={`mailto:${email}`}>
-                  <span className="break-all">{email}</span>
+                  {/* `anywhere` instead of `break-all`: it still stops long
+                      addresses forcing a horizontal scrollbar on phones, but
+                      leaves short addresses on one line. */}
+                  <span className="[overflow-wrap:anywhere]">{email}</span>
                 </ContactRow>
               )}
             </ul>
@@ -333,7 +347,7 @@ export const Footer = () => {
         </div>
 
         {/* Newsletter */}
-        <div className="border-t border-footer-foreground/15 py-10">
+        <div className="border-t border-footer-foreground/15 py-8 sm:py-10">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-xl">
               <h2 className="text-xl font-semibold text-footer-foreground">
@@ -362,7 +376,7 @@ export const Footer = () => {
                 onChange={(event) => setNewsletterEmail(event.target.value)}
                 disabled={isSubscribing}
                 placeholder="you@example.com"
-                className="h-12 w-full flex-1 rounded-full border border-footer-foreground/25 bg-transparent px-5 text-sm text-footer-foreground outline-none transition-colors placeholder:text-footer-muted/60 focus:border-gold disabled:opacity-60 sm:w-64"
+                className="h-12 w-full rounded-full border border-footer-foreground/25 bg-transparent px-5 text-sm text-footer-foreground outline-none transition-colors placeholder:text-footer-muted/60 focus:border-gold disabled:opacity-60 sm:w-64 sm:flex-1"
               />
               <Button
                 type="submit"
@@ -377,21 +391,24 @@ export const Footer = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-footer-foreground/15 py-6 sm:flex-row">
-          <p className="order-2 text-xs text-footer-muted sm:order-1">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-footer-foreground/15 py-5 sm:flex-row sm:py-6">
+          <p className="order-2 text-center text-xs text-footer-muted sm:order-1 sm:text-left">
             © {new Date().getFullYear()} {websiteName}. All rights reserved.
           </p>
 
-          <div className="order-1 flex items-center gap-6 sm:order-2">
+          {/* Wraps below ~360px instead of pushing the bar into a horizontal
+              scroll, and the tighter mobile gaps keep it on one line on most
+              phones. */}
+          <div className="order-1 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 sm:order-2 sm:gap-6">
             <Link
               href="/privacy-policy"
-              className={`rounded-sm text-xs text-footer-muted transition-colors hover:text-footer-foreground ${focusRing}`}
+              className={`-my-2 rounded-sm py-2 text-xs text-footer-muted transition-colors hover:text-footer-foreground ${focusRing}`}
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className={`rounded-sm text-xs text-footer-muted transition-colors hover:text-footer-foreground ${focusRing}`}
+              className={`-my-2 rounded-sm py-2 text-xs text-footer-muted transition-colors hover:text-footer-foreground ${focusRing}`}
             >
               Terms of Service
             </Link>

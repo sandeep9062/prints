@@ -13,6 +13,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Loader2,
+  Star,
 } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -50,6 +51,7 @@ import {
   useGetAllProductsAdminQuery,
   useDeleteProductMutation,
   useUpdateProductStatusMutation,
+  useUpdateProductFeaturedMutation,
   productsApi,
 } from "@/services/productsApi";
 import { formatINR } from "@/lib/utils";
@@ -67,6 +69,11 @@ import { formatINR } from "@/lib/utils";
     getProductStatus(product) === "active"
       ? "bg-success/10 text-success"
       : "bg-muted text-muted-foreground";
+
+// `featured` is a real persisted Boolean on the schema (`default: false`), but
+// documents written before the field existed come back with it undefined.
+// `Boolean(...)` normalises both, so the switch always shows a real on/off state.
+  const isProductFeatured = (product: any) => Boolean(product?.featured);
 
 const AdminProducts = () => {
   const router = useRouter();
@@ -92,6 +99,10 @@ const AdminProducts = () => {
   // Product ids currently being written, so only the row being saved shows a
   // spinner instead of disabling every toggle in the table.
   const [updatingStatusId, setUpdatingStatusId] = useState<string | null>(null);
+  // Same per-row tracking for the homepage "Featured" toggle, kept separate from
+  // the status id so flipping one toggle never greys out the other's switch.
+  const [updatingFeaturedId, setUpdatingFeaturedId] = useState<string | null>(null);
+  const [updateProductFeatured] = useUpdateProductFeaturedMutation();
 
   const allProducts = useMemo(() => {
     return productsData?.products || [];
@@ -196,6 +207,48 @@ const AdminProducts = () => {
       });
     } finally {
       setUpdatingStatusId(null);
+    }
+  };
+
+  // Toggle whether a product appears in the homepage "Featured collection"
+  // carousel (see components/home/FeaturedProducts.tsx, which filters on
+  // `featured`). Mirrors handleToggleStatus: optimistic cache patch for instant
+  // feedback, reverted via `.undo()` if the PATCH fails.
+  const handleToggleFeatured = async (product: any) => {
+    const nextFeatured = !isProductFeatured(product);
+
+    setUpdatingFeaturedId(product._id);
+
+    const patch = dispatch(
+      productsApi.util.updateQueryData(
+        "getAllProductsAdmin",
+        undefined,
+        (draft) => {
+          const match = draft?.products?.find((p: any) => p._id === product._id);
+          if (match) match.featured = nextFeatured;
+        },
+      ),
+    );
+
+    try {
+      await updateProductFeatured({
+        id: product._id,
+        featured: nextFeatured,
+      }).unwrap();
+
+      toast.success(nextFeatured ? "Added to Featured" : "Removed from Featured", {
+        description: nextFeatured
+          ? `"${product.name}" now shows in the homepage featured collection.`
+          : `"${product.name}" is no longer featured on the homepage.`,
+      });
+    } catch (error: any) {
+      patch.undo(); // put the switch back where it was
+      toast.error("Featured Update Failed", {
+        description:
+          error?.data?.message || "Failed to update featured flag. Please try again.",
+      });
+    } finally {
+      setUpdatingFeaturedId(null);
     }
   };
 
@@ -388,13 +441,14 @@ const AdminProducts = () => {
                 <TableHead>Price</TableHead>
                 <TableHead>Stock</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Featured</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedProducts.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8">
+                  <TableCell colSpan={7} className="text-center py-8">
                     <Package className="h-12 w-12 text-muted-foreground/70 mx-auto mb-2" />
                     <p className="text-muted-foreground">No products found</p>
                   </TableCell>
@@ -443,6 +497,25 @@ const AdminProducts = () => {
                         <Badge className={getProductStatusColor(product)}>
                           {getProductStatusLabel(product)}
                         </Badge>
+                      </div>
+                    </TableCell>
+                    {/* Homepage "Featured collection" toggle. Disabled while this
+                        row is saving so a double-click can't fire two PATCHes
+                        that land out of order. */}
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Switch
+                          checked={isProductFeatured(product)}
+                          disabled={updatingFeaturedId === product._id}
+                          onCheckedChange={() => handleToggleFeatured(product)}
+                          aria-label={`Toggle featured for ${product.name}`}
+                        />
+                        {isProductFeatured(product) && (
+                          <span className="inline-flex items-center gap-1 text-xs font-medium text-brand">
+                            <Star className="h-3.5 w-3.5 fill-current" />
+                            Featured
+                          </span>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell className="text-right">

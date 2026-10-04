@@ -341,6 +341,45 @@ export const updateProductStatus = async (req, res) => {
 };
 
 // =====================================
+// UPDATE PRODUCT FEATURED (admin homepage toggle)
+// =====================================
+// Same reasoning as `updateProductStatus` above: kept out of `updateProduct`
+// so a single-flag payload can't rebuild `images` and wipe the product's
+// photos. Writes `featured` and nothing else.
+export const updateProductFeatured = async (req, res) => {
+  try {
+    // Only a real boolean is accepted. Anything else (undefined, "false", 0)
+    // is a client bug and is rejected rather than silently coerced.
+    if (typeof req.body?.featured !== "boolean") {
+      return res.status(400).json({
+        success: false,
+        message: "featured must be a boolean",
+      });
+    }
+
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { featured: req.body.featured },
+      { new: true, runValidators: true },
+    );
+
+    if (!product)
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+
+    res.status(200).json({
+      success: true,
+      message: "Product featured flag updated successfully",
+      product,
+    });
+  } catch (error) {
+    console.error("Update Product Featured Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// =====================================
 // DELETE PRODUCT
 // =====================================
 export const deleteProduct = async (req, res) => {

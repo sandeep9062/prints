@@ -11,6 +11,7 @@ import {
   getProductsByUser,
   getAllProductsAdmin,
   updateProductStatus,
+  updateProductFeatured,
   seedProducts,
 } from "../controllers/productController.js";
 import { protect } from "../middlewares/authMiddleware.js";
@@ -35,6 +36,8 @@ router.put("/:id", protect, upload.array("image", 12), updateProduct);
 // Single-field status write — no multipart/upload middleware needed, which also
 // keeps it off the `/:id` PUT above.
 router.patch("/:id/status", protect, updateProductStatus);
+// Single-field `featured` write — same reasoning as the status route above.
+router.patch("/:id/featured", protect, updateProductFeatured);
 router.delete("/:id", protect, deleteProduct);
 router.delete("/:id/images", protect, deleteProductImage);
 

@@ -33,7 +33,7 @@ export default function OfferStrip() {
                 <span className="text-[11px] font-medium">
                   {offer}
                 </span>
-                <Link href="/offers" className="ml-3 group flex items-center">
+                <Link href="/offers" className="group -my-2 ml-3 flex items-center py-2">
                   <span className="text-[10px] underline underline-offset-4 decoration-footer-muted hover:decoration-gold transition-colors ">
                     Details
                   </span>

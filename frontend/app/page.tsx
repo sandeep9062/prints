@@ -15,6 +15,7 @@ import {
   getOrganizationSchema,
   getBreadcrumbSchema,
 } from "@/lib/seo";
+import QuickLinks from "@/components/QuickLinks";
 
 export default function Home() {
   const orgSchema = getOrganizationSchema();
@@ -42,6 +43,8 @@ export default function Home() {
         <TestimonialsSection />
         <Atelier />
         <CTASection />
+
+        <QuickLinks />
       </main>
     </div>
   );

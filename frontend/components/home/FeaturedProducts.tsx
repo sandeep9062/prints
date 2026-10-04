@@ -288,7 +288,7 @@ export const FeaturedProducts = () => {
           <div className="flex items-center justify-between gap-6 md:justify-end">
             <Link
               href="/products"
-              className="group inline-flex items-center gap-2 border-b border-foreground/40 pb-1 text-sm font-medium text-foreground transition-colors duration-300 hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-4 focus-visible:ring-offset-background motion-reduce:transition-none"
+              className="group -my-2 inline-flex items-center gap-2 border-b border-foreground/40 px-1 py-2 text-sm font-medium text-foreground transition-colors duration-300 hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-4 focus-visible:ring-offset-background motion-reduce:transition-none"
             >
               Browse all products
               <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />

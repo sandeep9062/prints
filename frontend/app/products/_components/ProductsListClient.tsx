@@ -104,30 +104,32 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
         jsonLd={breadcrumbSchema}
       />
       <main className="pb-24 pt-[calc(var(--navbar-height)+3rem)]">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Editorial header — mirrors CategoriesSection / FeaturedProducts */}
-          <div className="mb-10 flex flex-col justify-between gap-6 border-b border-border pb-6 md:flex-row md:items-end dark:border-border">
+          <div className="mb-8 flex flex-col justify-between gap-5 border-b border-border pb-6 sm:mb-10 sm:gap-6 md:flex-row md:items-end dark:border-border">
             <div className="max-w-xl">
               <span className="text-[10px] font-bold text-muted-foreground dark:text-muted-foreground">
                 Curated Suites
               </span>
-              <h1 className="mt-2 font-serif text-4xl leading-tight text-foreground md:text-5xl">
+              <h1 className="mt-2 font-serif text-3xl leading-tight text-foreground sm:text-4xl md:text-5xl">
                 The Complete{" "}
                 <em className="font-medium text-primary">
                   Collection
                 </em>
               </h1>
             </div>
-            <p className="mt-4 max-w-xs text-sm italic text-muted-foreground md:mt-0 dark:text-muted-foreground">
+            <p className="mt-3 max-w-xs text-sm italic text-muted-foreground sm:mt-4 md:mt-0 dark:text-muted-foreground">
               Every suite is pressed, foiled and finished in-house at Ink of Memories
               Printing Press.
             </p>
           </div>
 
           {/* Toolbar */}
-          <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            {/* Category filters — horizontally scrollable on small screens */}
-            <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 lg:flex-wrap lg:overflow-visible lg:pb-0">
+          <div className="mb-6 flex flex-col gap-5 sm:mb-8 sm:gap-6 lg:flex-row lg:items-center lg:justify-between">
+            {/* Category filters — a snap scroller on small screens. The scrollbar
+                is hidden (same treatment as the home page FeaturedProducts
+                carousel) so the rail doesn't double up with the page scroll. */}
+            <div className="-mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:flex-wrap lg:overflow-visible lg:pb-0">
               {categories.map((category) => {
                 const active =
                   category === "All"
@@ -141,7 +143,11 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                     onClick={() => handleCategoryChange(category)}
                     aria-pressed={active}
                     className={cn(
-                      "shrink-0 snap-start rounded-none border px-4 py-2.5 text-[10px] font-semibold transition-colors duration-300",
+                      // py-3 on phones lifts the chip to a ~44px tap target
+                      // (WCAG 2.5.8); it tightens back to py-2.5 from `sm` up,
+                      // where the chips sit in a wrapped row rather than a
+                      // thumb-scrolled rail.
+                      "shrink-0 snap-start rounded-none border px-4 py-3 text-[10px] font-semibold transition-colors duration-300 sm:py-2.5",
                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 dark:focus-visible:ring-offset-footer",
                       active
                         ? "border-foreground bg-primary text-primary-foreground dark:border-border dark:bg-muted dark:text-foreground"
@@ -154,8 +160,10 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
               })}
             </div>
 {/* Search + view toggle */}
-            <div className="flex items-center gap-3">
-              <div className="relative flex-1 sm:w-64 sm:flex-none">
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* min-w-0 lets the field actually shrink instead of forcing the
+                  row wider than a 320px screen. */}
+              <div className="relative min-w-0 flex-1 sm:w-64 sm:flex-none">
                 <label htmlFor="product-search" className="sr-only">
                   Search products
                 </label>
@@ -173,7 +181,7 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                 />
               </div>
 
-              <div className="flex items-center gap-px bg-muted dark:bg-card">
+              <div className="flex shrink-0 items-center gap-px bg-muted dark:bg-card">
                 {(
                   [
                     { mode: "grid", label: "Grid view", Icon: Grid3X3 },
@@ -208,7 +216,7 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
           {/* Result count */}
           <p
             aria-live="polite"
-            className="mb-8 text-[10px] font-semibold text-muted-foreground dark:text-muted-foreground"
+            className="mb-6 text-[10px] font-semibold text-muted-foreground sm:mb-8 dark:text-muted-foreground"
           >
             {filteredProducts.length}{" "}
             {filteredProducts.length === 1 ? "suite" : "suites"}
@@ -222,13 +230,21 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
             )}
           </p>
 
-          {/* Products Grid */}
+          {/* Products Grid
+            Mobile gets an explicit 2-up grid. Previously there was no base
+            column at all, so phones fell back to `grid-template-columns: none`
+            and rendered one card per row — at 4/5 aspect a single card is ~500px
+            tall on a 375px screen, so barely one product was visible at a time.
+            "Large" view intentionally stays single-column on phones: that is
+            the whole point of the toggle. The tighter mobile gutters/gaps hand
+            the cards back the width the 2-up layout takes from them
+            (gap-x-4 vs gap-x-8 is 16px back on every card). */}
           <div
             className={cn(
-              "grid gap-x-8 gap-y-14",
+              "grid gap-x-4 gap-y-10 sm:gap-x-8 sm:gap-y-14",
               viewMode === "grid"
-                ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                : "sm:grid-cols-2",
+                ? "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                : "grid-cols-1 sm:grid-cols-2",
             )}
           >
             {filteredProducts.map((product, index) => {
@@ -264,7 +280,7 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
           </div>
 {/* Empty state */}
           {filteredProducts.length === 0 && (
-            <div className="flex flex-col items-center border border-border py-24 text-center dark:border-border">
+            <div className="flex flex-col items-center border border-border py-16 text-center sm:py-24 dark:border-border">
               <div className="flex items-center gap-3">
                 <span aria-hidden="true" className="h-px w-8 bg-muted dark:bg-muted" />
                 <span className="text-[10px] font-bold text-muted-foreground dark:text-muted-foreground">

@@ -154,7 +154,10 @@ const Logo = () => (
     href="/"
     aria-label="Ink of Memories, go to home page"
     className={cn(
-      "shrink-0 rounded-md font-sans text-lg font-semibold tracking-wider text-foreground transition-colors hover:text-brand",
+      // -my-2 offsets the py-2 so the 44px tap target adds no height to the
+      // fixed h-12 row; text-base keeps the wordmark from squeezing the
+      // action cluster out of the bar below 360px.
+      "inline-flex shrink-0 -my-2 items-center rounded-md py-2 font-sans text-base font-semibold tracking-wider text-foreground transition-colors hover:text-brand sm:text-lg",
       focusRing,
     )}
   >
@@ -242,14 +245,18 @@ const NavbarInner = () => {
             />
           </div>
 
-          <div className="flex items-center gap-1.5 sm:gap-3">
+          {/* Icon cluster. Below `sm` it drops to the tighter gap so the wordmark
+              plus five controls still fit inside 320px. */}
+          <div className="flex items-center gap-1 sm:gap-3">
             <ToggleButton />
 
+            {/* Favourites — below `sm` this is dropped from the bar and repeated
+                in the mobile panel, so 320px still has room for the menu button. */}
             <Link
               href="/favourites"
               aria-label="Favourites"
               className={cn(
-                "rounded-full p-2 hover:bg-foreground/10",
+                "hidden rounded-full p-2 hover:bg-foreground/10 sm:block",
                 iconInteractive,
                 focusRing,
               )}
@@ -280,7 +287,13 @@ const NavbarInner = () => {
               />
             )}
 
-            <Button asChild size="sm" className={cn(primaryBtn, "px-5")}>
+            {/* Order now — below `sm` it lives in the mobile panel as a full-width
+                primary button instead of a pill in the bar. */}
+            <Button
+              asChild
+              size="sm"
+              className={cn(primaryBtn, "hidden px-5 sm:inline-flex")}
+            >
               <Link href="/products">Order now</Link>
             </Button>
 
@@ -446,6 +459,19 @@ const NavbarInner = () => {
               params={{ category: activeCategory ?? undefined }}
             />
           </div>
+
+          {/* Favourites — the bar drops this control below `sm` to make room,
+              so it is offered here for the same visitors. */}
+          <Link
+            href="/favourites"
+            className={cn(
+              "-my-2 flex items-center gap-3 rounded-sm py-3.5 text-base text-foreground transition-colors sm:hidden",
+              focusRing,
+            )}
+          >
+            <Heart className="h-5 w-5" aria-hidden="true" />
+            Favourites
+          </Link>
 
           <ul className="flex flex-col">
             <li className="border-y border-border">

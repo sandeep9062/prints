@@ -75,7 +75,7 @@ export default function Atelier() {
         <div className="grid items-center gap-16 lg:grid-cols-12 lg:gap-20">
           {/* Press-sheet photo */}
           <figure
-            className={`relative order-2 mx-auto w-full max-w-[480px] p-6 lg:order-1 lg:col-span-6 lg:max-w-none ${reveal("delay-150")}`}
+            className={`relative order-2 mx-auto w-full max-w-[480px] p-4 sm:p-6 lg:order-1 lg:col-span-6 lg:max-w-none ${reveal("delay-150")}`}
           >
             {MARKS.map((m) => (
               <span

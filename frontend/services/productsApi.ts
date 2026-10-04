@@ -90,6 +90,20 @@ export const productsApi = createApi({
       invalidatesTags: ["Products"],
     }),
 
+    // ✅ UPDATE product featured flag only (admin homepage toggle)
+    // Dedicated PATCH /:id/featured for the same reason as the status route
+    // above — never reuse updateProduct for a single-flag write.
+    updateProductFeatured: builder.mutation<any, { id: string; featured: boolean }>(
+      {
+        query: ({ id, featured }) => ({
+          url: `/${id}/featured`,
+          method: "PATCH",
+          body: { featured },
+        }),
+        invalidatesTags: ["Products"],
+      },
+    ),
+
     // ✅ DELETE
     deleteProduct: builder.mutation<any, string>({
       query: (id) => ({
@@ -124,6 +138,7 @@ export const {
   useAddProductMutation,
   useUpdateProductMutation,
   useUpdateProductStatusMutation,
+  useUpdateProductFeaturedMutation,
   useDeleteProductMutation,
   useDeleteProductImageMutation,
 } = productsApi;

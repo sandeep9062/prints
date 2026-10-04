@@ -18,15 +18,18 @@ import { Button } from "@/components/ui/button";
 
 const GRAIN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")`;
 
+// Crop marks sit outside the trim corners of the card. Below `sm` the frame is
+// narrower, so the marks pull in towards the corners instead of falling under
+// the card itself; `sm:` restores the full-size marks from sm upwards.
 const MARKS = [
-  "top-6 left-2 h-0.5 w-8",
-  "left-6 top-2 h-8 w-0.5",
-  "top-6 right-2 h-0.5 w-8",
-  "right-6 top-2 h-8 w-0.5",
-  "bottom-6 left-2 h-0.5 w-8",
-  "bottom-2 left-6 h-8 w-0.5",
-  "bottom-6 right-2 h-0.5 w-8",
-  "bottom-2 right-6 h-8 w-0.5",
+  "top-4 left-1.5 h-0.5 w-5 sm:top-6 sm:left-2 sm:w-8",
+  "left-4 top-1.5 h-5 w-0.5 sm:left-6 sm:top-2 sm:h-8",
+  "top-4 right-1.5 h-0.5 w-5 sm:top-6 sm:right-2 sm:w-8",
+  "right-4 top-1.5 h-5 w-0.5 sm:right-6 sm:top-2 sm:h-8",
+  "bottom-4 left-1.5 h-0.5 w-5 sm:bottom-6 sm:left-2 sm:w-8",
+  "bottom-1.5 left-4 h-5 w-0.5 sm:bottom-2 sm:left-6 sm:h-8",
+  "bottom-4 right-1.5 h-0.5 w-5 sm:bottom-6 sm:right-2 sm:w-8",
+  "bottom-1.5 right-4 h-5 w-0.5 sm:bottom-2 sm:right-6 sm:h-8",
 ];
 
 function useInView<T extends HTMLElement>(threshold = 0.2) {
@@ -76,8 +79,8 @@ export const CTASection: React.FC = () => {
         className="pointer-events-none absolute left-1/2 top-1/2 h-[640px] w-[1440px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/10 blur-[200px]"
       />
 
-      <div className="container relative mx-auto px-6">
-        <div className={`relative mx-auto max-w-7xl p-6 sm:p-8 ${reveal("")}`}>
+      <div className="container relative mx-auto px-4 sm:px-6">
+        <div className={`relative mx-auto max-w-7xl p-5 sm:p-8 ${reveal("")}`}>
           {MARKS.map((m) => (
             <span
               key={m}
@@ -94,29 +97,32 @@ export const CTASection: React.FC = () => {
             />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-6 border-2 border-gold"
+              className="pointer-events-none absolute inset-3 border-2 border-gold sm:inset-6"
             />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-8 border border-gold/50"
+              className="pointer-events-none absolute inset-4 border border-gold/50 sm:inset-8"
             />
 
-            <div className="relative px-10 py-12 text-center sm:px-16 sm:py-14 lg:px-20 lg:py-16">
+            {/* px-5 below `sm` is sized to clear the inset-4 gold rule; the
+                buttons inside drop their fixed min-width at the same breakpoint
+                so nothing is clipped by the card's overflow-hidden. */}
+            <div className="relative px-5 py-10 text-center sm:px-16 sm:py-14 lg:px-20 lg:py-16">
               <div
-                className={`flex items-center justify-center gap-6 ${reveal("delay-100")}`}
+                className={`flex items-center justify-center gap-4 sm:gap-6 ${reveal("delay-100")}`}
               >
-                <span aria-hidden="true" className="h-0.5 w-16 bg-gold/50" />
+                <span aria-hidden="true" className="h-0.5 w-4 bg-gold/50 sm:w-16" />
                 <span className="text-sm font-medium text-footer-muted">
                   Bespoke services
                 </span>
-                <span aria-hidden="true" className="h-0.5 w-16 bg-gold/50" />
+                <span aria-hidden="true" className="h-0.5 w-4 bg-gold/50 sm:w-16" />
               </div>
 
               <div className="mt-10 grid items-center gap-12 lg:grid-cols-12 lg:gap-16 lg:text-left">
                 <div className="lg:col-span-7">
                   <h2
                     id="cta-heading"
-                    className={`font-serif text-5xl font-medium leading-[1.08] tracking-tight text-footer-foreground sm:text-6xl lg:text-7xl xl:text-8xl ${reveal("delay-200")}`}
+                    className={`font-serif text-4xl font-medium leading-[1.08] tracking-tight text-footer-foreground sm:text-5xl sm:text-6xl lg:text-7xl xl:text-8xl ${reveal("delay-200")}`}
                   >
                     Your vision,{" "}
                     {/* Large display line, so plain gold is used here (not
@@ -134,13 +140,17 @@ export const CTASection: React.FC = () => {
                 </div>
 
                 <div className={`lg:col-span-5 ${reveal("delay-[400ms]")}`}>
-                  <div className="flex flex-col items-center justify-center gap-6 sm:flex-row lg:justify-end">
+                  {/* The two pills sit side by side from `md` up, where the card is
+                      wide enough for their natural width; between `sm` and `md` they
+                      stay stacked. The 260px floor only applies from `lg`, which is
+                      where the original desktop pill width starts. */}
+                  <div className="flex flex-col items-center justify-center gap-6 md:flex-row lg:justify-end">
                     <Button
                       asChild
-                      className="h-16 min-w-[260px] rounded-full bg-gold px-10 text-base text-footer transition-colors hover:bg-gold/85 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer lg:h-20 lg:px-12 lg:text-lg"
+                      className="h-14 w-full min-w-0 rounded-full bg-gold px-4 text-sm text-footer transition-colors hover:bg-gold/85 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer sm:h-16 sm:w-auto sm:px-8 sm:text-base lg:h-20 lg:min-w-[260px] lg:px-12 lg:text-lg"
                     >
                       <Link href="/customize">
-                        <PenLine className="h-6 w-6" aria-hidden="true" />
+                        <PenLine className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
                         Begin customization
                       </Link>
                     </Button>
@@ -148,10 +158,10 @@ export const CTASection: React.FC = () => {
                     <Button
                       asChild
                       variant="outline"
-                      className="h-16 min-w-[260px] rounded-full border-footer-foreground/40 bg-transparent px-10 text-base text-footer-foreground transition-colors hover:border-footer-foreground/10 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer lg:h-20 lg:px-12 lg:text-lg"
+                      className="h-14 w-full min-w-0 rounded-full border-footer-foreground/40 bg-transparent px-4 text-sm text-footer-foreground transition-colors hover:border-footer-foreground/10 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer sm:h-16 sm:w-auto sm:px-8 sm:text-base lg:h-20 lg:min-w-[260px] lg:px-12 lg:text-lg"
                     >
                       <Link href="/contact">
-                        <Phone className="h-6 w-6" aria-hidden="true" />
+                        <Phone className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
                         Connect with us
                       </Link>
                     </Button>
@@ -163,10 +173,10 @@ export const CTASection: React.FC = () => {
                     Prefer to browse first?{" "}
                     <Link
                       href="/products"
-                      className="inline-flex items-center gap-1 font-medium text-footer-foreground underline decoration-gold decoration-1 underline-offset-4 transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer"
+                      className="inline-flex items-center gap-1 py-1.5 font-medium text-footer-foreground underline decoration-gold decoration-1 underline-offset-4 transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-footer"
                     >
                       Explore the collection
-                      <ArrowRight className="h-6 w-6" aria-hidden="true" />
+                      <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
                     </Link>
                   </p>
                 </div>

@@ -49,7 +49,13 @@ export const ProductCard = ({
 
   return (
     <motion.div
-      className="group"
+      /* `@container` lets the card style itself from its OWN width rather than
+         the viewport's. The only place cards get this narrow is the 2-up mobile
+         grid on /products (~136-190px). The home page carousel is >=218px and
+         /favourites is ~327px, so both stay on the full-size treatment below
+         the 12rem threshold — a plain `sm:` breakpoint could not know which
+         context it was rendered in. */
+      className="@container group"
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       // Cap the stagger so long catalogues don't crawl in.
@@ -74,7 +80,7 @@ export const ProductCard = ({
         {/* Top-left flag stack: Featured tag sits above the optional badge,
             with the discount chip last so the editorial tags keep priority */}
         {(product.featured || product.badge || discount > 0) && (
-          <div className="pointer-events-none absolute left-4 top-4 z-10 flex flex-col items-start gap-2">
+          <div className="pointer-events-none absolute left-4 top-4 z-10 flex flex-col items-start gap-2 @max-[12rem]:left-2 @max-[12rem]:top-2 @max-[12rem]:gap-1.5">
             {product.featured && (
               <span className="inline-flex items-center gap-1 bg-footer px-3 py-1.5 text-[9px] font-bold text-background">
                 <Sparkles aria-hidden="true" className="h-2.5 w-2.5" />
@@ -97,8 +103,12 @@ export const ProductCard = ({
         )}
 
         {/* Card actions — wishlist, compare and quick-add share the top-right rail
-            so they stack instead of overlapping the flags above. */}
-        <div className="absolute right-4 top-4 z-10 flex flex-col items-center gap-2">
+            so they stack instead of overlapping the flags above. On a narrow
+            card the three 36px buttons make a 124px-tall rail that swallows the
+            image, so the rail tightens and scales down as a unit. Scaling the
+            wrapper (rather than each button) keeps Heart / CompareToggle /
+            AddToCartButton untouched — they're shared with other pages. */}
+        <div className="absolute right-4 top-4 z-10 flex flex-col items-center gap-2 @max-[12rem]:right-2 @max-[12rem]:top-2 @max-[12rem]:gap-1.5 @max-[12rem]:origin-top-right @max-[12rem]:scale-90">
           <Heart card={{ _id: product.id, id: product.id }} />
           <CompareToggle
             item={{
@@ -127,10 +137,10 @@ export const ProductCard = ({
         </div>
 
         {/* Quick View overlay */}
-        <div className="absolute inset-x-0 bottom-0 translate-y-full p-4 transition-transform duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 motion-reduce:transition-none">
+        <div className="absolute inset-x-0 bottom-0 translate-y-full p-4 transition-transform duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 motion-reduce:transition-none @max-[12rem]:p-2">
           <Link
             href={`/products/${product.slug}`}
-            className="flex w-full items-center justify-center gap-2 rounded-none bg-black/90 py-6 text-[10px] font-medium text-background backdrop-blur-sm transition-colors hover:bg-brand hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
+            className="flex w-full items-center justify-center gap-2 rounded-none bg-black/90 py-6 text-[10px] font-medium text-background backdrop-blur-sm transition-colors hover:bg-brand hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand @max-[12rem]:py-4"
           >
             Quick View
             <ArrowRight className="h-3 w-3" />
@@ -144,7 +154,7 @@ export const ProductCard = ({
           {product.category}
         </p>
 
-        <h3 className="text-lg leading-snug text-foreground transition-colors group-hover:text-brand">
+        <h3 className="text-lg leading-snug text-foreground transition-colors group-hover:text-brand @max-[12rem]:line-clamp-2 @max-[12rem]:text-sm">
           <Link
             href={`/products/${product.slug}`}
             className="rounded-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
@@ -159,7 +169,9 @@ export const ProductCard = ({
           </p>
         )}
 
-        <div className="flex items-center gap-3 pt-1">
+        {/* Wraps rather than pushing the card wider: a discounted item showing both
+            prices needs ~130px, which overruns a 136px card. */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 pt-1 @max-[12rem]:gap-x-2">
           <span className="text-sm font-medium tabular-nums text-foreground">
             {formatINR(product.price)}
           </span>
