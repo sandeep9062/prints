@@ -116,6 +116,53 @@ export const PAPER_TYPE_OPTIONS: ProductOption[] = [
 ];
 
 /**
+ * ------------------------------------------------------------
+ * The merchandising flags offered for `Product.badge`.
+ *
+ * Every badge currently used by the seed data (backend/data/product.ts)
+ * is listed, so seeded products keep matching an option instead of
+ * arriving as an off-list value. `badge` is a single optional String —
+ * one flag per product — so this is a Select, not the multi-select
+ * chip picker used for colors and paper types.
+ * ------------------------------------------------------------
+ */
+export const BADGE_OPTIONS: string[] = [
+  "New Arrival",
+  "Bestseller",
+  "Popular",
+  "Trending",
+  "High Demand",
+  "Sale",
+  "Limited Edition",
+  "Bulk Deal",
+  "Premium",
+  "Signature",
+  "Handcrafted",
+  "Eco Choice",
+  "Season Special",
+  "Gift Idea",
+  "Office Essential",
+  "Budget Friendly",
+];
+
+/**
+ * The options a single-value Select should offer: the curated list, plus
+ * `current` when it isn't one of them.
+ *
+ * `category` and `badge` are free-form Strings on the schema, and older
+ * products (plus the seed data) carry values written before these lists
+ * existed. Without this the Select would have no matching item, show its
+ * placeholder, read as "empty", and wipe the value on the next save.
+ */
+export function withCurrentValue(base: string[], current: string): string[] {
+  const value = current.trim();
+  if (value && !base.includes(value)) {
+    return [value, ...base];
+  }
+  return base;
+}
+
+/**
  * Case-insensitive lookup within a given option list. Returns
  * `undefined` for names we never listed, which callers treat as
  * "no entry / no swatch known".

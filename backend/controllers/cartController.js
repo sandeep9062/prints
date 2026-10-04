@@ -2,6 +2,23 @@ import asyncHandler from "express-async-handler";
 import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
 
+/**
+ * Canonical identity for a cart line's customization.
+ *
+ * The old check compared `JSON.stringify(item.customization)` against the raw
+ * request body, which is unreliable in both directions: the card quick-add
+ * posts no `customization` at all (`undefined`) while the detail page posts
+ * all three keys, and a missing key or a different key order alone decides
+ * the match. Normalising both sides means "same product + same options"
+ * reliably increments the existing line instead of stacking a duplicate.
+ */
+const customizationKey = (customization) =>
+  JSON.stringify({
+    size: customization?.size ?? "",
+    paperType: customization?.paperType ?? "",
+    colorTheme: customization?.colorTheme ?? "",
+  });
+
 // @desc    Add item to cart
 // @route   POST /api/cart
 // @access  Private
@@ -16,7 +33,7 @@ const addItemToCart = asyncHandler(async (req, res) => {
     const itemIndex = cart.items.findIndex(
       (item) =>
         item.product.toString() === productId &&
-        JSON.stringify(item.customization) === JSON.stringify(customization)
+        customizationKey(item.customization) === customizationKey(customization)
     );
 
     if (itemIndex > -1) {

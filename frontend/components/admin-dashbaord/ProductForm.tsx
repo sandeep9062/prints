@@ -24,9 +24,11 @@ import {
 } from "@/services/productsApi";
 import OptionPicker from "@/components/admin-dashbaord/OptionPicker";
 import {
+  BADGE_OPTIONS,
   COLOR_OPTIONS,
   PAPER_TYPE_OPTIONS,
   PRODUCT_CATEGORIES,
+  withCurrentValue,
 } from "@/data/productOptions";
 
 interface ProductFormData {
@@ -61,6 +63,15 @@ interface ProductFormData {
 
 /** Mirrors the `stock` default on the Mongoose schema. */
 const DEFAULT_STOCK = 50;
+
+/**
+ * Sentinel for "no badge" in the badge Select.
+ *
+ * Radix Select rejects an empty-string item value, so the optional
+ * `badge` (a plain String) is modelled as this sentinel in the UI and
+ * mapped back to "" before it is sent.
+ */
+const NO_BADGE_VALUE = "__no_badge__";
 
 /**
  * Blank input → `undefined` so the Mongoose default applies instead of
@@ -177,22 +188,20 @@ export default function ProductForm({
   };
 
   /**
-   * Category options shown in the Select: the shared catalogue, plus the
-   * product's current category when it isn't one of them.
-   *
-   * `category` is a plain `[String]`-style String on the schema and older
-   * products (and the backend seed data) carry values like "Printing" or
-   * "Vinyl Decals" variants written before the catalogue existed. Without
-   * this the Select would have no matching item and show the placeholder,
-   * reading as "no category" and wiping it on the next save.
+   * Options for the two single-value Selects. Both keep the product's
+   * current value in the list when it isn't part of the curated set, so
+   * editing an older product can't read as "empty" and wipe it — see
+   * `withCurrentValue`.
    */
-  const categoryOptions = useMemo(() => {
-    const current = formData.category.trim();
-    if (current && !PRODUCT_CATEGORIES.includes(current)) {
-      return [current, ...PRODUCT_CATEGORIES];
-    }
-    return PRODUCT_CATEGORIES;
-  }, [formData.category]);
+  const categoryOptions = useMemo(
+    () => withCurrentValue(PRODUCT_CATEGORIES, formData.category),
+    [formData.category],
+  );
+
+  const badgeOptions = useMemo(
+    () => withCurrentValue(BADGE_OPTIONS, formData.badge),
+    [formData.badge],
+  );
 
   const handleImageUpload = useCallback((files: File[]) => {
     const newPreviews = files.map((file) => URL.createObjectURL(file));
@@ -431,12 +440,30 @@ export default function ProductForm({
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="badge">Badge</Label>
-                  <Input
-                    id="badge"
-                    value={formData.badge}
-                    onChange={(e) => handleFormChange("badge", e.target.value)}
-                    placeholder="e.g. New, Sale, Popular"
-                  />
+                  <Select
+                    value={formData.badge || NO_BADGE_VALUE}
+                    onValueChange={(value) =>
+                      handleFormChange(
+                        "badge",
+                        value === NO_BADGE_VALUE ? "" : value,
+                      )
+                    }
+                  >
+                    <SelectTrigger id="badge" aria-label="Badge">
+                      <SelectValue placeholder="Select a badge" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={NO_BADGE_VALUE}>No badge</SelectItem>
+                      {badgeOptions.map((badge) => (
+                        <SelectItem key={badge} value={badge}>
+                          {badge}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Optional merchandising flag shown on the product card
+                  </p>
                 </div>
               </div>
             </CardContent>

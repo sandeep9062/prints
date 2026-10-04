@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -25,6 +27,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { cn, formatINR } from "@/lib/utils";
+import { selectIsAuthenticated } from "@/store/authSlice";
 import { SEOHelper } from "@/components/SEOHelper";
 import { getBreadcrumbSchema, getProductSchema } from "@/lib/seo";
 import type { Product } from "@/services/productsApi";
@@ -32,6 +35,19 @@ import type { Product } from "@/services/productsApi";
 interface ProductDetailClientProps {
   product: Product;
   slug: string;
+}
+
+/**
+ * Minimum order quantity for a product.
+ *
+ * `Product.minQuantity` is optional in the API type and, as of the current
+ * Product schema, not a persisted field — so most products have none. Fall
+ * back to 1 rather than inventing a bulk default: AddToCartButton applies the
+ * same rule, and this is the floor the quantity stepper is clamped to.
+ */
+function getMinQuantity(product?: Product): number {
+  const value = product?.minQuantity;
+  return typeof value === "number" && value > 0 ? value : 1;
 }
 
 export default function ProductDetailClient({
@@ -56,6 +72,8 @@ export default function ProductDetailClient({
   });
 
   const { addItem } = useCart();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const router = useRouter();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState("");
@@ -70,13 +88,37 @@ export default function ProductDetailClient({
     setSelectedSize(product?.options?.sizes?.[0] || "");
     setSelectedPaper(product?.options?.paperTypes?.[0] || "");
     setSelectedColor(product?.options?.colors?.[0] || "");
-    setQuantity(product?.minQuantity || 50);
+    // Falls back to 1, matching ProductCard's quick-add. The previous `|| 50`
+    // default silently ordered 50 of everything, which the pricing below then
+    // multiplied by 50 a second time.
+    setQuantity(getMinQuantity(product));
   }, [product]);
 
   /* ------------ PRICE CALCULATION ------------ */
-  const basePrice = product?.price || 0;
+  /** Quantity stepper floor — the product's minimum order quantity. */
+  const minQuantity = getMinQuantity(product);
 
-  const minQuantity = product?.minQuantity || 1;
+  /**
+   * Step the +/- buttons move by. Tied to the minimum order quantity so
+   * ordering happens in whole batches: a product with no MOQ steps by 1,
+   * a 50-piece MOQ steps by 50.
+   */
+  const quantityStep = Math.max(1, minQuantity);
+
+  /**
+   * A cart line stores a UNIT price: the cart page renders
+   * `item.price * item.quantity`, and ProductCard's quick-add passes the
+   * price it displays straight through. So resolve the discount once, store
+   * the unit, and derive the line total from it — never store an
+   * already-multiplied total, which the cart then multiplies again.
+   */
+  const unitPrice = product?.discountPrice || product?.price || 0;
+  const lineTotal = unitPrice * quantity;
+
+  /** Pre-discount total, shown struck through only when a discount applies. */
+  const originalTotal = product?.discountPrice
+    ? product.price * quantity
+    : null;
 
   /* ------------ DIMENSIONS ------------ */
   // `dimensions` is optional in the API payload — older documents don't have
@@ -94,24 +136,24 @@ export default function ProductDetailClient({
     return sides.length > 0 ? `${sides.join(" × ")} cm` : "Not specified";
   })();
 
-  const calculatedPrice = useMemo(() => {
-    return basePrice * (quantity / (product?.minQuantity || 1));
-  }, [basePrice, quantity, product?.minQuantity]);
-
-  const calculatedOriginal = useMemo(() => {
-    if (!product?.discountPrice) return null;
-    return product.discountPrice * (quantity / (product?.minQuantity || 1));
-  }, [product?.discountPrice, quantity, product?.minQuantity]);
-
   /* ------------ ADD TO CART ------------ */
   const handleAddToCart = async () => {
     if (!product) return;
+
+    // The cart routes are `protect`-ed, so an anonymous click can only ever
+    // 401. Bounce to /auth like AddToCartButton does instead of firing a
+    // doomed request and surfacing a raw "No token provided" toast.
+    if (!isAuthenticated) {
+      toast.error("Please log in to add items to your cart.");
+      router.push("/auth");
+      return;
+    }
 
     // addItem raises its own toast on failure, so only confirm on success.
     const ok = await addItem({
       id: product._id,
       name: product.name,
-      price: calculatedPrice,
+      price: unitPrice,
       quantity,
       image: selectedImage || "",
       customization: {
@@ -241,12 +283,12 @@ export default function ProductDetailClient({
               {/* Pricing */}
               <div className="flex items-end gap-4">
                 <span className="text-4xl font-semibold tabular-nums text-primary">
-                  {formatINR(Math.round(calculatedPrice))}
+                  {formatINR(Math.round(lineTotal))}
                 </span>
 
-                {calculatedOriginal && (
+                {originalTotal !== null && (
                   <span className="line-through text-muted-foreground text-lg mt-1 tabular-nums">
-                    {formatINR(Math.round(calculatedOriginal))}
+                    {formatINR(Math.round(originalTotal))}
                   </span>
                 )}
 
@@ -296,7 +338,7 @@ export default function ProductDetailClient({
                     <button
                       onClick={() =>
                         setQuantity((q) =>
-                          Math.max(minQuantity, q - 25),
+                          Math.max(minQuantity, q - quantityStep),
                         )
                       }
                       className="px-4 py-3 hover:bg-muted transition"
@@ -316,7 +358,7 @@ export default function ProductDetailClient({
                     />
 
                     <button
-                      onClick={() => setQuantity((q) => q + 25)}
+                      onClick={() => setQuantity((q) => q + quantityStep)}
                       className="px-4 py-3 hover:bg-muted transition"
                     >
                       <Plus className="h-4 w-4" />
