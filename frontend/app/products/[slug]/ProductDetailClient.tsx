@@ -104,10 +104,11 @@ export default function ProductDetailClient({
   }, [product?.discountPrice, quantity, product?.minQuantity]);
 
   /* ------------ ADD TO CART ------------ */
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!product) return;
 
-    addItem({
+    // addItem raises its own toast on failure, so only confirm on success.
+    const ok = await addItem({
       id: product._id,
       name: product.name,
       price: calculatedPrice,
@@ -119,6 +120,8 @@ export default function ProductDetailClient({
         colorTheme: selectedColor,
       },
     });
+
+    if (!ok) return;
 
     toast.success("Added to cart!", {
       description: `${product.name} (${quantity} pcs) added.`,

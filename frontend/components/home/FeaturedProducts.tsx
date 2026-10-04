@@ -18,6 +18,8 @@ type ProductCardProps = {
   badge?: string;
   /** Always true here (the carousel filters on it) — renders the Featured tag. */
   featured?: boolean;
+  minQuantity?: number;
+  stock?: number;
 };
 
 type ApiProduct = {
@@ -30,6 +32,8 @@ type ApiProduct = {
   images?: string[];
   badge?: string;
   featured?: boolean;
+  minQuantity?: number;
+  stock?: number;
 };
 
 const AUTOPLAY_DELAY = 4500;
@@ -92,6 +96,8 @@ export const FeaturedProducts = () => {
           image: p.images?.[0] || "/placeholder.svg",
           badge: p.badge,
           featured: p.featured,
+          minQuantity: p.minQuantity,
+          stock: p.stock,
         })),
     [data],
   );

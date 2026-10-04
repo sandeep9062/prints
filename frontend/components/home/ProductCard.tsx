@@ -5,6 +5,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import Heart from "@/components/Heart";
 import CompareToggle from "@/components/CompareToggle";
+import AddToCartButton from "@/components/AddToCartButton";
 import { formatINR } from "@/lib/utils";
 
 type Product = {
@@ -18,6 +19,14 @@ type Product = {
   badge?: string;
   description?: string;
   featured?: boolean;
+  /**
+   * Minimum order quantity. The storefront prices against this unit, so the
+   * quick-add button adds it rather than 1. Optional because callers that build
+   * cards from lighter payloads (wishlist) may not have it.
+   */
+  minQuantity?: number;
+  /** Optional — when present, an out-of-stock product disables quick-add. */
+  stock?: number;
 };
 
 export const ProductCard = ({
@@ -87,8 +96,8 @@ export const ProductCard = ({
           </div>
         )}
 
-        {/* Card actions — wishlist + compare share the top-right rail so they
-            stack instead of overlapping the flags above. */}
+        {/* Card actions — wishlist, compare and quick-add share the top-right rail
+            so they stack instead of overlapping the flags above. */}
         <div className="absolute right-4 top-4 z-10 flex flex-col items-center gap-2">
           <Heart card={{ _id: product.id, id: product.id }} />
           <CompareToggle
@@ -100,6 +109,19 @@ export const ProductCard = ({
               originalPrice: product.originalPrice,
               category: product.category,
               slug: product.slug,
+            }}
+          />
+          <AddToCartButton
+            item={{
+              id: product.id,
+              name: product.name,
+              // Cards receive the effective price already — both call sites
+              // resolve `discountPrice` before building the object — so the
+              // cart line is stored at what the card actually displays.
+              price: product.price,
+              image: product.image,
+              minQuantity: product.minQuantity,
+              stock: product.stock,
             }}
           />
         </div>

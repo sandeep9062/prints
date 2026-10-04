@@ -31,7 +31,12 @@ export interface CartItem {
 
 interface CartContextType {
   items: CartItem[];
-  addItem: (item: CartItem) => void;
+  /**
+   * Adds an item and resolves to `true` only when the mutation actually
+   * succeeded. Callers await this so a success toast can't fire alongside the
+   * error toast this function raises on failure.
+   */
+  addItem: (item: CartItem) => Promise<boolean>;
   removeItem: (id: string) => void; // This will be cart item _id from backend
   updateQuantity: (id: string, quantity: number) => void; // This will be cart item _id from backend
   clearCart: () => void;
@@ -70,7 +75,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     refetch();
   }, [refetch]);
 
-  const addItem = async (item: CartItem) => {
+  const addItem = async (item: CartItem): Promise<boolean> => {
     try {
       await addItemToCartMutation({
         productId: item.id,
@@ -79,6 +84,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         customization: item.customization,
       }).unwrap();
       refetch();
+      return true;
     } catch (error: any) {
       // Extract meaningful error message from RTK Query error
       const message =
@@ -88,6 +94,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         "Failed to add item to cart. Please try again.";
       console.error("Failed to add item to cart:", message, error);
       toast.error(message);
+      return false;
     }
   };
 

@@ -86,7 +86,7 @@ const Cart = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen mt-24 bg-background">
       <SEOHelper
         title="Shopping Cart"
         description="Review your printing order. Wedding cards, visiting cards, brochures & more in your customized cart from Samlason Printing Press."

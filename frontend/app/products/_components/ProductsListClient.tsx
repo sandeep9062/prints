@@ -248,6 +248,8 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                 badge: product.badge,
                 description: product.description,
                 featured: product.featured,
+                minQuantity: product.minQuantity,
+                stock: product.stock,
               };
 
               return (

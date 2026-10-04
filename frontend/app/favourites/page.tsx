@@ -42,6 +42,8 @@ type FavouriteProduct = {
   images?: string[];
   description?: string;
   featured?: boolean;
+  minQuantity?: number;
+  stock?: number;
 };
 
 // Hydration-safe "are we on the client yet?" flag. `useSyncExternalStore`
@@ -90,7 +92,7 @@ export default function FavouritesPage() {
 
     setRemovingId(id);
     try {
-      await toFav(item).unwrap();
+      await toFav({ id, product: item }).unwrap();
       toast.success("Removed from favourites");
     } catch (error) {
       const err = error as { data?: { message?: string }; error?: string };
@@ -243,6 +245,8 @@ export default function FavouritesPage() {
                             badge: item.badge,
                             description: item.description,
                             featured: item.featured,
+                            minQuantity: item.minQuantity,
+                            stock: item.stock,
                           }}
                           index={index}
                         />

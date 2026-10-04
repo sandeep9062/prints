@@ -1,6 +1,4 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { setUser } from "../store/authSlice";
-import { RootState } from "../store/store";
 import { baseQueryWithAuth } from "./api";
 
 // ✅ Interfaces
@@ -18,7 +16,8 @@ export interface User {
   resetPasswordToken?: string;
   resetPasswordExpire?: string;
   createdAt: string;
-  favProperties: any[];
+  // NOTE: `favProperties` does NOT exist on the user document — favourites are
+  // stored in a separate `Wishlist` collection. Use `getFavourites`.
   bookedVisits: any[];
   ownedProperties: any[];
 }
@@ -126,52 +125,43 @@ export const userApi = createApi({
     }),
 
     // ✅ Add/Remove Favourite
-    toFav: builder.mutation<User, any>({
-      query: (card) => ({
-        url: `/v1/users/toFav/${card._id || card.id}`,
+    // NOTE: favourites live in a separate `Wishlist` collection on the backend,
+    // NOT on the user document. The single source of truth reachable from the
+    // client is `getFavourites`, so that is the cache we optimistically patch.
+    toFav: builder.mutation<
+      { success: boolean; message: string; wishlist: string[] },
+      { id: string; product: any }
+    >({
+      query: ({ id }) => ({
+        url: `/v1/users/toFav/${id}`,
         method: "POST",
       }),
       invalidatesTags: ["User"],
-      async onQueryStarted(card, { dispatch, queryFulfilled, getState }) {
-        const state = getState() as RootState;
-        const userId = state.auth.user?._id;
-
-        if (!userId) {
-          return;
-        }
+      async onQueryStarted({ id, product }, { dispatch, queryFulfilled }) {
+        if (!id) return;
 
         const patchResult = dispatch(
-          userApi.util.updateQueryData("getUserById", userId, (draft) => {
-            if (draft) {
-              const cardId = card._id || card.id;
-              const isFavourited = draft.favProperties.some((fav: any) => {
-                const favId =
-                  typeof fav === "string" ? fav : fav?._id || fav?.id;
-                return favId === cardId;
-              });
+          userApi.util.updateQueryData("getFavourites", undefined, (draft) => {
+            if (!Array.isArray(draft)) return;
 
-              if (isFavourited) {
-                draft.favProperties = draft.favProperties.filter((fav: any) => {
-                  const favId =
-                    typeof fav === "string" ? fav : fav?._id || fav?.id;
-                  return favId !== cardId;
-                });
-              } else {
-                draft.favProperties.push(card);
-              }
+            const existing = draft.findIndex(
+              (fav: any) => fav?._id === id || fav?.id === id,
+            );
+
+            if (existing > -1) {
+              // Already favourited -> this call removes it.
+              draft.splice(existing, 1);
+            } else if (product) {
+              // Not favourited -> this call adds it.
+              draft.push(product);
             }
           }),
         );
 
         try {
-          const { data: updatedUser } = await queryFulfilled;
-          dispatch(
-            setUser({
-              user: updatedUser as any,
-              token: localStorage.getItem("token") || "",
-            }),
-          );
+          await queryFulfilled;
         } catch {
+          // Roll the optimistic update back if the request failed.
           patchResult.undo();
         }
       },
@@ -181,6 +171,8 @@ export const userApi = createApi({
     getFavourites: builder.query<any[], void>({
       query: () => `/v1/users/favourites`,
       providesTags: ["User"],
+      transformResponse: (response: { success: boolean; favourites: any[] }) =>
+        response?.favourites ?? [],
     }),
 
     // ✅ Get all bookings of a user
