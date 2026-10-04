@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, ArrowLeft, Save, UploadCloud, X } from "lucide-react";
 
@@ -10,11 +10,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import {
   useAddProductMutation,
   useUpdateProductMutation,
 } from "@/services/productsApi";
+import OptionPicker from "@/components/admin-dashbaord/OptionPicker";
+import {
+  COLOR_OPTIONS,
+  PAPER_TYPE_OPTIONS,
+  PRODUCT_CATEGORIES,
+} from "@/data/productOptions";
 
 interface ProductFormData {
   name: string;
@@ -33,10 +46,17 @@ interface ProductFormData {
   dimensionHeight: string;
   /** Product.js → options.sizes ([String]) — comma separated */
   sizes: string;
-  /** Product.js → options.paperTypes ([String]) — comma separated */
-  paperTypes: string;
-  /** Product.js → options.colors ([String]) — comma separated */
-  colors: string;
+  /**
+   * Product.js → options.paperTypes ([String]) — picked from
+   * PAPER_TYPE_OPTIONS, so held as an array (see `colors` below).
+   */
+  paperTypes: string[];
+  /**
+   * Product.js → options.colors ([String]) — picked from COLOR_OPTIONS,
+   * so held as an array rather than the raw comma separated string the
+   * `sizes` field still uses.
+   */
+  colors: string[];
 }
 
 /** Mirrors the `stock` default on the Mongoose schema. */
@@ -65,12 +85,38 @@ interface ProductFormProps {
   mode: "add" | "edit";
   initialData?: any;
   productId?: string;
+  /**
+   * Where the back arrow, Cancel button and the post-save redirect go.
+   * Defaults to the admin catalogue; the merchant dashboard passes its
+   * own path so the shared component stays one implementation.
+   */
+  redirectPath?: string;
+  /**
+   * Renders the "Featured Product" merchandising toggle. Admin only —
+   * featuring is decided by the admin (see the `featured` notes in
+   * backend/controllers/productController.js), so the merchant area
+   * passes `false`.
+   */
+  showFeatured?: boolean;
+  /**
+   * Set to `false` when the surrounding dashboard shell already renders a
+   * page title (the merchant shell does), so the two don't stack headings.
+   * The action buttons still render.
+   */
+  showHeading?: boolean;
+  title?: string;
+  subtitle?: string;
 }
 
 export default function ProductForm({
   mode,
   initialData,
   productId,
+  redirectPath = "/admin-dashboard/products",
+  showFeatured = true,
+  showHeading = true,
+  title,
+  subtitle,
 }: ProductFormProps) {
   const router = useRouter();
   const [addProduct, { isLoading: isAdding }] = useAddProductMutation();
@@ -89,8 +135,8 @@ export default function ProductForm({
     dimensionWidth: "",
     dimensionHeight: "",
     sizes: "",
-    paperTypes: "",
-    colors: "",
+    paperTypes: [],
+    colors: [],
   });
 
   const [newImages, setNewImages] = useState<File[]>([]);
@@ -112,9 +158,10 @@ export default function ProductForm({
         dimensionLength: initialData.dimensions?.length?.toString() || "",
         dimensionWidth: initialData.dimensions?.width?.toString() || "",
         dimensionHeight: initialData.dimensions?.height?.toString() || "",
+        // `options` is optional on the schema — guard before reading.
         sizes: initialData.options?.sizes?.join(", ") || "",
-        paperTypes: initialData.options?.paperTypes?.join(", ") || "",
-        colors: initialData.options?.colors?.join(", ") || "",
+        paperTypes: initialData.options?.paperTypes ?? [],
+        colors: initialData.options?.colors ?? [],
       });
       if (initialData.images && initialData.images.length > 0) {
         setImagePreviews(initialData.images);
@@ -124,10 +171,28 @@ export default function ProductForm({
 
   const handleFormChange = (
     field: keyof ProductFormData,
-    value: string | boolean,
+    value: string | boolean | string[],
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
+
+  /**
+   * Category options shown in the Select: the shared catalogue, plus the
+   * product's current category when it isn't one of them.
+   *
+   * `category` is a plain `[String]`-style String on the schema and older
+   * products (and the backend seed data) carry values like "Printing" or
+   * "Vinyl Decals" variants written before the catalogue existed. Without
+   * this the Select would have no matching item and show the placeholder,
+   * reading as "no category" and wiping it on the next save.
+   */
+  const categoryOptions = useMemo(() => {
+    const current = formData.category.trim();
+    if (current && !PRODUCT_CATEGORIES.includes(current)) {
+      return [current, ...PRODUCT_CATEGORIES];
+    }
+    return PRODUCT_CATEGORIES;
+  }, [formData.category]);
 
   const handleImageUpload = useCallback((files: File[]) => {
     const newPreviews = files.map((file) => URL.createObjectURL(file));
@@ -210,8 +275,8 @@ export default function ProductForm({
           : {}),
         options: {
           sizes: toStringArray(formData.sizes),
-          paperTypes: toStringArray(formData.paperTypes),
-          colors: toStringArray(formData.colors),
+          paperTypes: formData.paperTypes,
+          colors: formData.colors,
         },
         // For edit mode, keep existing images that weren't removed
         ...(mode === "edit"
@@ -239,7 +304,7 @@ export default function ProductForm({
         });
       }
 
-      router.push("/admin-dashboard/products");
+      router.push(redirectPath);
     } catch (error: any) {
       toast.error("Error", {
         description:
@@ -259,25 +324,29 @@ export default function ProductForm({
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => router.push("/admin-dashboard/products")}
+            onClick={() => router.push(redirectPath)}
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <div>
-            <h1 className="font-sans text-2xl lg:text-3xl font-semibold text-foreground">
-              {mode === "add" ? "Add New Product" : "Edit Product"}
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              {mode === "add"
-                ? "Fill in the details to create a new product"
-                : `Editing "${initialData?.name || ""}"`}
-            </p>
-          </div>
+          {showHeading && (
+            <div>
+              <h1 className="font-sans text-2xl lg:text-3xl font-semibold text-foreground">
+                {title ??
+                  (mode === "add" ? "Add New Product" : "Edit Product")}
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                {subtitle ??
+                  (mode === "add"
+                    ? "Fill in the details to create a new product"
+                    : `Editing "${initialData?.name || ""}"`)}
+              </p>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-3 mt-4 md:mt-0">
           <Button
             variant="outline"
-            onClick={() => router.push("/admin-dashboard/products")}
+            onClick={() => router.push(redirectPath)}
             disabled={isSubmitting}
           >
             Cancel
@@ -340,14 +409,25 @@ export default function ProductForm({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="category">Category *</Label>
-                  <Input
-                    id="category"
-                    value={formData.category}
-                    onChange={(e) =>
-                      handleFormChange("category", e.target.value)
-                    }
-                    placeholder="e.g. Printing, Design, Signage"
-                  />
+                  <Select
+                    value={formData.category || undefined}
+                    onValueChange={(value) => handleFormChange("category", value)}
+                  >
+                    <SelectTrigger id="category" aria-label="Category">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categoryOptions.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Used to group the product in the catalogue and storefront
+                    filters
+                  </p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="badge">Badge</Label>
@@ -489,20 +569,22 @@ export default function ProductForm({
                 </p>
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label>Featured Product</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Show this product on the homepage
-                  </p>
+              {showFeatured && (
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label>Featured Product</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Show this product on the homepage
+                    </p>
+                  </div>
+                  <Switch
+                    checked={formData.featured}
+                    onCheckedChange={(checked) =>
+                      handleFormChange("featured", checked)
+                    }
+                  />
                 </div>
-                <Switch
-                  checked={formData.featured}
-                  onCheckedChange={(checked) =>
-                    handleFormChange("featured", checked)
-                  }
-                />
-              </div>
+              )}
             </CardContent>
           </Card>
         {/* Dimensions */}
@@ -577,33 +659,24 @@ export default function ProductForm({
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="paperTypes">Paper Types</Label>
-                <Input
-                  id="paperTypes"
-                  value={formData.paperTypes}
-                  onChange={(e) =>
-                    handleFormChange("paperTypes", e.target.value)
-                  }
-                  placeholder="e.g. Matte, Gloss"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Comma separated
-                </p>
-              </div>
+              <OptionPicker
+                id="paperTypes"
+                label="Paper Types"
+                options={PAPER_TYPE_OPTIONS}
+                value={formData.paperTypes}
+                onChange={(next) => handleFormChange("paperTypes", next)}
+                customPlaceholder="Add a custom paper type (e.g. 300 GSM Textured)"
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="colors">Colors</Label>
-                <Input
-                  id="colors"
-                  value={formData.colors}
-                  onChange={(e) => handleFormChange("colors", e.target.value)}
-                  placeholder="e.g. Gold, Silver"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Comma separated
-                </p>
-              </div>
+              <OptionPicker
+                id="colors"
+                label="Colors"
+                showSwatch
+                options={COLOR_OPTIONS}
+                value={formData.colors}
+                onChange={(next) => handleFormChange("colors", next)}
+                customPlaceholder="Add a custom color (e.g. Pantone 186 C)"
+              />
             </CardContent>
           </Card>
         </div>

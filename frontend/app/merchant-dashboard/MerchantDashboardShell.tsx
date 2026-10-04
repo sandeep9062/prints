@@ -56,6 +56,14 @@ const pageConfig: Record<
     icon: <Package className="h-5 w-5 text-brand dark:text-brand" />,
     gradient: "from-brand to-brand-hover",
   },
+  // The lookup below matches by path prefix, so /edit-product/:id would
+  // otherwise fall through to the dashboard home title.
+  "/merchant-dashboard/edit-product": {
+    title: "Edit Product",
+    subtitle: "Update the details of your product",
+    icon: <Package className="h-5 w-5 text-brand dark:text-brand" />,
+    gradient: "from-brand to-brand-hover",
+  },
   "/merchant-dashboard/settings": {
     title: "Settings",
     subtitle: "Manage your account and preferences",
