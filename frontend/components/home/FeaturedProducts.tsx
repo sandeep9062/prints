@@ -15,6 +15,8 @@ type ProductCardProps = {
   price: number;
   originalPrice?: number;
   image: string;
+  /** Every uploaded frame — the card cycles through them automatically. */
+  images?: string[];
   badge?: string;
   /** Always true here (the carousel filters on it) — renders the Featured tag. */
   featured?: boolean;
@@ -94,6 +96,8 @@ export const FeaturedProducts = () => {
           originalPrice:
             p.discountPrice && p.discountPrice < p.price ? p.price : undefined,
           image: p.images?.[0] || "/placeholder.svg",
+          // Full set so the card can cycle through every frame.
+          images: p.images || [],
           badge: p.badge,
           featured: p.featured,
           minQuantity: p.minQuantity,

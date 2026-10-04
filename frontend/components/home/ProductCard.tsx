@@ -7,6 +7,7 @@ import Heart from "@/components/Heart";
 import CompareToggle from "@/components/CompareToggle";
 import AddToCartButton from "@/components/AddToCartButton";
 import { formatINR } from "@/lib/utils";
+import { ProductImageSlideshow } from "./ProductImageSlideshow";
 
 type Product = {
   id: string;
@@ -16,6 +17,15 @@ type Product = {
   price: number;
   originalPrice?: number;
   image: string;
+  /**
+   * Every frame the merchant uploaded for this product. The card rotates
+   * through them on its own — see <ProductImageSlideshow/> below.
+   *
+   * Optional because `image` alone still renders a perfectly good (static)
+   * card: compare and cart line items only ever need the cover frame, which is
+   * why `image` is kept as its own field rather than derived from this array.
+   */
+  images?: string[];
   badge?: string;
   description?: string;
   featured?: boolean;
@@ -62,13 +72,15 @@ export const ProductCard = ({
       transition={{ delay: Math.min(index, 8) * 0.06, duration: 0.5 }}
       viewport={{ once: true, margin: "-40px" }}
     >
-      {/* Image Composition */}
+      {/* Image Composition
+          Every uploaded frame of the product cycles through here automatically;
+          a single-image product renders as a plain static frame with no dots. */}
       <div className="relative aspect-[4/5] overflow-hidden bg-muted">
-        <img
-          src={product.image}
-          alt={product.name}
-          loading={index < 4 ? "eager" : "lazy"}
-          className="h-full w-full object-cover grayscale-[15%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        <ProductImageSlideshow
+          images={product.images ?? []}
+          fallback={product.image}
+          name={product.name}
+          index={index}
         />
 
         {/* Inner vignette for depth */}

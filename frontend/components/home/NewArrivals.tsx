@@ -44,6 +44,8 @@ type ProductCardProps = {
   price: number;
   originalPrice?: number;
   image: string;
+  /** Every uploaded frame — the card cycles through them automatically. */
+  images?: string[];
   badge?: string;
   minQuantity?: number;
   stock?: number;
@@ -127,6 +129,8 @@ export const NewArrivals = () => {
         originalPrice:
           p.discountPrice && p.discountPrice < p.price ? p.price : undefined,
         image: p.images?.[0] || "/placeholder.svg",
+        // Full set so the card can cycle through every frame.
+        images: p.images || [],
         badge: p.badge,
         minQuantity: p.minQuantity,
         stock: p.stock,

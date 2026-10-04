@@ -242,6 +242,9 @@ export default function FavouritesPage() {
                             price: onSale ? item.discountPrice! : item.price,
                             originalPrice: onSale ? item.price : undefined,
                             image: item.images?.[0] || "/placeholder.svg",
+                            // The whole set, so the card can cycle through
+                            // every frame.
+                            images: item.images || [],
                             badge: item.badge,
                             description: item.description,
                             featured: item.featured,

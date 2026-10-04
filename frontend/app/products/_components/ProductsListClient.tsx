@@ -514,6 +514,8 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                     ? product.price
                     : undefined,
                 image: product?.images?.[0] || "/placeholder.svg",
+                // The whole set, so the card can cycle through every frame.
+                images: product?.images || [],
                 badge: product.badge,
                 description: product.description,
                 featured: product.featured,
