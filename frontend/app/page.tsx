@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
 import { CategoriesSection } from "@/components/home/CategoriesSection";
 import { FeaturedProducts } from "@/components/home/FeaturedProducts";
+import { NewArrivals } from "@/components/home/NewArrivals";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { AboutSection } from "@/components/home/AboutSection";
 import { CTASection } from "@/components/home/CTASection";
@@ -82,10 +83,12 @@ export default function Home() {
       <main>
         <HeroSection />
         <OfferStrip />
-        {/* <ServiceSection/> */}
+
+        {/* <ServiceSection /> */}
         <CategoriesSection />
 
         <FeaturedProducts />
+        <NewArrivals />
         <AboutSection />
 
         <TestimonialsSection />

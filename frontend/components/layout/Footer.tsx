@@ -44,6 +44,7 @@ const quickLinks = [
   { name: "Products", path: "/products" },
 
   { name: "Business", path: "/business" },
+  { name: "Become a Merchant", path: "/become-a-merchant" },
   { name: "Customize", path: "/customize" },
   { name: "About Us", path: "/about-us" },
   { name: "Contact", path: "/contact" },
@@ -411,6 +412,12 @@ export const Footer = () => {
               className={`-my-2 rounded-sm py-2 text-xs text-footer-muted transition-colors hover:text-footer-foreground ${focusRing}`}
             >
               Terms of Service
+            </Link>
+            <Link
+              href="/disclaimer"
+              className={`-my-2 rounded-sm py-2 text-xs text-footer-muted transition-colors hover:text-footer-foreground ${focusRing}`}
+            >
+              Disclaimer
             </Link>
             <button
               type="button"

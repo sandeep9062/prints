@@ -36,7 +36,15 @@ const storage = new CloudinaryStorage({
 
 // Multer Upload Middleware
 const upload = multer({
-  storage,
+  /*
+   * In tests, skip the real Cloudinary round-trip and use in-memory storage
+   * instead. The integration tests exercise route guards and controllers, not
+   * Cloudinary itself, and a dummy API key would otherwise make every upload
+   * route fail with "Invalid api_key".
+   */
+  ...(process.env.NODE_ENV === "test"
+    ? { storage: multer.memoryStorage() }
+    : { storage }),
   limits: { fileSize: 60 * 1024 * 1024 }, // 60MB
   fileFilter: (req, file, cb) => {
     const allowedTypes = [

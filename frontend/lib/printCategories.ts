@@ -167,6 +167,7 @@ export const RESERVED_ROOT_SLUGS: ReadonlySet<string> = new Set([
   "about-us",
   "admin-dashboard",
   "auth",
+  "become-a-merchant",
   "blog",
   "business",
   "cart",

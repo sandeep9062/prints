@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { noIndexMetadata } from "@/lib/seo";
+import RoleGuard from "@/components/RoleGuard";
 import AdminDashboardShell from "./AdminDashboardShell";
 
 /*
@@ -37,5 +38,14 @@ export const metadata: Metadata = {
 export default function AdminLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return <AdminDashboardShell>{children}</AdminDashboardShell>;
+  return (
+    /*
+      UX-only role check. The API enforces admin authorization on every route
+      this area calls (`protect` + `checkAdmin`), so this is purely to give a
+      wrong-role visitor a clean redirect instead of a broken dashboard.
+    */
+    <RoleGuard allow={["admin"]}>
+      <AdminDashboardShell>{children}</AdminDashboardShell>
+    </RoleGuard>
+  );
 }

@@ -3,6 +3,18 @@ import Product from "../models/Product.js";
 import slugify from "slugify";
 import { products } from "../data/product.ts";
 
+/**
+ * Resolves the stored URL for an uploaded file.
+ *
+ * With Cloudinary storage multer sets `file.path` to the hosted URL. Under
+ * memoryStorage (used by the test suite to avoid a network round-trip) there is
+ * no `path`, so fall back to the original filename to keep the shape of the
+ * data identical.
+ */
+function toImageUrl(file) {
+  return file.path || file.originalname;
+}
+
 // =====================================
 // CREATE PRODUCT
 // =====================================
@@ -26,11 +38,9 @@ export const createProduct = async (req, res) => {
       stock,
       dimensions,
       options,
-      featured,
     } = JSON.parse(productData);
-    const owner = req.user?._id; // Assuming auth middleware sets req.user
 
-    const images = req.files ? req.files.map((file) => file.path) : [];
+    const images = req.files ? req.files.map(toImageUrl) : [];
 
     if (images.length === 0) {
       res.status(400);
@@ -40,7 +50,8 @@ export const createProduct = async (req, res) => {
     const slug = slugify(name, { lower: true });
 
     const product = await Product.create({
-      owner,
+      // Server-controlled. Never taken from the request body.
+      owner: req.user._id,
       name,
       slug,
       description,
@@ -52,8 +63,9 @@ export const createProduct = async (req, res) => {
       stock,
       dimensions,
       options,
-      // Coerce FormData/JSON quirks — the admin toggle posts a boolean.
-      featured: Boolean(featured),
+      // `featured` is deliberately NOT accepted on create. It is an admin-only
+      // merchandising flag (see updateProductFeatured), so a merchant must not
+      // be able to feature their own product by posting it here.
     });
 
     res.status(201).json({
@@ -103,10 +115,11 @@ export const seedProducts = async (req, res) => {
 // =====================================
 export const deleteProductImage = async (req, res) => {
   try {
-    const { id } = req.params;
     const { imageUrl } = req.body;
 
-    const product = await Product.findById(id);
+    // Permission already enforced by isOwnerOrAdmin; use the checked document
+    // rather than re-reading req.params.id.
+    const product = req.doc;
 
     if (!product) {
       return res
@@ -125,7 +138,7 @@ export const deleteProductImage = async (req, res) => {
       product,
     });
   } catch (error) {
-    console.error("Delete Product Image Error:", error);
+    console.error("Delete Product Image Error:", error.message);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -253,10 +266,9 @@ export const updateProduct = async (req, res) => {
       dimensions,
       options,
       images: existingImages, // Client might send back the list of existing images
-      featured,
     } = JSON.parse(productData);
 
-    const newImages = req.files ? req.files.map((file) => file.path) : [];
+    const newImages = req.files ? req.files.map(toImageUrl) : [];
 
     let updateData = {
       name,
@@ -269,10 +281,16 @@ export const updateProduct = async (req, res) => {
       dimensions,
       options,
       images: [...(existingImages || []), ...newImages], // Combine old and new images
-      // Only touch `featured` when the client actually sends it — the merchant
-      // dashboard PATCHes partial payloads (e.g. just `stock`) and must not
-      // silently clear the flag.
-      ...(typeof featured === "boolean" ? { featured } : {}),
+      /*
+       * `featured` is intentionally NOT writable here.
+       *
+       * It used to be spread in from the body, which let a merchant feature
+       * their own product through the ordinary edit form. Featuring is an
+       * admin merchandising decision and is now only reachable via the
+       * admin-only PATCH /:id/featured route.
+       *
+       * `status`, `owner` and `slug` are likewise never client-writable here.
+       */
     };
 
     // Generate new slug if name changed
@@ -280,7 +298,12 @@ export const updateProduct = async (req, res) => {
       updateData.slug = slugify(name, { lower: true });
     }
 
-    const product = await Product.findByIdAndUpdate(req.params.id, updateData, {
+    /*
+     * `req.doc` was already loaded and permission-checked by the
+     * isOwnerOrAdmin middleware, so this re-query cannot hit a document the
+     * caller was not allowed to touch.
+     */
+    const product = await Product.findByIdAndUpdate(req.doc._id, updateData, {
       new: true,
       runValidators: true,
     });
@@ -384,7 +407,13 @@ export const updateProductFeatured = async (req, res) => {
 // =====================================
 export const deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    /*
+     * Ownership/permission was already enforced by isOwnerOrAdmin, which
+     * attached the checked document as `req.doc`. Deleting by that id (rather
+     * than re-reading req.params.id) guarantees we delete exactly what was
+     * authorised.
+     */
+    const product = await Product.findByIdAndDelete(req.doc._id);
 
     if (!product)
       return res
@@ -396,7 +425,7 @@ export const deleteProduct = async (req, res) => {
       message: "Product deleted successfully",
     });
   } catch (error) {
-    console.error("Delete Product Error:", error);
+    console.error("Delete Product Error:", error.message);
     res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -1,6 +1,6 @@
 import express from "express";
 
-import { checkAdmin, protect } from "../middlewares/authMiddleware.js";
+import { authorize, checkAdmin, protect } from "../middlewares/authMiddleware.js";
 import upload from "../middlewares/multer.js";
 import {
   bookVisit,
@@ -14,6 +14,7 @@ import {
   toggleFavourite,
   updateProfile,
   updateUser,
+  updateUserRole,
   userFavourites,
   userProfile,
   addAddress,
@@ -48,8 +49,18 @@ router.delete("/address/:id", protect, deleteAddress);
 router.get("/customers/all", protect, getAllCustomers);
 router.get("/customers/:id", protect, getCustomerById);
 
-// ✅ Parameterized routes (must come after all named routes)
-router.get("/:id", getUser);
+/*
+ * ROUTE GUARDS — audit notes
+ * ----------------------------
+ * `getUser` (GET /:id) was previously PUBLIC and returned a full user record
+ * minus the password, which leaked email, phone and role for any account to
+ * anyone who could guess an id. It is now admin-only.
+ *
+ * `updateUser` (PUT /:id) was guarded by `protect` alone, letting any
+ * logged-in user edit any other account. Role changes moved to the dedicated
+ * admin-only PATCH /:id/role.
+ */
+router.get("/:id", protect, checkAdmin, getUser);
 
 // ✅ Create a new user
 router.post("/", createUser);
@@ -57,8 +68,16 @@ router.post("/", createUser);
 // ✅ Get all users
 router.get("/", protect, checkAdmin, getUsers);
 
-// ✅ Update user by ID
-router.put("/:id", protect, updateUser);
+// ✅ Update user by ID (name/email only — see updateUser for the allowlist)
+router.put("/:id", protect, authorize("admin"), updateUser);
+
+// ✅ Admin-only role assignment — the only path that can change a role.
+router.patch(
+  "/:id/role",
+  protect,
+  checkAdmin,
+  updateUserRole,
+);
 
 // ✅ Add/Remove Favourite Route
 router.post("/toFav/:propId", protect, toggleFavourite);

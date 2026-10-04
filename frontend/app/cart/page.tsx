@@ -226,20 +226,34 @@ const Cart = () => {
                     Promo Code
                   </label>
 
+                  {/*
+                    No coupon/discount API exists yet, so there is nothing to
+                    validate against. The button is disabled rather than
+                    silently doing nothing when clicked.
+                  */}
                   <div className="flex gap-2">
-                    <Input placeholder="Enter code" />
-                    <Button variant="outline">Apply</Button>
+                    <Input placeholder="Enter code" disabled />
+                    <Button variant="outline" disabled>
+                      Coming soon
+                    </Button>
                   </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Discount codes are not available at checkout yet.
+                  </p>
                 </div>
 
-                <Button variant="gold" size="lg" className="w-full">
-                  Proceed to Checkout
+                {/*
+                  Checkout is not implemented yet. This button previously read
+                  "Proceed to Checkout" with no handler at all, and the copy
+                  below it claimed "Secure checkout powered by
+                  industry-standard encryption" — a false claim, since there was
+                  no payment flow to secure. Both are corrected here; the
+                  encryption reassurance returns with a real checkout.
+                */}
+                <Button variant="gold" size="lg" className="w-full" disabled>
+                  Checkout Coming Soon
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-
-                <p className="text-xs text-center text-muted-foreground mt-4">
-                  Secure checkout powered by industry-standard encryption
-                </p>
               </div>
             </div>
           </div>

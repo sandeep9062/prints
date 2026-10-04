@@ -42,6 +42,13 @@ export const ordersApi = createApi({
       }),
       invalidatesTags: ["Orders"],
     }),
+
+    // ✅ DELETE order — admin only, enforced server-side by
+    // `protect` + `checkAdmin` on the backend route.
+    deleteOrder: builder.mutation<any, string>({
+      query: (id) => ({ url: `/${id}`, method: "DELETE" }),
+      invalidatesTags: ["Orders"],
+    }),
   }),
 });
 
@@ -50,4 +57,5 @@ export const {
   useGetOrdersByUserQuery,
   useGetOrderByIdQuery,
   useUpdateOrderStatusMutation,
+  useDeleteOrderMutation,
 } = ordersApi;

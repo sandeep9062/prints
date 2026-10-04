@@ -194,7 +194,10 @@ function SectionLabel({
     <div className="flex items-center gap-3 mb-5">
       <div
         className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-        style={{ background: "hsl(var(--brand) / 0.10)", color: "hsl(var(--brand))" }}
+        style={{
+          background: "hsl(var(--brand) / 0.10)",
+          color: "hsl(var(--brand))",
+        }}
       >
         {icon}
       </div>
@@ -358,13 +361,16 @@ export default function ServiceProviderRegisterPage() {
   if (submitted) {
     return (
       <>
-        <main className="min-h-screen flex items-center justify-center px-4 bg-background">
+        <main className="min-h-screen flex items-center justify-center px-4 mt-24 bg-background">
           <div className="max-w-md w-full bg-card rounded-2xl border border-border shadow-sm p-8 text-center">
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5"
               style={{ background: "hsl(var(--success) / 0.10)" }}
             >
-              <CheckCircle2 size={28} style={{ color: "hsl(var(--success))" }} />
+              <CheckCircle2
+                size={28}
+                style={{ color: "hsl(var(--success))" }}
+              />
             </div>
             <h1 className="text-[26px] text-foreground mb-2 font-semibold">
               Enquiry received
@@ -435,8 +441,8 @@ export default function ServiceProviderRegisterPage() {
             </h1>
             <p className="text-[14px] text-muted-foreground max-w-md mx-auto leading-relaxed font-normal">
               Tell us what you need printed — wedding cards, visiting cards,
-              shagun envelopes, brochures or packaging — and our design team will
-              get back with paper, finish and pricing options.
+              shagun envelopes, brochures or packaging — and our design team
+              will get back with paper, finish and pricing options.
             </p>
           </div>
 
@@ -452,7 +458,10 @@ export default function ServiceProviderRegisterPage() {
                 key={t}
                 className="inline-flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground bg-card border border-border rounded-full px-3 py-1.5 shadow-sm"
               >
-                <CheckCircle2 size={12} style={{ color: "hsl(var(--success))" }} />
+                <CheckCircle2
+                  size={12}
+                  style={{ color: "hsl(var(--success))" }}
+                />
                 {t}
               </span>
             ))}
@@ -791,9 +800,12 @@ export default function ServiceProviderRegisterPage() {
                 className="mt-0.5 w-4 h-4 rounded border-border accent-brand"
               />
               <span className="text-[12.5px] text-muted-foreground leading-relaxed">
-                I confirm the information above is accurate and agree to
-                Ink of Memories'{" "}
-                <span style={{ color: "hsl(var(--brand))" }} className="font-medium">
+                I confirm the information above is accurate and agree to Ink of
+                Memories'{" "}
+                <span
+                  style={{ color: "hsl(var(--brand))" }}
+                  className="font-medium"
+                >
                   Terms of Service & Privacy Policy
                 </span>
                 .
@@ -828,7 +840,10 @@ export default function ServiceProviderRegisterPage() {
           {/* footer note */}
           <p className="text-center text-[12px] text-muted-foreground mt-6">
             Already have a profile?{" "}
-            <span style={{ color: "hsl(var(--brand))" }} className="font-medium">
+            <span
+              style={{ color: "hsl(var(--brand))" }}
+              className="font-medium"
+            >
               Log in to your dashboard
             </span>
           </p>

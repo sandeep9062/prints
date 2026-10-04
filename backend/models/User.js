@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
+      required: [true, "Phone number is required"],
       // Optional for OAuth users (Google/Apple don't always provide it).
       // unique + sparse lets many users have no phone without collisions.
       unique: true,
@@ -123,12 +124,13 @@ userSchema.pre("save", async function (next) {
       return next();
     }
 
-    console.log("🔐 Hashing password...");
+    // NOTE: no logging here — this hook runs on every password change and
+    // previously printed a line on each hash.
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (err) {
-    console.error("🔥 Pre-save hook error:", err.message);
+    console.error("Pre-save password hook error:", err.message);
     next(err);
   }
 });

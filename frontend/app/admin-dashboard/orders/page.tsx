@@ -73,6 +73,7 @@ import { formatDate, formatINR } from "@/lib/utils";
 import {
   useGetOrdersByUserQuery,
   useUpdateOrderStatusMutation,
+  useDeleteOrderMutation,
 } from "@/services/ordersApi";
 
 // ---------------------------------------------------------------------------
@@ -382,6 +383,7 @@ const AdminOrders = () => {
     useGetOrdersByUserQuery();
   const [updateOrderStatus, { isLoading: isUpdating }] =
     useUpdateOrderStatusMutation();
+  const [deleteOrder, { isLoading: isDeleting }] = useDeleteOrderMutation();
 
   // ---- Local state ----
   const [searchQuery, setSearchQuery] = useState("");
@@ -469,14 +471,29 @@ const AdminOrders = () => {
     setDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
-    // API endpoint for order deletion is not implemented in backend,
-    // but we keep the UI flow. Show a toast indicating it's a placeholder.
-    toast.warning("Delete Order", {
-      description: `Order #${orderToDelete?._id.slice(-8).toUpperCase()} deletion is not available via API yet.`,
-    });
-    setDeleteDialogOpen(false);
-    setOrderToDelete(null);
+  const confirmDelete = async () => {
+    if (!orderToDelete) return;
+
+    /*
+     * Previously this only fired a `toast.warning` because no delete endpoint
+     * existed. `DELETE /api/v1/orders/:id` is now implemented and is guarded
+     * server-side by `protect` + `checkAdmin`, so the destructive action is
+     * actually performed — and enforced by the API, not by this button being
+     * admin-only in the UI.
+     */
+    const ref = orderToDelete._id.slice(-8).toUpperCase();
+    try {
+      await deleteOrder(orderToDelete._id).unwrap();
+      toast.success("Order deleted", {
+        description: `Order #${ref} has been removed.`,
+      });
+      setDeleteDialogOpen(false);
+      setOrderToDelete(null);
+    } catch {
+      toast.error("Could not delete order", {
+        description: `Order #${ref} could not be removed. Please try again.`,
+      });
+    }
   };
 
   // ---- Reset page when filters change ----
@@ -873,8 +890,9 @@ const AdminOrders = () => {
             <AlertDialogAction
               className="bg-primary hover:bg-brand-hover"
               onClick={confirmDelete}
+              disabled={isDeleting}
             >
-              Delete
+              {isDeleting ? "Deleting…" : "Delete"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

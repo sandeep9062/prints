@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { noIndexMetadata } from "@/lib/seo";
+import RoleGuard from "@/components/RoleGuard";
 import MerchantDashboardShell from "./MerchantDashboardShell";
 
 /*
@@ -33,5 +34,16 @@ export const metadata: Metadata = {
 export default function MerchantLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return <MerchantDashboardShell>{children}</MerchantDashboardShell>;
+  return (
+    /*
+      UX-only role check — the API is the real security boundary. The merchant
+      routes it calls are guarded server-side with `protect` +
+      `authorize("merchant","admin")` + `isOwnerOrAdmin`, so skipping this
+      component gains an attacker nothing. It exists so a signed-out visitor is
+      sent to /auth and a plain customer is returned to the storefront.
+    */
+    <RoleGuard allow={["merchant", "admin"]}>
+      <MerchantDashboardShell>{children}</MerchantDashboardShell>
+    </RoleGuard>
+  );
 }

@@ -317,7 +317,13 @@ export const getUser = async (req, res) => {
 // =====================================
 export const createUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    /*
+     * SECURITY: `role` is not read from the body. This handler used to accept
+     * `role` from any caller on a PUBLIC route, which was a second path to
+     * self-registering as an admin. Every account created here is a "client";
+     * use PATCH /users/:id/role (admin-only) to grant anything else.
+     */
+    const { name, email, phone, password } = req.body;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -329,8 +335,12 @@ export const createUser = async (req, res) => {
     const user = await User.create({
       name,
       email,
+      // `phone` is `required` on the User schema. This handler previously
+      // omitted it entirely, so POST /api/v1/users always failed validation
+      // with a 500 — the endpoint could never create anyone.
+      phone,
       password,
-      role: role || "client",
+      role: "client",
     });
     res.status(201).json({
       success: true,
@@ -342,8 +352,28 @@ export const createUser = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Create User Error:", error);
-    res.status(500).json({ success: false, message: error.message });
+    /*
+      A missing/blank required field (name, email, phone, password) is a client
+      error, not a server fault. This handler used to answer every failure with
+      500, so a caller sending no phone number got an opaque "Internal Server
+      Error" and the Mongoose validation message was echoed back to them.
+    */
+    if (error.name === "ValidationError") {
+      const message = Object.values(error.errors)
+        .map((e) => e.message)
+        .join(", ");
+      console.warn("Create User rejected: validation failed", message);
+      return res.status(400).json({ success: false, message });
+    }
+
+    if (error.code === 11000) {
+      return res
+        .status(400)
+        .json({ success: false, message: "An account with these details already exists" });
+    }
+
+    console.error("Create User Error:", error.message);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
@@ -365,13 +395,40 @@ export const getUsers = async (req, res) => {
 // =====================================
 // UPDATE USER
 // =====================================
-export const updateUser = async (req, res) => {
+/**
+ * Admin-only role assignment.
+ *
+ * This is the ONLY way a role changes. `registerUser` and `createUser` both
+ * hardcode "client", so a role can never be set by the account holder.
+ *
+ * An admin cannot demote themselves — that would let the last admin lock
+ * everyone (including themselves) out of the admin-only routes.
+ */
+export const updateUserRole = async (req, res) => {
   try {
-    const { name, email, role, isActive } = req.body;
+    const { role } = req.body;
+    const targetId = req.params.id;
+    const adminId = req.user._id;
+
+    // Allowlist — never trust an arbitrary string from the client.
+    const ALLOWED_ROLES = ["client", "merchant", "admin"];
+    if (!ALLOWED_ROLES.includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid role. Must be one of: ${ALLOWED_ROLES.join(", ")}.`,
+      });
+    }
+
+    if (String(targetId) === String(adminId)) {
+      return res.status(400).json({
+        success: false,
+        message: "You cannot change your own role.",
+      });
+    }
 
     const user = await User.findByIdAndUpdate(
-      req.params.id,
-      { name, email, role, isActive },
+      targetId,
+      { role },
       { new: true, runValidators: true },
     ).select("-password");
 
@@ -381,9 +438,57 @@ export const updateUser = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
+    res.status(200).json({
+      success: true,
+      message: `Role updated to "${role}".`,
+      user: { _id: user._id, name: user.name, email: user.email, role: user.role },
+    });
+  } catch (error) {
+    console.error("Update User Role Error:", error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    /*
+     * SECURITY: explicit allowlist instead of spreading req.body.
+     *
+     * The old version destructured `{ name, email, role, isActive }` straight
+     * into findByIdAndUpdate on a route guarded only by `protect`, so ANY
+     * logged-in user could PUT /users/:id and grant themselves admin or
+     * deactivate an admin. `role` and `isActive` are now admin-only and live
+     * behind updateUserRole / the dedicated admin actions.
+     */
+    const { name, email } = req.body;
+
+    const updateData = {};
+    if (typeof name === "string" && name.trim()) updateData.name = name.trim();
+    if (typeof email === "string" && email.trim()) {
+      updateData.email = email.trim().toLowerCase();
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No updatable fields provided (name, email).",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(req.params.id, updateData, {
+      new: true,
+      runValidators: true,
+    }).select("-password");
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
     res.status(200).json({ success: true, user });
   } catch (error) {
-    console.error("Update User Error:", error);
+    console.error("Update User Error:", error.message);
     res.status(500).json({ success: false, message: error.message });
   }
 };

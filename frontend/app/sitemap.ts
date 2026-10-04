@@ -51,6 +51,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      // Merchant acquisition page — a genuine commercial landing page, so it is
+      // indexable and belongs in the sitemap alongside /business.
+      url: `${BASE_URL}/become-a-merchant`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
+    {
       url: `${BASE_URL}/customize`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,

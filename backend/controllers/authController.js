@@ -47,56 +47,61 @@ const addProvider = (user, provider) => {
 // ==================
 export const registerUser = async (req, res) => {
   try {
-    console.log("📝 Register request body:", JSON.stringify(req.body, null, 2));
+    /*
+     * SECURITY: `role` is deliberately NOT read from req.body.
+     *
+     * This endpoint is public, so trusting a client-supplied role let anyone
+     * self-register as an admin (`POST {"role":"admin"}`) and, because
+     * `checkAdmin` gates the user/newsletter/site-settings routes, take over
+     * the whole platform. Every self-registration is a `client`; roles are
+     * granted deliberately via PATCH /api/v1/users/:id/role (admin-only).
+     *
+     * The sign-up form still offers a "Merchant" choice — that is only a
+     * client-side hint, and the request's role is discarded. See the report.
+     */
+    const { name, email, phone, password } = req.body;
 
-    const { name, email, phone, password, role } = req.body;
+    // Basic validation. Existence booleans are logged rather than the values,
+    // so no email/phone/password ever reaches the log.
+    //
+    // Each required field is reported by name so the form can point the user at
+    // the right input, rather than the old generic "Please fill in all fields".
+    const missing = [];
+    if (!name) missing.push("name");
+    if (!email) missing.push("email");
+    if (!phone) missing.push("phone");
+    if (!password) missing.push("password");
 
-    // Basic validation
-    if (!name || !email || !phone || !password) {
-      console.log("❌ Validation failed - missing fields:", {
-        name: !!name,
-        email: !!email,
-        phone: !!phone,
-        password: !!password,
+    if (missing.length > 0) {
+      console.warn("Register rejected: missing required fields", missing);
+      return res.status(400).json({
+        message: `Please fill in all fields. Missing: ${missing.join(", ")}.`,
+        missing,
       });
-      return res.status(400).json({ message: "Please fill in all fields" });
     }
 
-    console.log("🔍 Checking for existing user with email:", email);
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      console.log("❌ User already exists:", email);
+      console.warn("Register rejected: email already registered");
       return res.status(400).json({ message: "User already exists" });
     }
 
-    console.log("🔍 Checking for existing user with phone:", phone);
     const existingPhone = await User.findOne({ phone });
     if (existingPhone) {
-      console.log("❌ Phone already registered:", phone);
+      console.warn("Register rejected: phone already registered");
       return res
         .status(400)
         .json({ message: "A user with this phone number already exists" });
     }
 
-    console.log("👤 Creating new user:", {
-      name,
-      email,
-      phone,
-      role: role || "client",
-    });
     const user = await User.create({
       name,
       email,
       phone,
       password,
       providers: ["local"],
-      role: role || "client",
-    });
-
-    console.log("✅ User created successfully:", {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
+      // Server-controlled. Never from the request body.
+      role: "client",
     });
 
     const token = generateToken(user);
@@ -116,18 +121,31 @@ export const registerUser = async (req, res) => {
       message: "user Registered Succesfully",
     });
   } catch (error) {
-    console.error("🔥 Register error:", error.message);
-    console.error("🔥 Register error stack:", error.stack);
+    console.error("Register error:", error.message);
+
+    /*
+      Schema validation (e.g. `name` shorter than its minlength, a malformed
+      email) is a client mistake, so it must be a 400 with the actual reason —
+      not an opaque 500 "Server error". Previously a bad field produced a
+      generic failure that looked like a server fault and gave the user nothing
+      to act on.
+    */
+    if (error.name === "ValidationError") {
+      const message = Object.values(error.errors || {})
+        .map((e) => e.message)
+        .join(", ");
+      return res.status(400).json({ message: message || "Invalid details" });
+    }
 
     // Handle MongoDB duplicate key error (code 11000)
     if (error.code === 11000) {
       const field = Object.keys(error.keyPattern || {})[0] || "field";
-      const message = `A user with this ${field} already exists`;
-      console.log("❌ Duplicate key error on field:", field);
-      return res.status(400).json({ message });
+      return res.status(400).json({
+        message: `A user with this ${field} already exists`,
+      });
     }
 
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -142,7 +160,8 @@ export const loginUser = async (req, res) => {
         .status(400)
         .json({ message: "Please provide email/phone and password" });
     }
-    console.log(req.body, "login-data");
+    // NOTE: the request body (which contains the password) is deliberately not
+    // logged here — see the register handler for the same reasoning.
     const user = await User.findOne({
       $or: [{ email: emailOrPhone }, { phone: emailOrPhone }],
     })
