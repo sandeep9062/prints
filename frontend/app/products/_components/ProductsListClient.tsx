@@ -2,19 +2,24 @@
 
 import { useState, useMemo, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Grid3X3, LayoutGrid, Search } from "lucide-react";
+import { Grid3X3, LayoutGrid, Palette, Search, SlidersHorizontal, X } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn, formatINR } from "@/lib/utils";
 import { ProductCard } from "@/components/home/ProductCard";
 import { categories as allCategories } from "@/data/products";
 import { SEOHelper } from "@/components/SEOHelper";
 import { getBreadcrumbSchema } from "@/lib/seo";
+import { PriceFilter, ColorFilter } from "./ProductFilters";
+import { colorFamilyLabel, productColorFamilies } from "@/lib/productColors";
 import type { Product } from "@/services/productsApi";
 
 const categories = [
   "All",
   ...allCategories.filter((c) => c !== "All Products"),
 ];
+
+/** Query params the filters own. Mirrors the names QuickLinks links with. */
+const PARAMS = { minPrice: "minPrice", maxPrice: "maxPrice", color: "color" } as const;
 
 /** Matches the Navbar's slug rules so deep links keep working. */
 const slugify = (str: string) =>
@@ -28,6 +33,21 @@ interface ProductsListClientProps {
   initialProducts: Product[];
 }
 
+/**
+ * The price a shopper actually pays. A product with a `discountPrice` is shown
+ * and added to the cart at that figure, so the filter must use the same number
+ * — filtering on `price` alone would hide discounted items that look like they
+ * fall inside the chosen range. ProductCard resolves it the same way.
+ */
+const effectivePrice = (product: Product) => product.discountPrice || product.price;
+
+/** Parses a `minPrice`/`maxPrice` param, ignoring anything non-numeric. */
+const parseBound = (raw: string | null): number | null => {
+  if (raw === null || raw.trim() === "") return null;
+  const value = Number(raw);
+  return Number.isFinite(value) && value >= 0 ? value : null;
+};
+
 function ProductsContent({ initialProducts }: ProductsListClientProps) {
   const products = initialProducts;
 
@@ -40,6 +60,8 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
   const router = useRouter();
 
   const [viewMode, setViewMode] = useState<"grid" | "large">("grid");
+  // Panels are collapsible on desktop and hidden behind the toggle on mobile.
+  const [showFilters, setShowFilters] = useState(false);
 
   // The term is URL-driven so a navbar search (`/products?search=…`) lands
   // filtered. Typing updates local state instantly; a term arriving in the URL
@@ -54,6 +76,78 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
   }
 
   const categoryParam = searchParams.get("category") || "All";
+
+  /* ---------------- PRICE + COLOUR FILTERS (URL-driven) ----------------- */
+  // Both filters live in the query string rather than component state so the
+  // homepage QuickLinks deep links (/products?color=maroon, ?minPrice=100) land
+  // pre-filtered, the URL is shareable, and back/forward works for free.
+  const selectedMin = parseBound(searchParams.get(PARAMS.minPrice));
+  const selectedMax = parseBound(searchParams.get(PARAMS.maxPrice));
+
+  // Repeated `color` params let a shopper select several colours; a single
+  // comma-joined value is accepted too so hand-written links work.
+  const selectedColors = useMemo(() => {
+    const raw = searchParams.getAll(PARAMS.color);
+    const values = raw.flatMap((value) => value.split(","));
+    return Array.from(
+      new Set(values.map((v) => v.trim().toLowerCase()).filter(Boolean)),
+    );
+  }, [searchParams]);
+
+  /**
+   * Rewrites the query string, preserving the filters this handler doesn't
+   * touch. Building on the existing params (rather than a fresh
+   * `URLSearchParams`) is what keeps `?category=` and `?search=` alive when a
+   * shopper adjusts the price — and what stops `handleCategoryChange` from
+   * wiping a colour selection.
+   */
+  const pushParams = (
+    updates: Record<string, string | string[] | null>,
+    options?: { keepScroll?: boolean },
+  ) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    for (const [key, value] of Object.entries(updates)) {
+      params.delete(key);
+      if (value === null) continue;
+      for (const entry of Array.isArray(value) ? value : [value]) {
+        if (entry !== "") params.append(key, entry);
+      }
+    }
+
+    const query = params.toString();
+    // `scroll: false` keeps a slider drag from jumping the page to the top on
+    // every commit.
+    router.push(query ? `?${query}` : "?", { scroll: !options?.keepScroll });
+  };
+
+  /* ---------------- CATALOGUE PRICE + COLOUR FACETS ----------------- */
+  // Derived from the whole catalogue, not the currently filtered subset, so
+  // the slider bounds and the per-colour counts don't shrink every time a
+  // filter is applied (otherwise each tick would move the range under the
+  // shopper's thumb).
+  const { priceBounds, colorCounts } = useMemo(() => {
+    const prices = products.map(effectivePrice).filter((p) => Number.isFinite(p) && p > 0);
+
+    const bounds =
+      prices.length > 0
+        ? { min: Math.floor(Math.min(...prices)), max: Math.ceil(Math.max(...prices)) }
+        : { min: 0, max: 0 };
+
+    const counts: Record<string, number> = {};
+    for (const product of products) {
+      // A product's families are counted once each — "White with Gold" must
+      // not inflate both the white and the gold count for the same item.
+      for (const slug of productColorFamilies(product.options?.colors)) {
+        counts[slug] = (counts[slug] ?? 0) + 1;
+      }
+    }
+
+    return { priceBounds: bounds, colorCounts: counts };
+  }, [products]);
+
+  const activeFilterCount =
+    (selectedMin !== null || selectedMax !== null ? 1 : 0) + selectedColors.length;
 
   // Human-readable label for the counter, e.g. "wedding-cards" -> "Wedding Cards".
   const categoryLabel =
@@ -78,18 +172,71 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
       );
     }
 
+    if (selectedMin !== null || selectedMax !== null) {
+      filtered = filtered.filter((p) => {
+        const price = effectivePrice(p);
+        // A product with no usable price can't satisfy a priced range, so it's
+        // dropped rather than treated as ₹0 and matched by a "under ₹100" band.
+        if (!Number.isFinite(price) || price <= 0) return false;
+        if (selectedMin !== null && price < selectedMin) return false;
+        if (selectedMax !== null && price > selectedMax) return false;
+        return true;
+      });
+    }
+
+    if (selectedColors.length > 0) {
+      filtered = filtered.filter((p) => {
+        const families = productColorFamilies(p.options?.colors);
+        // Colours are OR'd (any selected colour matches), which is what a
+        // multi-select facet means. A product can satisfy several at once
+        // ("White with Gold" matches white AND gold) but is listed once.
+        return selectedColors.some((slug) => families.has(slug));
+      });
+    }
+
     return filtered;
-  }, [categoryParam, searchQuery, products]);
+  }, [
+    categoryParam,
+    searchQuery,
+    selectedMin,
+    selectedMax,
+    selectedColors,
+    products,
+  ]);
+
+  /* ---------------- FILTER HANDLERS ----------------- */
+  const handlePriceChange = (min: number | null, max: number | null) => {
+    pushParams(
+      {
+        [PARAMS.minPrice]: min === null ? null : String(min),
+        [PARAMS.maxPrice]: max === null ? null : String(max),
+      },
+      { keepScroll: true },
+    );
+  };
+
+  const handleColorToggle = (slug: string) => {
+    const next = selectedColors.includes(slug)
+      ? selectedColors.filter((c) => c !== slug)
+      : [...selectedColors, slug];
+
+    pushParams({ [PARAMS.color]: next }, { keepScroll: true });
+  };
+
+  const clearFilters = () => {
+    pushParams(
+      {
+        [PARAMS.minPrice]: null,
+        [PARAMS.maxPrice]: null,
+        [PARAMS.color]: null,
+      },
+      { keepScroll: true },
+    );
+  };
 
   /* ---------------- CATEGORY CHANGE ----------------- */
   const handleCategoryChange = (category: string) => {
-    const params = new URLSearchParams();
-
-    if (category !== "All") {
-      params.set("category", slugify(category));
-    }
-
-    router.push(params.toString() ? `?${params.toString()}` : "?");
+    pushParams({ category: category === "All" ? null : slugify(category) });
     setSearchQuery("");
   };
 
@@ -159,8 +306,33 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                 );
               })}
             </div>
-{/* Search + view toggle */}
+{/* Search + filters + view toggle */}
             <div className="flex items-center gap-2 sm:gap-3">
+              {/* Filters toggle. The badge counts the active price range as one
+                  entry plus one per colour, so it reads as "3 filters" rather
+                  than counting the two price thumbs separately. */}
+              <button
+                type="button"
+                onClick={() => setShowFilters((open) => !open)}
+                aria-expanded={showFilters}
+                aria-controls="product-filters"
+                className={cn(
+                  "flex h-11 shrink-0 items-center gap-2 rounded-none border px-3 text-[10px] font-semibold transition-colors duration-300",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 dark:focus-visible:ring-offset-background",
+                  showFilters || activeFilterCount > 0
+                    ? "border-brand text-brand"
+                    : "border-border text-muted-foreground hover:border-brand hover:text-foreground dark:border-border dark:text-muted-foreground dark:hover:text-foreground/40",
+                )}
+              >
+                <SlidersHorizontal aria-hidden="true" className="h-4 w-4" />
+                Filters
+                {activeFilterCount > 0 && (
+                  <span className="inline-flex h-4 min-w-4 items-center justify-center bg-brand px-1 text-[9px] font-bold text-primary-foreground">
+                    {activeFilterCount}
+                  </span>
+                )}
+              </button>
+
               {/* min-w-0 lets the field actually shrink instead of forcing the
                   row wider than a 320px screen. */}
               <div className="relative min-w-0 flex-1 sm:w-64 sm:flex-none">
@@ -212,6 +384,87 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
               </div>
             </div>
           </div>
+
+          {/* Price + colour filters. Collapsed by default so the catalogue is
+              the first thing on screen; the toolbar button opens it. */}
+          {showFilters && (
+            <div
+              id="product-filters"
+              className="mb-6 grid gap-8 border border-border p-5 sm:mb-8 sm:grid-cols-2 sm:p-6 lg:max-w-4xl lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-10 dark:border-border"
+            >
+              <PriceFilter
+                min={priceBounds.min}
+                max={priceBounds.max}
+                selectedMin={selectedMin}
+                selectedMax={selectedMax}
+                onChange={handlePriceChange}
+              />
+              {/* Full-bleed on the second column so the 3-up swatch grid keeps
+                  its natural width instead of being squeezed by the price
+                  column beside it. */}
+              <div className="sm:col-span-2 lg:col-span-1">
+                <ColorFilter
+                  selected={selectedColors}
+                  counts={colorCounts}
+                  onToggle={handleColorToggle}
+                  onClear={() =>
+                    pushParams({ [PARAMS.color]: null }, { keepScroll: true })
+                  }
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Active filter chips — a summary the shopper can undo one at a
+              time without reopening the panel. */}
+          {activeFilterCount > 0 && (
+            <ul className="mb-6 flex flex-wrap items-center gap-2 sm:mb-8">
+              {selectedColors.map((slug) => (
+                <li key={slug}>
+                  <button
+                    type="button"
+                    onClick={() => handleColorToggle(slug)}
+                    className="inline-flex h-8 items-center gap-1.5 border border-border px-3 text-[10px] font-semibold text-foreground transition-colors hover:border-brand hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand dark:border-border dark:text-foreground dark:hover:text-brand"
+                  >
+                    <Palette aria-hidden="true" className="h-3 w-3" />
+                    {colorFamilyLabel(slug)}
+                    <X aria-hidden="true" className="h-3 w-3" />
+                    <span className="sr-only">Remove colour filter</span>
+                  </button>
+                </li>
+              ))}
+
+              {(selectedMin !== null || selectedMax !== null) && (
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => handlePriceChange(null, null)}
+                    className="inline-flex h-8 items-center gap-1.5 border border-border px-3 text-[10px] font-semibold text-foreground transition-colors hover:border-brand hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand dark:border-border dark:text-foreground dark:hover:text-brand"
+                  >
+                    {selectedMin !== null && selectedMax !== null
+                      ? `${formatINR(selectedMin)} – ${formatINR(selectedMax)}`
+                      : selectedMin !== null
+                        ? `${formatINR(selectedMin)} & up`
+                        : `Up to ${formatINR(selectedMax)}`}
+                    <X aria-hidden="true" className="h-3 w-3" />
+                    <span className="sr-only">Remove price filter</span>
+                  </button>
+                </li>
+              )}
+
+              {activeFilterCount > 1 && (
+                <li>
+                  <button
+                    type="button"
+                    onClick={clearFilters}
+                    className="h-8 px-2 text-[10px] font-semibold text-muted-foreground underline underline-offset-4 transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand dark:text-muted-foreground"
+                  >
+                    Clear all
+                  </button>
+                </li>
+              )}
+            </ul>
+          )}
 
           {/* Result count */}
           <p
@@ -292,14 +545,24 @@ function ProductsContent({ initialProducts }: ProductsListClientProps) {
                 No suites match your search.
               </p>
               <p className="mt-3 max-w-sm text-sm font-normal text-muted-foreground dark:text-muted-foreground">
-                Try another category, or browse the full catalogue to explore
-                everything we press in-house.
+                {activeFilterCount > 0
+                  ? "Try widening your price range or clearing a colour — every filter you have set is listed above."
+                  : "Try another category, or browse the full catalogue to explore everything we press in-house."}
               </p>
               <button
                 type="button"
                 onClick={() => {
                   setSearchQuery("");
-                  if (categoryParam !== "All") handleCategoryChange("All");
+                  // One navigation, not three: handleCategoryChange and
+                  // clearFilters each push their own entry, which would leave
+                  // the shopper pressing Back twice to escape the empty state.
+                  pushParams({
+                    category: null,
+                    search: null,
+                    [PARAMS.minPrice]: null,
+                    [PARAMS.maxPrice]: null,
+                    [PARAMS.color]: null,
+                  });
                 }}
                 className="mt-8 rounded-none border border-brand/50 px-8 py-4 text-[11px] font-semibold text-brand transition-colors duration-300 hover:bg-brand-hover hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 dark:border-brand/50 dark:text-brand dark:focus-visible:ring-offset-footer"
               >
